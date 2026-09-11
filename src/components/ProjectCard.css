@@ -1,0 +1,62 @@
+.project-card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--surface);
+  transition: transform 0.35s ease, border-color 0.35s ease;
+}
+
+.project-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--border-strong);
+}
+
+.project-cover {
+  height: 230px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.project-cover svg {
+  width: 64px;
+  height: 64px;
+  opacity: 0.9;
+  position: relative;
+  z-index: 1;
+}
+
+.project-body {
+  padding: 26px 28px 30px;
+}
+
+.project-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.project-body h3 {
+  font-size: 23px;
+  margin-bottom: 10px;
+}
+
+.project-body h3 a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.project-body h3 a:hover {
+  color: var(--accent-2);
+}
+
+.project-body p {
+  color: var(--text-muted);
+  font-size: 15px;
+  line-height: 1.65;
+  margin-bottom: 16px;
+}

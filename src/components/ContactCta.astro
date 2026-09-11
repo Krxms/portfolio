@@ -1,3 +1,7 @@
+---
+import './ContactCta.css';
+---
+
 <section class="contact-cta">
   <div class="cta-glow" aria-hidden="true"></div>
   <div class="wrap cta-inner reveal">
@@ -7,48 +11,3 @@
     <a href="/contact" class="btn btn-primary">Discutons de votre projet <span class="btn-arrow">→</span></a>
   </div>
 </section>
-
-<style>
-  .contact-cta {
-    position: relative;
-    overflow: hidden;
-    padding: 130px 0;
-    text-align: center;
-  }
-
-  .cta-glow {
-    position: absolute;
-    inset: auto -10% -40% -10%;
-    height: 520px;
-    pointer-events: none;
-    z-index: 0;
-    background: radial-gradient(600px 420px at 50% 100%, rgba(255, 90, 31, 0.28), transparent 65%);
-  }
-
-  .cta-inner {
-    position: relative;
-    z-index: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 22px;
-  }
-
-  .cta-inner .eyebrow {
-    justify-content: center;
-  }
-
-  .cta-inner h2 {
-    font-size: clamp(30px, 4.2vw, 48px);
-    line-height: 1.1;
-    max-width: 16ch;
-  }
-
-  .cta-inner .sub {
-    color: var(--text-muted);
-    font-size: 17px;
-    line-height: 1.7;
-    max-width: 46ch;
-    margin-bottom: 6px;
-  }
-</style>

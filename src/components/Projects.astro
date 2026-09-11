@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import ProjectCard from './ProjectCard.astro';
+import './Projects.css';
 
 const projets = (await getCollection('projets')).sort((a, b) => a.data.order - b.data.order);
 ---
@@ -36,36 +37,3 @@ const projets = (await getCollection('projets')).sort((a, b) => a.data.order - b
     </div>
   </div>
 </section>
-
-<style>
-  .projects-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 28px;
-  }
-
-  .projects-footer {
-    margin-top: 36px;
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 24px;
-    flex-wrap: wrap;
-  }
-
-  .projects-note {
-    padding: 20px 24px;
-    border-radius: var(--radius-sm);
-    border: 1px dashed var(--border-strong);
-    color: var(--text-muted);
-    font-size: 14.5px;
-    line-height: 1.7;
-    max-width: 640px;
-  }
-
-  @media (max-width: 980px) {
-    .projects-grid {
-      grid-template-columns: 1fr;
-    }
-  }
-</style>
