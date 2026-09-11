@@ -1,0 +1,44 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ContactForm from '../components/ContactForm.astro';
+---
+
+<BaseLayout
+  title="Contact"
+  description="Parlons de votre projet — identité de marque, site vitrine ou produit digital sur-mesure. Réponse sous 24h ouvrées."
+>
+  <section class="section contact-page">
+    <div class="wrap">
+      <div class="page-head reveal">
+        <div class="eyebrow">Contact</div>
+        <h1>Parlons de votre projet.</h1>
+        <p class="sub">Décrivez-moi votre besoin en quelques lignes — je reviens vers vous sous 24h ouvrées.</p>
+      </div>
+      <ContactForm />
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .contact-page {
+    padding-top: 170px;
+  }
+
+  .page-head {
+    max-width: 640px;
+    margin-bottom: 60px;
+  }
+
+  .page-head h1 {
+    font-size: clamp(32px, 4.2vw, 52px);
+    line-height: 1.1;
+    margin-top: 4px;
+  }
+
+  .page-head .sub {
+    margin-top: 18px;
+    color: var(--text-muted);
+    font-size: 17px;
+    line-height: 1.7;
+  }
+</style>

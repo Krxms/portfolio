@@ -1,0 +1,150 @@
+---
+interface Props {
+  slug: string;
+  title: string;
+  sector: string;
+  summary: string;
+  tags: string[];
+  variant: number;
+}
+
+const { slug, title, sector, summary, tags, variant } = Astro.props;
+
+const icons: Record<number, string> = {
+  1: 'M8 40h32M12 40V20a4 4 0 0 1 4-4h16a4 4 0 0 1 4 4v20M18 40V28h12v12M20 12c0-3 1.8-5 4-5s4 2 4 5-4 6-4 6-4-3-4-6Z',
+  2: 'M24 18v8m-10 14v-6a10 10 0 0 1 20 0v6M8 40h32M18 26l-4 4m16-4 4 4',
+  3: '',
+  4: 'M24 6C15 6 8 14 8 22c0 11 16 20 16 20s16-9 16-20c0-8-7-16-16-16Z',
+};
+---
+
+<article class="project-card">
+  <a href={`/projets/${slug}`} class={`project-cover cover-${variant}`} aria-hidden="true">
+    {variant === 2 ? (
+      <svg viewBox="0 0 48 48" fill="none" stroke="#ffb84d" stroke-width="1.4">
+        <circle cx="24" cy="14" r="4"></circle>
+        <path d={icons[2]}></path>
+      </svg>
+    ) : variant === 3 ? (
+      <svg viewBox="0 0 48 48" fill="none" stroke="#ffb84d" stroke-width="1.4">
+        <rect x="7" y="9" width="34" height="26" rx="2"></rect>
+        <path d="M13 29v-8m8 8V17m8 12v-5m8 5v-11"></path>
+      </svg>
+    ) : variant === 4 ? (
+      <svg viewBox="0 0 48 48" fill="none" stroke="#ffb84d" stroke-width="1.4">
+        <path d={icons[4]}></path>
+        <circle cx="24" cy="22" r="5"></circle>
+      </svg>
+    ) : (
+      <svg viewBox="0 0 48 48" fill="none" stroke="#ffb84d" stroke-width="1.4">
+        <path d={icons[1]}></path>
+      </svg>
+    )}
+  </a>
+  <div class="project-body">
+    <div class="project-top-row">
+      <span class="project-sector">{sector}</span>
+      <span class="concept-badge">Projet concept</span>
+    </div>
+    <h3><a href={`/projets/${slug}`}>{title}</a></h3>
+    <p>{summary}</p>
+    <div class="tag-row">
+      {tags.map((tag) => <span class="tag">{tag}</span>)}
+    </div>
+  </div>
+</article>
+
+<style>
+  .project-card {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background: var(--surface);
+    transition: transform 0.35s ease, border-color 0.35s ease;
+  }
+
+  .project-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--border-strong);
+  }
+
+  .project-cover {
+    height: 230px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .project-cover svg {
+    width: 64px;
+    height: 64px;
+    opacity: 0.9;
+    position: relative;
+    z-index: 1;
+  }
+
+  .cover-1 {
+    background: radial-gradient(120% 140% at 20% 15%, #3a2115, #170d09 70%);
+  }
+  .cover-2 {
+    background: radial-gradient(120% 140% at 80% 20%, #331226, #150910 70%);
+  }
+  .cover-3 {
+    background: radial-gradient(120% 140% at 25% 85%, #10262b, #0a1416 70%);
+  }
+  .cover-4 {
+    background: radial-gradient(120% 140% at 75% 80%, #2a2008, #150f06 70%);
+  }
+
+  .project-body {
+    padding: 26px 28px 30px;
+  }
+
+  .project-top-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+
+  .concept-badge {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    color: var(--accent-2);
+    border: 1px solid rgba(255, 184, 77, 0.35);
+    background: rgba(255, 184, 77, 0.08);
+    padding: 4px 10px;
+    border-radius: 100px;
+  }
+
+  .project-sector {
+    font-size: 12.5px;
+    color: var(--text-faint);
+    font-family: var(--font-mono);
+  }
+
+  .project-body h3 {
+    font-size: 23px;
+    margin-bottom: 10px;
+  }
+
+  .project-body h3 a {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .project-body h3 a:hover {
+    color: var(--accent-2);
+  }
+
+  .project-body p {
+    color: var(--text-muted);
+    font-size: 15px;
+    line-height: 1.65;
+    margin-bottom: 16px;
+  }
+</style>

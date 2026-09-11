@@ -1,0 +1,186 @@
+<div class="contact-grid reveal">
+  <form id="contactForm" novalidate>
+    <div class="field-row">
+      <div class="field">
+        <label for="fName">Nom</label>
+        <input type="text" id="fName" name="name" placeholder="Votre nom" required />
+      </div>
+      <div class="field">
+        <label for="fEmail">Email</label>
+        <input type="email" id="fEmail" name="email" placeholder="vous@exemple.fr" required />
+      </div>
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <label for="fType">Type de projet</label>
+        <select id="fType" name="type">
+          <option>Identité de marque</option>
+          <option>Site vitrine</option>
+          <option>Produit digital / UX-UI</option>
+          <option>Accompagnement continu</option>
+          <option>Autre</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="fBudget">Budget estimé</label>
+        <select id="fBudget" name="budget">
+          <option>Moins de 1 000 €</option>
+          <option>1 000 – 3 000 €</option>
+          <option>3 000 – 8 000 €</option>
+          <option>8 000 € et plus</option>
+          <option>Je ne sais pas encore</option>
+        </select>
+      </div>
+    </div>
+    <div class="field">
+      <label for="fMessage">Message</label>
+      <textarea id="fMessage" name="message" placeholder="Parlez-moi de votre projet, de vos objectifs, de vos délais..." required></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Envoyer par email <span class="btn-arrow">→</span></button>
+    <p class="form-status" id="formStatus" role="status"></p>
+  </form>
+
+  <div class="contact-side">
+    <div class="contact-direct">
+      <div class="label">Écrire directement</div>
+      <a class="mail-link" href="mailto:antoine.bruneau@protonmail.com">antoine.bruneau@protonmail.com</a>
+    </div>
+    <p class="contact-note">
+      Que votre projet soit une identité complète, un site vitrine ou un produit digital plus complexe, le
+      premier échange ne coûte rien et ne vous engage à rien. Je préfère refuser un projet qui ne me correspond
+      pas plutôt que de mal le faire.
+    </p>
+  </div>
+</div>
+
+<script src="../scripts/contactForm.js"></script>
+
+<style>
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 70px;
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 22px;
+  }
+
+  .field label {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    letter-spacing: 0.03em;
+  }
+
+  .field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
+
+  input,
+  select,
+  textarea {
+    font-family: var(--font-body);
+    font-size: 15.5px;
+    color: var(--text);
+    background: var(--surface);
+    border: 1px solid var(--border-strong);
+    border-radius: 10px;
+    padding: 13px 15px;
+    width: 100%;
+  }
+
+  select {
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9'%3E%3Cpath d='M1 1l6 6 6-6' stroke='%23a49e91' stroke-width='1.6' fill='none' fill-rule='evenodd'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    padding-right: 36px;
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 120px;
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: var(--text-faint);
+  }
+
+  input:focus,
+  select:focus,
+  textarea:focus {
+    border-color: var(--accent);
+  }
+
+  .contact-side {
+    display: flex;
+    flex-direction: column;
+    gap: 34px;
+  }
+
+  .contact-direct {
+    padding: 30px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--surface);
+  }
+
+  .contact-direct .label {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    margin-bottom: 12px;
+  }
+
+  .contact-direct a.mail-link {
+    font-family: var(--font-display);
+    font-size: 22px;
+    text-decoration: none;
+    color: var(--text);
+    border-bottom: 1px solid var(--border-strong);
+    padding-bottom: 4px;
+    word-break: break-word;
+  }
+
+  .contact-direct a.mail-link:hover {
+    color: var(--accent-2);
+    border-color: var(--accent-2);
+  }
+
+  .contact-note {
+    color: var(--text-muted);
+    font-size: 14.5px;
+    line-height: 1.7;
+  }
+
+  .form-status {
+    font-size: 13.5px;
+    color: var(--accent-2);
+    margin-top: 6px;
+    min-height: 18px;
+  }
+
+  @media (max-width: 980px) {
+    .contact-grid {
+      grid-template-columns: 1fr;
+      gap: 44px;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .field-row {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

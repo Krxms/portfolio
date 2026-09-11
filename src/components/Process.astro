@@ -1,0 +1,94 @@
+---
+const steps = [
+  {
+    title: 'Découverte',
+    text: "Un échange de 30 à 45 minutes pour comprendre votre activité, vos objectifs, vos contraintes et votre budget réel. Je vous dis honnêtement si je suis la bonne personne pour le projet.",
+  },
+  {
+    title: 'Direction',
+    text: "Recherche rapide, références, premières pistes. On s'aligne sur une direction avant que je passe du temps sur les détails — pour ne jamais partir dans le mur ensemble.",
+  },
+  {
+    title: 'Design',
+    text: "Maquettes haute-fidélité, design system si besoin, prototype interactif. Vous voyez et testez le projet avant qu'une seule ligne de code ne soit écrite.",
+  },
+  {
+    title: 'Développement',
+    text: "Intégration no-code avancée ou développement sur-mesure selon les besoins du projet, tests sur les vrais usages, optimisation des performances.",
+  },
+  {
+    title: 'Lancement & suivi',
+    text: "Mise en ligne, prise en main, et un point de contact qui reste disponible après la livraison — pas un email qui reste sans réponse.",
+  },
+];
+---
+
+<section class="section" id="process">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">Méthode</div>
+      <h2>Comment on travaille, concrètement.</h2>
+      <p class="sub">Cinq étapes, toujours dans le même ordre — pour que vous sachiez exactement où vous en êtes et ce qui arrive ensuite.</p>
+    </div>
+
+    <div class="process-list reveal">
+      {steps.map((step, i) => (
+        <div class="process-item">
+          <span class="process-num">{String(i + 1).padStart(2, '0')}</span>
+          <div class="process-body">
+            <h3>{step.title}</h3>
+            <p>{step.text}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .process-item {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 36px;
+    padding: 36px 0;
+    border-top: 1px solid var(--border);
+  }
+
+  .process-item:last-child {
+    border-bottom: 1px solid var(--border);
+  }
+
+  .process-num {
+    font-family: var(--font-display);
+    font-size: 44px;
+    color: var(--text-faint);
+    font-weight: 300;
+  }
+
+  .process-item:hover .process-num {
+    color: var(--accent);
+    transition: color 0.3s ease;
+  }
+
+  .process-body h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+
+  .process-body p {
+    color: var(--text-muted);
+    font-size: 15.5px;
+    line-height: 1.7;
+    max-width: 58ch;
+  }
+
+  @media (max-width: 980px) {
+    .process-item {
+      grid-template-columns: 56px 1fr;
+      gap: 20px;
+    }
+    .process-num {
+      font-size: 30px;
+    }
+  }
+</style>

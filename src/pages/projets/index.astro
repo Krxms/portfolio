@@ -1,0 +1,88 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+
+const projets = (await getCollection('projets')).sort((a, b) => a.data.order - b.data.order);
+---
+
+<BaseLayout
+  title="Projets"
+  description="Études de cas — identité de marque, UX/UI produit et interfaces sur-mesure, de l'artisan à la PME."
+>
+  <section class="section projets-page">
+    <div class="wrap">
+      <div class="page-head reveal">
+        <div class="eyebrow">Projets</div>
+        <h1>Le type de projet que j'aime construire.</h1>
+        <p class="sub">Quatre projets conceptuels, pensés pour montrer comment je traite chaque catégorie de client — de l'artisan au produit digital.</p>
+      </div>
+
+      <div class="projects-grid reveal">
+        {projets.map((projet) => (
+          <ProjectCard
+            slug={projet.id}
+            title={projet.data.title}
+            sector={projet.data.sector}
+            summary={projet.data.summary}
+            tags={projet.data.tags}
+            variant={projet.data.variant}
+          />
+        ))}
+      </div>
+
+      <p class="projects-note reveal">
+        Je démarre mon activité de freelance : ces études de cas sont des projets conceptuels qui illustrent ma façon
+        de travailler. Mes prochains projets clients viendront enrichir cette page — et si vous faites partie des
+        premiers, votre projet aura toute mon attention.
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .projets-page {
+    padding-top: 170px;
+  }
+
+  .page-head {
+    max-width: 640px;
+    margin-bottom: 60px;
+  }
+
+  .page-head h1 {
+    font-size: clamp(32px, 4.2vw, 52px);
+    line-height: 1.1;
+    margin-top: 4px;
+  }
+
+  .page-head .sub {
+    margin-top: 18px;
+    color: var(--text-muted);
+    font-size: 17px;
+    line-height: 1.7;
+  }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+  }
+
+  .projects-note {
+    margin-top: 36px;
+    padding: 20px 24px;
+    border-radius: var(--radius-sm);
+    border: 1px dashed var(--border-strong);
+    color: var(--text-muted);
+    font-size: 14.5px;
+    line-height: 1.7;
+    max-width: 760px;
+  }
+
+  @media (max-width: 980px) {
+    .projects-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

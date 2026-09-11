@@ -1,0 +1,139 @@
+---
+const guarantees = [
+  { title: 'Réponse sous 24h ouvrées', text: 'Je réponds vite, même si c\'est pour dire « pas cette semaine ».' },
+  { title: 'Devis clair sous 48h', text: 'Un périmètre détaillé, un prix, aucune ligne cachée.' },
+  { title: 'Révisions incluses', text: 'Jusqu\'à validation, dans le cadre défini au départ.' },
+  { title: 'Un seul chantier à la fois', text: 'Votre projet a toute mon attention, pas 20 % de mon temps.' },
+];
+
+const tools = ['Figma', 'Webflow', 'Framer', 'HTML / CSS / JS', 'React', 'WordPress', 'Illustrator', 'Photoshop', 'After Effects'];
+---
+
+<section class="guarantees">
+  <div class="wrap section">
+    <div class="section-head reveal">
+      <div class="eyebrow">Ce que je garantis</div>
+      <h2>Des engagements clairs, pas des promesses vagues.</h2>
+    </div>
+
+    <div class="guarantee-grid reveal">
+      {guarantees.map((g) => (
+        <div class="guarantee-card">
+          <h3>{g.title}</h3>
+          <p>{g.text}</p>
+        </div>
+      ))}
+    </div>
+
+    <div class="tools-row reveal">
+      <span class="tools-label">Outils &amp; compétences</span>
+      <div class="marquee">
+        <div class="marquee-track" data-marquee-track>
+          {tools.map((tool) => <span class="tool-chip">{tool}</span>)}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .guarantees {
+    background: var(--bg-soft);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .guarantee-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    margin-bottom: 90px;
+  }
+
+  .guarantee-card {
+    background: var(--bg);
+    padding: 32px 26px;
+  }
+
+  .guarantee-card h3 {
+    font-size: 16px;
+    font-weight: 700;
+    font-family: var(--font-body);
+    margin-bottom: 10px;
+  }
+
+  .guarantee-card p {
+    color: var(--text-muted);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .tools-row {
+    display: flex;
+    flex-direction: column;
+    gap: 26px;
+  }
+
+  .tools-label {
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+  }
+
+  .marquee {
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  }
+
+  .marquee-track {
+    display: flex;
+    gap: 14px;
+    width: max-content;
+    animation: scroll-x 32s linear infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .marquee-track {
+      animation: none;
+    }
+  }
+
+  @keyframes scroll-x {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  .tool-chip {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    color: var(--text-muted);
+    border: 1px solid var(--border-strong);
+    padding: 10px 20px;
+    border-radius: 100px;
+    white-space: nowrap;
+    background: var(--surface);
+  }
+
+  @media (max-width: 980px) {
+    .guarantee-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .guarantee-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

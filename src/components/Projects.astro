@@ -1,0 +1,71 @@
+---
+import { getCollection } from 'astro:content';
+import ProjectCard from './ProjectCard.astro';
+
+const projets = (await getCollection('projets')).sort((a, b) => a.data.order - b.data.order);
+---
+
+<section class="section" id="projets">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">Projets</div>
+      <h2>Le type de projet que j'aime construire.</h2>
+      <p class="sub">Quatre projets conceptuels, pensés pour montrer comment je traite chaque catégorie de client — de l'artisan au produit digital.</p>
+    </div>
+
+    <div class="projects-grid reveal">
+      {projets.map((projet) => (
+        <ProjectCard
+          slug={projet.id}
+          title={projet.data.title}
+          sector={projet.data.sector}
+          summary={projet.data.summary}
+          tags={projet.data.tags}
+          variant={projet.data.variant}
+        />
+      ))}
+    </div>
+
+    <div class="projects-footer reveal">
+      <p class="projects-note">
+        Je démarre mon activité de freelance : ces études de cas sont des projets conceptuels qui illustrent ma façon
+        de travailler. Mes prochains projets clients viendront enrichir cette page — et si vous faites partie des
+        premiers, votre projet aura toute mon attention.
+      </p>
+      <a href="/projets" class="btn btn-ghost">Voir tous les projets <span class="btn-arrow">→</span></a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .projects-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+  }
+
+  .projects-footer {
+    margin-top: 36px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  .projects-note {
+    padding: 20px 24px;
+    border-radius: var(--radius-sm);
+    border: 1px dashed var(--border-strong);
+    color: var(--text-muted);
+    font-size: 14.5px;
+    line-height: 1.7;
+    max-width: 640px;
+  }
+
+  @media (max-width: 980px) {
+    .projects-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

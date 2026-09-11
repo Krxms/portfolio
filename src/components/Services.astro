@@ -1,0 +1,100 @@
+---
+const services = [
+  {
+    title: 'Identité de marque & direction artistique',
+    text: "Votre image doit dire, en un regard, ce que vous faites et pourquoi on peut vous faire confiance. Je construis une identité cohérente — logo, typographies, couleurs, déclinaisons — qui tient sur une carte de visite comme sur une façade.",
+    tags: ['Logo', 'Charte graphique', 'Supports print & digital'],
+  },
+  {
+    title: 'UX/UI Design',
+    text: "Recherche utilisateur légère, architecture de l'information, maquettes haute-fidélité et prototypes testables. Des parcours qui réduisent la friction et augmentent la conversion — pas des écrans qui font joli et s'arrêtent là.",
+    tags: ['Wireframes', 'Prototypes', 'Design system'],
+  },
+  {
+    title: 'Sites & interfaces sur-mesure',
+    text: "Webflow ou Framer pour aller vite sans sacrifier la qualité, et du développement sur-mesure quand le projet a des besoins spécifiques que le no-code ne couvre pas. Design et code pensés ensemble, pas en silos.",
+    tags: ['No-code avancé', 'Développement custom', 'Intégrations'],
+  },
+  {
+    title: 'Accompagnement continu',
+    text: "Certains projets ne s'arrêtent jamais vraiment. Pour les produits en évolution constante : un volant d'heures dédié chaque mois, une priorité claire, et une personne qui connaît déjà votre contexte.",
+    tags: ['Retainer mensuel', 'Conseil UX', 'Itérations'],
+  },
+];
+---
+
+<section class="section" id="services">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">Ce que je fais</div>
+      <h2>Quatre façons de travailler ensemble.</h2>
+      <p class="sub">Du logo à l'interface qui tourne réellement en production — chaque service peut être pris seul ou combiné selon l'ampleur du projet.</p>
+    </div>
+
+    <div class="services-grid reveal">
+      {services.map((service, i) => (
+        <div class="service-card">
+          <span class="service-index">{String(i + 1).padStart(2, '0')}</span>
+          <h3>{service.title}</h3>
+          <p>{service.text}</p>
+          <div class="tag-row">
+            {service.tags.map((tag) => <span class="tag">{tag}</span>)}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .services-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+
+  .service-card {
+    background: var(--bg);
+    padding: 44px 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    transition: background 0.3s ease;
+  }
+
+  .service-card:hover {
+    background: var(--surface);
+  }
+
+  .service-index {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--text-faint);
+  }
+
+  .service-card h3 {
+    font-size: 24px;
+    letter-spacing: -0.01em;
+  }
+
+  .service-card p {
+    color: var(--text-muted);
+    font-size: 15.5px;
+    line-height: 1.7;
+  }
+
+  .service-card .tag-row {
+    margin-top: auto;
+    padding-top: 8px;
+  }
+
+  @media (max-width: 980px) {
+    .services-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

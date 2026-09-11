@@ -1,0 +1,17 @@
+{
+  "name": "portfolio-antoine-bruneau",
+  "version": "1.0.0",
+  "description": "Portfolio freelance UX/UI design & direction artistique (identité, UX/UI, sites/interfaces sur-mesure, accompagnement continu).",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "author": "Antoine Bruneau",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "astro": "^7.3.2"
+  }
+}
