@@ -1,29 +1,33 @@
 ---
 import './Footer.css';
-
-const footerLinks = [
-  { href: '/#services', label: 'Services' },
-  { href: '/projets', label: 'Projets' },
-  { href: '/#process', label: 'Méthode' },
-  { href: '/#tarifs', label: 'Tarifs' },
-  { href: '/a-propos', label: 'À propos' },
-  { href: '/contact', label: 'Contact' },
-];
+import Logo from './Logo.astro';
 ---
 
-<footer>
-  <div class="wrap">
-    <div class="footer-top">
-      <p class="footer-line">Le design d'une agence.<br /><em>L'attention d'un artisan.</em></p>
-      <nav class="footer-nav">
-        {footerLinks.map((link) => (
-          <a href={link.href}>{link.label}</a>
-        ))}
-      </nav>
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <div class="footer-brand">
+      <Logo />
+      <p class="footer-tagline">Design UX/UI, identité de marque &amp; sites sur-mesure.</p>
     </div>
-    <div class="footer-bottom">
-      <span>© <span data-year>2026</span> Antoine Bruneau — Designer UX/UI &amp; Graphiste indépendant</span>
-      <span>antoine.bruneau@protonmail.com</span>
+
+    <div class="footer-contact">
+      <span class="eyebrow">Contact</span>
+      <a class="footer-mail" href="mailto:antoine.bruneau@protonmail.com">antoine.bruneau@protonmail.com</a>
+      <span class="footer-location">France · à distance ou sur site</span>
     </div>
+
+    <div class="footer-cta">
+      <a
+        class="btn btn-primary"
+        href="mailto:antoine.bruneau@protonmail.com?subject=Votre%20projet"
+      >
+        Me contacter <span class="btn-arrow">→</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="wrap footer-bottom">
+    <span>© <span data-year>2026</span> Antoine Bruneau</span>
+    <span>Site en construction</span>
   </div>
 </footer>

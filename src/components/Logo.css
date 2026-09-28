@@ -1,0 +1,30 @@
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: var(--ink);
+}
+
+.logo--paper {
+  color: var(--paper);
+}
+
+.logo svg {
+  width: 30px;
+  height: auto;
+  flex: none;
+}
+
+.logo-name {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 15.5px;
+  letter-spacing: -0.01em;
+}
+
+@media (max-width: 560px) {
+  .logo-name {
+    display: none;
+  }
+}

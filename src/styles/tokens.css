@@ -1,28 +1,35 @@
 :root {
-  --bg: #0a0a0c;
-  --bg-soft: #0e0e11;
-  --surface: #141417;
-  --surface-hover: #1a1a1f;
-  --border: rgba(255, 255, 255, 0.09);
-  --border-strong: rgba(255, 255, 255, 0.18);
-  --text: #f4efe6;
-  --text-muted: #a49e91;
-  --text-faint: #716b60;
-  --accent: #ff5a1f;
-  --accent-2: #ffb84d;
-  --accent-deep: #c81e3a;
-  --accent-contrast: #140a05;
+  /* Base neutrals — warm ivory paper / near-black ink (not pure white/black) */
+  --paper: #f5f0e6;
+  --paper-soft: #efe8da;
+  --ink: #15120e;
+  --ink-soft: #322c24;
+  --muted: #726a5c;
+  --line: rgba(21, 18, 14, 0.14);
+  --line-strong: rgba(21, 18, 14, 0.28);
+
+  /* Dark inset panel (holds the WebGL sphere) */
+  --panel: #0e0c0a;
+  --panel-line: rgba(245, 240, 230, 0.12);
+
+  /* Signature accent — signal vermillion */
+  --signal: #ff4321;
+  --signal-deep: #b4210a;
+  --signal-ink: #fff6ef;
 
   --radius-sm: 10px;
-  --radius-md: 18px;
-  --radius-lg: 30px;
+  --radius-md: 20px;
+  --radius-lg: 32px;
 
-  --font-display: 'Fraunces', Georgia, serif;
-  --font-body: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+  /* Signature display face for large statements */
+  --font-display: 'Bricolage Grotesque', 'Instrument Sans', sans-serif;
+  /* Body / UI */
+  --font-body: 'Instrument Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  /* Labels, eyebrows, status */
   --font-mono: 'Space Mono', 'SFMono-Regular', Consolas, monospace;
 
   --container: 1180px;
   --edge: clamp(20px, 5vw, 64px);
 
-  color-scheme: dark;
+  color-scheme: light;
 }

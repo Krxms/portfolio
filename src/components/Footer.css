@@ -1,60 +1,79 @@
-footer {
-  border-top: 1px solid var(--border);
-  padding: 64px 0 40px;
+.site-footer {
+  position: relative;
+  z-index: 2;
+  border-top: 1px solid var(--line);
+  margin-top: 40px;
 }
 
-.footer-top {
+.footer-inner {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr auto;
+  gap: 32px;
+  align-items: center;
+  padding: 44px 0 32px;
+}
+
+.footer-brand {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 40px;
-  flex-wrap: wrap;
-  margin-bottom: 52px;
+  flex-direction: column;
+  gap: 12px;
 }
 
-.footer-line {
-  font-family: var(--font-display);
-  font-size: clamp(22px, 3vw, 32px);
-  max-width: 16ch;
-  line-height: 1.25;
-}
-
-.footer-line em {
-  color: var(--accent-2);
-  font-style: italic;
-}
-
-.footer-nav {
-  display: flex;
-  gap: 36px;
-  flex-wrap: wrap;
-}
-
-.footer-nav a {
+.footer-tagline {
+  color: var(--muted);
   font-size: 14px;
-  color: var(--text-muted);
-  text-decoration: none;
+  max-width: 32ch;
 }
 
-.footer-nav a:hover {
-  color: var(--text);
+.footer-contact {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.footer-mail {
+  font-family: var(--font-display);
+  font-size: 17px;
+  text-decoration: none;
+  color: var(--ink);
+  border-bottom: 1px solid var(--line-strong);
+  width: fit-content;
+  padding-bottom: 2px;
+}
+
+.footer-mail:hover {
+  color: var(--signal-deep);
+  border-color: var(--signal-deep);
+}
+
+.footer-location {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+.footer-cta {
+  justify-self: end;
 }
 
 .footer-bottom {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  gap: 16px;
+  gap: 12px;
   flex-wrap: wrap;
-  padding-top: 26px;
-  border-top: 1px solid var(--border);
-  font-size: 13px;
-  color: var(--text-faint);
+  padding: 20px 0 32px;
+  border-top: 1px solid var(--line);
   font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--muted);
 }
 
-@media (max-width: 600px) {
-  .footer-top {
-    flex-direction: column;
+@media (max-width: 780px) {
+  .footer-inner {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .footer-cta {
+    justify-self: start;
   }
 }

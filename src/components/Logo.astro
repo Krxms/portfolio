@@ -1,0 +1,17 @@
+---
+import './Logo.css';
+
+interface Props {
+  variant?: 'ink' | 'paper';
+}
+const { variant = 'ink' } = Astro.props;
+---
+
+<a href="/" class={`logo logo--${variant}`} aria-label="Antoine Bruneau — accueil">
+  <svg viewBox="0 0 64 84" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <ellipse cx="32" cy="42" rx="26" ry="37" stroke="currentColor" stroke-width="1.6"/>
+    <text x="32" y="38" text-anchor="middle" font-family="'Bricolage Grotesque', sans-serif" font-size="21" font-weight="600" fill="currentColor">A</text>
+    <text x="32" y="63" text-anchor="middle" font-family="'Bricolage Grotesque', sans-serif" font-size="21" font-weight="600" fill="currentColor">B</text>
+  </svg>
+  <span class="logo-name">Antoine Bruneau</span>
+</a>

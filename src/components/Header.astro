@@ -1,34 +1,11 @@
 ---
 import './Header.css';
-
-const navLinks = [
-  { href: '/#services', label: 'Services' },
-  { href: '/projets', label: 'Projets' },
-  { href: '/#process', label: 'Méthode' },
-  { href: '/#tarifs', label: 'Tarifs' },
-  { href: '/#faq', label: 'FAQ' },
-  { href: '/a-propos', label: 'À propos' },
-];
+import Logo from './Logo.astro';
 ---
 
-<header class="site-nav" id="siteNav">
-  <a href="/" class="brand"><span class="dot"></span>Antoine Bruneau</a>
-  <nav class="links">
-    {navLinks.map((link) => (
-      <a href={link.href}>{link.label}</a>
-    ))}
-  </nav>
-  <div class="nav-cta">
-    <a href="/contact" class="btn btn-ghost">Contact</a>
-    <button class="burger" id="burgerBtn" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="mobilePanel">
-      <span></span>
-    </button>
+<header class="site-header">
+  <div class="wrap header-inner">
+    <Logo />
+    <span class="status-pill"><span class="pulse"></span>Nouveau site en préparation</span>
   </div>
 </header>
-
-<div class="mobile-panel" id="mobilePanel">
-  {navLinks.map((link) => (
-    <a href={link.href}>{link.label}</a>
-  ))}
-  <a href="/contact" class="btn btn-primary">Discutons de votre projet <span class="btn-arrow">→</span></a>
-</div>
