@@ -20,6 +20,9 @@
   /* Logo navy — used sparingly (background mesh) for continuity with the mark */
   --brand-navy: #202559;
 
+  /* Slate — Hello + CTA label */
+  --slate: #506180;
+
   /* Mesh-gradient hues — background only */
   --mesh-orange: #ff5a2e;
   --mesh-blue: #3b6cff;
