@@ -1,17 +1,13 @@
 .logo {
   display: inline-flex;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
   text-decoration: none;
   color: var(--ink);
 }
 
-.logo--paper {
-  color: var(--paper);
-}
-
-.logo svg {
-  width: 30px;
+.logo-mark {
+  width: 24px;
   height: auto;
   flex: none;
 }

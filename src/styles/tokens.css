@@ -17,6 +17,9 @@
   --signal-deep: #b4210a;
   --signal-ink: #fff6ef;
 
+  /* Logo navy — used sparingly (background mesh) for continuity with the mark */
+  --brand-navy: #202559;
+
   --radius-sm: 10px;
   --radius-md: 20px;
   --radius-lg: 32px;

@@ -1,6 +1,5 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import HeroSphere from '../components/HeroSphere.astro';
 import './index.css';
 ---
 
@@ -9,21 +8,14 @@ import './index.css';
   description="Le portfolio d'Antoine Bruneau, designer UX/UI & graphiste indépendant, fait peau neuve. De retour très prochainement."
 >
   <section class="hero wrap">
-    <span class="eyebrow">Prochainement</span>
+    <span class="label">Prochainement</span>
     <h1>Ça se<br /><em>façonne.</em></h1>
     <p class="hero-sub">
       Le portfolio d'Antoine Bruneau — designer UX/UI &amp; graphiste indépendant — fait peau neuve.
       Identité de marque, interfaces et sites sur-mesure : de retour très prochainement.
     </p>
-    <a class="btn btn-primary" href="mailto:antoine.bruneau@protonmail.com?subject=Votre%20projet">
+    <a class="btn btn-primary btn-glass" href="mailto:antoine.bruneau@protonmail.com?subject=Votre%20projet">
       Me contacter <span class="btn-arrow">→</span>
     </a>
-  </section>
-
-  <section class="panel wrap" aria-hidden="true">
-    <div class="panel-inner">
-      <HeroSphere />
-      <span class="panel-caption">// en cours de façonnage</span>
-    </div>
   </section>
 </BaseLayout>

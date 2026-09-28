@@ -7,48 +7,5 @@
 .header-inner {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  flex-wrap: wrap;
-}
-
-.status-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 9px;
-  font-family: var(--font-mono);
-  font-size: 12px;
-  letter-spacing: 0.05em;
-  padding: 8px 14px 8px 10px;
-  border: 1px solid var(--line-strong);
-  border-radius: 100px;
-  color: var(--muted);
-}
-
-.status-pill .pulse {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--signal);
-  position: relative;
-  flex: none;
-}
-
-.status-pill .pulse::after {
-  content: '';
-  position: absolute;
-  inset: -4px;
-  border-radius: 50%;
-  border: 1px solid var(--signal);
-  opacity: 0.55;
-  animation: pulse 2.2s ease-out infinite;
-}
-
-@keyframes pulse {
-  0% { transform: scale(0.6); opacity: 0.7; }
-  100% { transform: scale(2.1); opacity: 0; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .status-pill .pulse::after { animation: none; }
+  justify-content: flex-start;
 }

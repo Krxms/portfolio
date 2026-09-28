@@ -1,14 +1,20 @@
 .hero {
-  padding: 120px 0 64px;
+  padding: 120px 0 140px;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
   gap: 28px;
+  min-height: calc(100vh - 100px);
+  justify-content: center;
 }
 
-.hero .eyebrow {
-  justify-content: center;
+.hero .label {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
 }
 
 .hero h1 {
@@ -29,28 +35,6 @@
   font-size: 18px;
   line-height: 1.7;
   max-width: 46ch;
-}
-
-.panel {
-  padding: 0 0 96px;
-}
-
-.panel-inner {
-  background: var(--panel);
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--panel-line);
-  padding: clamp(40px, 7vw, 88px) clamp(20px, 6vw, 64px) clamp(32px, 5vw, 56px);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 28px;
-}
-
-.panel-caption {
-  font-family: var(--font-mono);
-  font-size: 12.5px;
-  letter-spacing: 0.06em;
-  color: rgba(245, 240, 230, 0.55);
 }
 
 @media (max-width: 600px) {
