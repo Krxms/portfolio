@@ -181,3 +181,8 @@
     padding-top: 150px;
   }
 }
+
+.hero-inner > *:not(.hero-sphere) {
+  position: relative;
+  z-index: 1;
+}
