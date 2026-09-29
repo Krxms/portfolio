@@ -26,6 +26,13 @@ const pageTitle = title === 'Antoine Bruneau' ? title : `${title} — Antoine Br
     <meta name="theme-color" content="#f5f0e6" />
   </head>
   <body>
+    <svg class="glass-defs" width="0" height="0" aria-hidden="true" focusable="false">
+      <filter id="liquid-glass" x="-30%" y="-30%" width="160%" height="160%" color-interpolation-filters="sRGB">
+        <feTurbulence type="fractalNoise" baseFrequency="0.009 0.014" numOctaves="2" seed="7" result="noise" />
+        <feGaussianBlur in="noise" stdDeviation="3" result="softNoise" />
+        <feDisplacementMap in="SourceGraphic" in2="softNoise" scale="30" xChannelSelector="R" yChannelSelector="G" />
+      </filter>
+    </svg>
     <Header />
     <main>
       <slot />

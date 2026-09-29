@@ -1,36 +1,33 @@
 :root {
-  /* Base neutrals — warm ivory paper / near-black ink (not pure white/black) */
+  /* Base neutrals — warm ivory paper / deep plum-black ink (not pure white/black) */
   --paper: #f5f0e6;
   --paper-soft: #efe8da;
-  --ink: #15120e;
-  --ink-soft: #322c24;
-  --muted: #726a5c;
-  --line: rgba(21, 18, 14, 0.14);
-  --line-strong: rgba(21, 18, 14, 0.28);
+  --ink: #241a30;
+  --ink-soft: #4a4166;
+  --muted: #6f6785;
+  --line: rgba(36, 26, 48, 0.13);
+  --line-strong: rgba(36, 26, 48, 0.26);
 
-  /* Dark inset panel (holds the WebGL sphere) */
-  --panel: #0e0c0a;
-  --panel-line: rgba(245, 240, 230, 0.12);
+  /* Signature accent — mauve/lavender */
+  --signal: #8c7fae;
+  --signal-deep: #6b5a8c;
+  --signal-ink: #fbfaff;
 
-  /* Signature accent — signal vermillion */
-  --signal: #ff4321;
-  --signal-deep: #b4210a;
-  --signal-ink: #fff6ef;
-
-  /* Logo navy — used sparingly (background mesh) for continuity with the mark */
+  /* Logo navy — used sparingly for continuity with the mark */
   --brand-navy: #202559;
 
-  /* Slate — Hello + CTA label */
+  /* Slate — Hello */
   --slate: #506180;
 
   /* Mesh-gradient hues — background only */
-  --mesh-orange: #ff5a2e;
-  --mesh-blue: #3b6cff;
-  --mesh-green: #2fb373;
+  --mesh-orange: #ff9a68;
+  --mesh-purple: #a594d1;
+  --mesh-green: #92c197;
 
   --radius-sm: 10px;
-  --radius-md: 20px;
+  --radius-md: 18px;
   --radius-lg: 32px;
+  --radius-btn: 16px;
 
   /* Signature display face for large statements */
   --font-display: 'Bricolage Grotesque', 'Instrument Sans', sans-serif;

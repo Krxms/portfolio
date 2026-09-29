@@ -33,17 +33,24 @@ body {
   overflow-x: hidden;
 }
 
-/* Léger mesh gradient de fond — fixe, très subtil */
+.glass-defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+/* Mesh gradient de fond — fixe, orange / mauve / vert très doux */
 body::before {
   content: '';
   position: fixed;
   inset: 0;
   z-index: -2;
   background:
-    radial-gradient(820px 620px at 8% 10%, color-mix(in srgb, var(--mesh-orange) 20%, transparent), transparent 62%),
-    radial-gradient(760px 600px at 95% 8%, color-mix(in srgb, var(--mesh-blue) 15%, transparent), transparent 60%),
-    radial-gradient(880px 680px at 50% 108%, color-mix(in srgb, var(--mesh-green) 16%, transparent), transparent 65%),
-    radial-gradient(560px 460px at 82% 82%, color-mix(in srgb, var(--mesh-orange) 13%, transparent), transparent 60%),
+    radial-gradient(820px 640px at 6% 8%, color-mix(in srgb, var(--mesh-orange) 42%, transparent), transparent 62%),
+    radial-gradient(780px 620px at 96% 6%, color-mix(in srgb, var(--mesh-purple) 40%, transparent), transparent 60%),
+    radial-gradient(760px 600px at 88% 96%, color-mix(in srgb, var(--mesh-purple) 34%, transparent), transparent 60%),
+    radial-gradient(880px 680px at 10% 96%, color-mix(in srgb, var(--mesh-green) 34%, transparent), transparent 62%),
     var(--paper);
 }
 
@@ -54,7 +61,7 @@ body::after {
   inset: 0;
   z-index: -1;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  opacity: 0.07;
+  opacity: 0.09;
   mix-blend-mode: multiply;
 }
 
@@ -116,7 +123,7 @@ p {
   height: 7px;
   border-radius: 50%;
   background: var(--signal);
-  box-shadow: 0 0 0 4px rgba(255, 67, 33, 0.16);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--signal) 16%, transparent);
   flex: none;
 }
 
@@ -129,7 +136,7 @@ p {
   font-weight: 600;
   font-size: 15.5px;
   padding: 13px 26px;
-  border-radius: 100px;
+  border-radius: 8px;
   border: 1px solid transparent;
   cursor: pointer;
   text-decoration: none;
@@ -140,13 +147,13 @@ p {
 .btn-primary {
   background: var(--signal);
   color: var(--signal-ink);
-  box-shadow: 0 10px 26px -10px rgba(255, 67, 33, 0.55);
+  box-shadow: 0 10px 26px -10px color-mix(in srgb, var(--signal) 55%, transparent);
 }
 
 .btn-primary:hover {
   background: var(--signal-deep);
   transform: translateY(-2px);
-  box-shadow: 0 16px 30px -10px rgba(180, 33, 10, 0.55);
+  box-shadow: 0 16px 30px -10px color-mix(in srgb, var(--signal-deep) 55%, transparent);
 }
 
 .btn-ghost {
@@ -168,22 +175,25 @@ p {
   transform: translateX(3px);
 }
 
-/* Liquid glass — réservé à un CTA unique, celui du hero */
+/* Liquid glass — réservé à un CTA unique, celui du hero. Vraie distorsion
+   du fond via le filtre SVG #liquid-glass (feTurbulence + feDisplacementMap),
+   façon matériau "Liquid Glass" iOS 26 — pas juste un flou + transparence. */
 .btn-glass {
-  background: linear-gradient(165deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.08) 40%, rgba(255, 67, 33, 0.5)),
-    rgba(255, 67, 33, 0.55);
-  backdrop-filter: blur(18px) saturate(170%);
-  -webkit-backdrop-filter: blur(18px) saturate(170%);
-  border: 1px solid rgba(255, 255, 255, 0.5);
+  position: relative;
+  background: linear-gradient(165deg, rgba(255, 255, 255, 0.32), rgba(255, 255, 255, 0.04) 45%, color-mix(in srgb, var(--signal) 38%, transparent)),
+    color-mix(in srgb, var(--signal) 22%, transparent);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  backdrop-filter: url(#liquid-glass) blur(6px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.55);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.65),
-    inset 0 -12px 16px -12px rgba(180, 33, 10, 0.35),
-    0 16px 34px -14px rgba(255, 67, 33, 0.55);
-  color: var(--slate);
-  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.3);
+    inset 0 1px 0 rgba(255, 255, 255, 0.8),
+    inset 0 -14px 18px -14px color-mix(in srgb, var(--signal-deep) 55%, transparent),
+    0 18px 36px -16px color-mix(in srgb, var(--signal) 65%, transparent);
+  color: var(--signal-ink);
+  text-shadow: 0 1px 3px color-mix(in srgb, var(--signal-deep) 45%, transparent);
 }
 
 .btn-glass:hover {
-  background: linear-gradient(165deg, rgba(255, 255, 255, 0.48), rgba(255, 255, 255, 0.1) 40%, rgba(180, 33, 10, 0.6)),
-    rgba(180, 33, 10, 0.6);
+  background: linear-gradient(165deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.06) 45%, color-mix(in srgb, var(--signal-deep) 48%, transparent)),
+    color-mix(in srgb, var(--signal-deep) 30%, transparent);
 }
