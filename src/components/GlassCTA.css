@@ -65,6 +65,10 @@
   filter: drop-shadow(0 25px 3px rgba(102, 102, 102, 0.2));
 }
 
+.btn-icon {
+  display: none;
+}
+
 .glass-cta::before {
   content: '';
   position: absolute;
