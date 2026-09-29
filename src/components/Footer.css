@@ -38,17 +38,11 @@
 
 .footer-mail {
   font-family: var(--font-body);
-  font-weight: 600;
-  font-size: 17px;
+  font-weight: 500;
+  font-size: 14px;
   text-decoration: none;
   color: var(--ink);
   width: fit-content;
-  transition: font-weight 0.2s ease, color 0.2s ease;
-}
-
-.footer-mail:hover {
-  font-weight: 800;
-  color: var(--signal-deep);
 }
 
 .footer-location {
@@ -67,16 +61,18 @@
 
 .footer-legal a {
   font-family: var(--font-body);
-  font-weight: 600;
+  font-weight: 500;
   font-size: 14px;
   text-decoration: none;
   color: var(--ink);
   width: fit-content;
-  transition: font-weight 0.2s ease;
 }
 
-.footer-legal a:hover {
-  font-weight: 800;
+/* Titres de colonnes du footer ("Contact", "Conditions") : Be Vietnam Pro
+   plutôt que le Space Mono utilisé pour les labels ailleurs sur le site. */
+.footer-contact .label,
+.footer-legal .label {
+  font-family: var(--font-body);
 }
 
 .footer-cta {
