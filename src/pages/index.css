@@ -6,8 +6,7 @@
   align-items: center;
   text-align: center;
   gap: 22px;
-  /* Agrandi temporairement pour avoir du scroll et tester le fond liquid de la navbar */
-  min-height: 180vh;
+  min-height: calc(100vh - 100px);
   justify-content: center;
 }
 
@@ -15,7 +14,7 @@
   font-family: var(--font-body);
   font-weight: 500;
   font-size: clamp(1.1rem, 2vw, 1.4rem);
-  color: var(--ink-soft);
+  color: var(--ink);
   letter-spacing: -0.01em;
 }
 
@@ -46,7 +45,7 @@
 }
 
 .hero-sub {
-  color: var(--ink-soft);
+  color: var(--ink);
   font-size: 18px;
   line-height: 1.7;
   max-width: 46ch;

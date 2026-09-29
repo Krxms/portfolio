@@ -19,6 +19,9 @@
   /* Slate — Hello */
   --slate: #506180;
 
+  /* Navbar */
+  --nav-bg: #ece5dc;
+
   /* Mesh-gradient hues — background only */
   --mesh-orange: #ff9a68;
   --mesh-purple: #a594d1;
