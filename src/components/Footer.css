@@ -7,9 +7,9 @@
 
 .footer-inner {
   display: grid;
-  grid-template-columns: 1.3fr 1fr auto;
+  grid-template-columns: 1.2fr 0.9fr 0.9fr auto;
   gap: 32px;
-  align-items: center;
+  align-items: start;
   padding: 44px 0 32px;
 }
 
@@ -53,8 +53,27 @@
   color: var(--muted);
 }
 
+.footer-legal {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.footer-legal a {
+  font-family: var(--font-body);
+  font-size: 14px;
+  text-decoration: none;
+  color: var(--ink-soft);
+  width: fit-content;
+}
+
+.footer-legal a:hover {
+  color: var(--signal-deep);
+}
+
 .footer-cta {
   justify-self: end;
+  align-self: center;
 }
 
 .footer-bottom {
@@ -72,5 +91,6 @@
   }
   .footer-cta {
     justify-self: start;
+    align-self: auto;
   }
 }
