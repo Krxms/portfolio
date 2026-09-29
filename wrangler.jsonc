@@ -8,7 +8,7 @@
     "binding": "ASSETS"
   },
   "vars": {
-    "EMAIL_FROM": "Antoine Bruneau <onboarding@resend.dev>",
+    "EMAIL_FROM": "Antoine Bruneau <contact@antoinebruneau.fr>",
     "EMAIL_TO": "contact@antoinebruneau.fr"
   }
 }
