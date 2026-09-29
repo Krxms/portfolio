@@ -7,8 +7,10 @@
 }
 
 .logo-mark {
+  display: block;
   width: 24px;
-  height: auto;
+  height: 42.5px;
+  aspect-ratio: 48 / 85;
   flex: none;
 }
 
