@@ -8,17 +8,19 @@
   /* Hauteur fixe plutôt que padding + hauteur du logo : évite que la
      navbar ne se redimensionne (et le flou dégradé avec elle) si le
      logo se rend différemment d'un navigateur à l'autre.
-     165px = 40px de marge + 85px de logo (taille native) + 40px, conforme
-     à la maquette Figma d'origine. */
-  height: 165px;
+     149px = 32px de marge + 85px de logo (taille native) + 32px. */
+  height: 149px;
   position: sticky;
   top: 0;
   z-index: 20;
+  /* Fond de base toujours visible (recette Josh Comeau) : même sans le
+     calque .backdrop, le header garde une teinte translucide. */
+  background: color-mix(in srgb, var(--nav-bg) 55%, transparent);
 }
 
 @media (max-width: 560px) {
   .site-header {
-    height: 124px;
+    height: 112px;
   }
 }
 
@@ -26,14 +28,18 @@
   position: absolute;
   inset: 0;
   height: 150%;
-  background: color-mix(in srgb, var(--nav-bg) 70%, transparent);
-  backdrop-filter: blur(14px);
   /* .backdrop fait 150% de la hauteur du header : le bord bas du header
      lui-même tombe donc à 100%/150% = 66.6% de la hauteur de CE calque.
-     Le flou/fond doit rester plein jusque-là (sinon il s'estompe encore
-     à l'intérieur du header et semble "trop court" pour l'encadrer), et
-     ne s'estomper que dans le débord sous le header, pour le contenu qui
-     défile dessous. */
+     Le dégradé de fond ET le masque doivent tous les deux rester pleins
+     jusque-là (sinon ça s'estompe encore à l'intérieur du header et ça
+     semble "trop court" pour l'encadrer), et ne s'estomper qu'ensuite,
+     dans le débord sous le header, pour le contenu qui défile dessous. */
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--nav-bg) 85%, transparent),
+    transparent 66.6%
+  );
+  backdrop-filter: blur(16px);
   mask-image: linear-gradient(to bottom, black 0% 66.6%, transparent 100%);
   pointer-events: none;
 }
