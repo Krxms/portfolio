@@ -1,0 +1,161 @@
+.contact-page {
+  padding-top: 170px;
+  padding-bottom: 100px;
+}
+
+.page-head {
+  max-width: 640px;
+  margin-bottom: 60px;
+}
+
+.page-head h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2.4rem, 4.5vw, 3.6rem);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin-top: 4px;
+}
+
+.page-head .sub {
+  margin-top: 18px;
+  color: var(--ink);
+  font-size: 17px;
+  line-height: 1.7;
+}
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 64px;
+  align-items: start;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.field label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-soft);
+  font-family: var(--font-mono);
+  letter-spacing: 0.03em;
+}
+
+.field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+input,
+select,
+textarea {
+  font-family: var(--font-body);
+  font-size: 15.5px;
+  color: var(--ink);
+  background: var(--paper-soft);
+  border: 1px solid var(--line-strong);
+  border-radius: 10px;
+  padding: 13px 15px;
+  width: 100%;
+}
+
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9'%3E%3Cpath d='M1 1l6 6 6-6' stroke='%236f6785' stroke-width='1.6' fill='none' fill-rule='evenodd'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 15px center;
+  padding-right: 36px;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 130px;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--muted);
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--signal);
+  outline: none;
+}
+
+.form-status {
+  font-size: 13.5px;
+  color: var(--signal-deep);
+  margin-top: 10px;
+  min-height: 18px;
+}
+
+.contact-side {
+  display: flex;
+  flex-direction: column;
+  gap: 34px;
+}
+
+.contact-direct {
+  padding: 30px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--paper-soft);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.contact-direct .label {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.contact-direct a {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 18px;
+  text-decoration: none;
+  color: var(--ink);
+  border-bottom: 1px solid var(--line-strong);
+  width: fit-content;
+  padding-bottom: 2px;
+}
+
+.contact-direct a:hover {
+  color: var(--signal-deep);
+  border-color: var(--signal-deep);
+}
+
+.contact-note {
+  color: var(--ink-soft);
+  font-size: 14.5px;
+  line-height: 1.7;
+}
+
+@media (max-width: 900px) {
+  .contact-grid {
+    grid-template-columns: 1fr;
+    gap: 44px;
+  }
+}
+
+@media (max-width: 600px) {
+  .contact-page {
+    padding-top: 110px;
+  }
+  .field-row {
+    grid-template-columns: 1fr;
+  }
+}

@@ -136,6 +136,17 @@ p {
   flex: none;
 }
 
+/* Comme .eyebrow, mais sans la pastille — label discret réutilisé sur
+   plusieurs pages (statut, "Contact", "Écrire directement"...) */
+.label {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
 .btn {
   display: inline-flex;
   align-items: center;

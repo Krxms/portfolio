@@ -1,0 +1,74 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import './contact.css';
+---
+
+<BaseLayout
+  title="Contact"
+  description="Parlons de votre projet — identité de marque, site vitrine ou produit digital sur-mesure. Réponse sous 24h ouvrées."
+>
+  <section class="section contact-page wrap">
+    <div class="page-head">
+      <span class="label">Contact</span>
+      <h1>Parlons de votre projet.</h1>
+      <p class="sub">Décrivez-moi votre besoin en quelques lignes — je reviens vers vous sous 24h ouvrées.</p>
+    </div>
+
+    <div class="contact-grid">
+      <form id="contactForm" novalidate>
+        <div class="field-row">
+          <div class="field">
+            <label for="fName">Nom</label>
+            <input type="text" id="fName" name="name" placeholder="Votre nom" required />
+          </div>
+          <div class="field">
+            <label for="fEmail">Email</label>
+            <input type="email" id="fEmail" name="email" placeholder="vous@exemple.fr" required />
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="fType">Type de projet</label>
+            <select id="fType" name="type">
+              <option>Identité de marque</option>
+              <option>Site vitrine</option>
+              <option>Produit digital / UX-UI</option>
+              <option>Accompagnement continu</option>
+              <option>Autre</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="fBudget">Budget estimé</label>
+            <select id="fBudget" name="budget">
+              <option>Moins de 1 000 €</option>
+              <option>1 000 – 3 000 €</option>
+              <option>3 000 – 8 000 €</option>
+              <option>8 000 € et plus</option>
+              <option>Je ne sais pas encore</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label for="fMessage">Message</label>
+          <textarea id="fMessage" name="message" placeholder="Parlez-moi de votre projet, de vos objectifs, de vos délais..." required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Envoyer <span class="btn-arrow">→</span></button>
+        <p class="form-status" id="formStatus" role="status"></p>
+      </form>
+
+      <div class="contact-side">
+        <div class="contact-direct">
+          <span class="label">Écrire directement</span>
+          <a href="mailto:contact@antoinebruneau.fr">contact@antoinebruneau.fr</a>
+          <a href="tel:+33609111838">06 09 11 18 38</a>
+        </div>
+        <p class="contact-note">
+          Que votre projet soit une identité complète, un site vitrine ou un produit digital plus complexe, le
+          premier échange ne coûte rien et ne vous engage à rien.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <script src="../scripts/contactForm.js"></script>
+</BaseLayout>
