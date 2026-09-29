@@ -54,6 +54,17 @@
   border-color: var(--signal-deep);
 }
 
+.footer-mail-secondary {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--muted);
+  border-color: transparent;
+}
+
+.footer-mail-secondary:hover {
+  color: var(--signal-deep);
+}
+
 .footer-location {
   font-family: var(--font-mono);
   font-size: 12.5px;

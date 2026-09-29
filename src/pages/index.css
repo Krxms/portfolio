@@ -1,44 +1,20 @@
 .hero {
-  padding: 120px 0 140px;
+  position: relative;
+  padding: 140px 0 140px;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: 28px;
+  gap: 22px;
   min-height: calc(100vh - 100px);
   justify-content: center;
-}
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  overflow: hidden;
 
-.hero .label {
-  font-family: var(--font-mono);
-  font-size: 12.5px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-
-.hero-intro {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 14px;
-}
-
-.hero h1 {
-  font-size: clamp(3.2rem, 11vw, 8.5rem);
-  font-weight: 700;
-  line-height: 0.96;
-  letter-spacing: -0.03em;
-  max-width: 14ch;
-}
-
-.hero h1 .hello {
-  color: var(--slate);
-}
-
-.hero h1 em {
-  font-style: normal;
-  color: var(--signal);
+  /* Photo de test — à remplacer par le visuel définitif */
+  background-image: linear-gradient(rgba(245, 240, 230, 0.2), rgba(245, 240, 230, 0.2)), url('/images/hero-bg-temp.webp');
+  background-size: cover;
+  background-position: center;
 }
 
 .hero-role {
@@ -49,11 +25,38 @@
   letter-spacing: -0.01em;
 }
 
+.hero .label {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.hero h1 {
+  font-size: clamp(3.2rem, 11vw, 8.5rem);
+  font-weight: 700;
+  line-height: 0.96;
+  letter-spacing: -0.03em;
+  max-width: 14ch;
+  margin-top: 10px;
+}
+
+.hero h1 .title-dark {
+  color: var(--ink);
+}
+
+.hero h1 em {
+  font-style: normal;
+  color: var(--signal);
+}
+
 .hero-sub {
   color: var(--ink-soft);
   font-size: 18px;
   line-height: 1.7;
   max-width: 46ch;
+  margin-top: 6px;
 }
 
 @media (max-width: 600px) {

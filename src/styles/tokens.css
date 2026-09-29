@@ -2,15 +2,15 @@
   /* Base neutrals — warm ivory paper / deep plum-black ink (not pure white/black) */
   --paper: #f5f0e6;
   --paper-soft: #efe8da;
-  --ink: #241a30;
+  --ink: #281c33;
   --ink-soft: #4a4166;
   --muted: #6f6785;
-  --line: rgba(36, 26, 48, 0.13);
-  --line-strong: rgba(36, 26, 48, 0.26);
+  --line: rgba(40, 28, 51, 0.13);
+  --line-strong: rgba(40, 28, 51, 0.26);
 
-  /* Signature accent — mauve/lavender */
-  --signal: #8c7fae;
-  --signal-deep: #6b5a8c;
+  /* Signature accent — mauve/lavender (exact maquette values) */
+  --signal: #735f84;
+  --signal-deep: #5a4a68;
   --signal-ink: #fbfaff;
 
   /* Logo navy — used sparingly for continuity with the mark */
