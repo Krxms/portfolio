@@ -54,7 +54,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: var(--ink);
+  background: #735f84af;
   border-radius: 50%;
   box-shadow: 0 0 6px rgba(0, 0, 0, 0.3);
   transition: 0.25s;
