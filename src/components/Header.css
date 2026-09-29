@@ -1,14 +1,48 @@
+/* Verre dépoli "gradué" (technique Josh Comeau — joshwcomeau.com/css/backdrop-filter) :
+   un calque .backdrop deux fois plus haut que le header, flouté puis masqué en
+   dégradé (net en haut, invisible à mi-hauteur), + une fine bande .backdrop-edge
+   parfaitement nette en bas — donne un flou qui s'estompe naturellement plutôt
+   qu'une coupure brutale. */
 .site-header {
+  --thickness: 1px;
   position: sticky;
   top: 0;
   z-index: 20;
   padding: 30px 0;
-  background: color-mix(in srgb, var(--nav-bg) 82%, transparent);
-  backdrop-filter: blur(14px);
-  border-bottom: 1px solid var(--line);
+}
+
+.backdrop {
+  position: absolute;
+  inset: 0;
+  height: 150%;
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--nav-bg) 60%, transparent),
+    transparent 35%
+  );
+  backdrop-filter: blur(9px);
+  mask-image: linear-gradient(to bottom, black 0% 30%, transparent 30% 100%);
+  pointer-events: none;
+}
+
+.backdrop-edge {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  background: color-mix(in srgb, var(--nav-bg) 14%, transparent);
+  backdrop-filter: blur(12px) brightness(0.98);
+  mask-image: linear-gradient(
+    to bottom,
+    black 0,
+    black var(--thickness),
+    transparent var(--thickness)
+  );
+  pointer-events: none;
 }
 
 .header-inner {
+  position: relative;
+  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: flex-start;

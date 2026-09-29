@@ -17,6 +17,8 @@
 .footer-brand {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  text-align: center;
   gap: 12px;
 }
 
@@ -29,6 +31,8 @@
 .footer-contact {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  text-align: center;
   gap: 8px;
 }
 
@@ -41,9 +45,11 @@
   border-bottom: 1px solid var(--line-strong);
   width: fit-content;
   padding-bottom: 2px;
+  transition: font-weight 0.2s ease;
 }
 
 .footer-mail:hover {
+  font-weight: 800;
   color: var(--signal-deep);
   border-color: var(--signal-deep);
 }
@@ -57,19 +63,23 @@
 .footer-legal {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  text-align: center;
   gap: 8px;
 }
 
 .footer-legal a {
   font-family: var(--font-body);
+  font-weight: 600;
   font-size: 14px;
   text-decoration: none;
-  color: var(--ink-soft);
+  color: var(--ink);
   width: fit-content;
+  transition: font-weight 0.2s ease;
 }
 
 .footer-legal a:hover {
-  color: var(--signal-deep);
+  font-weight: 800;
 }
 
 .footer-cta {

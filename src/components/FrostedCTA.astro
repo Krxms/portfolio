@@ -1,0 +1,35 @@
+---
+import './FrostedCTA.css';
+
+interface Props {
+  href: string;
+}
+
+const { href } = Astro.props;
+---
+
+<a href={href} class="frosted-cta">
+  <span class="text"><slot /></span>
+  <span class="btn-icon">
+    <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path
+        d="M779.180132 473.232045 322.354755 16.406668c-21.413706-21.413706-56.121182-21.413706-77.534887 0-21.413706 21.413706-21.413706 56.122205 0 77.534887l418.057421 418.057421L244.819868 930.057421c-21.413706 21.413706-21.413706 56.122205 0 77.534887 10.706853 10.706853 24.759917 16.059767 38.767955 16.059767s28.061103-5.353938 38.767955-16.059767L779.180132 550.767955C800.593837 529.35425 800.593837 494.64575 779.180132 473.232045z"
+      ></path>
+    </svg>
+  </span>
+</a>
+
+<script>
+  // Le hue-rotate suit la position horizontale de la souris sur le bouton
+  // (0deg à gauche → 110deg à droite), à la manière de la démo ".atom-fella"
+  // sur joshwcomeau.com/css/backdrop-filter.
+  const MAX_HUE = 110;
+
+  document.addEventListener('mousemove', (e) => {
+    const btn = (e.target as HTMLElement)?.closest?.('.frosted-cta') as HTMLElement | null;
+    if (!btn) return;
+    const rect = btn.getBoundingClientRect();
+    const ratio = Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width));
+    btn.style.setProperty('--hue', `${ratio * MAX_HUE}deg`);
+  });
+</script>

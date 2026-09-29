@@ -67,7 +67,7 @@ textarea {
   font-family: var(--font-body);
   font-size: 15.5px;
   color: var(--ink);
-  background: var(--paper-soft);
+  background: #fffdfa;
   border: 1px solid var(--line-strong);
   border-radius: 10px;
   padding: 13px 15px;
@@ -111,13 +111,16 @@ textarea:focus {
   display: flex;
   flex-direction: column;
   gap: 34px;
+  /* Aligne le haut de l'encart avec les champs de saisie du formulaire
+     (Nom/Email), pas avec leurs labels au-dessus. */
+  margin-top: 24px;
 }
 
 .contact-direct {
   padding: 30px;
   border: 1px solid var(--line);
   border-radius: var(--radius-md);
-  background: var(--paper-soft);
+  background: #fffdfa;
   display: flex;
   flex-direction: column;
   gap: 14px;
@@ -133,18 +136,15 @@ textarea:focus {
 
 .contact-direct a {
   font-family: var(--font-body);
-  font-weight: 600;
+  font-weight: 500;
   font-size: 18px;
   text-decoration: none;
   color: var(--ink);
-  border-bottom: 1px solid var(--line-strong);
   width: fit-content;
-  padding-bottom: 2px;
 }
 
 .contact-direct a:hover {
   color: var(--signal-deep);
-  border-color: var(--signal-deep);
 }
 
 .contact-note {

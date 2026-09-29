@@ -85,7 +85,7 @@
   position: absolute;
   inset: 0;
   border-radius: 9999px;
-  filter: blur(7px);
+  filter: blur(2px);
   background: linear-gradient(
     45deg,
     rgba(255, 255, 255, 0.8) 0%,

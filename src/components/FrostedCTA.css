@@ -1,0 +1,75 @@
+/* CTA en verre dépoli — backdrop-filter (blur + saturate), sans box-shadow.
+   État neutre au repos ; au survol, hue-rotate suit la position de la souris
+   (voir le <script> du composant), inspiré de joshwcomeau.com/css/backdrop-filter. */
+.frosted-cta {
+  --hue: 0deg;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 13px 13px 28px;
+  border-radius: 9999px;
+  border: 1px solid color-mix(in srgb, var(--ink) 14%, transparent);
+  background: color-mix(in srgb, var(--paper) 55%, transparent);
+  backdrop-filter: blur(14px) saturate(160%);
+  color: var(--ink);
+  cursor: pointer;
+  text-decoration: none;
+  user-select: none;
+  filter: hue-rotate(0deg);
+  transition: filter 0.2s ease, transform 0.25s ease, background 0.25s ease, border-color 0.25s ease;
+}
+
+.frosted-cta .text {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 17px;
+  white-space: nowrap;
+}
+
+.frosted-cta .btn-icon {
+  flex: none;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--signal);
+  transition: transform 0.25s ease;
+}
+
+.frosted-cta .btn-icon svg {
+  width: 14px;
+  fill: var(--signal-ink);
+}
+
+.frosted-cta:hover {
+  filter: hue-rotate(var(--hue));
+  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--ink) 22%, transparent);
+}
+
+.frosted-cta:hover .btn-icon {
+  transform: scale(1.1);
+}
+
+.frosted-cta:active {
+  transform: scale(0.97);
+}
+
+@media (max-width: 480px) {
+  .frosted-cta {
+    padding: 11px 11px 11px 22px;
+  }
+  .frosted-cta .text {
+    font-size: 15.5px;
+  }
+  .frosted-cta .btn-icon {
+    width: 32px;
+    height: 32px;
+  }
+  .frosted-cta .btn-icon svg {
+    width: 12px;
+  }
+}
