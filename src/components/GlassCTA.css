@@ -1,0 +1,143 @@
+/* Enveloppe qui isole l'effet de verre : le filter:contrast() ne doit
+   jamais déborder sur le reste de la page, seulement envelopper le bouton. */
+.glass-fx-layer {
+  display: inline-flex;
+  position: relative;
+  filter: contrast(3);
+}
+
+.glass-cta {
+  --tr: 15%;
+  position: relative;
+  z-index: 500;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.85rem;
+  /* Dimensionné par le contenu (texte + icône), donc naturellement
+     responsive — aucune largeur/hauteur figée à recalculer. */
+  padding: 12px 12px 12px 30px;
+  border-radius: 9999px;
+  border: 1px double rgba(51, 51, 51, 0.08);
+
+  box-shadow:
+    inset 2px -2px 1px -1px rgba(255, 255, 255, 0.9),
+    inset -2px 2px 1px -1px rgba(255, 255, 255, 0.9),
+    inset 6px -6px 1px -6px rgba(255, 255, 255, 0.55),
+    inset -6px 6px 1px -6px rgba(255, 255, 255, 0.55),
+    inset 0 0 2px rgba(0, 0, 0, 0.8),
+    0 4px 8px rgba(0, 0, 0, 0.2);
+
+  background: rgba(0, 0, 0, 0.02);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  cursor: pointer;
+  filter: brightness(0.9);
+  user-select: none;
+  text-decoration: none;
+  transition: 0.25s;
+}
+
+.glass-cta .text {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 18px;
+  color: var(--ink);
+  filter: drop-shadow(0 25px 3px rgba(102, 102, 102, 0.15));
+  white-space: nowrap;
+}
+
+.glass-cta .btn-icon {
+  flex: none;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--ink);
+  border-radius: 50%;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.3);
+  transition: 0.25s;
+}
+
+.glass-cta .btn-icon svg {
+  width: 15px;
+  fill: var(--paper);
+  filter: drop-shadow(0 25px 3px rgba(102, 102, 102, 0.2));
+}
+
+.glass-cta::before {
+  content: '';
+  position: absolute;
+  z-index: 1;
+  top: 35%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 16px);
+  height: calc(100% - 16px);
+  border-radius: 9999px;
+  border: 1px solid rgba(0, 0, 0, 0.9);
+  filter: blur(8px);
+}
+
+.glass-cta::after {
+  z-index: 501;
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  filter: blur(7px);
+  background: linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.8) 0%,
+    transparent var(--tr),
+    transparent calc(100% - var(--tr)),
+    rgba(255, 255, 255, 0.8) 100%
+  );
+}
+
+.glass-cta .circle-overlay {
+  position: absolute;
+  inset: 4.5px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 9999px;
+  filter: blur(1px);
+}
+
+.glass-cta:hover {
+  background: rgba(0, 0, 0, 0);
+  transform: translateY(-3px);
+}
+
+.glass-cta:hover .btn-icon {
+  transform: scale(1.1);
+}
+
+.glass-cta:active {
+  transform: scale(0.96);
+}
+
+.glass-cta:active .text {
+  color: #000;
+}
+
+.glass-cta:active .btn-icon {
+  transform: scale(0.94);
+}
+
+@media (max-width: 480px) {
+  .glass-cta {
+    padding: 10px 10px 10px 24px;
+    gap: 0.65rem;
+  }
+  .glass-cta .text {
+    font-size: 15.5px;
+  }
+  .glass-cta .btn-icon {
+    width: 34px;
+    height: 34px;
+  }
+  .glass-cta .btn-icon svg {
+    width: 13px;
+  }
+}
