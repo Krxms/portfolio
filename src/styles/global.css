@@ -41,9 +41,12 @@ body {
 }
 
 /* Mesh gradient + grain, posés sur <html> plutôt qu'en pseudo-éléments fixed sur body :
-   le fond du canevas racine est nativement toujours calé sur le viewport par le
-   navigateur (aucune unité vh/dvh/lvh, aucun position:fixed) — immunisé contre le bug
-   iOS où un fixed "se révèle" progressivement quand la barre d'adresse se rétracte. */
+   avec background-attachment:fixed, le fond du canevas racine est peint par le
+   navigateur relativement au VIEWPORT (pas à la hauteur totale de la page) et reste
+   ancré à l'écran au scroll — sans cette propriété, le fond se cale sur la hauteur du
+   document entier et finit par s'arrêter net à mi-page. Cette peinture "canvas" est en
+   plus immunisée contre le bug iOS où un position:fixed classique se désynchronise
+   quand la barre d'adresse se rétracte au scroll. */
 html {
   background:
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.09'/%3E%3C/svg%3E") repeat,
@@ -52,6 +55,7 @@ html {
     radial-gradient(760px 600px at 88% 96%, color-mix(in srgb, var(--mesh-purple) 34%, transparent), transparent 60%) no-repeat,
     radial-gradient(880px 680px at 10% 96%, color-mix(in srgb, var(--mesh-green) 34%, transparent), transparent 62%) no-repeat,
     var(--paper);
+  background-attachment: fixed, fixed, fixed, fixed, fixed;
   background-blend-mode: multiply, normal, normal, normal, normal;
 }
 
