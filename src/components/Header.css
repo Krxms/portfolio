@@ -21,12 +21,23 @@
   }
 }
 
+/* Calque séparé pour la distorsion SVG : certains navigateurs (Safari
+   notamment) ignorent tout le filtre si on mélange une fonction CSS
+   (contrast()/brightness()) et une référence SVG (url(#...)) dans la même
+   liste "filter" — on isole donc chaque effet sur son propre calque. */
+.backdrop-distort {
+  position: absolute;
+  inset: 0;
+  filter: url(#glass-distort);
+  pointer-events: none;
+}
+
 .backdrop {
   position: absolute;
   inset: 0;
   background: color-mix(in srgb, var(--nav-bg) 45%, transparent);
   backdrop-filter: blur(11px) saturate(210%);
-  filter: contrast(1.15) brightness(1.03) url(#glass-distort);
+  filter: contrast(1.15) brightness(1.03);
   pointer-events: none;
 }
 
