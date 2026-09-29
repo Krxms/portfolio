@@ -4,12 +4,16 @@
    parfaitement nette en bas — donne un flou qui s'estompe naturellement plutôt
    qu'une coupure brutale. */
 .site-header {
-  --thickness: 1px;
+  /* 4px, comme la vraie recette Josh Comeau (pas 1px). */
+  --thickness: 4px;
   /* Hauteur fixe plutôt que padding + hauteur du logo : évite que la
      navbar ne se redimensionne (et le flou dégradé avec elle) si le
      logo se rend différemment d'un navigateur à l'autre.
-     149px = 32px de marge + 85px de logo (taille native) + 32px. */
-  height: 149px;
+     100px = 24px de marge + ~53px de logo + 24px — le header de la démo
+     Josh Comeau ne fait lui-même que 64px au total, notre logo (bien plus
+     haut que large) nous impose d'être un peu plus généreux, mais on reste
+     compact plutôt que de viser la taille native du logo (85px). */
+  height: 100px;
   position: sticky;
   top: 0;
   z-index: 20;
@@ -20,7 +24,7 @@
 
 @media (max-width: 560px) {
   .site-header {
-    height: 112px;
+    height: 78px;
   }
 }
 

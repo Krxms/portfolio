@@ -8,16 +8,16 @@
 
 .logo-mark {
   display: block;
-  width: 48px;
-  height: 85px;
+  width: 30px;
+  height: 53.125px;
   aspect-ratio: 48 / 85;
   flex: none;
 }
 
 @media (max-width: 560px) {
   .logo-mark {
-    width: 36px;
-    height: 63.75px;
+    width: 26px;
+    height: 46px;
   }
 }
 
