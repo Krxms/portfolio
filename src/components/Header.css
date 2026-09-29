@@ -1,7 +1,12 @@
 .site-header {
-  position: relative;
-  z-index: 2;
-  padding: 28px 0 0;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  padding: 18px 0;
+  background: color-mix(in srgb, var(--paper) 55%, transparent);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  backdrop-filter: url(#liquid-glass) blur(10px) saturate(160%);
+  border-bottom: 1px solid var(--line);
 }
 
 .header-inner {

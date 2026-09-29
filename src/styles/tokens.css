@@ -29,10 +29,10 @@
   --radius-lg: 32px;
   --radius-btn: 16px;
 
-  /* Signature display face for large statements */
-  --font-display: 'Bricolage Grotesque', 'Instrument Sans', sans-serif;
-  /* Body / UI */
-  --font-body: 'Instrument Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  /* Signature display face — titre du hero uniquement */
+  --font-display: 'Bricolage Grotesque', 'Be Vietnam Pro', sans-serif;
+  /* Be Vietnam Pro — tout le reste du site */
+  --font-body: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, sans-serif;
   /* Labels, eyebrows, status */
   --font-mono: 'Space Mono', 'SFMono-Regular', Consolas, monospace;
 

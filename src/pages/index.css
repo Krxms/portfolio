@@ -6,19 +6,13 @@
   align-items: center;
   text-align: center;
   gap: 22px;
-  min-height: calc(100vh - 100px);
+  /* Agrandi temporairement pour avoir du scroll et tester le fond liquid de la navbar */
+  min-height: 180vh;
   justify-content: center;
-  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
-  overflow: hidden;
-
-  /* Photo de test — à remplacer par le visuel définitif */
-  background-image: linear-gradient(rgba(245, 240, 230, 0.2), rgba(245, 240, 230, 0.2)), url('/images/hero-bg-temp.webp');
-  background-size: cover;
-  background-position: center;
 }
 
 .hero-role {
-  font-family: var(--font-display);
+  font-family: var(--font-body);
   font-weight: 500;
   font-size: clamp(1.1rem, 2vw, 1.4rem);
   color: var(--ink-soft);

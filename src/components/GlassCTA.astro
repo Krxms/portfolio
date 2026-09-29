@@ -1,0 +1,33 @@
+---
+interface Props {
+  href: string;
+}
+
+const { href } = Astro.props;
+---
+
+<!-- Filtre SVG réutilisable -->
+<svg class="hidden" aria-hidden="true">
+  <defs>
+    <filter id="liquid-glass-refraction">
+      <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" result="noise" />
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="5" xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+  </defs>
+</svg>
+
+<a
+  href={href}
+  class="relative inline-block px-8 py-4 font-medium text-white rounded-3xl overflow-hidden transition-transform hover:-translate-y-0.5 active:scale-95"
+>
+  <!-- Calque déformé -->
+  <span
+    class="absolute inset-0 bg-white/15 backdrop-blur-xl border border-white/30 rounded-3xl shadow-[inset_0_1px_1px_rgba(255,255,255,0.7),inset_0_-10px_14px_-10px_rgba(0,0,0,0.15)]"
+    style="filter: url(#liquid-glass-refraction);"
+  ></span>
+
+  <!-- Contenu du CTA (isolé de la déformation) -->
+  <span class="relative z-10 flex items-center gap-2 [text-shadow:0_1px_3px_rgba(0,0,0,0.45)]">
+    <slot />
+  </span>
+</a>

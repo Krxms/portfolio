@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import GlassCTA from '../components/GlassCTA.astro';
 import './index.css';
 ---
 
@@ -15,8 +16,8 @@ import './index.css';
       Identité de marque, interfaces et sites sur-mesure :<br />
       je vous accompagne à chaque étape dans la création de votre projet.
     </p>
-    <a class="btn btn-primary btn-glass" href="mailto:antoine.bruneau@protonmail.com?subject=Votre%20projet">
-      Parlons de votre projet <span class="btn-arrow">→</span>
-    </a>
+    <GlassCTA href="mailto:antoine.bruneau@protonmail.com?subject=Votre%20projet">
+      Parlons de votre projet <span>→</span>
+    </GlassCTA>
   </section>
 </BaseLayout>

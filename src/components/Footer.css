@@ -40,7 +40,8 @@
 }
 
 .footer-mail {
-  font-family: var(--font-display);
+  font-family: var(--font-body);
+  font-weight: 600;
   font-size: 17px;
   text-decoration: none;
   color: var(--ink);
@@ -52,17 +53,6 @@
 .footer-mail:hover {
   color: var(--signal-deep);
   border-color: var(--signal-deep);
-}
-
-.footer-mail-secondary {
-  font-family: var(--font-body);
-  font-size: 14px;
-  color: var(--muted);
-  border-color: transparent;
-}
-
-.footer-mail-secondary:hover {
-  color: var(--signal-deep);
 }
 
 .footer-location {
