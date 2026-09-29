@@ -5,7 +5,6 @@
   padding: 30px 0;
   background: color-mix(in srgb, var(--nav-bg) 82%, transparent);
   backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
   border-bottom: 1px solid var(--line);
 }
 
