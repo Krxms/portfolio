@@ -26,13 +26,15 @@
   position: absolute;
   inset: 0;
   height: 150%;
-  background: linear-gradient(
-    to bottom,
-    color-mix(in srgb, var(--nav-bg) 60%, transparent),
-    transparent 35%
-  );
-  backdrop-filter: blur(9px);
-  mask-image: linear-gradient(to bottom, black 0% 30%, transparent 30% 100%);
+  background: color-mix(in srgb, var(--nav-bg) 70%, transparent);
+  backdrop-filter: blur(14px);
+  /* .backdrop fait 150% de la hauteur du header : le bord bas du header
+     lui-même tombe donc à 100%/150% = 66.6% de la hauteur de CE calque.
+     Le flou/fond doit rester plein jusque-là (sinon il s'estompe encore
+     à l'intérieur du header et semble "trop court" pour l'encadrer), et
+     ne s'estomper que dans le débord sous le header, pour le contenu qui
+     défile dessous. */
+  mask-image: linear-gradient(to bottom, black 0% 66.6%, transparent 100%);
   pointer-events: none;
 }
 
