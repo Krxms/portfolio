@@ -88,14 +88,13 @@ h3 {
   text-wrap: balance;
 }
 
-/* Be Vietnam Pro partout, sauf le titre du hero (h1) qui garde Bricolage Grotesque */
+/* Be Vietnam Pro partout — y compris les h1 des pages secondaires
+   (mentions légales, CGV, contact...). Seul le grand titre du hero garde
+   Bricolage Grotesque, via .hero h1 dans index.css. */
+h1,
 h2,
 h3 {
   font-family: var(--font-body);
-}
-
-h1 {
-  font-family: var(--font-display);
 }
 
 p {

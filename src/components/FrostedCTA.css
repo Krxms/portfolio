@@ -8,7 +8,7 @@
   align-items: center;
   gap: 10px;
   padding: 13px 13px 13px 28px;
-  border-radius: 9999px;
+  border-radius: 12px;
   border: 1px solid color-mix(in srgb, var(--ink) 14%, transparent);
   background: color-mix(in srgb, var(--paper) 55%, transparent);
   backdrop-filter: blur(14px) saturate(160%);
@@ -56,6 +56,15 @@
 
 .frosted-cta:active {
   transform: scale(0.97);
+}
+
+/* Coins "squircle" à courbure continue façon iOS, quand le navigateur le
+   supporte (propriété CSS récente) — dégrade proprement vers un simple
+   border-radius: 12px ailleurs. */
+@supports (corner-shape: squircle) {
+  .frosted-cta {
+    corner-shape: squircle;
+  }
 }
 
 @media (max-width: 480px) {
