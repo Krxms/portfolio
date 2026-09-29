@@ -8,6 +8,7 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -31,7 +32,6 @@ body {
   font-size: 16px;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
 }
 
 .glass-defs {
@@ -41,12 +41,17 @@ body {
   overflow: hidden;
 }
 
-/* Mesh gradient de fond — fixe, orange / mauve / vert très doux */
+/* Mesh gradient de fond — fixe, orange / mauve / vert très doux
+   (hauteur/largeur explicites + translateZ pour éviter le bug mobile
+   où un fixed sur pseudo-élément se "révèle" progressivement au scroll) */
 body::before {
   content: '';
   position: fixed;
   inset: 0;
+  width: 100vw;
+  height: 100dvh;
   z-index: -2;
+  transform: translateZ(0);
   background:
     radial-gradient(820px 640px at 6% 8%, color-mix(in srgb, var(--mesh-orange) 42%, transparent), transparent 62%),
     radial-gradient(780px 620px at 96% 6%, color-mix(in srgb, var(--mesh-purple) 40%, transparent), transparent 60%),
@@ -60,7 +65,10 @@ body::after {
   content: '';
   position: fixed;
   inset: 0;
+  width: 100vw;
+  height: 100dvh;
   z-index: -1;
+  transform: translateZ(0);
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   opacity: 0.09;
   mix-blend-mode: multiply;
