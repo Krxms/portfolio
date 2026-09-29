@@ -7,11 +7,19 @@
   --thickness: 1px;
   /* Hauteur fixe plutôt que padding + hauteur du logo : évite que la
      navbar ne se redimensionne (et le flou dégradé avec elle) si le
-     logo se rend différemment d'un navigateur à l'autre. */
-  height: 102px;
+     logo se rend différemment d'un navigateur à l'autre.
+     165px = 40px de marge + 85px de logo (taille native) + 40px, conforme
+     à la maquette Figma d'origine. */
+  height: 165px;
   position: sticky;
   top: 0;
   z-index: 20;
+}
+
+@media (max-width: 560px) {
+  .site-header {
+    height: 124px;
+  }
 }
 
 .backdrop {

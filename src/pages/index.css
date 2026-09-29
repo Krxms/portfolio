@@ -6,7 +6,7 @@
   align-items: center;
   text-align: center;
   gap: 22px;
-  min-height: calc(100vh - 100px);
+  min-height: calc(100vh - 165px);
   justify-content: center;
 }
 
