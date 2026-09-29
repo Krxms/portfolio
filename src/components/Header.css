@@ -3,10 +3,51 @@
   top: 0;
   z-index: 20;
   padding: 18px 0;
-  background: color-mix(in srgb, var(--paper) 55%, transparent);
-  -webkit-backdrop-filter: blur(14px) saturate(160%);
-  backdrop-filter: url(#liquid-glass) blur(10px) saturate(160%);
-  border-bottom: 1px solid var(--line);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.07);
+}
+
+/* Même technique que GlassCTA : une couche décorative isolée par
+   filter:contrast() pour sculpter un vrai liseré de verre — jamais
+   appliquée directement au logo/texte, qui doivent rester nets. */
+.header-glass {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  filter: contrast(3);
+}
+
+.header-glass-panel {
+  position: absolute;
+  inset: 0;
+  display: block;
+  background: rgba(0, 0, 0, 0.02);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  filter: brightness(0.94);
+}
+
+.header-glass-panel::before {
+  content: '';
+  position: absolute;
+  inset: -20px -20px -9px;
+  border: 1px solid rgba(0, 0, 0, 0.9);
+  filter: blur(8px);
+}
+
+.header-glass-panel::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  filter: blur(7px);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.85) 0%,
+    transparent 40%,
+    transparent 70%,
+    rgba(255, 255, 255, 0.85) 100%
+  );
 }
 
 .header-inner {
