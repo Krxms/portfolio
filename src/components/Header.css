@@ -5,10 +5,13 @@
    qu'une coupure brutale. */
 .site-header {
   --thickness: 1px;
+  /* Hauteur fixe plutôt que padding + hauteur du logo : évite que la
+     navbar ne se redimensionne (et le flou dégradé avec elle) si le
+     logo se rend différemment d'un navigateur à l'autre. */
+  height: 102px;
   position: sticky;
   top: 0;
   z-index: 20;
-  padding: 30px 0;
 }
 
 .backdrop {
@@ -43,6 +46,7 @@
 .header-inner {
   position: relative;
   z-index: 1;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: flex-start;
