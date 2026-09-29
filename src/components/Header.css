@@ -1,24 +1,17 @@
-/* Verre dépoli "gradué" (technique Josh Comeau — joshwcomeau.com/css/backdrop-filter) :
-   un calque .backdrop deux fois plus haut que le header, flouté puis masqué en
-   dégradé (net en haut, invisible à mi-hauteur), + une fine bande .backdrop-edge
-   parfaitement nette en bas — donne un flou qui s'estompe naturellement plutôt
-   qu'une coupure brutale. */
+/* Verre dépoli simple et net : un seul calque flouté (.backdrop), clippé au
+   header via overflow:hidden — plus de masques en pourcentages ni de
+   translateY à recalculer à chaque changement de hauteur (source des bugs
+   précédents), donc bord bas toujours parfaitement net (border-bottom réel).
+   filter: contrast()/brightness() sur .backdrop uniquement (jamais sur le
+   logo, qui est un sibling à part) simule un léger effet de réfraction de
+   la lumière dans le verre, sans distordre le contenu. */
 .site-header {
-  /* 4px, comme la vraie recette Josh Comeau (pas 1px). */
-  --thickness: 4px;
-  /* Hauteur fixe plutôt que padding + hauteur du logo : évite que la
-     navbar ne se redimensionne (et le flou dégradé avec elle) si le
-     logo se rend différemment d'un navigateur à l'autre.
-     100px = 24px de marge + ~53px de logo + 24px — le header de la démo
-     Josh Comeau ne fait lui-même que 64px au total, notre logo (bien plus
-     haut que large) nous impose d'être un peu plus généreux, mais on reste
-     compact plutôt que de viser la taille native du logo (85px). */
   height: 100px;
   position: sticky;
   top: 0;
   z-index: 20;
-  /* Fond de base toujours visible (recette Josh Comeau) : même sans le
-     calque .backdrop, le header garde une teinte translucide. */
+  overflow: hidden;
+  border-bottom: 1px solid var(--line);
   background: color-mix(in srgb, var(--nav-bg) 55%, transparent);
 }
 
@@ -31,35 +24,25 @@
 .backdrop {
   position: absolute;
   inset: 0;
-  height: 150%;
-  /* .backdrop fait 150% de la hauteur du header : le bord bas du header
-     lui-même tombe donc à 100%/150% = 66.6% de la hauteur de CE calque.
-     Le dégradé de fond ET le masque doivent tous les deux rester pleins
-     jusque-là (sinon ça s'estompe encore à l'intérieur du header et ça
-     semble "trop court" pour l'encadrer), et ne s'estomper qu'ensuite,
-     dans le débord sous le header, pour le contenu qui défile dessous. */
-  background: linear-gradient(
-    to bottom,
-    color-mix(in srgb, var(--nav-bg) 85%, transparent),
-    transparent 66.6%
-  );
-  backdrop-filter: blur(16px);
-  mask-image: linear-gradient(to bottom, black 0% 66.6%, transparent 100%);
+  background: color-mix(in srgb, var(--nav-bg) 45%, transparent);
+  backdrop-filter: blur(14px) saturate(160%);
+  filter: contrast(1.35) brightness(1.04);
   pointer-events: none;
 }
 
-.backdrop-edge {
+/* Fin liseré diagonal clair, comme un reflet sur du verre. */
+.backdrop::after {
+  content: '';
   position: absolute;
   inset: 0;
-  height: 100%;
-  background: color-mix(in srgb, var(--nav-bg) 14%, transparent);
-  backdrop-filter: blur(12px) brightness(0.98);
-  mask-image: linear-gradient(
-    to bottom,
-    black 0,
-    black var(--thickness),
-    transparent var(--thickness)
+  background: linear-gradient(
+    115deg,
+    color-mix(in srgb, white 45%, transparent) 0%,
+    transparent 22%,
+    transparent 78%,
+    color-mix(in srgb, white 30%, transparent) 100%
   );
+  mix-blend-mode: overlay;
   pointer-events: none;
 }
 
