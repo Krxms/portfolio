@@ -23,10 +23,9 @@ html {
 }
 
 body {
-  color: var(--paper);
   position: relative;
   margin: 0;
-  background: var(--paper);
+  background: transparent;
   color: var(--ink);
   font-family: var(--font-body);
   font-size: 16px;
@@ -41,37 +40,19 @@ body {
   overflow: hidden;
 }
 
-/* Mesh gradient de fond — fixe, orange / mauve / vert très doux
-   (100lvh = hauteur du viewport "large", barre d'adresse mobile rétractée,
-   pour que le fond ne se retrouve jamais trop petit quand elle disparaît au scroll) */
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  width: 100vw;
-  height: 100vh;
-  height: 100lvh;
-  z-index: -2;
+/* Mesh gradient + grain, posés sur <html> plutôt qu'en pseudo-éléments fixed sur body :
+   le fond du canevas racine est nativement toujours calé sur le viewport par le
+   navigateur (aucune unité vh/dvh/lvh, aucun position:fixed) — immunisé contre le bug
+   iOS où un fixed "se révèle" progressivement quand la barre d'adresse se rétracte. */
+html {
   background:
-    radial-gradient(820px 640px at 6% 8%, color-mix(in srgb, var(--mesh-orange) 42%, transparent), transparent 62%),
-    radial-gradient(780px 620px at 96% 6%, color-mix(in srgb, var(--mesh-purple) 40%, transparent), transparent 60%),
-    radial-gradient(760px 600px at 88% 96%, color-mix(in srgb, var(--mesh-purple) 34%, transparent), transparent 60%),
-    radial-gradient(880px 680px at 10% 96%, color-mix(in srgb, var(--mesh-green) 34%, transparent), transparent 62%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.09'/%3E%3C/svg%3E") repeat,
+    radial-gradient(820px 640px at 6% 8%, color-mix(in srgb, var(--mesh-orange) 42%, transparent), transparent 62%) no-repeat,
+    radial-gradient(780px 620px at 96% 6%, color-mix(in srgb, var(--mesh-purple) 40%, transparent), transparent 60%) no-repeat,
+    radial-gradient(760px 600px at 88% 96%, color-mix(in srgb, var(--mesh-purple) 34%, transparent), transparent 60%) no-repeat,
+    radial-gradient(880px 680px at 10% 96%, color-mix(in srgb, var(--mesh-green) 34%, transparent), transparent 62%) no-repeat,
     var(--paper);
-}
-
-/* Grain / frost léger par-dessus le mesh */
-body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  width: 100vw;
-  height: 100vh;
-  height: 100lvh;
-  z-index: -1;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  opacity: 0.09;
-  mix-blend-mode: multiply;
+  background-blend-mode: multiply, normal, normal, normal, normal;
 }
 
 img {
