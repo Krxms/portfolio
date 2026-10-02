@@ -1,0 +1,205 @@
+.stage {
+  position: relative;
+  width: min(100%, 1000px);
+  margin-inline: auto;
+  padding: clamp(28px, 6vw, 72px) clamp(12px, 5vw, 64px);
+}
+
+/* La lumière derrière la fenêtre : c'est ce que le verre flou et réfracte */
+.stage-light {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(34% 46% at 14% 60%, rgb(255 154 104 / 0.85), transparent 72%),
+    radial-gradient(36% 50% at 86% 38%, rgb(165 148 209 / 0.9), transparent 72%),
+    radial-gradient(34% 40% at 52% 100%, rgb(146 193 151 / 0.7), transparent 72%);
+  filter: blur(14px);
+}
+
+.win {
+  position: relative;
+  border-radius: clamp(18px, 3vw, 30px);
+  background: linear-gradient(135deg, rgb(255 255 255 / 0.5), rgb(255 255 255 / 0.18) 55%, rgb(255 255 255 / 0.3));
+  overflow: hidden;
+}
+
+.win-bar {
+  display: flex;
+  gap: 7px;
+  padding: 14px 18px;
+  border-bottom: 1px solid rgb(40 28 51 / 0.08);
+}
+
+.win-bar i {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgb(40 28 51 / 0.18);
+}
+
+.win-body {
+  padding: clamp(16px, 3.5vw, 40px);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(20px, 4vw, 44px);
+}
+
+.win-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.win-logo {
+  width: 18px;
+  height: 30px;
+  border: 1.5px solid #202559;
+  border-radius: 9px;
+}
+
+.win-nav span {
+  display: flex;
+  gap: 14px;
+}
+
+.win-nav i {
+  width: clamp(24px, 6vw, 56px);
+  height: 6px;
+  border-radius: 3px;
+  background: rgb(40 28 51 / 0.28);
+}
+
+.win-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.win-h1 {
+  width: min(70%, 420px);
+  height: clamp(18px, 3.4vw, 34px);
+  border-radius: 8px;
+  background: #281c33;
+}
+
+.win-h1--short {
+  width: min(46%, 280px);
+  background: #735f84;
+}
+
+.win-p {
+  width: min(52%, 320px);
+  height: 7px;
+  border-radius: 4px;
+  background: rgb(40 28 51 / 0.24);
+}
+
+.win-p--short {
+  width: min(34%, 210px);
+}
+
+.win-btns {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.win-btn {
+  width: clamp(54px, 10vw, 96px);
+  height: clamp(20px, 3.2vw, 30px);
+  border-radius: 8px;
+  background: rgb(255 255 255 / 0.7);
+  box-shadow: inset 0 0 0 1px rgb(40 28 51 / 0.14);
+}
+
+.win-btn--main {
+  background: #735f84;
+  box-shadow: none;
+}
+
+.win-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(8px, 2vw, 18px);
+}
+
+.win-grid i {
+  height: clamp(44px, 9vw, 96px);
+  border-radius: clamp(10px, 2vw, 18px);
+  background: rgb(255 255 255 / 0.5);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.9), inset 0 0 0 1px rgb(40 28 51 / 0.06);
+}
+
+.win-grid i:nth-child(2) {
+  background: rgb(255 154 104 / 0.3);
+}
+
+/* Pastilles de verre posées à cheval sur la fenêtre */
+.chip {
+  position: absolute;
+  border-radius: 22px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.chip--type {
+  left: clamp(0px, 1vw, 12px);
+  bottom: clamp(18px, 6vw, 70px);
+  padding: 14px 18px;
+}
+
+.chip-aa {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 5vw, 3rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+}
+
+.chip-cap {
+  display: none;
+  font-size: 11.5px;
+  line-height: 1.4;
+  font-weight: 500;
+  color: var(--ink-soft);
+}
+
+@media (min-width: 700px) {
+  .chip-cap {
+    display: block;
+  }
+}
+
+.chip--palette {
+  right: clamp(0px, 1vw, 12px);
+  top: clamp(8px, 4vw, 48px);
+  padding: 12px 14px;
+  gap: 8px;
+}
+
+.chip--palette i {
+  width: clamp(18px, 3.4vw, 28px);
+  height: clamp(18px, 3.4vw, 28px);
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.55);
+}
+
+.chip--pin {
+  right: clamp(18px, 9vw, 120px);
+  bottom: clamp(10px, 3vw, 36px);
+  padding: 0;
+  width: 40px;
+  height: 40px;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.chip--pin span {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+}

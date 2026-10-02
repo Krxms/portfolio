@@ -1,31 +1,41 @@
 .proc {
   list-style: none;
-  margin: 0;
+  margin: 0 auto;
   padding: 0;
+  max-width: 1040px;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr));
   gap: var(--space-7) var(--gap);
 }
 
+.proc--4 {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+}
+
 .proc-step {
-  border-top: 2px solid var(--ink);
-  padding-top: var(--space-4);
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
+  padding-top: var(--space-4);
+  border-top: 2px solid var(--ink);
 }
 
 .proc-num {
-  font-family: var(--font-mono);
-  font-size: clamp(2.4rem, 4vw, 3.4rem);
+  font-size: clamp(2.6rem, 4.4vw, 3.6rem);
+  font-weight: 600;
   line-height: 1;
   letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
   color: var(--signal);
 }
 
+.proc-step h3 {
+  font-size: 1.3rem;
+}
+
 .proc-step p {
-  font-size: 15.5px;
-  line-height: 1.65;
+  font-size: 16px;
+  line-height: 1.6;
   color: var(--ink-soft);
 }
 
@@ -33,55 +43,15 @@
   margin-top: auto;
   padding-top: var(--space-3);
   border-top: 1px solid var(--line);
+  color: var(--ink) !important;
 }
 
 .proc-gets span {
   display: block;
   margin-bottom: 2px;
-  font-family: var(--font-mono);
   font-size: 13px;
-  letter-spacing: 0.1em;
+  font-weight: 600;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--muted);
-}
-
-.proc-step .proc-gets {
-  color: var(--ink);
-}
-
-.proc--4 {
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
-}
-
-/* ---- Verre ---- */
-.proc-step {
-  position: relative;
-  border-top: 0;
-  padding: var(--space-5);
-  border-radius: 24px;
-  transition: transform 0.5s var(--spring);
-}
-
-.proc-step::after {
-  content: '';
-  position: absolute;
-  left: var(--space-5);
-  right: var(--space-5);
-  top: 0;
-  height: 2px;
-  border-radius: 2px;
-  background: linear-gradient(90deg, var(--signal) 0 40%, rgb(40 28 51 / 0.14) 40%);
-  transform-origin: left;
-  transition: background-position 0.5s var(--ease-out);
-  background-size: 250% 100%;
-  background-position: 100% 0;
-}
-
-@media (hover: hover) {
-  .proc-step:hover {
-    transform: translateY(-3px);
-  }
-  .proc-step:hover::after {
-    background-position: 0 0;
-  }
 }

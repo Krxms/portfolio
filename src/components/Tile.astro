@@ -1,0 +1,25 @@
+---
+import './Tile.css';
+
+interface Props {
+  tone?: 'light' | 'dark';
+  id?: string;
+  label?: string;
+  title: string;
+  sub?: string;
+}
+const { tone = 'light', id, label, title, sub } = Astro.props;
+---
+
+<section class:list={['tile', `tile--${tone}`]} id={id} aria-labelledby={id ? `${id}-title` : undefined}>
+  {tone === 'dark' && <div class="tile-light" aria-hidden="true"></div>}
+  <div class="wrap tile-inner">
+    <header class="tile-head">
+      {label && <p class="tile-label">{label}</p>}
+      <h2 id={id ? `${id}-title` : undefined}>{title}</h2>
+      {sub && <p class="tile-sub">{sub}</p>}
+      <div class="tile-actions"><slot name="actions" /></div>
+    </header>
+    <slot />
+  </div>
+</section>

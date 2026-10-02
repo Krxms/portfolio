@@ -1,16 +1,23 @@
-.cta-final {
-  border-top: 1px solid var(--line);
+.cta-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 900px;
+  margin-inline: auto;
+  padding: clamp(36px, 7vw, 88px) clamp(20px, 5vw, 64px);
+  border-radius: clamp(28px, 4vw, 44px);
 }
 
 .cta-final h2 {
-  font-size: clamp(2.2rem, 5vw, 3.8rem);
-  max-width: 18ch;
+  font-size: clamp(2.2rem, 5.4vw, 4rem);
 }
 
 .cta-final-row {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+  justify-content: center;
   gap: var(--space-5) var(--space-7);
   margin-top: var(--space-7);
 }
@@ -18,6 +25,7 @@
 .cta-final-direct {
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
 }
 
 .cta-final-direct a {
@@ -26,24 +34,11 @@
   min-height: 44px;
   font-weight: 500;
   font-size: 17px;
-  color: var(--ink);
+  color: #fff;
   text-decoration: none;
 }
 
 .cta-final-direct a:hover {
-  color: var(--signal-deep);
-}
-
-/* ---- Verre ---- */
-.cta-final {
-  border-top: 0;
-}
-
-.cta-panel {
-  padding: clamp(32px, 6vw, 80px);
-  border-radius: clamp(26px, 4vw, 40px);
-}
-
-.cta-final h2 {
-  max-width: 20ch;
+  text-decoration: underline;
+  text-underline-offset: 4px;
 }

@@ -15,7 +15,7 @@ interface Props {
 
 const { title, description, noindex = false, schema } = Astro.props;
 const isHome = Astro.url.pathname === '/';
-const pageTitle = isHome ? 'Antoine Bruneau — Designer UX/UI & webdesigner freelance' : `${title} — Antoine Bruneau`;
+const pageTitle = isHome ? 'Webdesigner UX/UI freelance, Yvelines — Antoine Bruneau' : `${title} — Antoine Bruneau`;
 
 // Cloudflare sert les pages en /page/ (avec slash final) : le canonical suit cette forme.
 const path = Astro.url.pathname.endsWith('/') ? Astro.url.pathname : `${Astro.url.pathname}/`;
@@ -35,6 +35,14 @@ const jsonLd = {
       telephone: '+33609111838',
       address: { '@type': 'PostalAddress', addressLocality: 'Guitrancourt', postalCode: '78440', addressCountry: 'FR' },
       founder: { '@id': `${siteUrl}/#person` },
+      areaServed: [
+        { '@type': 'AdministrativeArea', name: 'Yvelines' },
+        { '@type': 'AdministrativeArea', name: "Val-d'Oise" },
+        { '@type': 'AdministrativeArea', name: 'Oise' },
+        { '@type': 'AdministrativeArea', name: 'Paris' },
+        { '@type': 'AdministrativeArea', name: 'Île-de-France' },
+        { '@type': 'Country', name: 'France' },
+      ],
     },
     {
       '@type': 'Person',

@@ -1,0 +1,120 @@
+/* Tuiles pleine largeur façon apple.com : un titre court centré, une ligne de sous-titre,
+   des actions, puis le contenu. Les tuiles sombres portent de la lumière colorée,
+   c'est elle que le verre réfracte. */
+.tile {
+  position: relative;
+  overflow: hidden;
+  padding-block: clamp(72px, 11vw, 148px);
+  scroll-margin-top: 100px;
+}
+
+.tile--light {
+  background: color-mix(in srgb, var(--paper) 78%, transparent);
+}
+
+.tile--dark {
+  background: #1c1325;
+  color: #fff;
+}
+
+.tile-inner {
+  position: relative;
+  z-index: 1;
+}
+
+.tile-head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: clamp(40px, 6vw, 80px);
+}
+
+.tile-label {
+  margin-bottom: var(--space-3);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--signal-deep);
+}
+
+.tile--dark .tile-label {
+  color: #d9c8ee;
+}
+
+.tile h2 {
+  max-width: 18ch;
+  font-size: clamp(2.2rem, 5.6vw, 4.4rem);
+  font-weight: 600;
+  line-height: 1.04;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+
+.tile-sub {
+  max-width: 44ch;
+  margin-top: var(--space-4);
+  font-size: clamp(1.1rem, 2vw, 1.4rem);
+  line-height: 1.45;
+  color: var(--ink-soft);
+}
+
+.tile--dark .tile-sub {
+  color: rgb(255 255 255 / 0.74);
+}
+
+.tile-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-2) var(--space-6);
+  margin-top: var(--space-5);
+}
+
+.tile-actions:empty {
+  display: none;
+}
+
+/* Lueurs colorées derrière les surfaces vitrées (figées) */
+.tile-light {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(46% 52% at 12% 30%, rgb(255 154 104 / 0.55), transparent 70%),
+    radial-gradient(44% 56% at 88% 22%, rgb(165 148 209 / 0.6), transparent 70%),
+    radial-gradient(50% 50% at 62% 96%, rgb(146 193 151 / 0.4), transparent 70%);
+}
+
+/* Lien de fin de tuile, façon "En savoir plus ›" */
+.more {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  font-size: clamp(1rem, 1.6vw, 1.15rem);
+  font-weight: 500;
+  color: var(--signal-deep);
+  text-decoration: none;
+}
+
+.more::after {
+  content: '›';
+  font-size: 1.3em;
+  line-height: 1;
+  transition: transform 0.35s var(--spring);
+}
+
+.more:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.more:hover::after {
+  transform: translateX(3px);
+}
+
+.tile--dark .more {
+  color: #e6d9f5;
+}

@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Tile from '../components/Tile.astro';
 import FrostedCTA from '../components/FrostedCTA.astro';
 import AuditMock from '../components/AuditMock.astro';
 import Process from '../components/Process.astro';
@@ -10,7 +11,7 @@ import './service.css';
 
 const site = 'https://antoinebruneau.fr';
 const description =
-  "Audit UX/UI freelance de votre site ou application : points de friction, recommandations priorisées et plan d'action clair. Échangeons.";
+  "Audit UX/UI de site ou d'application par un designer freelance basé dans les Yvelines : constats priorisés, recommandations concrètes, en visio partout en France.";
 
 const schema = {
   '@context': 'https://schema.org',
@@ -39,29 +40,29 @@ const schema = {
 
 const examined = [
   ['Les parcours qui comptent', "De la page d'arrivée jusqu'à l'action attendue : contact, achat, inscription."],
-  ['La clarté des pages', 'Titres, hiérarchie, vocabulaire, appels à l\'action.'],
-  ['La navigation et la structure', 'Retrouve-t-on ce que l\'on cherche, et sans effort ?'],
-  ['Les formulaires', 'Champs, messages d\'erreur, étapes de saisie.'],
+  ['La clarté des pages', "Titres, hiérarchie, vocabulaire, appels à l'action."],
+  ['La navigation et la structure', "Retrouve-t-on ce que l'on cherche, et sans effort ?"],
+  ['Les formulaires', "Champs, messages d'erreur, étapes de saisie."],
   ["L'affichage sur mobile", 'Lisibilité, zones à toucher, longueur des pages.'],
-  ["L'accessibilité de base", "Contrastes, lisibilité, usage au clavier, libellés des champs."],
-  ['La cohérence visuelle', 'Écrans et composants qui se ressemblent quand ils font la même chose.'],
+  ["L'accessibilité de base", 'Contrastes, lisibilité, usage au clavier, libellés des champs.'],
+  ['La cohérence visuelle', 'Des écrans et des composants qui se ressemblent quand ils font la même chose.'],
 ];
 
 const steps = [
   {
     title: 'Cadrage',
-    text: "Vos objectifs, vos utilisateurs, les parcours à examiner et les données que vous avez déjà.",
+    text: 'Vos objectifs, vos utilisateurs, les parcours à examiner et les données que vous avez déjà.',
     gets: 'un périmètre écrit, avant le devis.',
   },
   {
     title: 'Revue',
-    text: "Je parcours le site ou le produit comme le ferait un utilisateur, puis je relève chaque problème avec une capture.",
+    text: 'Je parcours le site ou le produit comme le ferait un utilisateur, puis je relève chaque problème avec une capture.',
     gets: 'une liste de constats illustrés.',
   },
   {
     title: 'Priorisation',
-    text: 'Chaque recommandation est classée selon son effet attendu et l\'effort qu\'elle demande.',
-    gets: 'un ordre d\'action clair.',
+    text: "Chaque recommandation est classée selon son effet attendu et l'effort qu'elle demande.",
+    gets: "un ordre d'action clair.",
   },
   {
     title: 'Restitution',
@@ -81,7 +82,11 @@ const faq = [
   },
   {
     q: 'Faut-il me confier la refonte ensuite ?',
-    a: "Non. Les recommandations sont à vous : vous pouvez les appliquer vous-même, avec votre équipe ou avec moi.",
+    a: 'Non. Les recommandations sont à vous : vous pouvez les appliquer vous-même, avec votre équipe ou avec moi.',
+  },
+  {
+    q: "Faut-il être en Île-de-France pour demander un audit ?",
+    a: "Non. L'audit se fait à distance, avec une restitution en visio. Je suis basé dans les Yvelines et je travaille avec des entreprises du Val-d'Oise, de l'Oise, de Paris, d'Île-de-France et du reste de la France.",
   },
   {
     q: 'Quel est le prix ?',
@@ -99,109 +104,75 @@ const faq = [
     <nav class="crumbs" aria-label="Fil d'Ariane">
       <a href="/">Accueil</a><span aria-hidden="true">/</span><span aria-current="page">Audit UX/UI</span>
     </nav>
-    <div class="page-hero-grid">
-      <div>
-        <h1>Audit UX/UI de votre site ou application</h1>
-        <p class="page-lead">
-          Vous avez un site ou un produit en ligne et quelque chose cloche : peu de demandes, des abandons, des retours
-          confus. J'examine l'existant et je vous dis quoi corriger en premier.
-        </p>
-        <div class="page-actions">
-          <FrostedCTA href="/contact/?sujet=audit">Demander un devis d'audit</FrostedCTA>
-        </div>
-      </div>
-      <dl class="brief">
-        <div><dt>Durée</dt><dd>selon le périmètre, indiquée au devis</dd></div>
-        <div><dt>Livrable</dt><dd>un rapport illustré et une restitution commentée</dd></div>
-        <div><dt>Prix</dt><dd>sur devis gratuit</dd></div>
-      </dl>
+    <h1>Audit UX/UI de votre site ou application</h1>
+    <p class="page-lead">
+      Quelque chose cloche : peu de demandes, des abandons, des retours confus. J'examine votre site ou votre produit, depuis
+      les Yvelines et en visio partout en France, et je vous dis quoi corriger en premier.
+    </p>
+    <div class="page-actions">
+      <FrostedCTA href="/contact/?sujet=audit">Demander un devis d'audit</FrostedCTA>
     </div>
+    <dl class="brief glass">
+      <div><dt>Durée</dt><dd>selon le périmètre, indiquée au devis</dd></div>
+      <div><dt>Livrable</dt><dd>un rapport illustré et une restitution commentée</dd></div>
+      <div><dt>Prix</dt><dd>sur devis gratuit</dd></div>
+    </dl>
   </section>
 
-  <section class="sec">
-    <div class="wrap sec-grid">
-      <p class="sec-label">01 / Quand</p>
-      <div class="sec-body">
-        <h2>Quand un audit est utile</h2>
-        <div class="prose">
-          <ul class="plain" role="list">
-            <li>Vous voulez un regard extérieur avant de refaire un site ou une interface.</li>
-            <li>Votre site reçoit des visites mais peu de demandes.</li>
-            <li>Votre équipe ne voit plus les défauts du produit, à force de le côtoyer.</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </section>
+  <Tile id="quand" title="Quand un audit est utile">
+    <ul class="when" role="list">
+      <li>Vous voulez un regard extérieur avant de refaire un site ou une interface.</li>
+      <li>Votre site reçoit des visites mais peu de demandes.</li>
+      <li>Votre équipe ne voit plus les défauts du produit, à force de le côtoyer.</li>
+    </ul>
+  </Tile>
 
-  <section class="sec">
-    <div class="wrap sec-grid">
-      <p class="sec-label">02 / Périmètre</p>
-      <div class="sec-body">
-        <h2>Ce que j'examine</h2>
-        <ol class="criteria" role="list">
-          {
-            examined.map(([t, d], i) => (
-              <li>
-                <span class="criteria-n">{String(i + 1).padStart(2, '0')}</span>
-                <div>
-                  <h3>{t}</h3>
-                  <p>{d}</p>
-                </div>
-              </li>
-            ))
-          }
-        </ol>
-        <p class="prose note-line">Le périmètre exact (pages, parcours, nombre d'écrans) est fixé avec vous avant le devis.</p>
-      </div>
-    </div>
-  </section>
+  <Tile
+    id="perimetre"
+    title="Ce que j'examine"
+    sub="Le périmètre exact (pages, parcours, nombre d'écrans) est fixé avec vous avant le devis."
+  >
+    <ol class="criteria" role="list">
+      {
+        examined.map(([t, d], i) => (
+          <li>
+            <span class="criteria-n">{String(i + 1).padStart(2, '0')}</span>
+            <div>
+              <h3>{t}</h3>
+              <p>{d}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </Tile>
 
-  <section class="sec">
-    <div class="wrap sec-grid">
-      <p class="sec-label">03 / Livrable</p>
-      <div class="sec-body audit-split">
-        <div>
-          <h2>Ce que vous recevez</h2>
-          <ul class="plain prose deliver" role="list">
-            <li>les constats, chacun illustré par une capture annotée ;</li>
-            <li>une recommandation précise pour chaque constat ;</li>
-            <li>un classement par priorité ;</li>
-            <li>une restitution commentée en visio.</li>
-          </ul>
-          <p class="prose">
-            Ce que l'audit ne fait pas : il ne remplace ni des tests avec de vrais utilisateurs, ni l'analyse de vos
-            statistiques, et je ne promets aucun chiffre de progression. Il vous donne un diagnostic argumenté et un ordre
-            d'action.
-          </p>
-        </div>
-        <div><AuditMock /></div>
-      </div>
+  <Tile
+    tone="dark"
+    id="livrable"
+    label="Livrable"
+    title="Ce que vous recevez"
+    sub="Des constats illustrés par une capture annotée, une recommandation précise pour chacun, un classement par priorité et une restitution commentée en visio."
+  >
+    <div class="audit-wrap">
+      <AuditMock />
+      <p class="audit-caption">
+        Ce que l'audit ne fait pas : il ne remplace ni des tests avec de vrais utilisateurs, ni l'analyse de vos statistiques,
+        et je ne promets aucun chiffre de progression. Il vous donne un diagnostic argumenté et un ordre d'action.
+      </p>
     </div>
-  </section>
+  </Tile>
 
-  <section class="sec">
-    <div class="wrap sec-grid">
-      <p class="sec-label">04 / Méthode</p>
-      <div class="sec-body">
-        <div class="sec-head"><h2>Comment je procède</h2></div>
-        <Process steps={steps} />
-      </div>
-    </div>
-  </section>
+  <Tile id="methode" title="Comment je procède">
+    <Process steps={steps} />
+  </Tile>
 
-  <section class="sec">
-    <div class="wrap sec-grid">
-      <p class="sec-label">05 / Questions</p>
-      <div class="sec-body">
-        <div class="sec-head"><h2>Questions</h2></div>
-        <Faq items={faq} />
-        <p class="prose also">
-          Après l'audit, si vous voulez refaire ou créer un site, voir <a href="/creation-site-web/">la création de site web</a>.
-        </p>
-      </div>
-    </div>
-  </section>
+  <Tile id="faq" title="Questions">
+    <Faq items={faq} />
+    <p class="also">
+      Après l'audit, pour créer ou refaire un site, voir <a class="more" href="/creation-site-web/">la création de site web</a>.
+    </p>
+  </Tile>
 
   <FinalCta
     title="Quelle page vous inquiète ?"

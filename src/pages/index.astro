@@ -1,6 +1,8 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Tile from '../components/Tile.astro';
 import FrostedCTA from '../components/FrostedCTA.astro';
+import HeroStage from '../components/HeroStage.astro';
 import AuditMock from '../components/AuditMock.astro';
 import Process from '../components/Process.astro';
 import Faq from '../components/Faq.astro';
@@ -10,33 +12,50 @@ import './index.css';
 
 const services = [
   {
-    n: '01',
+    tone: 'warm',
+    span: 'wide',
+    kicker: 'Sites web',
     title: 'Création de site web',
     text: 'Je dessine les pages, puis je les intègre et je les mets en ligne. Vous recevez un site qui fonctionne, pas seulement des maquettes.',
-    gets: 'maquettes, site en ligne',
+    gets: ['Maquettes', 'Site en ligne'],
     href: '/creation-site-web/',
   },
   {
-    n: '02',
-    title: 'Design UX/UI de produit',
-    text: 'Parcours, écrans et composants pour une application ou un outil en ligne, en partant de ce que vos utilisateurs doivent réussir à faire.',
-    gets: 'parcours, écrans, composants',
-    href: '/contact/?sujet=ux',
-  },
-  {
-    n: '03',
+    tone: 'dark',
+    span: 'narrow',
+    kicker: 'Diagnostic',
     title: 'Audit UX/UI',
     text: "J'examine un site ou un produit existant et je classe les corrections par ordre de priorité.",
-    gets: 'constats annotés, recommandations',
+    gets: ['Constats annotés', 'Recommandations'],
     href: '/audit-ux-ui/',
   },
   {
-    n: '04',
+    tone: 'lilac',
+    span: 'narrow',
+    kicker: 'Produits',
+    title: 'Design UX/UI de produit',
+    text: 'Parcours, écrans et composants pour une application ou un outil en ligne, à partir de ce que vos utilisateurs doivent réussir à faire.',
+    gets: ['Parcours', 'Écrans', 'Composants'],
+    href: '/contact/?sujet=ux',
+  },
+  {
+    tone: 'sage',
+    span: 'wide',
+    kicker: 'Dans la durée',
     title: 'Accompagnement mensuel',
     text: 'Je reste votre designer de référence : ajustements, nouvelles pages, arbitrages, au fil des mois.',
-    gets: 'suivi régulier, évolutions',
+    gets: ['Suivi régulier', 'Évolutions'],
     href: '/contact/?sujet=suivi',
   },
+];
+
+const zones = [
+  ['Yvelines', '78'],
+  ["Val-d'Oise", '95'],
+  ['Oise', '60'],
+  ['Paris', '75'],
+  ['Île-de-France', ''],
+  ['Toute la France', ''],
 ];
 
 const steps = [
@@ -84,8 +103,8 @@ const faq = [
     a: "Les petites évolutions se chiffrent à part. Si vous voulez un designer disponible dans la durée, c'est le rôle de l'accompagnement mensuel.",
   },
   {
-    q: 'Peut-on travailler à distance ?',
-    a: "Oui, c'est ma manière habituelle de travailler, par visio, téléphone ou email. Je suis basé à Guitrancourt, dans les Yvelines.",
+    q: 'Travaillez-vous avec des entreprises hors des Yvelines ?',
+    a: "Oui. Je suis basé à Guitrancourt, dans les Yvelines, mais je travaille à distance par visio, téléphone et email avec des clients du Val-d'Oise, de l'Oise, de Paris, d'Île-de-France ou d'ailleurs en France.",
   },
   {
     q: 'Et si le projet ne convient finalement pas ?',
@@ -96,7 +115,7 @@ const faq = [
 
 <BaseLayout
   title="Antoine Bruneau"
-  description="Je conçois des sites web, des interfaces et des audits UX/UI, depuis les Yvelines et partout en France, à distance. Devis gratuit, réponse sous 24 h ouvrées."
+  description="Webdesigner et designer UX/UI freelance à Guitrancourt (Yvelines). Sites sur mesure, interfaces et audits UX/UI, à distance partout en France. Devis clair, un seul interlocuteur."
 >
   <section class="hero wrap" data-sticky-watch>
     <p class="hero-role">Designer UX/UI &amp; Webdesigner</p>
@@ -109,11 +128,15 @@ const faq = [
       <FrostedCTA href="/contact/">Décrire mon projet</FrostedCTA>
       <a class="hero-link" href="/audit-ux-ui/">Faire auditer mon site</a>
     </div>
-    <p class="hero-note mono">Réponse sous 24 h ouvrées · Devis gratuit</p>
+    <p class="hero-note">Basé dans les Yvelines · Île-de-France et toute la France · Devis gratuit</p>
   </section>
 
+  <div class="wrap">
+    <HeroStage />
+  </div>
+
   <section class="facts wrap" aria-label="Repères">
-    <dl class="facts-list glass" data-glow>
+    <dl class="facts-list">
       <div class="facts-cell"><dt>Réponse</dt><dd>sous 24 h ouvrées</dd></div>
       <div class="facts-cell"><dt>Devis</dt><dd>gratuit et détaillé</dd></div>
       <div class="facts-cell">
@@ -130,134 +153,115 @@ const faq = [
     </dl>
   </section>
 
-  <section class="sec" id="services">
-    <div class="wrap sec-grid">
-      <p class="sec-label">02 / Services</p>
-      <div class="sec-body">
-        <h2>Ce que je peux faire pour vous</h2>
-        <ul class="svc" role="list">
-          {
-            services.map((s) => (
-              <li class="svc-row">
-                <span class="svc-index" aria-hidden="true">{s.n}</span>
-                <div class="svc-main">
-                  <h3>
-                    <a class="svc-link" href={s.href}>{s.title}</a>
-                  </h3>
-                  <p class="svc-text">{s.text}</p>
-                </div>
-                <p class="svc-gets mono">{s.gets}</p>
-                <span class="svc-arrow" aria-hidden="true">→</span>
-              </li>
-            ))
-          }
+  <Tile id="services" title="Ce que je peux faire pour vous" sub="Quatre manières de travailler ensemble, selon où en est votre projet.">
+    <ul class="bento" role="list">
+      {
+        services.map((s) => (
+          <li class={`bento-item bento-item--${s.span}`}>
+            <a class={`bento-tile bento-tile--${s.tone}`} href={s.href} data-glow>
+              <p class="bento-kicker">{s.kicker}</p>
+              <h3>{s.title}</h3>
+              <p class="bento-text">{s.text}</p>
+              <ul class="bento-gets" role="list">
+                {s.gets.map((g) => (
+                  <li>{g}</li>
+                ))}
+              </ul>
+              <span class="bento-more" aria-hidden="true">En savoir plus</span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </Tile>
+
+  <Tile
+    tone="dark"
+    id="audit"
+    label="Audit UX/UI"
+    title="Ce qu'on reçoit après un audit"
+    sub="Chaque problème repéré est illustré, expliqué et accompagné d'une correction, du plus urgent au plus secondaire."
+  >
+    <a slot="actions" class="more" href="/audit-ux-ui/">Voir ce que contient un audit</a>
+    <div class="audit-wrap">
+      <AuditMock />
+      <p class="audit-caption">
+        Vous repérez les points qui posent problème et vous savez par quoi commencer. Je ne peux pas dire ce que font vos
+        visiteurs sans vos statistiques : l'audit s'appuie sur ce que je constate en parcourant le site ou le produit.
+      </p>
+    </div>
+  </Tile>
+
+  <Tile id="methode" title="Comment se passe un projet" sub="Quatre étapes, avec quelque chose de concret à la fin de chacune.">
+    <Process steps={steps} />
+  </Tile>
+
+  <Tile
+    id="approche"
+    title="Ma façon de travailler"
+    sub="Je fais moi-même les maquettes et l'intégration : personne n'a à retranscrire mon travail d'une étape à l'autre."
+  >
+    <div class="fit">
+      <div class="fit-col">
+        <h3>Pour qui ça marche bien</h3>
+        <ul>
+          <li>Vous voulez un seul interlocuteur du début à la fin.</li>
+          <li>Vous savez expliquer ce que vous vendez, même sans vocabulaire de designer.</li>
+          <li>Vous avez du temps pour les retours et pour fournir vos contenus.</li>
+        </ul>
+      </div>
+      <div class="fit-col">
+        <h3>Pour qui ça marche moins bien</h3>
+        <ul>
+          <li>Vous cherchez le prix le plus bas, ou un site en quelques jours.</li>
+          <li>Vous voulez un prix ferme sans aucun échange préalable.</li>
+          <li>Vous préférez ne pas intervenir pendant le projet.</li>
         </ul>
       </div>
     </div>
-  </section>
+  </Tile>
 
-  <section class="sec" id="audit">
-    <div class="wrap sec-grid">
-      <p class="sec-label">03 / Audit</p>
-      <div class="sec-body audit-split">
-        <div>
-          <h2>Ce qu'on reçoit après un audit</h2>
-          <p class="lead">
-            Un document où chaque problème repéré est illustré, expliqué et accompagné d'une correction proposée, du plus
-            urgent au plus secondaire.
-          </p>
-          <div class="prose audit-prose">
-            <p>
-              Vous repérez les points qui posent problème et vous savez par quoi commencer. Je ne peux pas dire ce que font
-              vos visiteurs sans vos statistiques : l'audit s'appuie sur ce que je constate en parcourant le site ou le produit.
-            </p>
-          </div>
-          <a class="hero-link" href="/audit-ux-ui/">Voir ce que contient un audit</a>
-        </div>
-        <div>
-          <AuditMock />
-        </div>
-      </div>
+  <Tile
+    id="zones"
+    title="Basé dans les Yvelines, à distance partout en France"
+    sub="Je suis à Guitrancourt (78) et je travaille par visio, téléphone et email avec des clients où qu'ils soient. Pour les entreprises voisines, une rencontre est plus simple à organiser."
+  >
+    <ul class="zones" role="list">
+      {
+        zones.map(([name, code]) => (
+          <li class="zone">
+            <span>{name}</span>
+            {code && <small>{code}</small>}
+          </li>
+        ))
+      }
+    </ul>
+    <p class="zones-note">
+      Création de site, design UX/UI et audit suivent la même méthode, que vous soyez dans les Yvelines, le Val-d'Oise,
+      l'Oise, à Paris ou ailleurs.
+    </p>
+  </Tile>
+
+  <Tile id="cadre" title="Argent, délais, droits" sub="Ce qui est écrit avant que le travail commence.">
+    <div class="terms glass">
+      <dl>
+        <div><dt>Statut</dt><dd>Entrepreneur individuel</dd></div>
+        <div><dt>SIREN</dt><dd>788 566 719</dd></div>
+        <div><dt>Devis</dt><dd>Détaillé et gratuit, à valider avant tout démarrage</dd></div>
+        <div><dt>Acompte</dt><dd>À la commande, sauf accord contraire au devis</dd></div>
+        <div><dt>Solde</dt><dd>À la livraison, sauf accord contraire au devis</dd></div>
+        <div><dt>Droits</dt><dd>Cédés au paiement intégral</dd></div>
+      </dl>
     </div>
-  </section>
+    <p class="terms-links">
+      <a class="more" href="/cgv/">Lire les CGV</a>
+      <a class="more" href="/mentions-legales/">Mentions légales</a>
+    </p>
+  </Tile>
 
-  <section class="sec" id="methode">
-    <div class="wrap sec-grid">
-      <p class="sec-label">04 / Méthode</p>
-      <div class="sec-body">
-        <div class="sec-head">
-          <h2>Comment se passe un projet</h2>
-        </div>
-        <Process steps={steps} />
-      </div>
-    </div>
-  </section>
-
-  <section class="sec" id="approche">
-    <div class="wrap sec-grid">
-      <p class="sec-label">05 / Approche</p>
-      <div class="sec-body">
-        <h2>Ma façon de travailler</h2>
-        <p class="lead">
-          Je fais moi-même les maquettes et l'intégration : personne n'a à retranscrire mon travail d'une étape à l'autre.
-        </p>
-
-        <div class="fit">
-          <div>
-            <h3>Pour qui ça marche bien</h3>
-            <ul>
-              <li>Vous voulez un seul interlocuteur du début à la fin.</li>
-              <li>Vous savez expliquer ce que vous vendez, même sans vocabulaire de designer.</li>
-              <li>Vous avez du temps pour les retours et pour fournir vos contenus.</li>
-            </ul>
-          </div>
-          <div>
-            <h3>Pour qui ça marche moins bien</h3>
-            <ul>
-              <li>Vous cherchez le prix le plus bas, ou un site en quelques jours.</li>
-              <li>Vous voulez un prix ferme sans aucun échange préalable.</li>
-              <li>Vous préférez ne pas intervenir pendant le projet.</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="sec" id="cadre">
-    <div class="wrap sec-grid">
-      <p class="sec-label">06 / Cadre</p>
-      <div class="sec-body">
-        <h2>Argent, délais, droits</h2>
-        <div class="terms glass" data-glow>
-          <dl>
-            <div><dt>Statut</dt><dd>Entrepreneur individuel</dd></div>
-            <div><dt>SIREN</dt><dd>788 566 719</dd></div>
-            <div><dt>Devis</dt><dd>Détaillé et gratuit, à valider avant tout démarrage</dd></div>
-            <div><dt>Acompte</dt><dd>À la commande, sauf accord contraire au devis</dd></div>
-            <div><dt>Solde</dt><dd>À la livraison, sauf accord contraire au devis</dd></div>
-            <div><dt>Droits</dt><dd>Cédés au paiement intégral</dd></div>
-          </dl>
-        </div>
-        <p class="terms-links">
-          <a class="link" href="/cgv/">Lire les CGV</a>
-          <a class="link" href="/mentions-legales/">Mentions légales</a>
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <section class="sec" id="faq">
-    <div class="wrap sec-grid">
-      <p class="sec-label">07 / Questions</p>
-      <div class="sec-body">
-        <div class="sec-head">
-          <h2>Vos questions</h2>
-        </div>
-        <Faq items={faq} />
-      </div>
-    </div>
-  </section>
+  <Tile id="faq" title="Vos questions">
+    <Faq items={faq} />
+  </Tile>
 
   <FinalCta
     title="Parlons de votre projet"

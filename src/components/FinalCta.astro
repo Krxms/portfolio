@@ -1,4 +1,5 @@
 ---
+import './Tile.css';
 import './FinalCta.css';
 import FrostedCTA from './FrostedCTA.astro';
 
@@ -11,11 +12,12 @@ interface Props {
 const { title, text, label, href = '/contact/' } = Astro.props;
 ---
 
-<section class="cta-final sec" data-sticky-watch>
-  <div class="wrap">
-    <div class="cta-panel glass" data-glow>
+<section class="cta-final tile tile--dark" data-sticky-watch>
+  <div class="tile-light" aria-hidden="true"></div>
+  <div class="wrap tile-inner">
+    <div class="cta-panel glass glass--dark">
       <h2>{title}</h2>
-      <p class="lead">{text}</p>
+      <p class="tile-sub">{text}</p>
       <div class="cta-final-row">
         <FrostedCTA href={href}>{label}</FrostedCTA>
         <p class="cta-final-direct">
