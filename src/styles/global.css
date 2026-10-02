@@ -6,15 +6,7 @@
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 112px;
   overflow-x: hidden;
-}
-
-@media (max-width: 700px) {
-  html {
-    scroll-padding-top: 90px;
-    scroll-padding-bottom: 104px;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -83,6 +75,7 @@ a:focus-visible,
 button:focus-visible {
   outline: 2px solid var(--signal-deep);
   outline-offset: 2px;
+  border-radius: 4px;
 }
 
 h1,
@@ -183,14 +176,8 @@ main:focus {
 }
 
 .btn-primary {
-  background: linear-gradient(180deg, color-mix(in srgb, var(--signal) 88%, white), var(--signal));
+  background: var(--signal);
   color: var(--signal-ink);
-  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.35);
-  transition: transform 0.45s var(--spring), background 0.25s ease;
-}
-
-.btn-primary:active {
-  transform: scale(0.96);
 }
 
 .btn-primary:hover {

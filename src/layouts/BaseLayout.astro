@@ -3,19 +3,16 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import '../styles/tokens.css';
 import '../styles/global.css';
-import '../styles/sections.css';
-import '../styles/glass.css';
 
 interface Props {
   title: string;
   description: string;
   noindex?: boolean;
-  schema?: object;
 }
 
-const { title, description, noindex = false, schema } = Astro.props;
+const { title, description, noindex = false } = Astro.props;
 const isHome = Astro.url.pathname === '/';
-const pageTitle = isHome ? 'Webdesigner UX/UI freelance, Yvelines — Antoine Bruneau' : `${title} — Antoine Bruneau`;
+const pageTitle = isHome ? 'Antoine Bruneau — Designer UX/UI & webdesigner freelance' : `${title} — Antoine Bruneau`;
 
 // Cloudflare sert les pages en /page/ (avec slash final) : le canonical suit cette forme.
 const path = Astro.url.pathname.endsWith('/') ? Astro.url.pathname : `${Astro.url.pathname}/`;
@@ -35,14 +32,6 @@ const jsonLd = {
       telephone: '+33609111838',
       address: { '@type': 'PostalAddress', addressLocality: 'Guitrancourt', postalCode: '78440', addressCountry: 'FR' },
       founder: { '@id': `${siteUrl}/#person` },
-      areaServed: [
-        { '@type': 'AdministrativeArea', name: 'Yvelines' },
-        { '@type': 'AdministrativeArea', name: "Val-d'Oise" },
-        { '@type': 'AdministrativeArea', name: 'Oise' },
-        { '@type': 'AdministrativeArea', name: 'Paris' },
-        { '@type': 'AdministrativeArea', name: 'Île-de-France' },
-        { '@type': 'Country', name: 'France' },
-      ],
     },
     {
       '@type': 'Person',
@@ -79,10 +68,9 @@ const jsonLd = {
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Space+Mono:wght@400;700&display=swap"
     />
     {isHome && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
-    {schema && <script type="application/ld+json" set:html={JSON.stringify(schema)} />}
   </head>
   <body>
     <a class="skip-link" href="#main">Aller au contenu</a>

@@ -7,8 +7,7 @@
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  padding: 13px 28px;
-  max-width: 100%;
+  padding: 13px 13px 13px 28px;
   border-radius: 12px;
   border: 1px solid color-mix(in srgb, var(--ink) 14%, transparent);
   background: color-mix(in srgb, var(--paper) 55%, transparent);
@@ -25,7 +24,7 @@
   font-family: var(--font-body);
   font-weight: 600;
   font-size: 17px;
-  text-align: center;
+  white-space: nowrap;
 }
 
 .frosted-cta .btn-icon {
@@ -87,7 +86,7 @@
 
 @media (max-width: 480px) {
   .frosted-cta {
-    padding: 11px 22px;
+    padding: 11px 11px 11px 22px;
   }
   .frosted-cta .text {
     font-size: 15.5px;
@@ -99,10 +98,4 @@
   .frosted-cta .btn-icon svg {
     width: 12px;
   }
-}
-
-.glass--dark .frosted-cta {
-  color: #fff;
-  background: rgb(255 255 255 / 0.16);
-  border-color: rgb(255 255 255 / 0.3);
 }

@@ -104,25 +104,3 @@
     align-self: auto;
   }
 }
-
-.footer-services {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0 var(--space-5);
-}
-
-.footer-services a {
-  display: inline-flex;
-  align-items: center;
-  min-height: 44px;
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--ink);
-  text-decoration: none;
-}
-
-.footer-services a:hover {
-  text-decoration: underline;
-  text-underline-offset: 4px;
-}

@@ -4,7 +4,7 @@
   --paper-soft: #efe8da;
   --ink: #281c33;
   --ink-soft: #4a4166;
-  --muted: #554d6b;
+  --muted: #5e5673;
   --line: rgba(40, 28, 51, 0.13);
   --line-strong: rgba(40, 28, 51, 0.26);
 
@@ -37,24 +37,7 @@
   /* Be Vietnam Pro — tout le reste du site */
   --font-body: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, sans-serif;
   /* Labels, eyebrows, status */
-  --font-mono: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, sans-serif;
-
-  --card: #fffdfa;
-  --danger: #9b1c1c;
-  --ok: #3d6a4b;
-
-  --space-1: 4px;
-  --space-2: 8px;
-  --space-3: 12px;
-  --space-4: 16px;
-  --space-5: 24px;
-  --space-6: 32px;
-  --space-7: 48px;
-  --space-8: 64px;
-  --section-y: clamp(72px, 10vw, 136px);
-  --gap: clamp(16px, 2.5vw, 32px);
-  --measure: 62ch;
-  --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --font-mono: 'Space Mono', 'SFMono-Regular', Consolas, monospace;
 
   --container: 1180px;
   --edge: clamp(20px, 5vw, 64px);

@@ -4,8 +4,8 @@ import './contact.css';
 ---
 
 <BaseLayout
-  title="Contact, devis designer UX/UI freelance"
-  description="Parlez-moi de votre projet de site web, d'interface ou d'audit UX/UI. Designer freelance basé à Guitrancourt (78), réponse sous 24 h ouvrées."
+  title="Contact"
+  description="Parlons de votre projet — identité de marque, site vitrine ou produit digital sur-mesure. Réponse sous 24h ouvrées."
 >
   <section class="section contact-page wrap">
     <div class="page-head">
@@ -39,28 +39,27 @@ import './contact.css';
           <div class="field">
             <label for="fType">Type de projet</label>
             <select id="fType" name="type">
-              <option>Création de site web</option>
-              <option>Design UX/UI de produit</option>
-              <option>Audit UX/UI</option>
-              <option>Accompagnement mensuel</option>
               <option>Identité de marque</option>
+              <option>Site vitrine</option>
+              <option>Produit digital / UX-UI</option>
+              <option>Accompagnement continu</option>
               <option>Autre</option>
             </select>
           </div>
           <div class="field">
-            <label for="fBudget">Budget</label>
+            <label for="fBudget">Budget estimé</label>
             <select id="fBudget" name="budget">
-              <option>À définir ensemble</option>
-              <option>Déjà fixé (je le précise dans le message)</option>
+              <option>1 000 – 3 000 €</option>
+              <option>3 000 – 8 000 €</option>
+              <option>8 000 € et plus</option>
+              <option>Je ne sais pas encore</option>
             </select>
           </div>
         </div>
         <div class="field">
           <label for="fMessage">Message</label>
-          <p class="field-hint" id="fMessageHint">Quelques lignes suffisent : votre activité, ce que vous attendez, et une date si vous en avez une.</p>
-          <textarea id="fMessage" aria-describedby="fMessageHint" name="message" placeholder="Parlez-moi de votre projet, de vos objectifs, de vos délais..." required aria-required="true"></textarea>
+          <textarea id="fMessage" name="message" placeholder="Parlez-moi de votre projet, de vos objectifs, de vos délais..." required aria-required="true"></textarea>
         </div>
-        <p class="form-promise">Je réponds sous 24 h ouvrées. Le premier échange est gratuit et sans engagement.</p>
         <button type="submit" class="btn btn-primary">Envoyer <span class="btn-arrow">→</span></button>
         <p class="form-status" id="formStatus" role="status" aria-live="polite" aria-atomic="true"></p>
       </form>
