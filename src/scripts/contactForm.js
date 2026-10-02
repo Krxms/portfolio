@@ -13,12 +13,26 @@ if (form && status) {
     const message = form.message.value.trim();
     const company = form.company ? form.company.value.trim() : '';
 
-    if (!name || !email || !message) {
-      status.textContent = 'Merci de renseigner votre nom, votre email et un message.';
+    const fields = [form.name, form.email, form.message];
+    fields.forEach((f) => f.removeAttribute('aria-invalid'));
+    status.classList.remove('is-error');
+    status.setAttribute('role', 'status');
+
+    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    const invalid = fields.filter((f) => !f.value.trim() || (f === form.email && !emailOk));
+    if (invalid.length) {
+      invalid.forEach((f) => f.setAttribute('aria-invalid', 'true'));
+      status.classList.add('is-error');
+      status.setAttribute('role', 'alert');
+      status.textContent = !emailOk && email
+        ? "L'adresse email semble invalide. Merci de la vérifier."
+        : 'Merci de renseigner votre nom, votre email et un message.';
+      invalid[0].focus();
       return;
     }
 
     submitBtn.disabled = true;
+    submitBtn.setAttribute('aria-busy', 'true');
     status.textContent = 'Envoi en cours...';
 
     try {
@@ -34,14 +48,17 @@ if (form && status) {
         status.textContent =
           'Message envoyé — vous allez recevoir un email de confirmation, je reviens vers vous sous 24h ouvrées.';
       } else {
+        status.classList.add('is-error');
         status.textContent =
           "Une erreur est survenue lors de l'envoi. Vous pouvez réessayer, ou m'écrire directement à contact@antoinebruneau.fr.";
       }
     } catch {
+      status.classList.add('is-error');
       status.textContent =
         "Une erreur réseau est survenue. Vous pouvez réessayer, ou m'écrire directement à contact@antoinebruneau.fr.";
     } finally {
       submitBtn.disabled = false;
+      submitBtn.removeAttribute('aria-busy');
     }
   });
 }

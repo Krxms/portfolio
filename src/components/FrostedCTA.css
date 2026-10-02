@@ -45,14 +45,30 @@
   fill: var(--signal-ink);
 }
 
-.frosted-cta:hover {
-  filter: hue-rotate(var(--hue));
-  transform: translateY(-2px);
-  border-color: color-mix(in srgb, var(--ink) 22%, transparent);
+@media (hover: hover) {
+  .frosted-cta:hover {
+    filter: hue-rotate(var(--hue));
+    transform: translateY(-2px);
+    border-color: color-mix(in srgb, var(--ink) 22%, transparent);
+  }
+
+  .frosted-cta:hover .btn-icon {
+    transform: scale(1.1);
+  }
 }
 
-.frosted-cta:hover .btn-icon {
-  transform: scale(1.1);
+@media (prefers-reduced-motion: reduce) {
+  .frosted-cta:hover {
+    filter: none;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .frosted-cta {
+    backdrop-filter: none;
+    background: var(--paper);
+  }
 }
 
 .frosted-cta:active {

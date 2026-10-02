@@ -33,3 +33,7 @@
     display: none;
   }
 }
+
+.logo:focus-visible {
+  outline-offset: -2px;
+}

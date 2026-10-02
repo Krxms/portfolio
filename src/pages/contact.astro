@@ -16,6 +16,7 @@ import './contact.css';
 
     <div class="contact-grid">
       <form id="contactForm" novalidate>
+        <p class="form-hint">Tous les champs sont obligatoires.</p>
         <input
           type="text"
           name="company"
@@ -27,11 +28,11 @@ import './contact.css';
         <div class="field-row">
           <div class="field">
             <label for="fName">Nom</label>
-            <input type="text" id="fName" name="name" placeholder="Votre nom" required />
+            <input type="text" id="fName" name="name" placeholder="Votre nom" autocomplete="name" required aria-required="true" />
           </div>
           <div class="field">
             <label for="fEmail">Email</label>
-            <input type="email" id="fEmail" name="email" placeholder="vous@exemple.fr" required />
+            <input type="email" id="fEmail" name="email" placeholder="vous@exemple.fr" autocomplete="email" inputmode="email" autocapitalize="off" spellcheck="false" required aria-required="true" />
           </div>
         </div>
         <div class="field-row">
@@ -57,10 +58,10 @@ import './contact.css';
         </div>
         <div class="field">
           <label for="fMessage">Message</label>
-          <textarea id="fMessage" name="message" placeholder="Parlez-moi de votre projet, de vos objectifs, de vos délais..." required></textarea>
+          <textarea id="fMessage" name="message" placeholder="Parlez-moi de votre projet, de vos objectifs, de vos délais..." required aria-required="true"></textarea>
         </div>
         <button type="submit" class="btn btn-primary">Envoyer <span class="btn-arrow">→</span></button>
-        <p class="form-status" id="formStatus" role="status"></p>
+        <p class="form-status" id="formStatus" role="status" aria-live="polite" aria-atomic="true"></p>
       </form>
 
       <div class="contact-side">

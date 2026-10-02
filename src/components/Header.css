@@ -54,3 +54,17 @@
   align-items: center;
   justify-content: flex-start;
 }
+
+@media (prefers-reduced-transparency: reduce) {
+  .site-header {
+    background: var(--nav-bg);
+  }
+  .backdrop {
+    backdrop-filter: none;
+    filter: none;
+    background: var(--nav-bg);
+  }
+  .backdrop::after {
+    display: none;
+  }
+}

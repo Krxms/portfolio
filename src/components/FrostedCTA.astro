@@ -27,7 +27,7 @@ const { href } = Astro.props;
 
   document.addEventListener('mousemove', (e) => {
     const btn = (e.target as HTMLElement)?.closest?.('.frosted-cta') as HTMLElement | null;
-    if (!btn) return;
+    if (!btn || (e as PointerEvent).pointerType === 'touch') return;
     const rect = btn.getBoundingClientRect();
     const ratio = Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width));
     btn.style.setProperty('--hue', `${ratio * MAX_HUE}deg`);

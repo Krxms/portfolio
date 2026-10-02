@@ -7,10 +7,43 @@ import '../styles/global.css';
 interface Props {
   title: string;
   description: string;
+  noindex?: boolean;
 }
 
-const { title, description } = Astro.props;
-const pageTitle = title === 'Antoine Bruneau' ? title : `${title} — Antoine Bruneau`;
+const { title, description, noindex = false } = Astro.props;
+const isHome = Astro.url.pathname === '/';
+const pageTitle = isHome ? 'Antoine Bruneau — Designer UX/UI & webdesigner freelance' : `${title} — Antoine Bruneau`;
+
+// Cloudflare sert les pages en /page/ (avec slash final) : le canonical suit cette forme.
+const path = Astro.url.pathname.endsWith('/') ? Astro.url.pathname : `${Astro.url.pathname}/`;
+const canonical = new URL(path, Astro.site).href;
+
+const siteUrl = 'https://antoinebruneau.fr';
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    { '@type': 'WebSite', '@id': `${siteUrl}/#website`, url: siteUrl, name: 'Antoine Bruneau', inLanguage: 'fr-FR' },
+    {
+      '@type': 'ProfessionalService',
+      '@id': `${siteUrl}/#service`,
+      name: 'Antoine Bruneau',
+      url: siteUrl,
+      email: 'contact@antoinebruneau.fr',
+      telephone: '+33609111838',
+      address: { '@type': 'PostalAddress', addressLocality: 'Guitrancourt', postalCode: '78440', addressCountry: 'FR' },
+      founder: { '@id': `${siteUrl}/#person` },
+    },
+    {
+      '@type': 'Person',
+      '@id': `${siteUrl}/#person`,
+      name: 'Antoine Bruneau',
+      jobTitle: 'Designer UX/UI et webdesigner freelance',
+      url: siteUrl,
+      email: 'contact@antoinebruneau.fr',
+      telephone: '+33609111838',
+    },
+  ],
+};
 ---
 
 <!doctype html>
@@ -20,12 +53,27 @@ const pageTitle = title === 'Antoine Bruneau' ? title : `${title} — Antoine Br
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex,follow" />}
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content="Antoine Bruneau" />
+    <meta property="og:locale" content="fr_FR" />
+    <meta name="twitter:card" content="summary" />
     <meta name="theme-color" content="#f5f0e6" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Space+Mono:wght@400;700&display=swap"
+    />
+    {isHome && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
   </head>
   <body>
+    <a class="skip-link" href="#main">Aller au contenu</a>
     <svg class="glass-defs" width="0" height="0" aria-hidden="true" focusable="false">
       <filter id="liquid-glass" x="-30%" y="-30%" width="160%" height="160%" color-interpolation-filters="sRGB">
         <feTurbulence type="fractalNoise" baseFrequency="0.009 0.014" numOctaves="2" seed="7" result="noise" />
@@ -41,7 +89,7 @@ const pageTitle = title === 'Antoine Bruneau' ? title : `${title} — Antoine Br
       </filter>
     </svg>
     <Header />
-    <main>
+    <main id="main" tabindex="-1">
       <slot />
     </main>
     <Footer />
