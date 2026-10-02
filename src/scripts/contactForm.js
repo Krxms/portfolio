@@ -1,3 +1,14 @@
+const sujets = {
+  site: 'Création de site web',
+  ux: 'Design UX/UI de produit',
+  audit: 'Audit UX/UI',
+  suivi: 'Accompagnement mensuel',
+};
+const sujetParam = new URLSearchParams(window.location.search).get('sujet');
+const wanted = sujetParam && Object.hasOwn(sujets, sujetParam) ? sujets[sujetParam] : null;
+const typeSelect = document.getElementById('fType');
+if (wanted && typeSelect) typeSelect.value = wanted;
+
 const form = document.getElementById('contactForm');
 const status = document.getElementById('formStatus');
 

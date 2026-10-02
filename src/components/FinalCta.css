@@ -1,0 +1,35 @@
+.cta-final {
+  border-top: 1px solid var(--line);
+}
+
+.cta-final h2 {
+  font-size: clamp(2.2rem, 5vw, 3.8rem);
+  max-width: 18ch;
+}
+
+.cta-final-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-5) var(--space-7);
+  margin-top: var(--space-7);
+}
+
+.cta-final-direct {
+  display: flex;
+  flex-direction: column;
+}
+
+.cta-final-direct a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-weight: 500;
+  font-size: 17px;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.cta-final-direct a:hover {
+  color: var(--signal-deep);
+}

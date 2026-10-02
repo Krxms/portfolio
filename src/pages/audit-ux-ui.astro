@@ -1,0 +1,213 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import FrostedCTA from '../components/FrostedCTA.astro';
+import AuditMock from '../components/AuditMock.astro';
+import Process from '../components/Process.astro';
+import Faq from '../components/Faq.astro';
+import FinalCta from '../components/FinalCta.astro';
+import StickyCta from '../components/StickyCta.astro';
+import './service.css';
+
+const site = 'https://antoinebruneau.fr';
+const description =
+  "Audit UX/UI freelance de votre site ou application : points de friction, recommandations priorisées et plan d'action clair. Échangeons.";
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Service',
+      '@id': `${site}/audit-ux-ui/#audit`,
+      name: 'Audit UX/UI',
+      serviceType: 'Audit UX/UI',
+      description:
+        "Examen d'un site ou d'un produit existant, constats illustrés, recommandations classées par priorité et restitution commentée.",
+      url: `${site}/audit-ux-ui/`,
+      inLanguage: 'fr-FR',
+      areaServed: { '@type': 'Country', name: 'France' },
+      provider: { '@type': 'ProfessionalService', '@id': `${site}/#service`, name: 'Antoine Bruneau' },
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Accueil', item: `${site}/` },
+        { '@type': 'ListItem', position: 2, name: 'Audit UX/UI', item: `${site}/audit-ux-ui/` },
+      ],
+    },
+  ],
+};
+
+const examined = [
+  ['Les parcours qui comptent', "De la page d'arrivée jusqu'à l'action attendue : contact, achat, inscription."],
+  ['La clarté des pages', 'Titres, hiérarchie, vocabulaire, appels à l\'action.'],
+  ['La navigation et la structure', 'Retrouve-t-on ce que l\'on cherche, et sans effort ?'],
+  ['Les formulaires', 'Champs, messages d\'erreur, étapes de saisie.'],
+  ["L'affichage sur mobile", 'Lisibilité, zones à toucher, longueur des pages.'],
+  ["L'accessibilité de base", "Contrastes, lisibilité, usage au clavier, libellés des champs."],
+  ['La cohérence visuelle', 'Écrans et composants qui se ressemblent quand ils font la même chose.'],
+];
+
+const steps = [
+  {
+    title: 'Cadrage',
+    text: "Vos objectifs, vos utilisateurs, les parcours à examiner et les données que vous avez déjà.",
+    gets: 'un périmètre écrit, avant le devis.',
+  },
+  {
+    title: 'Revue',
+    text: "Je parcours le site ou le produit comme le ferait un utilisateur, puis je relève chaque problème avec une capture.",
+    gets: 'une liste de constats illustrés.',
+  },
+  {
+    title: 'Priorisation',
+    text: 'Chaque recommandation est classée selon son effet attendu et l\'effort qu\'elle demande.',
+    gets: 'un ordre d\'action clair.',
+  },
+  {
+    title: 'Restitution',
+    text: 'Je vous présente les résultats en visio et je réponds à vos questions.',
+    gets: 'le rapport commenté.',
+  },
+];
+
+const faq = [
+  {
+    q: 'Faut-il me donner des accès ?',
+    a: "Souvent, l'adresse du site suffit. Pour un produit qui n'est pas public, il me faut un accès de test. Vos statistiques de fréquentation sont utiles si vous en avez.",
+  },
+  {
+    q: "Mon produit n'est pas public, est-ce un problème ?",
+    a: "Non. On en discute avant de commencer.",
+  },
+  {
+    q: 'Faut-il me confier la refonte ensuite ?',
+    a: "Non. Les recommandations sont à vous : vous pouvez les appliquer vous-même, avec votre équipe ou avec moi.",
+  },
+  {
+    q: 'Quel est le prix ?',
+    a: "Il dépend du périmètre. Le devis est gratuit et détaillé, envoyé après un échange sur ce que vous souhaitez faire examiner.",
+  },
+  {
+    q: 'Combien de temps faut-il ?',
+    a: "Cela dépend du périmètre. La durée figure au devis. Je réponds à votre premier message sous 24 h ouvrées.",
+  },
+];
+---
+
+<BaseLayout title="Audit UX/UI freelance, site & produit" description={description} schema={schema}>
+  <section class="page-hero wrap" data-sticky-watch>
+    <nav class="crumbs" aria-label="Fil d'Ariane">
+      <a href="/">Accueil</a><span aria-hidden="true">/</span><span aria-current="page">Audit UX/UI</span>
+    </nav>
+    <div class="page-hero-grid">
+      <div>
+        <h1>Audit UX/UI de votre site ou application</h1>
+        <p class="page-lead">
+          Vous avez un site ou un produit en ligne et quelque chose cloche : peu de demandes, des abandons, des retours
+          confus. J'examine l'existant et je vous dis quoi corriger en premier.
+        </p>
+        <div class="page-actions">
+          <FrostedCTA href="/contact/?sujet=audit">Demander un devis d'audit</FrostedCTA>
+        </div>
+      </div>
+      <dl class="brief">
+        <div><dt>Durée</dt><dd>selon le périmètre, indiquée au devis</dd></div>
+        <div><dt>Livrable</dt><dd>un rapport illustré et une restitution commentée</dd></div>
+        <div><dt>Prix</dt><dd>sur devis gratuit</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="wrap sec-grid">
+      <p class="sec-label">01 / Quand</p>
+      <div class="sec-body">
+        <h2 data-reveal>Quand un audit est utile</h2>
+        <div class="prose" data-reveal>
+          <ul class="plain" role="list">
+            <li>Vous voulez un regard extérieur avant de refaire un site ou une interface.</li>
+            <li>Votre site reçoit des visites mais peu de demandes.</li>
+            <li>Votre équipe ne voit plus les défauts du produit, à force de le côtoyer.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="wrap sec-grid">
+      <p class="sec-label">02 / Périmètre</p>
+      <div class="sec-body">
+        <h2 data-reveal>Ce que j'examine</h2>
+        <ol class="criteria" role="list" data-reveal>
+          {
+            examined.map(([t, d], i) => (
+              <li>
+                <span class="criteria-n">{String(i + 1).padStart(2, '0')}</span>
+                <div>
+                  <h3>{t}</h3>
+                  <p>{d}</p>
+                </div>
+              </li>
+            ))
+          }
+        </ol>
+        <p class="prose note-line">Le périmètre exact (pages, parcours, nombre d'écrans) est fixé avec vous avant le devis.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="wrap sec-grid">
+      <p class="sec-label">03 / Livrable</p>
+      <div class="sec-body audit-split">
+        <div>
+          <h2 data-reveal>Ce que vous recevez</h2>
+          <ul class="plain prose deliver" role="list">
+            <li>les constats, chacun illustré par une capture annotée ;</li>
+            <li>une recommandation précise pour chaque constat ;</li>
+            <li>un classement par priorité ;</li>
+            <li>une restitution commentée en visio.</li>
+          </ul>
+          <p class="prose">
+            Ce que l'audit ne fait pas : il ne remplace ni des tests avec de vrais utilisateurs, ni l'analyse de vos
+            statistiques, et je ne promets aucun chiffre de progression. Il vous donne un diagnostic argumenté et un ordre
+            d'action.
+          </p>
+        </div>
+        <div data-reveal><AuditMock /></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="wrap sec-grid">
+      <p class="sec-label">04 / Méthode</p>
+      <div class="sec-body">
+        <div class="sec-head"><h2 data-reveal>Comment je procède</h2></div>
+        <Process steps={steps} />
+      </div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="wrap sec-grid">
+      <p class="sec-label">05 / Questions</p>
+      <div class="sec-body">
+        <div class="sec-head"><h2 data-reveal>Questions</h2></div>
+        <Faq items={faq} />
+        <p class="prose also">
+          Après l'audit, si vous voulez refaire ou créer un site, voir <a href="/creation-site-web/">la création de site web</a>.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <FinalCta
+    title="Quelle page vous inquiète ?"
+    text="Indiquez l'adresse du site ou du produit et ce qui vous pose problème. Le premier échange est gratuit."
+    label="Demander un devis d'audit"
+    href="/contact/?sujet=audit"
+  />
+  <StickyCta href="/contact/?sujet=audit" />
+</BaseLayout>

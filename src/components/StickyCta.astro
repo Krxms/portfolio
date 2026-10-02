@@ -1,0 +1,26 @@
+---
+import './StickyCta.css';
+
+interface Props {
+  href?: string;
+}
+const { href = '/contact/' } = Astro.props;
+---
+
+<div class="sticky-cta" data-sticky-cta>
+  <a class="btn btn-primary" href={href}>Devis gratuit</a>
+</div>
+
+<script>
+  // Visible tant qu'aucune zone marquée data-sticky-watch (hero, CTA final) n'est à l'écran.
+  const bar = document.querySelector<HTMLElement>('[data-sticky-cta]');
+  const watched = document.querySelectorAll('[data-sticky-watch], .site-footer');
+  if (bar && 'IntersectionObserver' in window && watched.length) {
+    const inView = new Set<Element>();
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => (e.isIntersecting ? inView.add(e.target) : inView.delete(e.target)));
+      bar.classList.toggle('is-visible', inView.size === 0);
+    });
+    watched.forEach((el) => io.observe(el));
+  }
+</script>

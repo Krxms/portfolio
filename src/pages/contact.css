@@ -187,3 +187,24 @@ textarea[aria-invalid='true'] {
     grid-template-columns: 1fr;
   }
 }
+
+.field-hint,
+.form-promise {
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--ink-soft);
+}
+
+.form-promise {
+  margin-bottom: var(--space-4);
+}
+
+.contact-grid > *,
+.field,
+.field-row > * {
+  min-width: 0;
+}
+
+select {
+  text-overflow: ellipsis;
+}

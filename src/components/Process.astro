@@ -1,0 +1,21 @@
+---
+import './Process.css';
+
+interface Props {
+  steps: { title: string; text: string; gets: string }[];
+}
+const { steps } = Astro.props;
+---
+
+<ol class={`proc proc--${steps.length}`} role="list">
+  {
+    steps.map((s, i) => (
+      <li class="proc-step" data-reveal>
+        <span class="proc-num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+        <h3>{s.title}</h3>
+        <p>{s.text}</p>
+        <p class="proc-gets"><span>Vous recevez</span> {s.gets}</p>
+      </li>
+    ))
+  }
+</ol>

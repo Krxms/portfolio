@@ -1,0 +1,146 @@
+.page-hero {
+  padding-top: clamp(48px, 7vw, 96px);
+  padding-bottom: clamp(32px, 5vw, 72px);
+}
+
+.crumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  align-items: center;
+  margin-bottom: var(--space-6);
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+.crumbs a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  color: var(--ink-soft);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.page-hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  gap: var(--space-8) var(--gap);
+  align-items: end;
+}
+
+.page-hero h1 {
+  font-size: clamp(2.2rem, 4.6vw, 3.8rem);
+  font-weight: 600;
+  line-height: 1.08;
+  letter-spacing: -0.025em;
+  max-width: 20ch;
+}
+
+.page-lead {
+  margin-top: var(--space-5);
+  max-width: 54ch;
+  font-size: 1.2rem;
+  line-height: 1.6;
+}
+
+.page-actions {
+  margin-top: var(--space-6);
+}
+
+.brief {
+  margin: 0;
+  border-top: 2px solid var(--ink);
+}
+
+.brief > div {
+  padding-block: var(--space-4);
+  border-bottom: 1px solid var(--line);
+}
+
+.brief dt {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.brief dd {
+  margin: var(--space-1) 0 0;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+@media (max-width: 900px) {
+  .page-hero-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.plain {
+  margin: 0;
+  padding-left: 1.1em;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.deliver {
+  margin-bottom: var(--space-5);
+}
+
+.criteria {
+  list-style: none;
+  margin: var(--space-7) 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-bottom: 1px solid var(--line);
+}
+
+.criteria li {
+  display: grid;
+  grid-template-columns: 40px 1fr;
+  gap: var(--space-3);
+  padding: var(--space-5) var(--space-5) var(--space-5) 0;
+  border-top: 1px solid var(--line);
+}
+
+.criteria-n {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--signal-deep);
+  padding-top: 3px;
+}
+
+.criteria h3 {
+  font-size: 1.05rem;
+}
+
+.criteria p {
+  margin-top: var(--space-1);
+  font-size: 15.5px;
+  line-height: 1.6;
+  color: var(--ink-soft);
+}
+
+@media (max-width: 760px) {
+  .criteria {
+    grid-template-columns: 1fr;
+  }
+}
+
+.note-line {
+  margin-top: var(--space-5);
+  font-size: 15.5px;
+  color: var(--ink-soft);
+}
+
+.also {
+  margin-top: var(--space-6);
+}
+

@@ -7,7 +7,8 @@
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  padding: 13px 13px 13px 28px;
+  padding: 13px 28px;
+  max-width: 100%;
   border-radius: 12px;
   border: 1px solid color-mix(in srgb, var(--ink) 14%, transparent);
   background: color-mix(in srgb, var(--paper) 55%, transparent);
@@ -24,7 +25,7 @@
   font-family: var(--font-body);
   font-weight: 600;
   font-size: 17px;
-  white-space: nowrap;
+  text-align: center;
 }
 
 .frosted-cta .btn-icon {
@@ -86,7 +87,7 @@
 
 @media (max-width: 480px) {
   .frosted-cta {
-    padding: 11px 11px 11px 22px;
+    padding: 11px 22px;
   }
   .frosted-cta .text {
     font-size: 15.5px;
