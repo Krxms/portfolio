@@ -52,3 +52,36 @@
 .proc--4 {
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
 }
+
+/* ---- Verre ---- */
+.proc-step {
+  position: relative;
+  border-top: 0;
+  padding: var(--space-5);
+  border-radius: 24px;
+  transition: transform 0.5s var(--spring);
+}
+
+.proc-step::after {
+  content: '';
+  position: absolute;
+  left: var(--space-5);
+  right: var(--space-5);
+  top: 0;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--signal) 0 40%, rgb(40 28 51 / 0.14) 40%);
+  transform-origin: left;
+  transition: background-position 0.5s var(--ease-out);
+  background-size: 250% 100%;
+  background-position: 100% 0;
+}
+
+@media (hover: hover) {
+  .proc-step:hover {
+    transform: translateY(-3px);
+  }
+  .proc-step:hover::after {
+    background-position: 0 0;
+  }
+}

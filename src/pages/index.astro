@@ -113,7 +113,7 @@ const faq = [
   </section>
 
   <section class="facts wrap" aria-label="Repères">
-    <dl class="facts-list">
+    <dl class="facts-list glass" data-glow>
       <div class="facts-cell"><dt>Réponse</dt><dd>sous 24 h ouvrées</dd></div>
       <div class="facts-cell"><dt>Devis</dt><dd>gratuit et détaillé</dd></div>
       <div class="facts-cell">
@@ -134,8 +134,8 @@ const faq = [
     <div class="wrap sec-grid">
       <p class="sec-label">02 / Services</p>
       <div class="sec-body">
-        <h2 data-reveal>Ce que je peux faire pour vous</h2>
-        <ul class="svc" role="list" data-reveal>
+        <h2>Ce que je peux faire pour vous</h2>
+        <ul class="svc" role="list">
           {
             services.map((s) => (
               <li class="svc-row">
@@ -161,7 +161,7 @@ const faq = [
       <p class="sec-label">03 / Audit</p>
       <div class="sec-body audit-split">
         <div>
-          <h2 data-reveal>Ce qu'on reçoit après un audit</h2>
+          <h2>Ce qu'on reçoit après un audit</h2>
           <p class="lead">
             Un document où chaque problème repéré est illustré, expliqué et accompagné d'une correction proposée, du plus
             urgent au plus secondaire.
@@ -174,7 +174,7 @@ const faq = [
           </div>
           <a class="hero-link" href="/audit-ux-ui/">Voir ce que contient un audit</a>
         </div>
-        <div data-reveal>
+        <div>
           <AuditMock />
         </div>
       </div>
@@ -186,7 +186,7 @@ const faq = [
       <p class="sec-label">04 / Méthode</p>
       <div class="sec-body">
         <div class="sec-head">
-          <h2 data-reveal>Comment se passe un projet</h2>
+          <h2>Comment se passe un projet</h2>
         </div>
         <Process steps={steps} />
       </div>
@@ -197,12 +197,12 @@ const faq = [
     <div class="wrap sec-grid">
       <p class="sec-label">05 / Approche</p>
       <div class="sec-body">
-        <h2 data-reveal>Ma façon de travailler</h2>
-        <p class="lead" data-reveal>
+        <h2>Ma façon de travailler</h2>
+        <p class="lead">
           Je fais moi-même les maquettes et l'intégration : personne n'a à retranscrire mon travail d'une étape à l'autre.
         </p>
 
-        <div class="fit" data-reveal>
+        <div class="fit">
           <div>
             <h3>Pour qui ça marche bien</h3>
             <ul>
@@ -228,8 +228,8 @@ const faq = [
     <div class="wrap sec-grid">
       <p class="sec-label">06 / Cadre</p>
       <div class="sec-body">
-        <h2 data-reveal>Argent, délais, droits</h2>
-        <div class="terms" data-reveal>
+        <h2>Argent, délais, droits</h2>
+        <div class="terms glass" data-glow>
           <dl>
             <div><dt>Statut</dt><dd>Entrepreneur individuel</dd></div>
             <div><dt>SIREN</dt><dd>788 566 719</dd></div>
@@ -252,7 +252,7 @@ const faq = [
       <p class="sec-label">07 / Questions</p>
       <div class="sec-body">
         <div class="sec-head">
-          <h2 data-reveal>Vos questions</h2>
+          <h2>Vos questions</h2>
         </div>
         <Faq items={faq} />
       </div>

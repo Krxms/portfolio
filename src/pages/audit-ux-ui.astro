@@ -122,8 +122,8 @@ const faq = [
     <div class="wrap sec-grid">
       <p class="sec-label">01 / Quand</p>
       <div class="sec-body">
-        <h2 data-reveal>Quand un audit est utile</h2>
-        <div class="prose" data-reveal>
+        <h2>Quand un audit est utile</h2>
+        <div class="prose">
           <ul class="plain" role="list">
             <li>Vous voulez un regard extérieur avant de refaire un site ou une interface.</li>
             <li>Votre site reçoit des visites mais peu de demandes.</li>
@@ -138,8 +138,8 @@ const faq = [
     <div class="wrap sec-grid">
       <p class="sec-label">02 / Périmètre</p>
       <div class="sec-body">
-        <h2 data-reveal>Ce que j'examine</h2>
-        <ol class="criteria" role="list" data-reveal>
+        <h2>Ce que j'examine</h2>
+        <ol class="criteria" role="list">
           {
             examined.map(([t, d], i) => (
               <li>
@@ -162,7 +162,7 @@ const faq = [
       <p class="sec-label">03 / Livrable</p>
       <div class="sec-body audit-split">
         <div>
-          <h2 data-reveal>Ce que vous recevez</h2>
+          <h2>Ce que vous recevez</h2>
           <ul class="plain prose deliver" role="list">
             <li>les constats, chacun illustré par une capture annotée ;</li>
             <li>une recommandation précise pour chaque constat ;</li>
@@ -175,7 +175,7 @@ const faq = [
             d'action.
           </p>
         </div>
-        <div data-reveal><AuditMock /></div>
+        <div><AuditMock /></div>
       </div>
     </div>
   </section>
@@ -184,7 +184,7 @@ const faq = [
     <div class="wrap sec-grid">
       <p class="sec-label">04 / Méthode</p>
       <div class="sec-body">
-        <div class="sec-head"><h2 data-reveal>Comment je procède</h2></div>
+        <div class="sec-head"><h2>Comment je procède</h2></div>
         <Process steps={steps} />
       </div>
     </div>
@@ -194,7 +194,7 @@ const faq = [
     <div class="wrap sec-grid">
       <p class="sec-label">05 / Questions</p>
       <div class="sec-body">
-        <div class="sec-head"><h2 data-reveal>Questions</h2></div>
+        <div class="sec-head"><h2>Questions</h2></div>
         <Faq items={faq} />
         <p class="prose also">
           Après l'audit, si vous voulez refaire ou créer un site, voir <a href="/creation-site-web/">la création de site web</a>.

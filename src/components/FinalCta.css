@@ -33,3 +33,17 @@
 .cta-final-direct a:hover {
   color: var(--signal-deep);
 }
+
+/* ---- Verre ---- */
+.cta-final {
+  border-top: 0;
+}
+
+.cta-panel {
+  padding: clamp(32px, 6vw, 80px);
+  border-radius: clamp(26px, 4vw, 40px);
+}
+
+.cta-final h2 {
+  max-width: 20ch;
+}

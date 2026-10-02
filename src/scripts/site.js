@@ -2,28 +2,13 @@ document.querySelectorAll('[data-year]').forEach((el) => {
   el.textContent = String(new Date().getFullYear());
 });
 
-const revealEls = document.querySelectorAll('[data-reveal]');
-if ('IntersectionObserver' in window && revealEls.length) {
-  const vh = window.innerHeight;
-  revealEls.forEach((el) => {
-    if (el.getBoundingClientRect().top < vh) el.classList.add('is-in');
+// Reflet du verre : la position du pointeur alimente --mx / --my sur la surface survolée.
+if (window.matchMedia('(hover: hover)').matches) {
+  document.addEventListener('pointermove', (e) => {
+    const el = e.target.closest && e.target.closest('[data-glow]');
+    if (!el) return;
+    const r = el.getBoundingClientRect();
+    el.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+    el.style.setProperty('--my', (e.clientY - r.top) + 'px');
   });
-  // Le masquage ne s'active qu'une fois ce script exécuté : sans JS, tout reste visible.
-  document.documentElement.classList.add('reveal-on');
-  const io = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting || entry.boundingClientRect.top < 0) {
-          entry.target.classList.add('is-in');
-          io.unobserve(entry.target);
-        }
-      });
-    },
-    { threshold: 0.15 },
-  );
-  revealEls.forEach((el) => {
-    if (!el.classList.contains('is-in')) io.observe(el);
-  });
-} else {
-  revealEls.forEach((el) => el.classList.add('is-in'));
 }

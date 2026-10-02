@@ -63,3 +63,60 @@
   outline: 2px solid var(--signal-deep);
   outline-offset: -2px;
 }
+
+/* ---- Verre ---- */
+.faq {
+  border-bottom: 0;
+}
+
+.faq details {
+  margin-inline: calc(var(--space-4) * -1);
+  padding-inline: var(--space-4);
+  border-top-color: transparent;
+  border-radius: 20px;
+  background-image: linear-gradient(var(--line), var(--line));
+  background-repeat: no-repeat;
+  background-size: calc(100% - 2 * var(--space-4)) 1px;
+  background-position: center top;
+  transition: background-color 0.3s var(--ease-out), box-shadow 0.3s var(--ease-out);
+}
+
+.faq details[open] {
+  background-color: rgb(255 255 255 / 0.6);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.9), 0 0 0 1px rgb(40 28 51 / 0.06), 0 14px 30px -18px rgb(40 28 51 / 0.2);
+  background-image: none;
+}
+
+.faq details[open] + details {
+  background-image: none;
+}
+
+.faq summary::after,
+.faq details[open] summary::after {
+  content: '+' / '';
+  transition: transform 0.45s var(--spring);
+}
+
+.faq details[open] summary::after {
+  transform: rotate(135deg);
+}
+
+.faq details > p {
+  animation: none;
+}
+
+@supports (interpolate-size: allow-keywords) {
+  .faq details {
+    interpolate-size: allow-keywords;
+  }
+  .faq details::details-content {
+    block-size: 0;
+    overflow: clip;
+    opacity: 0;
+    transition: block-size 0.4s var(--ease-out), opacity 0.3s var(--ease-out), content-visibility 0.4s allow-discrete;
+  }
+  .faq details[open]::details-content {
+    block-size: auto;
+    opacity: 1;
+  }
+}

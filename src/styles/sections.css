@@ -82,15 +82,16 @@
 .prose a,
 .link {
   color: var(--ink);
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 3px;
+  text-decoration: none;
+  background: linear-gradient(currentColor, currentColor) 0 100% / 100% 1px no-repeat;
+  padding-bottom: 2px;
+  transition: background-size 0.25s var(--ease-out), color 0.2s var(--ease-out);
 }
 
 .prose a:hover,
 .link:hover {
   color: var(--signal-deep);
-  text-decoration-thickness: 2px;
+  background-size: 100% 2px;
 }
 
 .mono {
@@ -104,26 +105,8 @@
   margin-bottom: var(--space-7);
 }
 
-/* Apparition douce au scroll, uniquement si JS actif */
-[data-reveal] {
-  transition: opacity 0.5s var(--ease-out), transform 0.5s var(--ease-out);
-}
 
-html.reveal-on [data-reveal]:not(.is-in) {
-  opacity: 0;
-  transform: translateY(12px);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  html.reveal-on [data-reveal]:not(.is-in) {
-    opacity: 1;
-    transform: none;
-  }
-}
-
-@media print {
-  [data-reveal] {
-    opacity: 1 !important;
-    transform: none !important;
-  }
+.sec-label,
+.mono {
+  font-weight: 500;
 }

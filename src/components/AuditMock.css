@@ -165,3 +165,21 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* ---- Verre ---- */
+.audit-mock {
+  border: 0;
+  border-radius: 26px;
+}
+
+.audit-mock .wf {
+  background: rgb(255 255 255 / 0.55);
+  transition: transform 0.55s var(--spring), box-shadow 0.4s var(--ease-out);
+}
+
+@media (hover: hover) {
+  .audit-mock:hover .wf--after {
+    transform: translateY(-4px) scale(1.015);
+    box-shadow: 0 16px 28px -14px rgb(40 28 51 / 0.28);
+  }
+}
