@@ -1,17 +1,17 @@
 :root {
-  /* Base neutrals — warm ivory paper / deep plum-black ink (not pure white/black) */
-  --paper: #f5f0e6;
-  --paper-soft: #efe8da;
-  --ink: #281c33;
-  --ink-soft: #4a4166;
-  --muted: #554d6b;
+  /* Base neutrals — crème légèrement verte / encre bleu-nuit (ni blanc ni noir purs) */
+  --paper: #f5f3ea;
+  --paper-soft: #ecebdf;
+  --ink: #12202b;
+  --ink-soft: #3a4955;
+  --muted: #4a5864;
   --line: rgba(40, 28, 51, 0.13);
   --line-strong: rgba(40, 28, 51, 0.26);
 
-  /* Signature accent — mauve/lavender (exact maquette values) */
-  --signal: #735f84;
-  --signal-deep: #5a4a68;
-  --signal-ink: #fbfaff;
+  /* Accent signature — bleu klein tiré vers le vert */
+  --signal: #14509a;
+  --signal-deep: #0c3a73;
+  --signal-ink: #f7fbff;
 
   /* Logo navy — used sparingly for continuity with the mark */
   --brand-navy: #202559;
@@ -20,12 +20,15 @@
   --slate: #506180;
 
   /* Navbar */
-  --nav-bg: #ece5dc;
+  --nav-bg: #eceee4;
 
-  /* Mesh-gradient hues — background only */
-  --mesh-orange: #ff9a68;
-  --mesh-purple: #a594d1;
-  --mesh-green: #92c197;
+  /* Tracés faits main (une seule famille) : abricot sur clair, plus clair sur sombre */
+  --mark: #e8764f;
+  --mark-on-dark: #ffb48a;
+
+  /* Grain : bruit fin, posé sur le fond et sur les tuiles sombres */
+  --grain-soft: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 
   --radius-sm: 10px;
   --radius-md: 18px;
@@ -39,7 +42,7 @@
   /* Labels, eyebrows, status */
   --font-mono: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, sans-serif;
 
-  --card: #fffdfa;
+  --card: #fffefa;
   --danger: #9b1c1c;
   --ok: #3d6a4b;
 
@@ -57,7 +60,14 @@
   --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
 
   --container: 1180px;
+  --header-h: 100px;
   --edge: clamp(20px, 5vw, 64px);
 
   color-scheme: light;
+}
+
+@media (max-width: 560px) {
+  :root {
+    --header-h: 78px;
+  }
 }

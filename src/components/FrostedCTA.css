@@ -1,24 +1,27 @@
-/* CTA en verre dépoli — backdrop-filter (blur + saturate), sans box-shadow.
-   État neutre au repos ; au survol, hue-rotate suit la position de la souris
-   (voir le <script> du composant), inspiré de joshwcomeau.com/css/backdrop-filter. */
+/* CTA en verre dépoli teinté de bleu : backdrop-filter (blur + saturate). Au survol, la couleur et la transparence varient
+   doucement ; rien ne bouge. */
 .frosted-cta {
-  --hue: 0deg;
   position: relative;
+  isolation: isolate;
+  overflow: hidden;
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  padding: 13px 28px;
+  box-sizing: border-box;
+  min-height: 54px;
+  padding: 0 28px;
   max-width: 100%;
   border-radius: 12px;
-  border: 1px solid color-mix(in srgb, var(--ink) 14%, transparent);
-  background: color-mix(in srgb, var(--paper) 55%, transparent);
+  border: 0;
+  /* Verre teinté de bleu : reste du verre dépoli, mais devient l'action principale (contraste texte ≈ 5,5:1) */
+  /* quasi opaque : le contraste du texte (≥ 5,5:1) ne dépend plus de ce qui passe derrière le bouton (lave animée) */
+  background: linear-gradient(180deg, rgb(255 255 255 / 0.14), rgb(255 255 255 / 0) 60%), color-mix(in srgb, var(--signal) 88%, transparent);
   backdrop-filter: blur(14px) saturate(160%);
-  color: var(--ink);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.32), 0 14px 30px -18px rgb(12 58 115 / 0.85);
+  color: var(--signal-ink);
   cursor: pointer;
   text-decoration: none;
-  user-select: none;
-  filter: hue-rotate(0deg);
-  transition: filter 0.2s ease, transform 0.25s ease, background 0.25s ease, border-color 0.25s ease;
+  transition: background-color 0.5s var(--ease-out), box-shadow 0.5s var(--ease-out), backdrop-filter 0.5s var(--ease-out);
 }
 
 .frosted-cta .text {
@@ -46,34 +49,38 @@
   fill: var(--signal-ink);
 }
 
-@media (hover: hover) {
-  .frosted-cta:hover {
-    filter: hue-rotate(var(--hue));
-    transform: translateY(-2px);
-    border-color: color-mix(in srgb, var(--ink) 22%, transparent);
-  }
-
-  .frosted-cta:hover .btn-icon {
-    transform: scale(1.1);
-  }
+/* Survol : rien ne bouge. Une lumière douce suit le pointeur sur le verre (reflet de [data-glow]), un filet intérieur
+   clair apparaît, le verre se sature et l'ombre se creuse : on sent la matière réagir, sans effet de masse. */
+.frosted-cta[data-glow]::after {
+  background: radial-gradient(150px circle at var(--mx, 50%) var(--my, 0%), rgb(255 255 255 / 0.34), rgb(255 255 255 / 0) 70%);
+  transition-duration: 0.5s;
 }
 
-@media (prefers-reduced-motion: reduce) {
+@media (hover: hover) {
   .frosted-cta:hover {
-    filter: none;
-    transform: none;
+    -webkit-backdrop-filter: blur(16px) saturate(190%);
+    backdrop-filter: blur(16px) saturate(190%);
+    background:
+      linear-gradient(180deg, rgb(255 255 255 / 0.12), rgb(255 255 255 / 0) 60%),
+      color-mix(in srgb, var(--signal) 94%, transparent);
+    box-shadow:
+      inset 0 0 0 1px rgb(255 255 255 / 0.3),
+      inset 0 1px 0 rgb(255 255 255 / 0.5),
+      0 18px 36px -16px rgb(12 58 115 / 0.95);
   }
 }
 
 @media (prefers-reduced-transparency: reduce) {
   .frosted-cta {
     backdrop-filter: none;
-    background: var(--paper);
+    background: var(--signal-deep);
   }
 }
 
 .frosted-cta:active {
-  transform: scale(0.97);
+  background:
+    linear-gradient(180deg, rgb(0 0 0 / 0.06), rgb(0 0 0 / 0) 60%),
+    color-mix(in srgb, var(--signal-deep) 100%, transparent);
 }
 
 /* Coins "squircle" à courbure continue façon iOS, quand le navigateur le
@@ -87,7 +94,8 @@
 
 @media (max-width: 480px) {
   .frosted-cta {
-    padding: 11px 22px;
+    min-height: 50px;
+    padding: 0 22px;
   }
   .frosted-cta .text {
     font-size: 15.5px;
@@ -101,8 +109,43 @@
   }
 }
 
+/* Dans un panneau sombre : verre clair, texte sombre (≈ 14:1) */
 .glass--dark .frosted-cta {
-  color: #fff;
-  background: rgb(255 255 255 / 0.16);
-  border-color: rgb(255 255 255 / 0.3);
+  color: var(--ink);
+  background: rgb(255 255 255 / 0.93);
+  border-color: rgb(255 255 255 / 0.95);
+  box-shadow: 0 12px 28px -14px rgb(0 0 0 / 0.6);
+}
+
+/* Focus clavier : double anneau (blanc contre le bouton, bleu marine autour) lisible sur n'importe quel fond */
+.frosted-cta:focus-visible {
+  outline: 3px solid var(--signal-deep);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 3px #fff, inset 0 1px 0 rgb(255 255 255 / 0.35);
+}
+
+.glass--dark .frosted-cta:focus-visible {
+  outline-color: #fff;
+  box-shadow: 0 0 0 3px var(--signal-deep);
+}
+
+/* Contraste renforcé et Windows en contraste élevé : aplat plein, bordure franche */
+@media (prefers-contrast: more) {
+  .frosted-cta {
+    backdrop-filter: none;
+    background: var(--signal-deep);
+    border: 2px solid #fff;
+  }
+}
+
+@media (forced-colors: active) {
+  .frosted-cta {
+    border: 2px solid ButtonText;
+    background: ButtonFace;
+    color: ButtonText;
+    forced-color-adjust: none;
+  }
+  .frosted-cta:focus-visible {
+    outline: 3px solid Highlight;
+  }
 }

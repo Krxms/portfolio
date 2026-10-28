@@ -1,0 +1,237 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Tile from '../components/Tile.astro';
+import PageHero from '../components/PageHero.astro';
+import Process from '../components/Process.astro';
+import ProjectTeaser from '../components/ProjectTeaser.astro';
+import Faq from '../components/Faq.astro';
+import LinkUnder from '../components/LinkUnder.astro';
+import FinalCta from '../components/FinalCta.astro';
+import StickyCta from '../components/StickyCta.astro';
+// Même langage visuel que la page « Création de site » : on réutilise sa feuille de style (préfixe cs-)
+import './creation-site-web.css';
+
+const site = 'https://antoinebruneau.fr';
+const description =
+  'Refonte de site web par un webdesigner freelance (Yvelines) : audit de l’existant, puis refonte de ce qui doit l’être, sans perdre votre référencement. Devis gratuit.';
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Service',
+      '@id': `${site}/refonte-site-web/#refonte`,
+      name: 'Refonte de site web',
+      serviceType: 'Refonte de site web',
+      description:
+        'Audit de l’existant, puis refonte de ce qui doit l’être : conception, intégration, reprise des contenus et redirections pour préserver le référencement.',
+      url: `${site}/refonte-site-web/`,
+      inLanguage: 'fr-FR',
+      areaServed: { '@type': 'Country', name: 'France' },
+      provider: { '@type': 'ProfessionalService', '@id': `${site}/#service`, name: 'Antoine Bruneau' },
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Accueil', item: `${site}/` },
+        { '@type': 'ListItem', position: 2, name: 'Refonte de site web', item: `${site}/refonte-site-web/` },
+      ],
+    },
+  ],
+};
+
+const signs = [
+  { viz: 'build', t: 'Il se lit mal sur mobile', d: 'Une grande partie de vos visiteurs arrive depuis un téléphone : si le site y est pénible, ils repartent.' },
+  { viz: 'design', t: 'Vos visiteurs ne vous écrivent pas', d: 'Le trafic est là, mais personne ne prend contact : le parcours et les appels à l’action sont à repenser.' },
+  { viz: 'seo', t: 'On vous trouve difficilement', d: 'Structure confuse, titres approximatifs, pages lentes : les moteurs de recherche comprennent mal votre site.' },
+  { viz: 'handoff', t: 'Vous n’osez plus y toucher', d: 'Modifier un texte devient une affaire de spécialiste, ou casse la mise en page.' },
+  { viz: 'launch', t: 'Il ne ressemble plus à votre activité', d: 'Votre offre a évolué, votre site est resté à l’époque de sa création.' },
+];
+
+const steps = [
+  { title: 'Audit', when: 'Semaine 1', text: 'Je parcours votre site, je repère ce qui freine et ce qui fonctionne.', gets: 'un rapport classé par priorité.' },
+  { title: 'Cadrage', when: 'Semaine 1 et 2', text: 'Ce qu’on garde, ce qu’on change, les pages et les contenus à reprendre. Acompte à la commande.', gets: 'le plan de la refonte.' },
+  { title: 'Maquettes', when: 'Semaines 2 et 3', text: 'Les écrans pour ordinateur et mobile, soumis à vos retours.', gets: 'des maquettes validées.' },
+  { title: 'Intégration', when: 'Semaines 3 à 5', text: 'Je construis le site, je reprends vos contenus et je prépare les redirections des anciennes adresses.', gets: 'un site prêt à remplacer l’ancien.' },
+  { title: 'Bascule', when: 'Semaines 5 et 6', text: 'Publication, vérifications après la mise en ligne et prise en main. Solde à la livraison.', gets: 'votre nouveau site en ligne, sans coupure.' },
+];
+
+const scopes = [
+  { t: 'Retouche ciblée', d: 'Quelques pages ou parcours clés sont repris (accueil, contact, offre). Le reste de votre site reste en place.', tech: 'Sur votre site actuel', me: 25, share: 'Environ un quart du site est refait, le reste est conservé.' },
+  { t: 'Refonte partielle', d: 'Le design et les pages principales sont refaits. Les contenus qui fonctionnent sont conservés et réorganisés.', tech: 'WordPress ou Webflow', me: 60, share: 'Un peu plus de la moitié du site est refaite.' },
+  { t: 'Refonte complète', d: 'Nouvelle structure, nouveau design, contenus repris, redirections pour conserver votre référencement.', tech: 'Sur mesure, ou WordPress en headless', me: 100, share: 'Tout le site est refait.' },
+];
+
+const protectedList = [
+  'Vos anciennes adresses redirigées vers les nouvelles',
+  'Vos contenus utiles repris, rien n’est jeté sans votre accord',
+  'Une sauvegarde de l’ancien site avant la bascule',
+  'Des vérifications après la mise en ligne',
+  'Droits sur les créations et le code, cédés au paiement des factures',
+];
+const yours = [
+  'Les accès à votre site actuel, à son hébergement et à son nom de domaine',
+  'Des textes et des images à jour (la rédaction n’est pas incluse)',
+  'Vos retours et validations dans les délais',
+];
+
+const faq = [
+  {
+    q: 'Vais-je perdre mon référencement ?',
+    a: 'Je limite ce risque : les anciennes adresses sont redirigées vers les nouvelles, les titres et descriptions utiles sont repris, et je vérifie le site après la mise en ligne. Aucune refonte ne garantit une position dans les résultats, mais elle n’a pas à repartir de zéro.',
+  },
+  {
+    q: 'L’audit est-il obligatoire ?',
+    a: 'Non, mais je le recommande : il évite de refaire ce qui fonctionne. Son montant est déduit du projet si nous poursuivons ensemble, avec un tarif préférentiel pour le pack audit + conception.',
+  },
+  {
+    q: 'Combien de temps dure une refonte ?',
+    a: 'Comptez en général quatre à six semaines, audit compris. Le délai exact figure au devis : il dépend de la taille du site et de la rapidité de vos retours.',
+  },
+];
+---
+
+<BaseLayout title="Refonte de site web" description={description} schema={schema}>
+  <PageHero
+    crumb="Refonte de site web"
+    kicker="Refonte de site web"
+    line1="Gardez ce qui marche,"
+    line2="refaites le reste."
+    lead="Je pars de votre site actuel, je conserve ce qui fonctionne et je reconstruis ce qui freine vos visiteurs."
+    ctaHref="/contact/?sujet=refonte"
+    ctaLabel="Décrire mon site actuel"
+    linkHref="/audit-ux-ui/"
+    linkLabel="Commencer par un audit"
+    note="Devis gratuit · Réponse sous 24 h ouvrées · Audit déduit si nous poursuivons"
+  />
+
+  <section class="tile tile--light" id="signes" aria-labelledby="signes-title">
+    <div class="wrap tile-inner cs-split">
+      <header class="cs-split-head">
+        <p class="tile-label">Quand s’en occuper</p>
+        <h2 id="signes-title">Les signes qu’il est temps d’y toucher.</h2>
+        <p class="cs-split-sub">Un seul de ces signes suffit parfois : tout n’est pas à refaire.</p>
+      </header>
+      <ol class="cs-received" role="list">
+        {
+          signs.map((r, i) => (
+            <li class="cs-row">
+              <span class="cs-row-num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+              <div class="cs-row-text">
+                <h3>{r.t}</h3>
+                <p>{r.d}</p>
+              </div>
+              <div class={`cs-viz cs-viz--${r.viz} cs-viz-tone-${i % 3}`} aria-hidden="true">
+                {r.viz === 'design' && (
+                  <>
+                    <div class="v-frame v-desk"><i class="v-bar"></i><i class="v-hero"></i><i class="v-col"></i><i class="v-col"></i></div>
+                    <div class="v-frame v-phone"><i class="v-hero"></i><i class="v-line"></i><i class="v-line s"></i></div>
+                  </>
+                )}
+                {r.viz === 'build' && (
+                  <>
+                    <div class="v-frame v-desk"><i class="v-bar"></i><i class="v-hero"></i><i class="v-line"></i></div>
+                    <div class="v-frame v-tab"><i class="v-hero"></i><i class="v-line"></i></div>
+                    <div class="v-frame v-phone"><i class="v-hero"></i><i class="v-line s"></i></div>
+                  </>
+                )}
+                {r.viz === 'seo' && (
+                  <div class="v-card v-serp">
+                    <span class="v-url"><i class="v-dot"></i>votre-site.fr</span>
+                    <b>Votre activité, ce que vous proposez</b>
+                    <i class="v-line"></i>
+                    <i class="v-line s"></i>
+                  </div>
+                )}
+                {r.viz === 'launch' && (
+                  <div class="v-card v-browser">
+                    <span class="v-addr"><svg viewBox="0 0 12 14" width="10" height="12"><path d="M3 6V4.5a3 3 0 0 1 6 0V6M2 6h8v6H2z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>votre-site.fr</span>
+                    <i class="v-hero"></i>
+                    <span class="v-live"><i></i>En ligne</span>
+                  </div>
+                )}
+                {r.viz === 'handoff' && (
+                  <div class="v-card v-guide">
+                    <span><i class="v-tick"></i>Modifier un texte</span>
+                    <span><i class="v-tick"></i>Ajouter une page</span>
+                    <span><i class="v-tick"></i>Publier</span>
+                  </div>
+                )}
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <Tile id="deroule" title="De l’audit à la bascule" sub="Cinq étapes, sur quatre à six semaines environ.">
+    <Process steps={steps} />
+  </Tile>
+
+  <Tile id="ampleur" title="Vous choisissez l’ampleur." sub="On ne refait que ce qui le mérite : de la retouche ciblée à la refonte complète.">
+    <div class="cs-panel">
+      <p class="cs-axis" aria-hidden="true"><span>Je touche peu</span><span>Je reconstruis tout</span></p>
+      <ol class="cs-levels" role="list">
+        {
+          scopes.map((l, i) => (
+            <li class="cs-level glass">
+              <p class="cs-level-n">Option {i + 1}</p>
+              <div class="cs-share" role="img" aria-label={l.share} style={`--me: ${l.me}%`}>
+                <i></i>
+              </div>
+              <div class="cs-share-legend" aria-hidden="true"><span>Refait</span><span>Conservé</span></div>
+              <h3>{l.t}</h3>
+              <p>{l.d}</p>
+              <p class="cs-tech"><span>Base technique</span> {l.tech}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+    <aside class="cs-pick glass">
+      <p class="cs-pick-label">Mon conseil</p>
+      <p>
+        Commencer par l’audit : il dit ce qui mérite d’être refait et ce qui peut rester. Les niveaux d’autonomie et les outils
+        sont les mêmes que pour une
+        <LinkUnder href="/creation-site-web/#autonomie" label="création de site" />.
+      </p>
+    </aside>
+  </Tile>
+
+  <Tile tone="dark" mesh="a" id="cadre" title="Rien ne se perd en route." sub="Voici ce que je protège pendant la refonte, et ce dont j’ai besoin de votre côté.">
+    <ul class="cs-figures" role="list">
+      <li class="glass glass--dark"><b>1<small>audit</small></b><span>au départ, déduit si nous poursuivons</span></li>
+      <li class="glass glass--dark"><b>2<small>tours</small></b><span>de retours sur les maquettes</span></li>
+      <li class="glass glass--dark"><b>4 à 6<small>semaines</small></b><span>indicatif, selon l’ampleur et vos retours</span></li>
+    </ul>
+    <div class="cs-cols">
+      <div class="glass glass--dark">
+        <h3>Protégé</h3>
+        <ul class="cs-ticks" role="list">{protectedList.map((i) => <li>{i}</li>)}</ul>
+      </div>
+      <div class="glass glass--dark">
+        <h3>De votre côté</h3>
+        <ul class="cs-ticks cs-ticks--plain" role="list">{yours.map((i) => <li>{i}</li>)}</ul>
+      </div>
+    </div>
+    <p class="cs-audit">
+      Audit puis conception : un <LinkUnder href="/audit-ux-ui/" label="tarif préférentiel" tone="light" /> s’applique au pack.
+    </p>
+  </Tile>
+
+  <ProjectTeaser label="Un projet livré" />
+
+  <Tile id="faq" title="Avant de vous lancer">
+    <Faq items={faq} />
+    <p class="cs-more"><LinkUnder href="/faq/" label="Toutes les questions" /></p>
+  </Tile>
+
+  <FinalCta
+    title="Dites-moi ce qui ne va plus."
+    text="Décrivez votre site actuel et ce que vous en attendez. Je réponds sous 24 h ouvrées, et ce premier échange ne coûte rien."
+    label="Décrire mon site actuel"
+    href="/contact/?sujet=refonte"
+  />
+  <StickyCta href="/contact/?sujet=refonte" />
+</BaseLayout>

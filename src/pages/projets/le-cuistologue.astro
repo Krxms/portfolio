@@ -1,0 +1,374 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import FinalCta from '../../components/FinalCta.astro';
+import StickyCta from '../../components/StickyCta.astro';
+import LinkUnder from '../../components/LinkUnder.astro';
+import Mark from '../../components/Mark.astro';
+import '../../components/Tile.css';
+import '../../components/Hero.css';
+import './le-cuistologue.css';
+
+import siteHero from '../../assets/projets/cuistologue/site-hero.webp';
+import sitePresentation from '../../assets/projets/cuistologue/site-presentation.webp';
+import siteHowto from '../../assets/projets/cuistologue/site-howto.webp';
+import siteOffre from '../../assets/projets/cuistologue/site-offre.webp';
+import mobileTop from '../../assets/projets/cuistologue/mobile-top.webp';
+import mobileMenu from '../../assets/projets/cuistologue/mobile-menu.webp';
+import mobileHowto from '../../assets/projets/cuistologue/mobile-howto.webp';
+import logo from '../../assets/projets/cuistologue/logo.webp';
+import carteRoseA from '../../assets/projets/cuistologue/carte-rose-recto.webp';
+import carteRoseB from '../../assets/projets/cuistologue/carte-rose-verso.webp';
+import carteOrangeA from '../../assets/projets/cuistologue/carte-orange-recto.webp';
+import carteOrangeB from '../../assets/projets/cuistologue/carte-orange-verso.webp';
+import carteVertA from '../../assets/projets/cuistologue/carte-vert-recto.webp';
+import carteVertB from '../../assets/projets/cuistologue/carte-vert-verso.webp';
+import flyerA from '../../assets/projets/cuistologue/flyer-recto.webp';
+import flyerB from '../../assets/projets/cuistologue/flyer-verso.webp';
+
+const img = (i: ImageMetadata) => ({ src: i.src, width: i.width, height: i.height });
+
+// Palette relevée sur les cartes et le flyer imprimés
+const palette = [
+  { name: 'Rose', hex: '#FF9998' },
+  { name: 'Orange', hex: '#F1B76B' },
+  { name: 'Sauge', hex: '#8BA47E' },
+  { name: 'Crème', hex: '#F0EED7' },
+  { name: 'Mauve', hex: '#BDAAB5' },
+  { name: 'Vert profond', hex: '#013A3A' },
+  { name: 'Terracotta', hex: '#C9502F' },
+];
+
+const printItems = [
+  { bg: '#ff9998', label: 'Carte de visite · rose', a: carteRoseA, b: carteRoseB, kind: 'cards' },
+  { bg: '#f1b76b', label: 'Carte de visite · orange', a: carteOrangeA, b: carteOrangeB, kind: 'cards' },
+  { bg: '#8ba47e', label: 'Carte de visite · sauge', a: carteVertA, b: carteVertB, kind: 'cards' },
+  { bg: '#bdaab5', label: 'Flyer', a: flyerA, b: flyerB, kind: 'flyer' },
+];
+
+const choices = [
+  {
+    title: 'Un message, dès le premier écran',
+    text: 'Le titre dit la promesse (« Une façon simple de bien manger »), deux boutons ouvrent les deux chemins possibles : découvrir les formules ou demander un devis.',
+  },
+  {
+    title: 'Un parcours en trois étapes',
+    text: '« Comment ça marche ? » raconte la semaine type en trois pas, chacun illustré : on échange, le cuisinier cuisine chez vous, vous profitez.',
+  },
+  {
+    title: 'Le local, dit clairement',
+    text: 'Le titre de la page, la zone d’intervention (Oise, Val-d’Oise, Yvelines, Eure) et les données structurées LocalBusiness racontent la même chose : où il intervient.',
+  },
+  {
+    title: 'Un consentement aux cookies équilibré',
+    text: '« Tout refuser », « Personnaliser » et « Tout accepter » sont présentés à égalité : refuser est aussi simple qu’accepter.',
+  },
+];
+
+const metrics = [
+  { value: '96', unit: '/100', label: 'Accessibilité', note: 'Lighthouse' },
+  { value: '100', unit: '/100', label: 'Bonnes pratiques', note: 'Lighthouse' },
+  { value: '100', unit: '/100', label: 'SEO', note: 'Lighthouse' },
+  { value: '233', unit: 'ms', label: 'Affichage du contenu principal (LCP)', note: 'Chrome, sans bridage' },
+  { value: '0', unit: '', label: 'Décalage de mise en page (CLS)', note: 'Chrome, sans bridage' },
+];
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'CreativeWork',
+  name: 'Le Cuistologue — identité visuelle, site web et supports imprimés',
+  creator: { '@type': 'Person', name: 'Antoine Bruneau', url: 'https://antoinebruneau.fr' },
+  about: 'Cuisinier à domicile (Oise, Val-d’Oise, Yvelines, Eure)',
+  url: 'https://antoinebruneau.fr/projets/le-cuistologue/',
+  sameAs: 'https://lecuistologue.fr',
+};
+---
+
+<BaseLayout
+  title="Le Cuistologue, identité, site web et print"
+  description="Étude de cas : identité visuelle, site web et supports imprimés (cartes de visite, flyer) conçus pour Le Cuistologue, cuisinier à domicile dans l’Oise, le Val-d’Oise, les Yvelines et l’Eure."
+  schema={schema}
+>
+  <!-- ===== Hero ===== -->
+  <div class="hero-zone">
+    <section class="wrap pj-hero" data-sticky-watch>
+      <nav class="crumbs" aria-label="Fil d’Ariane">
+        <a href="/">Accueil</a><span aria-hidden="true">/</span><a href="/projets/">Projets</a><span aria-hidden="true">/</span><span aria-current="page">Le Cuistologue</span>
+      </nav>
+      <p class="hero-role">Identité visuelle · Site web · Print</p>
+      <h1 class="pj-title">Le Cuistologue</h1>
+      <p class="pj-lead">
+        Un visage, un site et des supports imprimés pour un cuisinier à domicile, qui prépare chez ses clients les repas de la semaine.
+      </p>
+      <LinkUnder href="https://lecuistologue.fr" label="Voir le site en ligne" external />
+    </section>
+
+    <div class="wrap">
+      <div class="pj-devices">
+        <div class="laptop">
+          <img {...img(siteHero)} alt="Page d’accueil du site lecuistologue.fr sur ordinateur : « Une façon simple de bien manger »" decoding="async" />
+        </div>
+        <div class="phone phone--float">
+          <img {...img(mobileTop)} alt="Le même site sur mobile" decoding="async" loading="lazy" />
+        </div>
+        <div class="logo-plate">
+          <img {...img(logo)} alt="Logo du Cuistologue : une assiette de feuilles entre une fourchette et un couteau" decoding="async" loading="lazy" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Contexte ===== -->
+  <section class="tile tile--light" aria-labelledby="ctx-title">
+    <div class="wrap tile-inner pj-context">
+      <div class="pj-context-head">
+        <p class="tile-label">Le contexte</p>
+        <h2 id="ctx-title">Des repas pour la semaine, préparés chez vous.</h2>
+        <Mark kind="underline" class="pj-mark" />
+      </div>
+      <div class="pj-context-body">
+        <p>
+          Le Cuistologue est cuisinier professionnel à domicile, spécialiste de la cuisine du quotidien. En une seule
+          intervention, il prépare chez ses clients les repas de la semaine, dans l’Oise, le Val-d’Oise, les Yvelines et
+          l’Eure.
+        </p>
+        <figure class="definition">
+          <blockquote>
+            <p><span class="phon">[lə kɥis.tɔ.lɔɡ]</span> n. m. : cuisinier professionnel à domicile spécialiste de la cuisine du quotidien.</p>
+          </blockquote>
+          <figcaption>Extrait du site : le nom est présenté comme une entrée de dictionnaire.</figcaption>
+        </figure>
+        <h3>Ce que j’ai conçu</h3>
+        <ul class="scope">
+          <li><strong>Identité visuelle</strong><span>logo, couleurs, typographies, univers d’illustrations</span></li>
+          <li><strong>Site web</strong><span>conception UX/UI, parcours, version mobile</span></li>
+          <li><strong>Print</strong><span>cartes de visite en trois couleurs, flyer</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Identité ===== -->
+  <section class="tile tile--light pj-identity" id="identite" aria-labelledby="id-title">
+    <div class="wrap tile-inner">
+      <header class="tile-head">
+        <p class="tile-label">L’identité</p>
+        <h2 id="id-title">Gravée, chaleureuse, du quotidien.</h2>
+        <p class="tile-sub">Logo, palette, typographies et illustrations : un même univers, du flyer au site.</p>
+      </header>
+
+      <div class="plates cuisto-scope">
+        <figure class="plate plate--logo">
+          <img {...img(logo)} alt="Logo du Cuistologue" loading="lazy" decoding="async" />
+        </figure>
+
+        <div class="plate plate--type" aria-label="Typographies">
+          <p class="type-big">On mange<br /><span>quoi</span> ce&nbsp;soir&nbsp;?</p>
+          <p class="type-meta"><strong>Poppins</strong> pour les titres, <strong>Inter</strong> pour les textes.</p>
+        </div>
+
+        <ul class="swatches" role="list">
+          {
+            palette.map((c) => (
+              <li class="swatch" style={`--c:${c.hex}`}>
+                <span class="swatch-chip" aria-hidden="true"></span>
+                <span class="swatch-name">{c.name}</span>
+                <span class="swatch-hex">{c.hex}</span>
+              </li>
+            ))
+          }
+        </ul>
+
+        <figure class="plate plate--illus">
+          <img {...img(siteHowto)} alt="Section « Comment ça marche ? » du site : trois illustrations gravées" loading="lazy" decoding="async" />
+          <figcaption>Des illustrations gravées pour raconter le parcours.</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Print : scène épinglée ===== -->
+  <section class="print" data-print aria-labelledby="print-title">
+    <div class="print-pin">
+      <div class="print-stage" data-stage style="--stage:#ff9998">
+        <header class="print-head wrap">
+          <p class="tile-label">Le print</p>
+          <h2 id="print-title">Cartes de visite et flyer</h2>
+          <p class="print-sub">Trois couleurs pour les cartes, un flyer qui explique la semaine type. Faites défiler.</p>
+        </header>
+
+        <div class="print-track" data-track>
+          {
+            printItems.map((p) => (
+              <figure class={`print-item print-item--${p.kind}`} data-bg={p.bg}>
+                <div class="print-sheets">
+                  <img class="sheet sheet--a" {...img(p.a)} alt={`${p.label}, côté visuel`} loading="lazy" decoding="async" />
+                  <img class="sheet sheet--b" {...img(p.b)} alt={`${p.label}, côté coordonnées`} loading="lazy" decoding="async" />
+                </div>
+                <figcaption>{p.label}</figcaption>
+              </figure>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Le site ===== -->
+  <section class="tile tile--dark tile--mesh-a pj-site" aria-labelledby="site-title">
+    <div class="wrap tile-inner">
+      <header class="tile-head">
+        <p class="tile-label">Le site</p>
+        <h2 id="site-title">Du premier écran jusqu’au contact.</h2>
+        <p class="tile-sub">Les mêmes repères sur ordinateur et sur mobile : message, parcours, formules, zone d’intervention.</p>
+      </header>
+
+      <div class="shots">
+        <figure class="shot shot--wide glass glass--dark">
+          <img {...img(siteOffre)} alt="Section « Des solutions culinaires pensées pour vous » : les formules" loading="lazy" decoding="async" />
+          <figcaption>Les formules, présentées avec leur contenu.</figcaption>
+        </figure>
+        <figure class="shot glass glass--dark">
+          <img {...img(sitePresentation)} alt="Section de présentation du site" loading="lazy" decoding="async" />
+          <figcaption>La présentation, au ton direct.</figcaption>
+        </figure>
+        <figure class="shot glass glass--dark">
+          <img {...img(siteHowto)} alt="Le parcours en trois étapes" loading="lazy" decoding="async" />
+          <figcaption>Le parcours en trois étapes.</figcaption>
+        </figure>
+      </div>
+
+      <div class="mobile-row">
+        <figure class="phone">
+          <img {...img(mobileHowto)} alt="Le parcours en trois étapes sur mobile" loading="lazy" decoding="async" />
+        </figure>
+        <figure class="phone phone--loop" aria-label="Le menu mobile qui s’ouvre">
+          <img class="loop loop--a" {...img(mobileTop)} alt="" loading="lazy" decoding="async" />
+          <img class="loop loop--b" {...img(mobileMenu)} alt="Le menu mobile ouvert, avec le bouton « Prendre contact »" loading="lazy" decoding="async" />
+        </figure>
+        <div class="mobile-copy">
+          <p class="tile-label">Sur mobile</p>
+          <h3>Le contact reste à portée de pouce.</h3>
+          <p>
+            Le menu s’ouvre sous l’en-tête et garde le bouton « Prendre contact » en bas de liste : on peut passer de la
+            lecture à la demande de devis sans chercher.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Choix et mesures ===== -->
+  <section class="tile tile--light" aria-labelledby="choix-title">
+    <div class="wrap tile-inner">
+      <header class="tile-head">
+        <p class="tile-label">Les choix</p>
+        <h2 id="choix-title">Ce qui a guidé les décisions.</h2>
+        <p class="tile-sub">Quatre choix de conception, et ce qu’on peut vérifier.</p>
+      </header>
+
+      <ol class="choices" role="list">
+        {
+          choices.map((c, i) => (
+            <li class="choice">
+              <span class="choice-n" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+              <h3>{c.title}</h3>
+              <p>{c.text}</p>
+            </li>
+          ))
+        }
+      </ol>
+
+      <div class="metrics-head">
+        <h3>Mesures sur le site en ligne</h3>
+      </div>
+      <ul class="metrics" role="list">
+        {
+          metrics.map((m) => (
+            <li class="metric">
+              <p class="metric-value">{m.value}<small>{m.unit}</small></p>
+              <p class="metric-label">{m.label}</p>
+              <p class="metric-note">{m.note}</p>
+            </li>
+          ))
+        }
+      </ul>
+      <p class="metrics-foot">
+        Mesures faites le 3 octobre 2026 sur lecuistologue.fr, en laboratoire (Lighthouse en mobile et en bureau ; LCP et CLS
+        sous Chrome, sans bridage). Elles peuvent varier d’une mesure à l’autre.
+      </p>
+    </div>
+  </section>
+
+  <FinalCta
+    title="Un projet qui a besoin de caractère ?"
+    text="Écrivez-moi quelques lignes sur votre projet. Je réponds sous 24 h ouvrées, et ce premier échange ne coûte rien."
+    label="Décrire mon projet"
+  />
+
+  <StickyCta />
+</BaseLayout>
+
+<script>
+  // Scène « print » : tant que la section est à l'écran, elle reste épinglée et le défilement vertical
+  // fait glisser les pièces horizontalement. Le fond de la scène prend la couleur de la pièce au centre.
+  // Désactivé (simple bande à faire défiler) sur petit écran et avec « réduire les animations ».
+  const section = document.querySelector<HTMLElement>('[data-print]');
+  const stage = section?.querySelector<HTMLElement>('[data-stage]');
+  const track = section?.querySelector<HTMLElement>('[data-track]');
+  if (section && stage && track) {
+    const items = [...track.querySelectorAll<HTMLElement>('[data-bg]')];
+    const wide = matchMedia('(min-width: 901px)');
+    const calm = matchMedia('(prefers-reduced-motion: reduce)');
+    let maxX = 0;
+    let raf = 0;
+
+    const setBg = (x: number) => {
+      const mid = stage.clientWidth / 2;
+      let best = items[0];
+      let bestD = Infinity;
+      items.forEach((it) => {
+        const c = it.offsetLeft + it.offsetWidth / 2 - x;
+        const d = Math.abs(c - mid);
+        if (d < bestD) {
+          bestD = d;
+          best = it;
+        }
+      });
+      stage.style.setProperty('--stage', best.dataset.bg ?? '');
+    };
+
+    const measure = () => {
+      const active = wide.matches && !calm.matches;
+      section.classList.toggle('is-pinned', active);
+      if (!active) {
+        section.style.height = '';
+        track.style.transform = '';
+        return;
+      }
+      maxX = Math.max(0, track.scrollWidth - stage.clientWidth);
+      section.style.height = `${innerHeight + maxX}px`;
+      update();
+    };
+
+    const update = () => {
+      if (!section.classList.contains('is-pinned')) return;
+      const top = section.getBoundingClientRect().top;
+      const p = Math.min(1, Math.max(0, -top / (section.offsetHeight - innerHeight || 1)));
+      const x = p * maxX;
+      track.style.transform = `translate3d(${-x}px,0,0)`;
+      setBg(x);
+    };
+
+    const onScroll = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(update);
+    };
+
+    addEventListener('scroll', onScroll, { passive: true });
+    addEventListener('resize', measure);
+    wide.addEventListener('change', measure);
+    calm.addEventListener('change', measure);
+    measure();
+    addEventListener('load', measure);
+  }
+</script>

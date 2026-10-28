@@ -26,7 +26,6 @@
   inset: 0;
   background: color-mix(in srgb, var(--nav-bg) 45%, transparent);
   backdrop-filter: blur(11px) saturate(210%);
-  filter: contrast(1.15) brightness(1.03);
   pointer-events: none;
 }
 
@@ -46,13 +45,37 @@
   pointer-events: none;
 }
 
-.header-inner {
+.site-header .header-inner {
+  max-width: 1560px;
   position: relative;
   z-index: 1;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+/* Bureau : logo à gauche, liens centrés sur la barre, bouton à droite (trois colonnes, celle du milieu centrée). */
+@media (min-width: 1201px) {
+  .site-header .header-inner {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+  }
+
+  .site-header .header-nav {
+    display: contents;
+  }
+
+  .site-header .header-nav .btn {
+    justify-self: end;
+    margin-left: 0;
+  }
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 2px;
 }
 
 @media (prefers-reduced-transparency: reduce) {
@@ -69,68 +92,198 @@
   }
 }
 
+.header-nav .btn {
+  margin-left: var(--space-3);
+}
+
 .header-nav {
   display: flex;
   align-items: center;
-  gap: clamp(16px, 3vw, 36px);
+  gap: 2px;
 }
 
-.header-nav a {
+/* Liens de navigation : au survol le lien se colore ; le lien actif est en gras avec un soulignement coloré.
+   Une copie invisible en gras réserve la largeur (data-text) : passer en gras ne décale rien. */
+.header-nav a:not(.btn) {
   display: inline-flex;
+  flex-direction: column;
   align-items: center;
+  justify-content: center;
   min-height: 44px;
+  padding-inline: 14px;
   font-size: 15px;
   font-weight: 500;
   color: var(--ink);
   text-decoration: none;
 }
 
-.header-nav a:hover {
-  text-decoration: underline;
-  text-underline-offset: 6px;
-  text-decoration-thickness: 1px;
+.header-nav a:not(.btn)::after {
+  content: attr(data-text);
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
+  font-weight: 700;
+  pointer-events: none;
+  user-select: none;
 }
 
-.header-nav a[aria-current] {
-  text-decoration: underline;
-  text-underline-offset: 6px;
-  text-decoration-thickness: 1px;
+/* Survol façon mcdonalds.fr : le libellé monte et s'efface, sa copie en gras arrive du bas (0,16 s). Le lien actif est
+   en bleu, en gras, avec un trait coloré dessous. */
+.nl {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  padding: 0 4px 6px;
+  margin-inline: -4px;
+}
+
+.nl-a,
+.nl-b {
+  display: inline-block;
+  white-space: nowrap;
+  transition: transform 0.16s ease-out, opacity 0.16s ease-out;
+}
+
+.nl-b {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translate(-50%, 140%);
+  font-weight: 700;
+  color: var(--signal);
+}
+
+.header-nav a:not(.btn):hover .nl-a,
+.header-nav a:not(.btn):focus-visible .nl-a {
+  opacity: 0;
+  transform: translateY(-100%);
+}
+
+.header-nav a:not(.btn):hover .nl-b,
+.header-nav a:not(.btn):focus-visible .nl-b {
+  transform: translate(-50%, 0);
+}
+
+.header-nav a:not(.btn)[aria-current] {
+  color: var(--signal);
+}
+
+.header-nav a:not(.btn)[aria-current] .nl-a {
+  font-weight: 700;
+}
+
+.header-nav a:not(.btn)[aria-current] .nl::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--signal);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nl-a,
+  .nl-b {
+    transition: none;
+  }
+}
+
+.menu-btn {
+  display: none;
+}
+
+/* Sous 1200px : un bouton Menu ouvre un panneau de verre sous l'en-tête */
+@media (max-width: 1200px) {
+  .menu-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 44px;
+    padding: 0 16px;
+    border: 0;
+    border-radius: 999px;
+    background: rgb(255 255 255 / 0.7);
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.95), 0 0 0 1px rgb(18 32 43 / 0.1);
+    font: inherit;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--ink);
+    cursor: pointer;
+  }
+
+  .menu-btn-bars {
+    display: grid;
+    gap: 5px;
+  }
+
+  .menu-btn-bars i {
+    display: block;
+    width: 18px;
+    height: 2px;
+    border-radius: 2px;
+    background: currentColor;
+    transition: transform 0.3s var(--ease-out);
+  }
+
+  [data-open] .menu-btn-bars i:first-child {
+    transform: translateY(3.5px) rotate(45deg);
+  }
+
+  [data-open] .menu-btn-bars i:last-child {
+    transform: translateY(-3.5px) rotate(-45deg);
+  }
+
+  .header-nav {
+    position: fixed;
+    top: 100px;
+    left: var(--space-4);
+    right: var(--space-4);
+    flex-direction: column;
+    align-items: stretch;
+    gap: 2px;
+    padding: var(--space-3);
+    border-radius: 24px;
+    background: rgb(255 253 250 / 0.82);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    backdrop-filter: blur(24px) saturate(180%);
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.95), 0 0 0 1px rgb(18 32 43 / 0.1), 0 30px 60px -24px rgb(18 32 43 / 0.45);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-8px);
+    transition: opacity 0.25s var(--ease-out), transform 0.35s var(--ease-out), visibility 0s linear 0.35s;
+  }
+
+  [data-open] .header-nav {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    transition-delay: 0s;
+  }
+
+  .nav-links {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .header-nav a:not(.btn) {
+    align-items: flex-start;
+    min-height: 48px;
+    padding-inline: 18px;
+    font-size: 17px;
+  }
+
+  .header-nav .btn {
+    margin: var(--space-2) 0 0;
+    justify-content: center;
+  }
 }
 
 @media (max-width: 560px) {
   .header-nav {
-    gap: 14px;
-  }
-  .header-nav a {
-    font-size: 14px;
-  }
-}
-
-@media (max-width: 359px) {
-  .header-nav a:not(.header-nav-contact) {
-    display: none;
-  }
-}
-
-.header-nav a {
-  padding-inline: 14px;
-  border-radius: 999px;
-  text-decoration: none !important;
-  transition: background-color 0.25s var(--ease-out), box-shadow 0.25s var(--ease-out), transform 0.4s var(--spring);
-}
-
-.header-nav a:hover,
-.header-nav a[aria-current] {
-  background: rgb(255 255 255 / 0.7);
-  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.95), 0 0 0 1px rgb(40 28 51 / 0.07);
-}
-
-.header-nav a:active {
-  transform: scale(0.95);
-}
-
-@media (max-width: 560px) {
-  .header-nav a {
-    padding-inline: 10px;
+    top: 78px;
+    left: var(--space-3);
+    right: var(--space-3);
   }
 }

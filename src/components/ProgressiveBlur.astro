@@ -1,0 +1,15 @@
+---
+import './ProgressiveBlur.css';
+
+interface Props {
+  /** côté vers lequel le flou grandit : « bottom » (maximal en bas) ou « top » (maximal en haut) */
+  toward?: 'bottom' | 'top';
+}
+const { toward = 'bottom' } = Astro.props;
+// six couches de flou croissant, chacune visible sur sa propre bande : l'ensemble donne un flou progressif, sans palier
+const layers = [0.5, 1, 2, 4, 8, 14];
+---
+
+<div class={`pblur pblur--${toward}`} aria-hidden="true">
+  {layers.map((b, i) => <i style={`--b:${b}px;--i:${i}`} />)}
+</div>

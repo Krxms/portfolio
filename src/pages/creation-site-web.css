@@ -1,0 +1,708 @@
+/* Page « Création de site web ». Même langage que l'accueil, composition propre : texte à gauche et exemple livré
+   en hero, liste éditoriale en verre, frise à cinq étapes, curseur d'autonomie, bande sombre pour le cadre. */
+
+/* ---------- Ce que vous recevez ---------- */
+.cs-split {
+  display: grid;
+  grid-template-columns: minmax(0, 3.4fr) minmax(0, 8.6fr);
+  gap: clamp(32px, 6vw, 96px);
+  align-items: start;
+}
+
+/* Le titre reste visible pendant qu'on parcourt les cinq livrables */
+.cs-split-head {
+  position: sticky;
+  top: calc(var(--header-h) + 24px);
+}
+
+.cs-split-head h2 {
+  max-width: 14ch;
+  font-size: clamp(2rem, 3.4vw, 2.9rem);
+}
+
+.cs-split-head .tile-label {
+  margin-bottom: var(--space-3);
+}
+
+.cs-split-sub {
+  max-width: 30ch;
+  margin-top: var(--space-4);
+  font-size: clamp(1.05rem, 1.7vw, 1.2rem);
+  line-height: 1.55;
+  color: var(--ink-soft);
+}
+
+.cs-received {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 2px solid var(--ink);
+}
+
+.cs-row {
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr) minmax(0, 212px);
+  gap: var(--space-5) clamp(16px, 2.4vw, 32px);
+  align-items: center;
+  padding-block: clamp(22px, 2.6vw, 34px);
+  border-bottom: 1px solid var(--line-strong);
+}
+
+.cs-row-num {
+  align-self: start;
+  padding-top: 0.35em;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
+  color: var(--signal-deep);
+}
+
+.cs-row h3 {
+  font-size: clamp(1.2rem, 1.9vw, 1.5rem);
+  line-height: 1.15;
+  text-wrap: balance;
+  letter-spacing: -0.02em;
+}
+
+.cs-row p {
+  margin-top: var(--space-2);
+  max-width: 42ch;
+  font-size: 16.5px;
+  line-height: 1.6;
+  color: var(--ink-soft);
+}
+
+/* Vignettes : de petites interfaces dessinées en CSS, sur les mêmes mesh que les cartes de l'accueil.
+   Décoratives (aria-hidden) : elles illustrent le texte voisin sans rien affirmer de plus. */
+.cs-viz {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 10px;
+  height: 148px;
+  padding: 18px 18px 0;
+  overflow: hidden;
+  border-radius: 22px;
+  background-size: cover;
+  background-position: center;
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.85),
+    inset 0 0 0 1px rgb(255 255 255 / 0.35),
+    0 0 0 1px rgb(18 32 43 / 0.07);
+}
+
+.cs-viz::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: var(--grain) 0 0 / 160px 160px repeat;
+  mix-blend-mode: soft-light;
+  opacity: 0.5;
+}
+
+.cs-viz-tone-0 {
+  background-image: url('../assets/mesh/card-blue.webp');
+}
+.cs-viz-tone-1 {
+  background-image: url('../assets/mesh/card-mint.webp');
+}
+.cs-viz-tone-2 {
+  background-image: url('../assets/mesh/card-warm.webp');
+}
+
+.cs-viz i {
+  display: block;
+}
+
+/* cadres d'écran (conception, intégration) */
+.v-frame {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px;
+  border-radius: 10px 10px 0 0;
+  background: rgb(255 255 255 / 0.88);
+  box-shadow: 0 -1px 0 rgb(255 255 255 / 0.9), 0 10px 24px -12px rgb(18 32 43 / 0.45);
+}
+
+.v-desk {
+  width: 128px;
+  height: 100px;
+}
+.v-tab {
+  width: 74px;
+  height: 84px;
+}
+.v-phone {
+  width: 50px;
+  height: 92px;
+  border-radius: 12px 12px 0 0;
+}
+
+.v-bar {
+  height: 5px;
+  width: 38%;
+  border-radius: 3px;
+  background: var(--signal);
+}
+.v-hero {
+  flex: 1 1 auto;
+  min-height: 16px;
+  border-radius: 6px;
+  background: linear-gradient(135deg, rgb(20 80 154 / 0.2), rgb(53 179 148 / 0.28));
+}
+.v-line {
+  height: 5px;
+  border-radius: 3px;
+  background: rgb(18 32 43 / 0.16);
+}
+.v-line.s {
+  width: 60%;
+}
+.v-col {
+  display: inline-block;
+  height: 14px;
+  width: calc(50% - 3px);
+  border-radius: 4px;
+  background: rgb(18 32 43 / 0.12);
+}
+.v-desk .v-col + .v-col {
+  margin-left: 6px;
+}
+.v-desk:has(.v-col) {
+  display: block;
+}
+.v-desk:has(.v-col) .v-bar {
+  margin-bottom: 6px;
+}
+.v-desk:has(.v-col) .v-hero {
+  height: 40px;
+  margin-bottom: 6px;
+}
+
+/* cartes (référencement, mise en ligne, prise en main) */
+.v-card {
+  width: 100%;
+  max-width: 196px;
+  margin-bottom: 18px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: rgb(255 255 255 / 0.9);
+  box-shadow: 0 12px 26px -14px rgb(18 32 43 / 0.5), inset 0 1px 0 #fff;
+  font-size: 12px;
+  line-height: 1.35;
+  color: var(--ink);
+}
+
+.v-serp {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.v-url {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--ink-soft);
+}
+.v-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--signal);
+}
+.v-serp b {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #1a4fb8;
+}
+
+.v-browser {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.v-addr {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 9px;
+  border-radius: 999px;
+  background: rgb(18 32 43 / 0.07);
+  font-size: 11px;
+  color: var(--ink-soft);
+}
+.v-browser .v-hero {
+  flex: none;
+  height: 26px;
+}
+.v-live {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #1f6b4f;
+}
+.v-live i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #35b394;
+  box-shadow: 0 0 0 3px rgb(53 179 148 / 0.25);
+}
+
+.v-guide {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  font-weight: 500;
+}
+.v-guide span {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.v-tick {
+  position: relative;
+  flex: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--signal);
+}
+.v-tick::after {
+  content: '';
+  position: absolute;
+  left: 4.5px;
+  top: 4px;
+  width: 7px;
+  height: 4px;
+  border-left: 1.8px solid #fff;
+  border-bottom: 1.8px solid #fff;
+  transform: rotate(-45deg);
+}
+
+/* ---------- Niveaux d'autonomie ---------- */
+.cs-panel {
+  position: relative;
+  isolation: isolate;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: clamp(20px, 3vw, 36px);
+  border-radius: clamp(28px, 3.4vw, 44px);
+  background: url('../assets/mesh/hero.webp') center / cover no-repeat, var(--paper-soft);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.85),
+    0 0 0 1px rgb(18 32 43 / 0.07),
+    0 40px 60px -40px rgb(18 32 43 / 0.45);
+}
+
+.cs-panel::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  pointer-events: none;
+  background: var(--grain) 0 0 / 160px 160px repeat;
+  mix-blend-mode: soft-light;
+  opacity: 0.5;
+}
+
+/* Axe : de « je délègue » à « je gère moi-même », avec une flèche dessinée qui court d'un bout à l'autre */
+.cs-axis {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding-bottom: 16px;
+  margin-bottom: clamp(16px, 2.4vw, 28px);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--signal-deep);
+}
+
+.cs-axis::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--signal), #35b394);
+}
+
+.cs-levels {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(14px, 2vw, 24px);
+}
+
+.cs-level {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: clamp(22px, 2.6vw, 32px);
+  border-radius: 26px;
+  text-align: left;
+}
+
+.cs-level-n {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--signal-deep);
+}
+
+/* Répartition du travail : la part « moi » à gauche, la part « vous » à droite */
+.cs-share {
+  position: relative;
+  height: 10px;
+  margin-block: 6px;
+  border-radius: 999px;
+  background: rgb(53 179 148 / 0.38);
+}
+
+.cs-share i {
+  display: block;
+  width: var(--me);
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--signal-deep), var(--signal));
+}
+
+/* Repère : une petite barre à la frontière « moi / vous », pour lire la jauge comme un équilibre */
+.cs-share::after {
+  content: '';
+  position: absolute;
+  top: -6px;
+  bottom: -6px;
+  left: min(max(var(--me), 2px), calc(100% - 2px));
+  width: 4px;
+  border-radius: 2px;
+  transform: translateX(-50%);
+  background: var(--ink);
+  box-shadow: 0 0 0 2px rgb(255 255 255 / 0.75);
+}
+
+.cs-share-legend {
+  display: flex;
+  justify-content: space-between;
+  margin-top: -4px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.cs-level h3 {
+  margin-top: var(--space-2);
+  font-size: clamp(1.25rem, 2vw, 1.6rem);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+.cs-level > p:not(.cs-level-n):not(.cs-tech) {
+  font-size: 16.5px;
+  line-height: 1.6;
+  color: var(--ink-soft);
+}
+
+.cs-tech {
+  margin-top: auto;
+  min-height: 5.4em;
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--line-strong);
+  color: var(--ink);
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.cs-tech span {
+  display: block;
+  margin-bottom: 2px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.cs-pick {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: baseline;
+  gap: var(--space-2) var(--space-5);
+  max-width: 880px;
+  margin: clamp(24px, 3.6vw, 44px) auto 0;
+  padding: clamp(20px, 2.4vw, 28px) clamp(22px, 3vw, 36px);
+  border-radius: 24px;
+}
+
+.cs-pick-label {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--signal-deep);
+}
+
+.cs-pick p:not(.cs-pick-label) {
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--ink);
+}
+
+.cs-tools {
+  max-width: 1120px;
+  margin: clamp(56px, 8vw, 104px) auto 0;
+}
+
+.cs-tools h3 {
+  font-size: clamp(1.4rem, 2.4vw, 1.8rem);
+  letter-spacing: -0.025em;
+  text-align: center;
+}
+
+.cs-tools dl {
+  margin: var(--space-6) 0 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  border-top: 2px solid var(--ink);
+}
+
+.cs-tools dl > div {
+  padding: var(--space-5) clamp(14px, 1.8vw, 28px) var(--space-2);
+}
+
+.cs-tools dl > div + div {
+  border-left: 1px solid var(--line-strong);
+}
+
+.cs-tools dl > div:first-child {
+  padding-left: 0;
+}
+
+.cs-tools dt {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--signal-deep);
+}
+
+.cs-tools dd {
+  margin: var(--space-3) 0 0;
+}
+
+.cs-tools dd ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cs-tools dd li {
+  font-size: 17px;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+/* ---------- Le cadre (tuile sombre) ---------- */
+.cs-figures {
+  list-style: none;
+  margin: 0 auto;
+  padding: 0;
+  max-width: 1000px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--gap);
+  text-align: center;
+}
+
+.cs-figures li {
+  padding: clamp(24px, 3vw, 40px) clamp(16px, 2vw, 28px);
+  border-radius: 26px;
+}
+
+.cs-figures b {
+  display: block;
+  white-space: nowrap;
+  font-size: clamp(2rem, 4vw, 3.3rem);
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+  color: #fff;
+}
+
+.cs-figures small {
+  margin-left: 0.28em;
+  font-size: 0.42em;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: rgb(255 255 255 / 0.92);
+}
+
+.cs-figures span {
+  display: block;
+  max-width: 24ch;
+  margin: var(--space-2) auto 0;
+  font-size: 16px;
+  line-height: 1.5;
+  color: rgb(255 255 255 / 0.9);
+}
+
+.cs-cols {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--gap);
+  max-width: 1000px;
+  margin: var(--gap) auto 0;
+}
+
+.cs-cols > div {
+  padding: clamp(24px, 3vw, 40px);
+  border-radius: 26px;
+}
+
+.cs-cols h3 {
+  margin-bottom: var(--space-4);
+  font-size: 1.2rem;
+  color: #fff;
+}
+
+.cs-ticks {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.cs-ticks li {
+  position: relative;
+  padding-left: 28px;
+  font-size: 16.5px;
+  line-height: 1.55;
+  color: rgb(255 255 255 / 0.95);
+}
+
+.cs-ticks li::before {
+  content: '';
+  position: absolute;
+  left: 2px;
+  top: 0.35em;
+  width: 11px;
+  height: 6px;
+  border-left: 2px solid #8fe3c4;
+  border-bottom: 2px solid #8fe3c4;
+  transform: rotate(-45deg);
+}
+
+.cs-ticks--plain li::before {
+  width: 10px;
+  height: 0;
+  top: 0.8em;
+  border-left: 0;
+  border-bottom: 2px solid rgb(255 255 255 / 0.7);
+  transform: none;
+}
+
+.cs-audit {
+  max-width: 62ch;
+  margin: clamp(32px, 5vw, 56px) auto 0;
+  text-align: center;
+  font-size: 17px;
+  line-height: 1.7;
+  color: rgb(255 255 255 / 0.95);
+}
+
+.cs-audit .link-under {
+  min-height: 0;
+  vertical-align: baseline;
+}
+
+.cs-more {
+  margin-top: var(--space-5);
+  text-align: center;
+}
+
+@media (max-width: 900px) {
+  .cs-split {
+    grid-template-columns: 1fr;
+  }
+  .cs-split-head {
+    position: static;
+  }
+  .cs-row {
+    grid-template-columns: 36px minmax(0, 1fr);
+  }
+  .cs-viz {
+    grid-column: 2;
+    max-width: 340px;
+  }
+  .cs-levels {
+    grid-template-columns: 1fr;
+  }
+  .cs-tools dl {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .cs-tools dl > div:nth-child(odd) {
+    padding-left: 0;
+    border-left: 0;
+  }
+  .cs-pick {
+    grid-template-columns: 1fr;
+  }
+  .cs-figures,
+  .cs-cols {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .cs-tools dl {
+    grid-template-columns: 1fr;
+  }
+  .cs-tools dl > div + div {
+    border-left: 0;
+    border-top: 1px solid var(--line-strong);
+    padding-left: 0;
+  }
+}
+
+/* Deux tuiles claires qui se suivent : moins de vide entre elles */
+#deroule {
+  padding-bottom: clamp(40px, 5vw, 72px);
+}
+#autonomie,
+#ampleur {
+  padding-top: clamp(40px, 5vw, 72px);
+}
+
+/* Après la bande sombre, l'encart du dernier projet respire */
+#projet {
+  padding-top: clamp(56px, 8vw, 112px);
+}

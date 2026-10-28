@@ -1,16 +1,18 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Tile from '../components/Tile.astro';
-import FrostedCTA from '../components/FrostedCTA.astro';
+import PageHero from '../components/PageHero.astro';
 import Process from '../components/Process.astro';
+import ProjectTeaser from '../components/ProjectTeaser.astro';
 import Faq from '../components/Faq.astro';
+import LinkUnder from '../components/LinkUnder.astro';
 import FinalCta from '../components/FinalCta.astro';
 import StickyCta from '../components/StickyCta.astro';
-import './service.css';
+import './creation-site-web.css';
 
 const site = 'https://antoinebruneau.fr';
 const description =
-  "Création de site internet sur mesure par un webdesigner freelance dans les Yvelines : design, intégration et mise en ligne par une seule personne, partout en France.";
+  'Création de site web sur mesure par un webdesigner freelance (Yvelines) : conception, intégration, mise en ligne, un seul interlocuteur. Devis gratuit.';
 
 const schema = {
   '@context': 'https://schema.org',
@@ -21,7 +23,7 @@ const schema = {
       name: 'Création de site web sur mesure',
       serviceType: 'Création de site web',
       description:
-        "Conception des pages, maquettes, intégration et mise en ligne d'un site web par un seul interlocuteur.",
+        'Conception sur mesure, intégration, bases du référencement et mise en ligne d’un site web, avec un seul interlocuteur du premier échange à la livraison.',
       url: `${site}/creation-site-web/`,
       inLanguage: 'fr-FR',
       areaServed: { '@type': 'Country', name: 'France' },
@@ -37,104 +39,220 @@ const schema = {
   ],
 };
 
+const received = [
+  { viz: 'design', t: 'Une conception sur mesure', d: 'Maquettes pour ordinateur et mobile, pensées autour de ce que vos visiteurs doivent faire.' },
+  { viz: 'build', t: 'Une intégration soignée', d: 'Un site rapide, accessible et adapté à tous les écrans, testé avant la mise en ligne.' },
+  { viz: 'seo', t: 'Les bases du référencement', d: 'Structure, titres, descriptions et données structurées : de quoi être compris des moteurs de recherche.' },
+  { viz: 'launch', t: 'Une mise en ligne complète', d: 'Nom de domaine, hébergement et mise en route, configurés à votre nom.' },
+  { viz: 'handoff', t: 'Une vraie prise en main', d: 'Vous savez comment fonctionne votre site et comment le faire évoluer.' },
+];
+
 const steps = [
-  { title: 'Échange gratuit', text: 'Votre activité, vos clients, ce que le site doit déclencher.', gets: 'une première lecture de votre projet.' },
-  { title: 'Devis détaillé', text: 'Pages prévues, livrables, délai indicatif, prix. Vous le validez avant tout démarrage.', gets: 'un devis écrit.' },
-  { title: 'Cadrage', text: "Arborescence et contenus attendus. L'acompte est versé à la commande.", gets: "l'arborescence du site." },
-  { title: 'Maquettes', text: 'Les écrans, pour ordinateur et pour mobile, sont soumis à vos retours.', gets: 'des maquettes validées.' },
-  { title: 'Intégration et tests', text: 'Je construis le site et je le vérifie sur plusieurs écrans.', gets: 'un site prêt à être publié.' },
-  { title: 'Mise en ligne', text: 'Le site est publié. Le solde est dû à la livraison.', gets: 'le site en ligne. Les droits vous sont cédés une fois les factures réglées.' },
+  { title: 'Échange', when: 'Semaine 1', text: 'Votre activité, vos clients, ce que le site doit déclencher.', gets: 'un devis écrit, gratuit.' },
+  { title: 'Cadrage', when: 'Semaine 1', text: 'Les pages, les contenus attendus. Acompte à la commande.', gets: 'le plan de votre site.' },
+  { title: 'Maquettes', when: 'Semaine 2', text: 'Les écrans pour ordinateur et mobile, soumis à vos retours.', gets: 'des maquettes validées.' },
+  { title: 'Intégration', when: 'Semaines 3 et 4', text: 'Je construis le site et je le teste sur plusieurs écrans.', gets: 'un site prêt à être publié.' },
+  { title: 'Mise en ligne', when: 'Semaines 4 et 5', text: 'Publication, vérifications et prise en main. Solde à la livraison.', gets: 'votre site en ligne, et ses droits à la réception des paiements.' },
+];
+
+const levels = [
+  { t: 'Je m’occupe de tout', d: 'Vous me confiez les mises à jour et les évolutions : vous n’avez rien à toucher.', tech: 'Site sur mesure (Astro, React, Node.js)', me: 100, share: 'Moi : tout. Vous : rien à gérer.' },
+  { t: 'Vous modifiez vos contenus', d: 'Textes, images, nouvelles pages : vous les gérez depuis une interface simple, sans abîmer la mise en page.', tech: 'WordPress en headless, ou Webflow', me: 55, share: 'Moi : la structure et le design. Vous : vos contenus.' },
+  { t: 'Vous êtes autonome', d: 'Je vous forme à votre outil, puis vous avancez à votre rythme.', tech: 'WordPress ou Webflow', me: 18, share: 'Moi : la prise en main. Vous : le reste.' },
+];
+
+const tools = [
+  { t: 'Conception', d: ['Figma', 'Illustrator', 'Photoshop'] },
+  { t: 'Développement', d: ['HTML, CSS, JavaScript', 'Astro, React, Node.js', 'VS Code'] },
+  { t: 'Contenu', d: ['WordPress (headless)', 'Webflow'] },
+  { t: 'Automatisation', d: ['Workflows sur mesure', 'Agents assistés par IA (Claude)'] },
+];
+
+const included = [
+  'Conception des maquettes (ordinateur et mobile)',
+  'Intégration, tests et mise en ligne',
+  'Bases du référencement : structure, titres, descriptions',
+  'Prise en main de votre site',
+  'Droits sur les créations et le code, cédés au paiement des factures',
+];
+const yours = [
+  'Vos textes et vos images (la rédaction n’est pas incluse)',
+  'Vos retours et validations dans les délais',
+  'Les coûts annuels du nom de domaine et de l’hébergement, configurés par mes soins à votre nom',
 ];
 
 const faq = [
   {
     q: 'Combien de temps faut-il pour créer un site ?',
-    a: 'Le devis indique un délai indicatif. Il dépend de la taille du site et de la rapidité de vos retours.',
-  },
-  {
-    q: 'Combien ça coûte ?',
-    a: "Le prix est fixé dans le devis, après un échange gratuit, pour un périmètre écrit. Je ne publie pas de grille, car chaque site est différent.",
+    a: 'Comptez environ trois à cinq semaines, de la validation du devis à la mise en ligne. Le délai exact figure au devis : il dépend surtout de la rapidité de vos retours et de vos contenus.',
   },
   {
     q: 'Dois-je fournir les textes et les images ?',
-    a: "En général, oui. Je vous dis dès le cadrage ce qu'il faut préparer et sous quelle forme.",
+    a: 'Oui, en général. Je vous dis dès le cadrage ce qu’il faut préparer et sous quelle forme. La rédaction n’est pas incluse dans le socle.',
   },
   {
-    q: "Le site m'appartient-il ?",
-    a: 'Oui. Les droits sur les créations graphiques et le code vous sont cédés au paiement intégral, sauf mention contraire au devis.',
-  },
-  {
-    q: "Travaillez-vous avec des entreprises du Val-d'Oise, de l'Oise ou de Paris ?",
-    a: "Oui. Je suis basé à Guitrancourt, dans les Yvelines, et je travaille avec des entreprises des Yvelines, du Val-d'Oise, de l'Oise, de Paris, d'Île-de-France et d'ailleurs en France. Les échanges se font en visio, par téléphone et par email.",
-  },
-  {
-    q: 'Peut-on se voir ?',
-    a: "Par visio d'abord. Pour une entreprise proche, une rencontre est plus simple à organiser : on en parle.",
+    q: 'À qui appartient le site ?',
+    a: 'À vous. Les droits sur les créations graphiques et le code vous sont cédés au paiement intégral, sauf mention contraire au devis. Le nom de domaine et l’hébergement sont à votre nom.',
   },
 ];
 ---
 
-<BaseLayout title="Création de site web sur mesure freelance" description={description} schema={schema}>
-  <section class="page-hero wrap" data-sticky-watch>
-    <nav class="crumbs" aria-label="Fil d'Ariane">
-      <a href="/">Accueil</a><span aria-hidden="true">/</span><span aria-current="page">Création de site web</span>
-    </nav>
-    <h1>Création de site web sur mesure dans les Yvelines</h1>
-    <p class="page-lead">
-      Conçu, intégré et mis en ligne par la même personne : je dessine les pages, puis je les construis. Vous avez un seul
-      interlocuteur, des Yvelines au reste de la France.
-    </p>
-    <div class="page-actions">
-      <FrostedCTA href="/contact/?sujet=site">Demander un devis pour mon site</FrostedCTA>
+<BaseLayout title="Création de site web sur mesure" description={description} schema={schema}>
+  <PageHero
+    crumb="Création de site web"
+    kicker="Création de site web sur mesure"
+    line1="Un site qui donne envie"
+    line2="de vous écrire."
+    lead="Des premières bases à la mise en ligne, je reste votre interlocuteur privilégié."
+    ctaHref="/contact/?sujet=site"
+    ctaLabel="Décrire mon projet"
+    linkHref="/projets/le-cuistologue/"
+    linkLabel="Voir un exemple"
+    note="Devis gratuit · Réponse sous 24 h ouvrées · Livraison en 3 à 5 semaines"
+  />
+
+  <section class="tile tile--light" id="livrables" aria-labelledby="livrables-title">
+    <div class="wrap tile-inner cs-split">
+      <header class="cs-split-head">
+        <p class="tile-label">Ce que vous recevez</p>
+        <h2 id="livrables-title">Pensé à la main, construit pour convertir.</h2>
+        <p class="cs-split-sub">Un site complet, prêt à accueillir vos clients, et non un assemblage de blocs.</p>
+      </header>
+      <ol class="cs-received" role="list">
+        {
+          received.map((r, i) => (
+            <li class="cs-row">
+              <span class="cs-row-num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+              <div class="cs-row-text">
+                <h3>{r.t}</h3>
+                <p>{r.d}</p>
+              </div>
+              <div class={`cs-viz cs-viz--${r.viz} cs-viz-tone-${i % 3}`} aria-hidden="true">
+                {r.viz === 'design' && (
+                  <>
+                    <div class="v-frame v-desk"><i class="v-bar"></i><i class="v-hero"></i><i class="v-col"></i><i class="v-col"></i></div>
+                    <div class="v-frame v-phone"><i class="v-hero"></i><i class="v-line"></i><i class="v-line s"></i></div>
+                  </>
+                )}
+                {r.viz === 'build' && (
+                  <>
+                    <div class="v-frame v-desk"><i class="v-bar"></i><i class="v-hero"></i><i class="v-line"></i></div>
+                    <div class="v-frame v-tab"><i class="v-hero"></i><i class="v-line"></i></div>
+                    <div class="v-frame v-phone"><i class="v-hero"></i><i class="v-line s"></i></div>
+                  </>
+                )}
+                {r.viz === 'seo' && (
+                  <div class="v-card v-serp">
+                    <span class="v-url"><i class="v-dot"></i>votre-site.fr</span>
+                    <b>Votre activité, ce que vous proposez</b>
+                    <i class="v-line"></i>
+                    <i class="v-line s"></i>
+                  </div>
+                )}
+                {r.viz === 'launch' && (
+                  <div class="v-card v-browser">
+                    <span class="v-addr"><svg viewBox="0 0 12 14" width="10" height="12"><path d="M3 6V4.5a3 3 0 0 1 6 0V6M2 6h8v6H2z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>votre-site.fr</span>
+                    <i class="v-hero"></i>
+                    <span class="v-live"><i></i>En ligne</span>
+                  </div>
+                )}
+                {r.viz === 'handoff' && (
+                  <div class="v-card v-guide">
+                    <span><i class="v-tick"></i>Modifier un texte</span>
+                    <span><i class="v-tick"></i>Ajouter une page</span>
+                    <span><i class="v-tick"></i>Publier</span>
+                  </div>
+                )}
+              </div>
+            </li>
+          ))
+        }
+      </ol>
     </div>
-    <dl class="brief glass">
-      <div><dt>Interlocuteur</dt><dd>un seul, du début à la fin</dd></div>
-      <div><dt>Devis</dt><dd>gratuit, après un premier échange</dd></div>
-      <div><dt>Paiement</dt><dd>acompte, puis solde à la livraison</dd></div>
-    </dl>
   </section>
 
-  <Tile id="deroule" title="Du premier échange à la mise en ligne">
+  <Tile id="deroule" title="De la première idée à la mise en ligne" sub="Cinq étapes, sur trois à cinq semaines environ.">
     <Process steps={steps} />
   </Tile>
 
-  <Tile
-    id="livrables"
-    title="Ce que vous recevez"
-    sub="Le devis écrit précisément ce qui est inclus : nombre de pages, fonctionnalités, tours de retours. Tout ce qui n'y figure pas est chiffré avant d'être réalisé."
-  >
-    <ul class="when when--list" role="list">
-      <li>L'arborescence du site.</li>
-      <li>Les maquettes validées.</li>
-      <li>Le site intégré, adapté aux écrans d'ordinateur, de tablette et de téléphone.</li>
-      <li>La mise en ligne.</li>
-      <li>Les balises de base pour les moteurs de recherche : titres et descriptions de pages.</li>
-      <li>Les droits sur les créations graphiques et le code, cédés au paiement intégral des factures.</li>
+  <Tile id="autonomie" title="Vous gardez la main." sub="À vous de choisir jusqu’où : je m’occupe de tout, vous modifiez vos contenus, ou vous êtes autonome.">
+    <div class="cs-panel">
+      <p class="cs-axis" aria-hidden="true"><span>Je délègue</span><span>Je gère moi-même</span></p>
+      <ol class="cs-levels" role="list">
+        {
+          levels.map((l, i) => (
+            <li class="cs-level glass">
+              <p class="cs-level-n">Niveau {i + 1}</p>
+              <div class="cs-share" role="img" aria-label={l.share} style={`--me: ${l.me}%`}>
+                <i></i>
+              </div>
+              <div class="cs-share-legend" aria-hidden="true"><span>Moi</span><span>Vous</span></div>
+              <h3>{l.t}</h3>
+              <p>{l.d}</p>
+              <p class="cs-tech"><span>Technologies</span> {l.tech}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+    <aside class="cs-pick glass">
+      <p class="cs-pick-label">Ma préférence</p>
+      <p>
+        WordPress en headless. Vos contenus restent faciles à modifier, et le site reste rapide et léger. Webflow convient
+        si l’édition visuelle compte pour vous (abonnement plus élevé).
+      </p>
+    </aside>
+    <div class="cs-tools">
+      <h3>Les outils derrière le site</h3>
+      <dl>
+        {
+          tools.map((x) => (
+            <div>
+              <dt>{x.t}</dt>
+              <dd>
+                <ul role="list">{x.d.map((i) => <li>{i}</li>)}</ul>
+              </dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </Tile>
+
+  <Tile tone="dark" mesh="a" id="cadre" title="Tout est écrit avant de commencer." sub="Le devis précise le périmètre exact. Voici les repères.">
+    <ul class="cs-figures" role="list">
+      <li class="glass glass--dark"><b>5<small>pages</small></b><span>incluses, d’autres au devis</span></li>
+      <li class="glass glass--dark"><b>2<small>tours</small></b><span>de retours sur les maquettes</span></li>
+      <li class="glass glass--dark"><b>3 à 5<small>semaines</small></b><span>indicatif, selon vos retours et vos contenus</span></li>
     </ul>
-    <p class="also">
-      De votre côté, prévoyez les textes, les images et les validations : les délais annoncés en dépendent.
+    <div class="cs-cols">
+      <div class="glass glass--dark">
+        <h3>Inclus</h3>
+        <ul class="cs-ticks" role="list">{included.map((i) => <li>{i}</li>)}</ul>
+      </div>
+      <div class="glass glass--dark">
+        <h3>De votre côté</h3>
+        <ul class="cs-ticks cs-ticks--plain" role="list">{yours.map((i) => <li>{i}</li>)}</ul>
+      </div>
+    </div>
+    <p class="cs-audit">
+      Pas sûr de votre point de départ ? Commencez par{' '}
+      <LinkUnder href="/audit-ux-ui/" label="un audit UX/UI" tone="light" />, dont le montant est déduit si nous poursuivons
+      ensemble.
     </p>
   </Tile>
 
-  <Tile
-    id="ensuite"
-    title="Après la livraison"
-    sub="Vous gérez le site seul, vous me demandez des évolutions ponctuelles sur devis, ou vous passez à un accompagnement mensuel où je reste votre designer de référence."
-  >
-    <p class="also">
-      Pour un site existant à améliorer avant une refonte, vous pouvez aussi commencer par
-      <a class="more" href="/audit-ux-ui/">un audit UX/UI</a>.
-    </p>
-  </Tile>
+  <ProjectTeaser label="Exemple de livrable" />
 
-  <Tile id="faq" title="Questions">
+  <Tile id="faq" title="Avant de vous lancer">
     <Faq items={faq} />
+    <p class="cs-more"><LinkUnder href="/faq/" label="Toutes les questions" /></p>
   </Tile>
 
   <FinalCta
-    title="Un site à créer ou à refaire ?"
-    text="Décrivez votre activité et ce que vous attendez du site. Réponse sous 24 h ouvrées."
-    label="Demander un devis pour mon site"
+    title="Votre site commence par une conversation."
+    text="Décrivez votre activité et ce que le site doit permettre. Je réponds sous 24 h ouvrées, et ce premier échange ne coûte rien."
+    label="Décrire mon projet"
     href="/contact/?sujet=site"
   />
   <StickyCta href="/contact/?sujet=site" />

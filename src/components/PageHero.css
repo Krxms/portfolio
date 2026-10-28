@@ -1,0 +1,147 @@
+/* Variante « page de service » de la zone hero : le fond (mesh + grain) vient de Hero.css, seules la hauteur
+   et la composition changent. */
+.hero-zone--page {
+  min-height: clamp(560px, 82svh, 780px);
+  justify-content: center;
+  padding-top: calc(var(--header-h) + clamp(16px, 3vw, 40px));
+  padding-bottom: clamp(48px, 7vw, 96px);
+  /* Calque riso (points d'encre) : dense sur le bord droit, nul sous le texte, donc la lecture n'est jamais gênée */
+  background:
+    var(--grain) 0 0 / 160px 160px repeat,
+    url('../assets/mesh/hero-riso-right.webp') right center / cover no-repeat,
+    url('../assets/mesh/hero.webp') center / cover no-repeat,
+    var(--paper);
+  background-blend-mode: soft-light, multiply, normal, normal;
+}
+
+/* Écrans étroits : le texte occupe toute la largeur, le riso passe donc sous le texte (bord bas) */
+@media (max-width: 1100px) {
+  .hero-zone--page {
+    padding-bottom: clamp(150px, 40vw, 280px);
+    background:
+      var(--grain) 0 0 / 160px 160px repeat,
+      url('../assets/mesh/hero-riso-bottom.webp') center bottom / cover no-repeat,
+      url('../assets/mesh/hero.webp') center / cover no-repeat,
+      var(--paper);
+    background-blend-mode: soft-light, multiply, normal, normal;
+  }
+}
+
+.ph-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
+  gap: clamp(36px, 5vw, 88px);
+  align-items: center;
+}
+
+/* Texte calé plus à gauche que le conteneur : le riso a toute la place à droite */
+.hero-zone--page .ph-grid--solo {
+  max-width: none;
+  margin-inline: 0;
+  padding-left: clamp(var(--edge), 7vw, 128px);
+}
+
+.ph-grid--solo {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.ph-grid--solo .ph-copy {
+  max-width: min(100%, 640px);
+}
+
+.ph-copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;
+  text-align: left;
+}
+
+.ph-crumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--ink-soft);
+}
+
+.ph-crumbs a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  margin-block: -14px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.ph-crumbs a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.ph-crumbs [aria-current] {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+/* Le mot-clé de la page (création de site web) vit dans le h1 sous forme de surtitre, visible et sans artifice */
+.ph-copy h1 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+.ph-kicker {
+  display: block;
+  margin-bottom: 22px;
+  font-family: var(--font-body);
+  font-size: clamp(1rem, 1.6vw, 1.2rem);
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.005em;
+  color: var(--signal-deep);
+}
+
+.ph-l1,
+.ph-l2 {
+  display: block;
+  font-size: clamp(2.5rem, 5.6vw, 5rem);
+}
+
+.ph-l1 {
+  color: var(--ink);
+}
+
+.ph-l2 {
+  color: var(--signal);
+}
+
+.ph-lead {
+  max-width: 36ch;
+  font-size: clamp(1.1rem, 1.9vw, 1.3rem);
+  line-height: 1.55;
+  color: var(--ink);
+}
+
+.ph-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3) var(--space-6);
+}
+
+.ph-note {
+  font-size: 14px;
+  color: var(--ink-soft);
+}
+
+.ph-visual {
+  min-width: 0;
+}
+
+@media (max-width: 900px) {
+  .ph-grid {
+    grid-template-columns: 1fr;
+  }
+}

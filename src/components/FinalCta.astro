@@ -12,8 +12,7 @@ interface Props {
 const { title, text, label, href = '/contact/' } = Astro.props;
 ---
 
-<section class="cta-final tile tile--dark" data-sticky-watch>
-  <div class="tile-light" aria-hidden="true"></div>
+<section class="cta-final tile tile--dark tile--mesh-a" data-sticky-watch>
   <div class="wrap tile-inner">
     <div class="cta-panel glass glass--dark">
       <h2>{title}</h2>
@@ -25,6 +24,14 @@ const { title, text, label, href = '/contact/' } = Astro.props;
           <a href="mailto:contact@antoinebruneau.fr">contact@antoinebruneau.fr</a>
         </p>
       </div>
+      <ul class="cta-facts" role="list">
+        <li>Réponse sous 24 h ouvrées</li>
+        <li>Devis gratuit et détaillé</li>
+        <li>
+          Entrepreneur individuel,{' '}
+          <a href="https://annuaire-entreprises.data.gouv.fr/entreprise/788566719" rel="noopener">SIREN 788 566 719</a>
+        </li>
+      </ul>
     </div>
   </div>
 </section>

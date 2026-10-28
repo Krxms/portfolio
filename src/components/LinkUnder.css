@@ -1,0 +1,58 @@
+.link-under {
+  --lu-fill: var(--signal-deep);
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding-bottom: 2px;
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--ink);
+  text-decoration: none;
+  /* trait de repos fin et discret, plus un trait de remplissage ancré à gauche (taille 0 au repos) */
+  background:
+    linear-gradient(var(--lu-fill), var(--lu-fill)) 0 100% / 0% 2px no-repeat,
+    linear-gradient(color-mix(in srgb, currentColor 62%, transparent), color-mix(in srgb, currentColor 62%, transparent)) 0 100% / 100% 2px no-repeat;
+  transition: background-size 0.5s var(--ease-out), color 0.25s var(--ease-out), font-weight 0.25s var(--ease-out);
+}
+
+.link-under-text {
+  display: inline-flex;
+  flex-direction: column;
+}
+
+/* Copie invisible en gras : fixe la largeur, le texte ne bouge pas au survol */
+.link-under-text::after {
+  content: attr(data-text);
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
+  font-weight: 700;
+  pointer-events: none;
+  user-select: none;
+}
+
+.link-under:hover,
+.link-under:focus-visible {
+  color: var(--lu-fill);
+  font-weight: 700;
+  background-size: 100% 2px, 100% 1px;
+}
+
+/* Sur fond sombre : texte clair, remplissage menthe au survol */
+.link-under--light {
+  --lu-fill: #8fe3c4;
+  color: #fff;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .link-under {
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .link-under {
+    color: LinkText;
+    text-decoration: underline;
+  }
+}

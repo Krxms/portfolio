@@ -1,21 +1,51 @@
 ---
 import './Process.css';
+import Mark from './Mark.astro';
 
 interface Props {
-  steps: { title: string; text: string; gets: string }[];
+  steps: { title: string; text: string; gets?: string; when?: string }[];
 }
 const { steps } = Astro.props;
 ---
 
+<div class="proc-wrap">
+  <Mark kind="timeline" class="proc-timeline" />
 <ol class={`proc proc--${steps.length}`} role="list">
   {
     steps.map((s, i) => (
       <li class="proc-step">
         <span class="proc-num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+        {s.when && <span class="proc-when">{s.when}</span>}
         <h3>{s.title}</h3>
         <p>{s.text}</p>
-        <p class="proc-gets"><span>Vous recevez</span> {s.gets}</p>
+        {s.gets && (
+          <div class="proc-gets">
+            <p><span>Vous recevez</span> {s.gets}</p>
+          </div>
+        )}
       </li>
     ))
   }
 </ol>
+</div>
+
+<script>
+  // La flèche chronologique se trace de gauche à droite (la pointe arrive en dernier), une seule fois, quand elle
+  // entre à l'écran. Sans JavaScript ou avec « réduire les animations », elle est affichée en entier.
+  const arrow = document.querySelector<SVGElement>('.proc-timeline');
+  if (arrow && 'IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    arrow.classList.add('is-armed');
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          arrow.classList.add('is-drawing');
+          io.disconnect();
+        }
+      },
+      { threshold: 0.2, rootMargin: '0px 0px -10% 0px' },
+    );
+    // On observe le conteneur, pas la flèche : tant qu'elle est masquée par son clip-path, le navigateur calcule une
+    // zone visible nulle et l'observateur ne se déclencherait jamais.
+    io.observe(arrow.parentElement ?? arrow);
+  }
+</script>

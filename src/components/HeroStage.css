@@ -1,20 +1,9 @@
 .stage {
+  display : none;
   position: relative;
   width: min(100%, 1000px);
   margin-inline: auto;
   padding: clamp(28px, 6vw, 72px) clamp(12px, 5vw, 64px);
-}
-
-/* La lumière derrière la fenêtre : c'est ce que le verre flou et réfracte */
-.stage-light {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background:
-    radial-gradient(34% 46% at 14% 60%, rgb(255 154 104 / 0.85), transparent 72%),
-    radial-gradient(36% 50% at 86% 38%, rgb(165 148 209 / 0.9), transparent 72%),
-    radial-gradient(34% 40% at 52% 100%, rgb(146 193 151 / 0.7), transparent 72%);
-  filter: blur(14px);
 }
 
 .win {
@@ -28,14 +17,14 @@
   display: flex;
   gap: 7px;
   padding: 14px 18px;
-  border-bottom: 1px solid rgb(40 28 51 / 0.08);
+  border-bottom: 1px solid rgb(18 32 43 / 0.08);
 }
 
 .win-bar i {
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: rgb(40 28 51 / 0.18);
+  background: rgb(18 32 43 / 0.18);
 }
 
 .win-body {
@@ -67,7 +56,7 @@
   width: clamp(24px, 6vw, 56px);
   height: 6px;
   border-radius: 3px;
-  background: rgb(40 28 51 / 0.28);
+  background: rgb(18 32 43 / 0.28);
 }
 
 .win-hero {
@@ -81,19 +70,19 @@
   width: min(70%, 420px);
   height: clamp(18px, 3.4vw, 34px);
   border-radius: 8px;
-  background: #281c33;
+  background: #12202b;
 }
 
 .win-h1--short {
   width: min(46%, 280px);
-  background: #735f84;
+  background: #14509a;
 }
 
 .win-p {
   width: min(52%, 320px);
   height: 7px;
   border-radius: 4px;
-  background: rgb(40 28 51 / 0.24);
+  background: rgb(18 32 43 / 0.24);
 }
 
 .win-p--short {
@@ -101,6 +90,7 @@
 }
 
 .win-btns {
+  position: relative;
   display: flex;
   gap: 10px;
   margin-top: 8px;
@@ -111,11 +101,11 @@
   height: clamp(20px, 3.2vw, 30px);
   border-radius: 8px;
   background: rgb(255 255 255 / 0.7);
-  box-shadow: inset 0 0 0 1px rgb(40 28 51 / 0.14);
+  box-shadow: inset 0 0 0 1px rgb(18 32 43 / 0.14);
 }
 
 .win-btn--main {
-  background: #735f84;
+  background: #14509a;
   box-shadow: none;
 }
 
@@ -129,11 +119,11 @@
   height: clamp(44px, 9vw, 96px);
   border-radius: clamp(10px, 2vw, 18px);
   background: rgb(255 255 255 / 0.5);
-  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.9), inset 0 0 0 1px rgb(40 28 51 / 0.06);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.9), inset 0 0 0 1px rgb(18 32 43 / 0.06);
 }
 
 .win-grid i:nth-child(2) {
-  background: rgb(255 154 104 / 0.3);
+  background: rgb(255 202 168 / 0.55);
 }
 
 /* Pastilles de verre posées à cheval sur la fenêtre */
@@ -188,18 +178,20 @@
   box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.55);
 }
 
-.chip--pin {
-  right: clamp(18px, 9vw, 120px);
-  bottom: clamp(10px, 3vw, 36px);
-  padding: 0;
-  width: 40px;
-  height: 40px;
-  justify-content: center;
-  border-radius: 50%;
+/* Tracés faits main posés sur la maquette */
+.stage-circle {
+  position: absolute;
+  left: -16%;
+  top: -42%;
+  width: 62%;
+  height: 190%;
 }
 
-.chip--pin span {
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--ink);
+.stage-arrow {
+  position: absolute;
+  right: 100%;
+  margin-right: clamp(26px, 5vw, 64px);
+  top: -90%;
+  width: clamp(48px, 8vw, 96px);
+  transform: rotate(-4deg);
 }

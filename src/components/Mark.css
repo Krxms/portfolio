@@ -1,0 +1,59 @@
+.mark {
+  display: block;
+  color: var(--mark);
+  overflow: visible;
+  pointer-events: none;
+  filter: url(#ink);
+}
+
+.mark path {
+  stroke: currentColor;
+  stroke-width: 4.5px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.mark--rule path {
+  stroke-width: 2px;
+}
+
+.mark--flow path {
+  stroke-width: 2.6px;
+}
+
+/* Tracés d'Antoine : des formes pleines dessinées à la main, reprises telles quelles, sans filtre ni trait ajouté */
+.mark--own {
+  filter: none;
+}
+
+.mark--own path {
+  fill: currentColor;
+  stroke: none;
+  stroke-width: 0;
+  vector-effect: none;
+}
+
+/* Révélation unique au chargement, de gauche à droite — jamais liée au scroll ni au survol */
+.mark--draw {
+  clip-path: inset(-20% 100% -20% -5%);
+  animation: mark-draw 0.95s var(--ease-out) 0.55s forwards;
+}
+
+@keyframes mark-draw {
+  to {
+    clip-path: inset(-20% -5% -20% -5%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mark--draw {
+    clip-path: none;
+    animation: none;
+  }
+}
+
+.tile--dark .mark,
+.mark--on-dark {
+  color: var(--mark-on-dark);
+}

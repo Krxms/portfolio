@@ -1,0 +1,21 @@
+---
+import './Hero.css';
+import FrostedCTA from './FrostedCTA.astro';
+import LinkUnder from './LinkUnder.astro';
+---
+
+<section class="hero wrap" data-sticky-watch>
+  <h1>
+    <span class="hero-role">Webdesigner &amp; designer UX/UI freelance · Yvelines</span>{' '}
+    <span class="hero-l1">Votre site,</span>{' '}
+    <span class="hero-l2">avec du <em class="hero-word">caractère</em>.</span>
+  </h1>
+  <p class="hero-sub">
+    Votre activité mérite mieux qu’un site standardisé : <br>Une expérience digitale pensée autour de votre identité, de vos enjeux et de vos objectifs.
+
+  </p>
+  <div class="hero-actions">
+    <FrostedCTA href="/contact/">Décrire mon projet</FrostedCTA>
+    <LinkUnder href="/audit-ux-ui/" label="Commencer par un audit" glow />
+  </div>
+</section>

@@ -1,0 +1,33 @@
+---
+import './Tile.css';
+import './ProjectTeaser.css';
+import LinkUnder from './LinkUnder.astro';
+import siteShot from '../assets/cuistologue-site.webp';
+
+interface Props {
+  href?: string;
+  label?: string;
+}
+const { href = '/projets/le-cuistologue/', label = 'Dernier projet' } = Astro.props;
+---
+
+<section class="tile tile--light project-tile" id="projet" aria-labelledby="projet-title">
+  <div class="wrap tile-inner">
+    <div class="project glass">
+      <div class="project-copy">
+        <p class="tile-label">{label}</p>
+        <h2 id="projet-title">Le Cuistologue</h2>
+        <p class="project-text">
+          Identité, site web et supports imprimés pour un cuisinier à domicile, du Val&#8209;d’Oise aux Yvelines.
+        </p>
+        <p class="project-scope">Identité visuelle · Site web · Cartes et flyers</p>
+        <LinkUnder href={href} label="Voir le projet" />
+      </div>
+
+      <!-- L'image mène aussi à la page projet, sans réaction au survol : seul le lien texte réagit. -->
+      <a class="project-visual" href={href} tabindex="-1" aria-hidden="true">
+        <img src={siteShot.src} width={siteShot.width} height={siteShot.height} alt="" loading="lazy" decoding="async" />
+      </a>
+    </div>
+  </div>
+</section>

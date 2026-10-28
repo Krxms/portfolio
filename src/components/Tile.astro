@@ -3,16 +3,16 @@ import './Tile.css';
 
 interface Props {
   tone?: 'light' | 'dark';
+  mesh?: 'a' | 'b';
   id?: string;
   label?: string;
   title: string;
   sub?: string;
 }
-const { tone = 'light', id, label, title, sub } = Astro.props;
+const { tone = 'light', mesh = 'a', id, label, title, sub } = Astro.props;
 ---
 
-<section class:list={['tile', `tile--${tone}`]} id={id} aria-labelledby={id ? `${id}-title` : undefined}>
-  {tone === 'dark' && <div class="tile-light" aria-hidden="true"></div>}
+<section class:list={['tile', `tile--${tone}`, tone === 'dark' && `tile--mesh-${mesh}`]} id={id} aria-labelledby={id ? `${id}-title` : undefined}>
   <div class="wrap tile-inner">
     <header class="tile-head">
       {label && <p class="tile-label">{label}</p>}

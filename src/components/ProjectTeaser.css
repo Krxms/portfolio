@@ -1,0 +1,65 @@
+/* Encart « dernier projet » : aucun agrandissement, aucun déplacement. Seul le lien « Voir le projet »
+   réagit, et seulement quand on le survole lui. */
+.project-tile {
+  padding-top: 0;
+  padding-bottom: clamp(32px, 5vw, 72px);
+}
+
+.project {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  align-items: center;
+  gap: clamp(24px, 4vw, 64px);
+  padding: clamp(24px, 4vw, 56px);
+  border-radius: clamp(28px, 4vw, 44px);
+  color: var(--ink);
+  overflow: hidden;
+}
+
+.project-copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.project-copy .tile-label {
+  margin-bottom: var(--space-3);
+}
+
+.project-copy h2 {
+  max-width: none;
+  font-size: clamp(2.2rem, 4.6vw, 3.6rem);
+}
+
+.project-text {
+  margin-top: var(--space-4);
+  max-width: 34ch;
+  font-size: clamp(1.05rem, 1.7vw, 1.2rem);
+  line-height: 1.55;
+  color: var(--ink-soft);
+}
+
+.project-scope {
+  margin: var(--space-4) 0 var(--space-3);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--signal-deep);
+}
+
+.project-visual {
+  position: relative;
+  display: block;
+}
+
+.project-visual img {
+  width: 100%;
+  height: auto;
+  border-radius: 20px;
+  box-shadow: 0 0 0 1px rgb(18 32 43 / 0.08), 0 30px 50px -34px rgb(18 32 43 / 0.45);
+}
+
+@media (max-width: 860px) {
+  .project {
+    grid-template-columns: 1fr;
+  }
+}

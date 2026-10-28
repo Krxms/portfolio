@@ -1,0 +1,51 @@
+---
+import './Tile.css';
+import './AboutMini.css';
+import Mark from './Mark.astro';
+import LinkUnder from './LinkUnder.astro';
+import portrait from '../assets/portrait-cine.webp';
+
+const zones = ['Yvelines', 'Val-d’Oise', 'Oise'];
+---
+
+<section class="tile tile--dark tile--mesh-b about" id="qui-suis-je" aria-labelledby="about-title">
+  <div class="wrap tile-inner about-grid">
+    <figure class="portrait">
+      <img
+        src={portrait.src}
+        width={portrait.width}
+        height={portrait.height}
+        alt="Portrait d’Antoine Bruneau, webdesigner et designer UX/UI freelance"
+        loading="lazy"
+        decoding="async"
+      />
+    </figure>
+
+    <div class="about-copy">
+      <p class="tile-label">Qui suis-je ?</p>
+      <h2 id="about-title">Antoine Bruneau</h2>
+      <p class="about-lead">
+        Spécialiste du web, j’accompagne les entreprises dans leur quête de visibilité digitale. Offrant des services
+        complets, de la conception de sites internet avec audit et design UX/UI et SEO.
+      </p>
+
+      <div class="about-values">
+        <p class="about-values-label">Mes valeurs</p>
+        <h3>Confiance, écoute et disponibilité</h3>
+        <p>
+          À mon compte depuis 2017, j’accompagne des entreprises variées dans leur stratégie digitale. Parce que le
+          numérique doit être au service de l’humain, je mets un point d’honneur à collaborer dans un cadre de confiance
+          et d’écoute pour vous proposer les meilleures prestations adaptées à vos besoins.
+        </p>
+      </div>
+
+      <p class="about-zone">
+        Tous les services d’une agence web dans les Yvelines (78), avec la flexibilité, la proximité et la réactivité d’un
+        freelance.
+      </p>
+      <ul class="about-zones" role="list">{zones.map((z) => <li>{z}</li>)}</ul>
+
+      <LinkUnder href="/a-propos/" label="En savoir plus sur moi" tone="light" />
+    </div>
+  </div>
+</section>

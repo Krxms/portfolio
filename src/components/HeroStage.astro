@@ -1,10 +1,9 @@
 ---
 import './HeroStage.css';
+import Mark from './Mark.astro';
 ---
 
 <div class="stage" aria-hidden="true">
-  <div class="stage-light"></div>
-
   <div class="win glass">
     <div class="win-bar"><i></i><i></i><i></i></div>
     <div class="win-body">
@@ -17,7 +16,12 @@ import './HeroStage.css';
         <div class="win-h1 win-h1--short"></div>
         <div class="win-p"></div>
         <div class="win-p win-p--short"></div>
-        <div class="win-btns"><b class="win-btn win-btn--main"></b><b class="win-btn"></b></div>
+        <div class="win-btns">
+          <b class="win-btn win-btn--main"></b>
+          <b class="win-btn"></b>
+          <Mark kind="circle" class="stage-circle" />
+          <Mark kind="arrow" class="stage-arrow" />
+        </div>
       </div>
       <div class="win-grid"><i></i><i></i><i></i></div>
     </div>
@@ -29,11 +33,9 @@ import './HeroStage.css';
   </div>
 
   <div class="chip chip--palette glass">
-    <i style="background:#281c33"></i>
-    <i style="background:#735f84"></i>
-    <i style="background:#ff9a68"></i>
-    <i style="background:#92c197"></i>
+    <i style="background:#12202b"></i>
+    <i style="background:#14509a"></i>
+    <i style="background:#9fdcc8"></i>
+    <i style="background:#ffcaa8"></i>
   </div>
-
-  <div class="chip chip--pin glass"><span>1</span></div>
 </div>

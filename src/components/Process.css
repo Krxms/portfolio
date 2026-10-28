@@ -9,15 +9,84 @@
 }
 
 .proc--4 {
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+  max-width: 1180px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+@media (max-width: 1060px) {
+  .proc--4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 620px) {
+  .proc--4 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Cinq étapes : toujours sur une seule ligne sur ordinateur */
+.proc--5 {
+  max-width: 1180px;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: var(--space-6) clamp(16px, 2vw, 28px);
+}
+
+.proc-when {
+  margin-top: -4px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--signal-deep);
+}
+
+@media (min-width: 1061px) {
+  .proc--5 .proc-gets {
+    min-height: 11.5em;
+  }
+}
+
+@media (max-width: 1060px) {
+  .proc--5 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 620px) {
+  .proc--5 {
+    grid-template-columns: 1fr;
+  }
 }
 
 .proc-step {
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
-  padding-top: var(--space-4);
-  border-top: 2px solid var(--ink);
+  padding-top: 0;
+}
+
+.proc-wrap {
+  max-width: 1180px;
+  margin-inline: auto;
+}
+
+/* Flèche chronologique dessinée à la main, sur toute la largeur des quatre étapes */
+.proc-timeline {
+  width: 100%;
+  height: auto;
+  margin-bottom: var(--space-5);
+  color: var(--mark);
+}
+
+/* Flèche d'annotation : une seule fois, dans la marge à gauche de la rangée « Vous recevez » */
+.proc-note {
+  position: absolute;
+  right: calc(100% + 10px);
+  top: 4px;
+  width: clamp(34px, 3.6vw, 52px);
+  height: auto;
+  color: var(--signal);
 }
 
 .proc-num {
@@ -40,10 +109,15 @@
 }
 
 .proc-gets {
+  position: relative;
   margin-top: auto;
   padding-top: var(--space-3);
   border-top: 1px solid var(--line);
-  color: var(--ink) !important;
+}
+
+.proc-gets p {
+  margin: 0;
+  color: var(--ink);
 }
 
 .proc-gets span {
@@ -54,4 +128,52 @@
   letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--muted);
+}
+
+/* Ligne « après la livraison », sous les quatre étapes */
+.proc-after {
+  max-width: 62ch;
+  margin: clamp(36px, 5vw, 64px) auto 0;
+  text-align: center;
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--ink-soft);
+}
+
+.proc-after strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+@media (min-width: 1061px) {
+  .proc-gets {
+    min-height: 10.2em;
+  }
+}
+
+/* La flèche chronologique n'a de sens que quand les quatre étapes sont sur une seule rangée */
+@media (max-width: 1060px) {
+  /* préfixe .proc-wrap : sans lui, la règle .mark { display: block } (chargée après) l'emportait */
+  .proc-wrap .proc-timeline,
+  .proc-wrap .proc-note {
+    display: none;
+  }
+}
+
+/* Tracé de la flèche : révélation de gauche à droite, avec une cadence de stylo (départ posé, glisse, arrivée douce) */
+.proc-timeline.is-armed {
+  clip-path: inset(-20% 100% -20% 0);
+}
+
+.proc-timeline.is-drawing {
+  animation: timeline-draw 0.8s cubic-bezier(0.45, 0.05, 0.3, 1) both;
+}
+
+@keyframes timeline-draw {
+  from {
+    clip-path: inset(-20% 100% -20% 0);
+  }
+  to {
+    clip-path: inset(-20% -2% -20% 0);
+  }
 }

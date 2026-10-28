@@ -1,0 +1,72 @@
+---
+import './ServiceCards.css';
+
+const cards = [
+  {
+    tone: 'warm',
+    mark: 'sparkle',
+    kicker: 'Création de site',
+    title: 'Votre site, pensé pour vous.',
+    text: 'À partir de vos besoins : Structure, maquettes, intégration, SEO, optimisation IA, mise en ligne.',
+  },
+  {
+    tone: 'blue',
+    mark: 'loop',
+    kicker: 'Refonte de site',
+    title: 'Votre site ne vous ressemble plus.',
+    text: 'Ou il ne répond plus à vos besoins. On commence par un audit, puis je reconstruis ce qui doit l’être.',
+  },
+  {
+    tone: 'mint',
+    mark: 'lens',
+    kicker: 'Audit UX/UI',
+    title: 'Voir clair avant de décider.',
+    text: 'Je parcours votre site, repère ce qui freine et classe les corrections par priorité.',
+    note: ' Le montant de l’audit est déduit du projet si nous poursuivons ensemble.',
+  },
+] as const;
+---
+
+<ul class="cards" role="list">
+  {
+    cards.map((c) => (
+      <li class={`card card--${c.tone}`} data-tilt>
+        <div class="card-art" aria-hidden="true"><i class="s s1"></i><i class="s s2"></i><i class="s s3"></i></div>
+        <p class="card-kicker">{c.kicker}</p>
+        <h3 class="card-title">{c.title}</h3>
+        <p class="card-text">
+          {c.text}
+          {c.note && <span class="card-note">{c.note}</span>}
+        </p>
+      </li>
+    ))
+  }
+</ul>
+
+<script>
+  // Parallaxe très légère : seule la carte s'incline de quelques degrés vers le pointeur, son texte
+  // reste collé à elle. Désactivée au tactile et avec « réduire les animations ».
+  const fine = matchMedia('(hover: hover) and (pointer: fine)').matches;
+  const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (fine && !calm) {
+    document.querySelectorAll<HTMLElement>('[data-tilt]').forEach((card) => {
+      let frame = 0;
+      card.addEventListener('pointermove', (e) => {
+        const r = card.getBoundingClientRect();
+        const x = (e.clientX - r.left) / r.width - 0.5;
+        const y = (e.clientY - r.top) / r.height - 0.5;
+        cancelAnimationFrame(frame);
+        frame = requestAnimationFrame(() => {
+          card.classList.add('is-tilting');
+          card.style.setProperty('--rx', `${(-y * 5).toFixed(2)}deg`);
+          card.style.setProperty('--ry', `${(x * 5).toFixed(2)}deg`);
+        });
+      });
+      card.addEventListener('pointerleave', () => {
+        cancelAnimationFrame(frame);
+        card.classList.remove('is-tilting');
+        ['--rx', '--ry'].forEach((p) => card.style.removeProperty(p));
+      });
+    });
+  }
+</script>

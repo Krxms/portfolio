@@ -1,20 +1,101 @@
 /* Tuiles pleine largeur façon apple.com : un titre court centré, une ligne de sous-titre,
-   des actions, puis le contenu. Les tuiles sombres portent de la lumière colorée,
-   c'est elle que le verre réfracte. */
+   des actions, puis le contenu. Les tuiles claires laissent voir le mesh de la page ;
+   les tuiles sombres portent leur propre mesh (la couleur que le verre réfracte), plus du grain. */
 .tile {
   position: relative;
-  overflow: hidden;
+  isolation: isolate;
   padding-block: clamp(72px, 11vw, 148px);
   scroll-margin-top: 100px;
 }
 
+/* Tuile claire : la crème de la page, rien d'autre */
 .tile--light {
-  background: color-mix(in srgb, var(--paper) 78%, transparent);
+  background: transparent;
 }
 
+/* Performance : le verre dépoli des grandes zones sombres n'utilise PAS backdrop-filter. Floutter un dégradé déjà
+   parfaitement lisse ne change rien à l'œil, mais recalculer ce flou sur plusieurs milliers de pixels à chaque
+   image de défilement rendait le scroll lourd. Le rendu laiteux vient du voile, du grain et de l'arête lumineuse.
+
+   Tuile sombre : bords nets. Dessous, un dégradé très fluide (::before) ; dessus, un verre dépoli (::after)
+   = voile laiteux, flou, grain et arête lumineuse. */
 .tile--dark {
-  background: #1c1325;
   color: #fff;
+}
+
+.tile--dark::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  background: var(--tile-mesh) center / cover no-repeat, #06151c;
+}
+
+.tile--dark::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    var(--grain-soft) 0 0 / 160px 160px repeat,
+    linear-gradient(180deg, rgb(2 12 20 / 0.34), rgb(2 12 20 / 0.26));
+  background-blend-mode: soft-light, normal;
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.4), inset 0 -1px 0 rgb(255 255 255 / 0.14);
+}
+
+/* Zone sombre commune : deux tuiles sombres qui se suivent partagent UN seul fond (dégradé fluide + verre
+   dépoli), donc aucune séparation entre elles. Les tuiles à l'intérieur n'ont plus de fond propre. */
+.dark-zone {
+  position: relative;
+  isolation: isolate;
+  color: #fff;
+}
+
+.dark-zone::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  /* même matière que la section identité : un dégradé marine vers bleu klein, fixe et sans texture */
+  background:
+    radial-gradient(60% 34% at 82% 10%, rgb(46 98 230 / 0.34), transparent 72%),
+    radial-gradient(52% 30% at 8% 58%, rgb(16 130 180 / 0.26), transparent 72%),
+    linear-gradient(180deg, #081742 0%, #0b2170 52%, #0a1a58 100%);
+}
+
+.dark-zone::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgb(2 12 20 / 0.22), rgb(2 12 20 / 0.16));
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.3), inset 0 -1px 0 rgb(255 255 255 / 0.1);
+}
+
+/* Dans la zone commune, l'appel final remonte vers « Qui suis-je » : moins de vide entre les deux */
+.dark-zone > .tile:not(:last-child) {
+  padding-bottom: clamp(24px, 4vw, 56px);
+}
+
+.dark-zone > .tile + .tile {
+  padding-top: clamp(8px, 2vw, 24px);
+}
+
+.dark-zone > .tile.tile--dark::before,
+.dark-zone > .tile.tile--dark::after {
+  content: none;
+}
+
+.tile--mesh-a::before {
+  --tile-mesh: url('../assets/mesh/dark-a.webp');
+}
+
+.tile--mesh-b::before {
+  --tile-mesh: url('../assets/mesh/dark-b.webp');
 }
 
 .tile-inner {
@@ -39,7 +120,7 @@
 }
 
 .tile--dark .tile-label {
-  color: #d9c8ee;
+  color: #d6f1e8;
 }
 
 .tile h2 {
@@ -60,7 +141,7 @@
 }
 
 .tile--dark .tile-sub {
-  color: rgb(255 255 255 / 0.74);
+  color: rgb(255 255 255 / 0.94);
 }
 
 .tile-actions {
@@ -74,17 +155,6 @@
 
 .tile-actions:empty {
   display: none;
-}
-
-/* Lueurs colorées derrière les surfaces vitrées (figées) */
-.tile-light {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background:
-    radial-gradient(46% 52% at 12% 30%, rgb(255 154 104 / 0.55), transparent 70%),
-    radial-gradient(44% 56% at 88% 22%, rgb(165 148 209 / 0.6), transparent 70%),
-    radial-gradient(50% 50% at 62% 96%, rgb(146 193 151 / 0.4), transparent 70%);
 }
 
 /* Lien de fin de tuile, façon "En savoir plus ›" */
@@ -116,5 +186,6 @@
 }
 
 .tile--dark .more {
-  color: #e6d9f5;
+  color: #d6f1e8;
 }
+

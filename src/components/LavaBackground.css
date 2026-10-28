@@ -1,0 +1,18 @@
+/* Fond animé de la Hero : une « lava lamp » en WebGL. Le canvas est derrière tout le contenu et apparaît en fondu
+   par-dessus le mesh statique, qui reste le repli (sans WebGL, ou si le contexte est perdu). */
+.lava {
+  position: absolute;
+  /* déborde de 380 px sous la Hero : la section suivante (verre dépoli) en laisse voir le bas des gouttes */
+  inset: 0 0 -380px 0;
+  z-index: -1;
+  display: block;
+  width: 100%;
+  height: calc(100% + 380px);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 1.4s ease-out;
+}
+
+.lava.is-ready {
+  opacity: 1;
+}

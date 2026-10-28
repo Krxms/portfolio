@@ -1,0 +1,385 @@
+---
+import './LavaBackground.css';
+---
+
+<canvas class="lava" aria-hidden="true" data-lava></canvas>
+
+<script>
+  // Lava lamp en temps réel, sans boucle : une vidéo repasserait au début, ici chaque image est calculée à partir
+  // du temps. Le mouvement suit le cycle d'une vraie lampe : une nappe de cire chaude en bas, d'où une goutte se
+  // détache, s'étire en larme en montant, s'aplatit en haut, se refroidit et redescend pour se refondre dans la nappe.
+  // Chaque goutte a sa période, et son point de départ comme sa hauteur changent à chaque cycle : la composition
+  // ne se répète pas de façon lisible. La pellicule (grain à 24 images/s, léger tremblé, vignette) et le passage de flou
+  // arrivent à une cadence de montage, comme le passage de verre cannelé (stries fines).
+  // Avec « réduire les animations » : une seule image fixe, sans boucle.
+  const canvas = document.querySelector<HTMLCanvasElement>('[data-lava]');
+  const zone = canvas?.parentElement;
+  if (canvas && zone) {
+    const gl = canvas.getContext('webgl', { antialias: false, alpha: false, powerPreference: 'low-power' });
+    const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const vert = 'attribute vec2 a;void main(){gl_Position=vec4(a,0.,1.);}';
+    const frag = `
+precision highp float;
+uniform vec2 uRes;
+uniform float uView;   // hauteur de l'écran visible, en pixels du canvas : la lave se joue dans ce cadre
+uniform float uT;
+uniform float uBlur;   // passage de flou d'objectif (0 à 1)
+uniform float uGlass;  // passage de verre cannelé (0 à 1)
+uniform vec4 uBall[16]; // x, y, rayon, étirement vertical (>1 : goutte en larme, <1 : écrasée)
+uniform vec3 uBC[16];   // couleur de chaque goutte
+
+float hash(vec2 p){vec3 q=fract(vec3(p.xyx)*0.1031);q+=dot(q,q.yzx+33.33);return fract((q.x+q.y)*q.z);}
+
+// champ de la matière : somme des r²/d², plus c'est grand plus on est au coeur de la cire
+float field(vec2 p){
+  float f=0.;
+  for(int i=0;i<16;i++){
+    vec2 d=p-uBall[i].xy;
+    d.y/=uBall[i].w;
+    f+=uBall[i].z*uBall[i].z/(dot(d,d)+0.0004);
+  }
+  return f;
+}
+
+vec3 lava(vec2 p,float soft,out float m){
+  float f=0.;
+  vec3 c=vec3(0.);
+  float wsum=0.;
+  for(int i=0;i<16;i++){
+    vec2 d=p-uBall[i].xy;
+    d.y/=uBall[i].w;
+    float w=uBall[i].z*uBall[i].z/(dot(d,d)+0.0004);
+    f+=w;
+    w*=sqrt(sqrt(sqrt(w)));
+    c+=uBC[i]*w;
+    wsum+=w;
+  }
+  c/=max(wsum,1e-4);
+  m=smoothstep(1.0-soft,1.0+soft+0.12,f);
+  return c;
+}
+
+void main(){
+  float A=uRes.x/uView;
+  // y = 1 en haut de l'écran, 0 au pli (là où se tient la nappe), négatif sous le pli
+  vec2 uv=vec2(gl_FragCoord.x,gl_FragCoord.y-(uRes.y-uView))/uView;
+  float t=uT;
+
+  // courbure du verre : on regarde la lave à travers une paroi bombée. Le centre est légèrement agrandi, les côtés se
+  // compriment et se courbent (le contenu y défile plus vite), comme au bord d'un cylindre de verre.
+  vec2 sn=vec2(uv.x/A,uv.y)*2.-1.;
+  float edge=pow(abs(sn.x),3.);
+  vec2 warped=vec2(sn.x*(1.+0.46*sn.x*sn.x),sn.y*(1.+0.12*sn.x*sn.x)+0.08*sn.x*sn.x*sn.x*sn.y);
+  uv=vec2((warped.x*.5+.5)*A,warped.y*.5+.5);
+
+  // tremblé de la fenêtre de projection : un décalage minuscule, tiré à 24 images/s
+  float fr=floor(t*24.);
+  uv+=(vec2(hash(vec2(fr,1.)),hash(vec2(fr,2.)))-0.5)*0.0003;
+
+  // verre cannelé : des cannelures fines, chacune une petite lentille cylindrique qui retourne un peu l'image
+  float flutes=32.*A;
+  float fx=uv.x*flutes;
+  float cell=floor(fx);
+  float lf=fract(fx)-0.5;
+  uv.x=(cell+0.5+lf*mix(1.,-0.4,uGlass))/flutes;
+
+  float soft=0.05+uBlur*0.55;
+  float shift=0.0035*uGlass+0.0022*uBlur+0.013*edge;
+  float m,mr,mb;
+  vec3 col=lava(uv,soft,m);
+  // dispersion chromatique pendant les passages de flou et sur les bords du verre
+  vec3 colR=col,colB=col;
+  if(shift>0.0004){
+    colR=lava(uv+vec2(shift,0.),soft,mr);
+    colB=lava(uv-vec2(shift,0.),soft,mb);
+  } else { mr=m; mb=m; }
+
+  // papier : clair, légèrement bleuté à gauche et mentholé à droite comme le mesh de la marque
+  vec3 paper=mix(vec3(0.9,0.925,0.968),vec3(0.9,0.962,0.95),clamp(uv.x/A,0.,1.));
+  paper=mix(paper,vec3(0.84,0.945,0.92),smoothstep(0.55,1.,uv.x/A)*smoothstep(0.55,0.,uv.y)*0.5);
+
+  // la lave est tirée vers le papier pour rester pastel, et elle s'efface derrière le bloc de texte (lisibilité)
+  vec2 q=(uv-vec2(A*0.5,0.52))/vec2(max(A*0.3,0.5),0.34);
+  float textZone=exp(-dot(q,q));
+  float strength=0.92-0.55*textZone;
+  vec3 tint=vec3(1.0,0.99,0.97);
+  vec3 lavaCol=mix(col,tint,0.04);
+  vec3 outC;
+  outC.r=mix(paper.r,mix(colR,tint,0.04).r,mr*strength);
+  outC.g=mix(paper.g,lavaCol.g,m*strength);
+  outC.b=mix(paper.b,mix(colB,tint,0.04).b,mb*strength);
+
+  // relief : un éclairage rasant sur le bord des gouttes (arête claire en haut à gauche, ombre douce en bas à droite)
+  float e=0.004;
+  vec2 g=vec2(field(uv+vec2(e,0.))-field(uv-vec2(e,0.)),field(uv+vec2(0.,e))-field(uv-vec2(0.,e)));
+  float gm=length(g);
+  vec2 n=-g/max(gm,1e-5);
+  float rim=m*(1.-m)*4.*smoothstep(0.015,0.09,gm);
+  float lit=dot(n,normalize(vec2(-0.6,0.8)));
+  outC+=vec3(1.)*max(lit,0.)*rim*0.22*(1.-uBlur);
+  outC-=vec3(0.18,0.2,0.16)*max(-lit,0.)*rim*0.12*(1.-uBlur);
+
+  // dispersion du verre sur les côtés : frange rouge-orangé vers l'intérieur, froide vers l'extérieur
+  float fringe=smoothstep(0.45,1.,abs(sn.x));
+  outC+=vec3(0.07,0.0,-0.03)*fringe*fringe*(1.-uBlur);
+  outC=mix(outC,outC*vec3(1.0,0.97,1.04),fringe*0.5);
+
+  // parois du verre : un reflet vertical doux à gauche, une ombre fine contre chaque bord
+  float streak=exp(-pow((sn.x+0.8)/0.035,2.));
+  outC+=vec3(0.06)*streak*(0.6+0.4*sin(uv.y*3.+t*0.05));
+  outC=mix(outC,outC*vec3(0.84,0.84,0.86),smoothstep(0.78,1.,abs(sn.x))*0.7);
+  outC+=vec3(0.05)*exp(-pow((sn.x-0.86)/0.05,2.));
+
+  // pellicule : grain à 24 images/s (plus marqué dans les ombres), vignette douce, léger voile chaud
+  float gr=hash(gl_FragCoord.xy*0.8+fr*7.31)-0.5;
+  float lum=dot(outC,vec3(0.299,0.587,0.114));
+  outC+=gr*(0.05-0.02*lum);
+  vec2 vq=gl_FragCoord.xy/uRes-0.5;
+  outC*=1.-dot(vq,vq)*0.38;
+  outC=mix(outC,outC*vec3(0.99,1.0,1.02),0.5);
+
+  gl_FragColor=vec4(clamp(outC,0.,1.),1.);
+}`;
+
+    const compile = (type: number, src: string) => {
+      const s = gl!.createShader(type)!;
+      gl!.shaderSource(s, src);
+      gl!.compileShader(s);
+      return gl!.getShaderParameter(s, gl!.COMPILE_STATUS) ? s : null;
+    };
+
+    const vs = gl && compile(gl.VERTEX_SHADER, vert);
+    const fs = gl && compile(gl.FRAGMENT_SHADER, frag);
+
+    if (gl && vs && fs) {
+      const prog = gl.createProgram()!;
+      gl.attachShader(prog, vs);
+      gl.attachShader(prog, fs);
+      gl.linkProgram(prog);
+      gl.useProgram(prog);
+
+      const buf = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+      const loc = gl.getAttribLocation(prog, 'a');
+      gl.enableVertexAttribArray(loc);
+      gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+
+      const U = (n: string) => gl.getUniformLocation(prog, n);
+      const uRes = U('uRes'), uView = U('uView'), uT = U('uT'), uBlur = U('uBlur'), uGlass = U('uGlass'), uBall = U('uBall'), uBC = U('uBC');
+
+      type Col = [number, number, number];
+      // spectre bleu serré : bleu marine, bleu klein, bleu roi, puis bleu-vert (canard, lagon). Les mélanges passent d'une
+      // teinte à l'autre sans jamais sortir de cette famille.
+      const navy: Col = [0.09, 0.17, 0.52];
+      const klein: Col = [0.12, 0.27, 0.84];
+      const royal: Col = [0.22, 0.42, 0.92];
+      const teal: Col = [0.1, 0.48, 0.82];
+      const lagoon: Col = [0.12, 0.58, 0.75];
+
+      // La nappe du bas (3 grosses gouttes aplaties) : la cire chaude d'où tout part.
+      const pool = [
+        { x: 0.18, r: 0.16, c: navy },
+        { x: 0.5, r: 0.19, c: klein },
+        { x: 0.82, r: 0.16, c: teal },
+      ];
+      // Les gouttes mobiles. per = durée d'un cycle complet en secondes, off = avance du cycle au départ, top = hauteur
+      // maximale (1 = haut de l'écran). Les 4 premières sont grosses, les 6 suivantes petites ; tail = traîne en larme.
+      const drops = [
+        { r: 0.125, per: 96, off: 0.58, top: 0.92, c: navy, tail: true, sway: 0.035, sf: 0.11, seed: 1 },
+        { r: 0.11, per: 118, off: 0.2, top: 0.84, c: klein, tail: true, sway: 0.04, sf: 0.09, seed: 2 },
+        { r: 0.12, per: 83, off: 0.8, top: 0.96, c: teal, tail: true, sway: 0.03, sf: 0.13, seed: 3 },
+        { r: 0.1, per: 132, off: 0.38, top: 0.78, c: lagoon, tail: false, sway: 0.045, sf: 0.08, seed: 4 },
+        { r: 0.05, per: 41, off: 0.1, top: 0.7, c: royal, tail: false, sway: 0.03, sf: 0.17, seed: 5 },
+        { r: 0.04, per: 53, off: 0.55, top: 0.85, c: klein, tail: false, sway: 0.035, sf: 0.14, seed: 6 },
+        { r: 0.055, per: 47, off: 0.32, top: 0.55, c: teal, tail: false, sway: 0.03, sf: 0.19, seed: 7 },
+        { r: 0.04, per: 61, off: 0.7, top: 0.92, c: navy, tail: false, sway: 0.04, sf: 0.12, seed: 8 },
+        { r: 0.06, per: 37, off: 0.88, top: 0.62, c: royal, tail: false, sway: 0.025, sf: 0.21, seed: 9 },
+        { r: 0.045, per: 57, off: 0.45, top: 0.76, c: lagoon, tail: false, sway: 0.035, sf: 0.16, seed: 10 },
+      ];
+      const POOL = 3;
+      const HEADS = POOL;
+      const TAILS = POOL + drops.length;
+      const colors = new Float32Array(16 * 3);
+      const setCol = (slot: number, c: Col) => colors.set(c, slot * 3);
+      pool.forEach((p, i) => setCol(i, p.c));
+      drops.forEach((d, i) => setCol(HEADS + i, d.c));
+      let tailSlot = TAILS;
+      const tailOf: number[] = [];
+      drops.forEach((d, i) => {
+        if (d.tail) {
+          tailOf[i] = tailSlot;
+          setCol(tailSlot, d.c);
+          tailSlot++;
+        } else tailOf[i] = -1;
+      });
+      gl.uniform3fv(uBC, colors);
+
+      const bd = new Float32Array(64);
+      // temps propre à chaque goutte : il avance un peu plus vite juste après un contact, puis retrouve son rythme
+      const tau = new Float32Array(drops.length);
+      const boost = new Float32Array(drops.length);
+      const prox = new Float32Array(drops.length);
+      let lastT = -1;
+      const SPEED = 0.2;
+      let view = 1;
+      let floorY = 0;
+      // le canvas dépasse sous la Hero : la section suivante, en verre dépoli, laisse voir le bas des gouttes
+      const EXTRA = 380;
+
+      const resize = () => {
+        const w = zone.clientWidth || innerWidth;
+        const h = (zone.clientHeight || innerHeight) + EXTRA;
+        // moitié de résolution : la lave est lisse, et le grain y gagne un côté pellicule
+        const s = Math.min(1, 1100 / w) * Math.min(devicePixelRatio || 1, 1.5) * 0.55;
+        canvas.width = Math.max(2, Math.round(w * s));
+        canvas.height = Math.max(2, Math.round(h * s));
+        view = Math.min(canvas.height, Math.round(innerHeight * s));
+        // bas de la Hero, dans le repère de la lave (1 = haut de l'écran, 0 = bas de l'écran)
+        floorY = 1 - (zone.clientHeight || innerHeight) / innerHeight;
+        gl.viewport(0, 0, canvas.width, canvas.height);
+        gl.uniform2f(uRes, canvas.width, canvas.height);
+        gl.uniform1f(uView, view);
+      };
+
+      const smooth = (a: number, b: number, x: number) => {
+        const t = Math.min(1, Math.max(0, (x - a) / (b - a)));
+        return t * t * (3 - 2 * t);
+      };
+      // un passage = une montée douce, un palier, une descente douce
+      const pass = (t: number, period: number, offset: number, len: number) => {
+        const ph = (((t + offset) % period) + period) % period;
+        return smooth(0, len * 0.35, ph) * (1 - smooth(len * 0.65, len, ph));
+      };
+      const rnd = (n: number, seed: number) => {
+        const v = Math.sin(n * 12.9898 + seed * 78.233) * 43758.5453;
+        return v - Math.floor(v);
+      };
+      // profil d'un cycle (w de 0 à 1) : la goutte monte, reste un instant en haut, puis redescend plus doucement
+      const H = (w: number) => smooth(0, 0.5, w) - smooth(0.62, 1, w);
+
+      // position, étirement et rayon d'une goutte pour une phase de cycle donnée
+      const place = (d: (typeof drops)[number], phase: number, u: number, A: number) => {
+        const n = Math.floor(phase);
+        const w = phase - n;
+        const top = d.top * (0.78 + 0.22 * rnd(n, d.seed));
+        const base = floorY + 0.06;
+        const y = base + (top - base) * H(w);
+        const x0 = A * (0.08 + 0.84 * rnd(n + 0.5, d.seed));
+        const x1 = A * (0.08 + 0.84 * rnd(n + 1.5, d.seed));
+        // le départ latéral se fait pendant la descente, quand la goutte est près de la nappe
+        const x = x0 + (x1 - x0) * smooth(0.78, 1, w) + A * d.sway * Math.sin(u * d.sf + d.seed * 3.1);
+        // taille propre à chaque cycle (0,85 à 1,2), fondue quand la goutte retourne dans la nappe
+        const rv = 0.85 + 0.35 * (rnd(n + 3.3, d.seed) + (rnd(n + 4.3, d.seed) - rnd(n + 3.3, d.seed)) * smooth(0.78, 1, w));
+        // vitesse verticale (0 à 1) : la goutte s'étire en larme quand elle file, s'écrase en palier
+        const e = 0.01;
+        const vn = Math.min(1, Math.abs(H(w + e) - H(w - e)) / (2 * e) / 3.4);
+        return { x, y, s: 0.98 + 0.1 * vn, vn, rv };
+      };
+
+      const draw = (t: number) => {
+        const A = canvas.width / view;
+        const dt = lastT < 0 ? 0 : Math.min(0.1, Math.max(0, t - lastT));
+        lastT = t;
+        const rs = Math.min(1, 0.5 + 0.5 * A);
+
+        pool.forEach((p, i) => {
+          bd[i * 4] = (p.x + 0.035 * Math.sin(t * 0.05 + i * 1.9)) * A;
+          bd[i * 4 + 1] = floorY + 0.03 + 0.012 * Math.sin(t * 0.13 + i * 2.1);
+          bd[i * 4 + 2] = p.r * rs * (1 + 0.04 * Math.sin(t * 0.09 + i));
+          bd[i * 4 + 3] = 0.9;
+        });
+
+        drops.forEach((d, i) => {
+          // la phase avance au temps réel ralenti, plus un surplus quand la goutte vient d'en toucher une autre
+          tau[i] += dt * SPEED * (1 + boost[i]) * (1 + 0.25 * Math.sin(t * 0.05 * (1 + i * 0.13) + d.seed * 2.3));
+          if (dt === 0 && tau[i] === 0) tau[i] = t * SPEED;
+          const u = tau[i];
+          const p = place(d, u / d.per + d.off, u, A);
+          const k = (HEADS + i) * 4;
+          bd[k] = p.x;
+          bd[k + 1] = p.y;
+          bd[k + 2] = d.r * rs * p.rv * (1.04 - 0.08 * p.vn);
+          bd[k + 3] = p.s;
+          if (tailOf[i] >= 0) {
+            // la traîne suit la tête avec un léger retard : c'est elle qui fait le col étroit de la larme
+            const lag = 0.05;
+            const q = place(d, u / d.per + d.off - lag, u - lag * d.per, A);
+            const j = tailOf[i] * 4;
+            bd[j] = q.x;
+            bd[j + 1] = q.y;
+            bd[j + 2] = d.r * rs * q.rv * 0.52;
+            bd[j + 3] = 1.04;
+          }
+        });
+
+        // contacts : la proximité de chaque goutte avec les autres gouttes ; quand elle monte, petit élan
+        drops.forEach((_, i) => {
+          const a = (HEADS + i) * 4;
+          let p = 0;
+          for (let jj = 0; jj < drops.length; jj++) {
+            if (jj === i) continue;
+            const b = (HEADS + jj) * 4;
+            const reach = (bd[a + 2] + bd[b + 2]) * 1.2;
+            const dist = Math.hypot(bd[a] - bd[b], (bd[a + 1] - bd[b + 1]) * 0.8);
+            const q = Math.min(1, Math.max(0, (reach - dist) / (reach * 0.5)));
+            p = Math.max(p, q * q * (3 - 2 * q));
+          }
+          if (p > prox[i]) boost[i] = Math.min(0.5, boost[i] + (p - prox[i]) * 1.0);
+          prox[i] = p;
+          boost[i] *= Math.exp(-dt * 0.35);
+        });
+
+        gl.uniform4fv(uBall, bd);
+        gl.uniform1f(uT, t);
+        gl.uniform1f(uBlur, pass(t, 43, 17, 10) * 0.42);
+        gl.uniform1f(uGlass, pass(t, 27, 11, 3.6));
+        gl.drawArrays(gl.TRIANGLES, 0, 3);
+      };
+
+      resize();
+      new ResizeObserver(() => {
+        resize();
+        if (calm) draw(14);
+      }).observe(zone);
+
+      let raf = 0;
+      let visible = true;
+      let origin = performance.now();
+      const loop = (now: number) => {
+        raf = 0;
+        if (!visible) return;
+        draw(14 + (now - origin) / 1000);
+        raf = requestAnimationFrame(loop);
+      };
+
+      if (calm) {
+        draw(14);
+        canvas.classList.add('is-ready');
+      } else {
+        draw(14);
+        requestAnimationFrame(() => canvas.classList.add('is-ready'));
+        raf = requestAnimationFrame(loop);
+        // pause hors écran ou onglet masqué ; au retour, le temps reprend où il en était (pas de saut)
+        let pausedAt = 0;
+        const setVisible = (v: boolean) => {
+          if (v === visible) return;
+          visible = v;
+          if (v) {
+            origin += performance.now() - pausedAt;
+            if (!raf) raf = requestAnimationFrame(loop);
+          } else pausedAt = performance.now();
+        };
+        new IntersectionObserver(([e]) => setVisible(e.isIntersecting && !document.hidden)).observe(zone);
+        document.addEventListener('visibilitychange', () => setVisible(!document.hidden));
+      }
+
+      canvas.addEventListener('webglcontextlost', (e) => {
+        e.preventDefault();
+        canvas.classList.remove('is-ready');
+        visible = false;
+      });
+    }
+  }
+</script>

@@ -1,6 +1,7 @@
 ---
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import '../styles/fonts.css';
 import '../styles/tokens.css';
 import '../styles/global.css';
 import '../styles/sections.css';
@@ -11,9 +12,19 @@ interface Props {
   description: string;
   noindex?: boolean;
   schema?: object;
+  /** Image de partage (chemin depuis la racine) */
+  image?: string;
+  imageAlt?: string;
 }
 
-const { title, description, noindex = false, schema } = Astro.props;
+const {
+  title,
+  description,
+  noindex = false,
+  schema,
+  image = '/og-image.jpg',
+  imageAlt = 'Antoine Bruneau, webdesigner et designer UX/UI freelance dans les Yvelines : « Votre site, avec du caractère. »',
+} = Astro.props;
 const isHome = Astro.url.pathname === '/';
 const pageTitle = isHome ? 'Webdesigner UX/UI freelance, Yvelines — Antoine Bruneau' : `${title} — Antoine Bruneau`;
 
@@ -22,6 +33,12 @@ const path = Astro.url.pathname.endsWith('/') ? Astro.url.pathname : `${Astro.ur
 const canonical = new URL(path, Astro.site).href;
 
 const siteUrl = 'https://antoinebruneau.fr';
+const ogImage = new URL(image, siteUrl).href;
+const services = [
+  { name: 'Création de site web', description: 'Conception sur mesure : structure, maquettes, intégration, bases du référencement et mise en ligne.' },
+  { name: 'Refonte de site web', description: 'Audit de l’existant, puis refonte de ce qui doit l’être, avec un tarif préférentiel pour le pack audit + conception.' },
+  { name: 'Audit UX/UI', description: 'Analyse d’un site ou d’une interface, problèmes classés par priorité avec recommandations.' },
+];
 const jsonLd = {
   '@context': 'https://schema.org',
   '@graph': [
@@ -33,8 +50,16 @@ const jsonLd = {
       url: siteUrl,
       email: 'contact@antoinebruneau.fr',
       telephone: '+33609111838',
-      address: { '@type': 'PostalAddress', addressLocality: 'Guitrancourt', postalCode: '78440', addressCountry: 'FR' },
+      description: 'Webdesigner et designer UX/UI freelance : création de site, refonte de site et audit UX/UI, dans les Yvelines et à distance partout en France.',
       founder: { '@id': `${siteUrl}/#person` },
+      description: 'Webdesigner et designer UX/UI freelance : création de site, refonte de site et audit UX/UI, dans les Yvelines et à distance partout en France.',
+      slogan: 'Votre site, avec du caractère.',
+      image: ogImage,
+      hasOfferCatalog: {
+        '@type': 'OfferCatalog',
+        name: 'Services',
+        itemListElement: services.map((s) => ({ '@type': 'Service', name: s.name, description: s.description, provider: { '@id': `${siteUrl}/#service` }, serviceType: s.name })),
+      },
       areaServed: [
         { '@type': 'AdministrativeArea', name: 'Yvelines' },
         { '@type': 'AdministrativeArea', name: "Val-d'Oise" },
@@ -65,22 +90,37 @@ const jsonLd = {
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
-    {noindex && <meta name="robots" content="noindex,follow" />}
+    {noindex ? <meta name="robots" content="noindex,follow" /> : <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1" />}
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonical} />
     <meta property="og:site_name" content="Antoine Bruneau" />
     <meta property="og:locale" content="fr_FR" />
-    <meta name="twitter:card" content="summary" />
-    <meta name="theme-color" content="#f5f0e6" />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={imageAlt} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image:alt" content={imageAlt} />
+    <meta name="author" content="Antoine Bruneau" />
+    <meta name="theme-color" content="#f5f3ea" />
+    <link rel="icon" href="/favicon.ico" sizes="48x48" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap"
-    />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    {
+      [
+        'be-vietnam-pro-400',
+        'be-vietnam-pro-500',
+        'be-vietnam-pro-600',
+        'be-vietnam-pro-700',
+        ...(isHome ? ['bricolage-grotesque-200-800'] : []),
+      ].map((f) => <link rel="preload" href={`/fonts/${f}.woff2`} as="font" type="font/woff2" crossorigin />)
+    }
+    <slot name="head" />
     {isHome && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
     {schema && <script type="application/ld+json" set:html={JSON.stringify(schema)} />}
   </head>
@@ -98,6 +138,11 @@ const jsonLd = {
         <feTurbulence type="fractalNoise" baseFrequency="0.012 0.02" numOctaves="2" seed="4" result="noise" />
         <feGaussianBlur in="noise" stdDeviation="2" result="softNoise" />
         <feDisplacementMap in="SourceGraphic" in2="softNoise" scale="7" xChannelSelector="R" yChannelSelector="G" />
+      </filter>
+      <!-- Bords légèrement rongés pour les tracés faits main (voir Mark.astro) -->
+      <filter id="ink" x="-10%" y="-30%" width="120%" height="160%" color-interpolation-filters="sRGB">
+        <feTurbulence type="fractalNoise" baseFrequency="0.035 0.06" numOctaves="2" seed="3" result="grit" />
+        <feDisplacementMap in="SourceGraphic" in2="grit" scale="3.2" xChannelSelector="R" yChannelSelector="G" />
       </filter>
     </svg>
     <Header />

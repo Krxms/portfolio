@@ -1,0 +1,259 @@
+/* Trois cartes non cliquables. Seul mouvement : une parallaxe très légère au pointeur (voir le script).
+   Chaque carte : un verre clair, et en haut une petite affiche imprimée façon risographie, bâtie avec les formes du logo
+   (disque, arche, demi-disque) dans une palette qui vit : soleil, azur et menthe. */
+.cards {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--gap);
+}
+
+.card {
+  --rx: 0deg;
+  --ry: 0deg;
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  padding: 10px 10px clamp(26px, 3vw, 34px);
+  border-radius: 32px;
+  background: rgb(255 255 255 / 0.84);
+  color: var(--ink);
+  /* verre épais : liseré clair, franges de dispersion (chaude à gauche, froide à droite), ombre portée */
+  box-shadow:
+    inset 0 1px 0 #fff,
+    inset 0 0 0 1px rgb(255 255 255 / 0.6),
+    inset 14px 0 20px -16px rgb(255 130 140 / 0.35),
+    inset -14px 0 20px -16px rgb(90 190 255 / 0.4),
+    0 0 0 1px rgb(18 32 43 / 0.07),
+    0 26px 44px -30px rgb(18 32 43 / 0.5);
+  transform: perspective(1100px) rotateX(var(--rx)) rotateY(var(--ry));
+  transition: transform 0.7s var(--spring);
+  will-change: transform;
+}
+
+.card.is-tilting {
+  transition: transform 0.18s var(--ease-out);
+}
+
+.card > :not(.card-art) {
+  padding-inline: clamp(14px, 1.8vw, 22px);
+}
+
+/* ---------- l'affiche ---------- */
+.card-art {
+  container-type: inline-size;
+  position: relative;
+  isolation: isolate;
+  aspect-ratio: 16 / 10;
+  margin-bottom: clamp(18px, 2vw, 26px);
+  border-radius: 24px;
+  overflow: hidden;
+  background: var(--art-bg);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.4), inset 0 1px 0 rgb(255 255 255 / 0.7);
+}
+
+/* manques d'encre (le papier qui perce) et grain de pellicule */
+.card-art::before,
+.card-art::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.card-art::before {
+  z-index: 3;
+  background: url('../assets/riso/speck.png') 30px 70px / 256px 256px repeat;
+  opacity: 0.9;
+}
+
+.card-art::after {
+  z-index: 4;
+  background: var(--grain-soft) 0 0 / 160px 160px repeat;
+  mix-blend-mode: soft-light;
+  opacity: 0.8;
+}
+
+.card-art .s {
+  position: absolute;
+  display: block;
+}
+
+/* trame de points sur la forme principale (demi-ton) */
+.card-art .s1::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(circle, rgb(40 0 20 / 0.32) 0 32%, transparent 38%) 0 0 / 1.5cqw 1.5cqw;
+  -webkit-mask-image: linear-gradient(200deg, transparent 38%, #000 110%);
+  mask-image: linear-gradient(200deg, transparent 38%, #000 110%);
+}
+
+/* Création : un soleil (jaune, corail) */
+.card--warm {
+  --art-bg: radial-gradient(70% 90% at 15% 10%, #ffe27a, transparent 62%), radial-gradient(70% 90% at 90% 95%, #ff8a7a, transparent 64%), linear-gradient(150deg, #ffbf6e, #ff7a6b);
+}
+
+.card--warm .s1 {
+  left: 9cqw;
+  top: 11cqw;
+  width: 44cqw;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #ff5a4a;
+  box-shadow: 1.2cqw 1cqw 0 rgb(45 70 220 / 0.55);
+}
+
+.card--warm .s2 {
+  left: 34cqw;
+  top: 21cqw;
+  width: 29cqw;
+  height: 39cqw;
+  box-sizing: border-box;
+  border: 4.6cqw solid #1a2a8f;
+  border-bottom: 0;
+  border-radius: 999px 999px 0 0;
+  box-shadow: 1cqw 0.9cqw 0 rgb(255 255 255 / 0.4);
+}
+
+.card--warm .s3 {
+  right: 5cqw;
+  bottom: 7cqw;
+  width: 15cqw;
+  height: 30cqw;
+  border-radius: 100% 0 0 100% / 50% 0 0 50%;
+  background: #fff4c8;
+  box-shadow: 1cqw 0.9cqw 0 rgb(255 90 74 / 0.6);
+}
+
+/* Refonte : un azur lumineux qui vire au canard */
+.card--blue {
+  --art-bg: radial-gradient(70% 90% at 10% 0%, #8fb0ff, transparent 62%), radial-gradient(70% 90% at 95% 95%, #38d6c2, transparent 64%), linear-gradient(150deg, #4f78ff, #1fb7d4);
+}
+
+.card--blue .s1 {
+  right: 8cqw;
+  top: 10cqw;
+  width: 30cqw;
+  height: 60cqw;
+  border-radius: 100% 0 0 100% / 50% 0 0 50%;
+  background: #ffcf4a;
+  box-shadow: 1.2cqw 1cqw 0 rgb(255 90 90 / 0.55);
+}
+
+.card--blue .s2 {
+  left: 14cqw;
+  top: 17cqw;
+  width: 34cqw;
+  height: 46cqw;
+  box-sizing: border-box;
+  border: 4.6cqw solid #fff;
+  border-bottom: 0;
+  border-radius: 999px 999px 0 0;
+  box-shadow: 1cqw 0.9cqw 0 rgb(20 40 150 / 0.45);
+}
+
+.card--blue .s3 {
+  left: 9cqw;
+  bottom: 9cqw;
+  width: 12cqw;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #ff5a4a;
+  box-shadow: 0.9cqw 0.8cqw 0 rgb(255 255 255 / 0.45);
+}
+
+/* Audit : une menthe qui vire au citron */
+.card--mint {
+  --art-bg: radial-gradient(70% 90% at 10% 5%, #7ff0cf, transparent 62%), radial-gradient(70% 90% at 95% 95%, #e4f58a, transparent 66%), linear-gradient(150deg, #45d6b4, #b6ea8e);
+}
+
+.card--mint .s1 {
+  left: 10cqw;
+  top: 9cqw;
+  width: 46cqw;
+  aspect-ratio: 1;
+  box-sizing: border-box;
+  border: 5cqw solid #14509a;
+  border-radius: 50%;
+  box-shadow: 1.2cqw 1cqw 0 rgb(255 90 74 / 0.55);
+}
+
+.card--mint .s2 {
+  right: 11cqw;
+  bottom: 9cqw;
+  width: 20cqw;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #ff5a4a;
+  box-shadow: 1cqw 0.9cqw 0 rgb(20 80 154 / 0.5);
+}
+
+.card--mint .s3 {
+  right: 8cqw;
+  top: 12cqw;
+  width: 22cqw;
+  height: 4.2cqw;
+  border-radius: 2cqw;
+  background: #fff;
+  box-shadow: 0.9cqw 0.8cqw 0 rgb(20 80 154 / 0.4);
+}
+
+/* ---------- le texte ---------- */
+.card-kicker {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--signal-deep);
+}
+
+.card-title {
+  margin-top: var(--space-2);
+  font-size: clamp(1.6rem, 2.6vw, 2.1rem);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+}
+
+.card-text {
+  margin-top: var(--space-4);
+  font-size: 16.5px;
+  line-height: 1.58;
+  color: var(--ink-soft);
+}
+
+.cards-cta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3) var(--space-6);
+  margin-top: clamp(32px, 5vw, 56px);
+}
+
+@media (max-width: 900px) {
+  .cards {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card {
+    transform: none;
+  }
+}
+
+/* ---------- Fond de la section ----------
+   Un blanc bleuté, frais, entre l'indigo de la section identité et la crème chaude de la méthode. */
+#services.tile--light {
+  background:
+    radial-gradient(70% 38% at 50% 0%, rgb(110 150 255 / 0.16), transparent 72%),
+    linear-gradient(180deg, #eef3fb 0%, #e8eff9 100%);
+}
+
+#methode.tile--light {
+  background: var(--paper);
+}

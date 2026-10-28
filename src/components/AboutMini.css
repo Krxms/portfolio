@@ -1,0 +1,139 @@
+.about-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
+  align-items: center;
+  gap: clamp(32px, 6vw, 96px);
+}
+
+/* Portrait : pas de cadre, la photo se dissout dans le fond par un masque doux (ellipse, plein au centre,
+   transparent sur les bords). Le gris de l'arrière-plan s'efface dans le mesh. */
+.portrait {
+  margin: 0;
+  max-width: 460px;
+  justify-self: center;
+}
+
+.portrait img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  /*mask-image: radial-gradient(ellipse 46% 49% at 50% 45%, #000 40%, rgb(0 0 0 / 0.8) 56%, rgb(0 0 0 / 0.42) 74%, rgb(0 0 0 / 0.12) 90%, transparent 100%);
+  mask-image: radial-gradient(ellipse 46% 49% at 50%; */
+}
+
+.about-copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.about-copy .tile-label {
+  margin-bottom: var(--space-2);
+}
+
+.about h2 {
+  max-width: none;
+  font-size: clamp(2.4rem, 5vw, 4rem);
+}
+
+.about-mark {
+  width: min(260px, 60%);
+  height: 18px;
+  margin-top: 6px;
+}
+
+.about-lead {
+  margin-top: var(--space-5);
+  max-width: 44ch;
+  font-size: clamp(1.15rem, 2vw, 1.4rem);
+  line-height: 1.5;
+}
+
+.about-values {
+  margin-top: var(--space-6);
+  padding-top: var(--space-5);
+  border-top: 1px solid rgb(255 255 255 / 0.2);
+  max-width: 58ch;
+}
+
+.about-values-label {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #d6f1e8;
+}
+
+.about-values h3 {
+  margin-top: var(--space-2);
+  font-size: clamp(1.25rem, 2.2vw, 1.6rem);
+  letter-spacing: -0.02em;
+}
+
+.about-values p:last-child {
+  margin-top: var(--space-3);
+  font-size: 16.5px;
+  line-height: 1.65;
+  color: rgb(255 255 255 / 0.94);
+}
+
+.about-zone {
+  margin-top: var(--space-6);
+  max-width: 52ch;
+  font-size: 16.5px;
+  line-height: 1.6;
+  color: rgb(255 255 255 / 0.96);
+}
+
+.about-zones {
+  list-style: none;
+  margin: var(--space-4) 0 var(--space-3);
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.about-zones li {
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 500;
+  background: rgb(255 255 255 / 0.12);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.3), inset 0 0 0 1px rgb(255 255 255 / 0.14);
+}
+
+@media (max-width: 860px) {
+  .about-grid {
+    grid-template-columns: 1fr;
+  }
+  .portrait {
+    max-width: 340px;
+  }
+}
+
+/* Portrait : coins arrondis et filet de verre épais (liseré clair, franges de dispersion) pour rejoindre le reste de la DA */
+.portrait {
+  position: relative;
+  border-radius: 32px;
+  box-shadow: 0 34px 70px -34px rgb(2 8 40 / 0.85);
+}
+
+.portrait img {
+  display: block;
+  border-radius: inherit;
+}
+
+.portrait::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / 0.28),
+    inset 0 1px 0 rgb(255 255 255 / 0.5),
+    inset 12px 0 18px -12px rgb(255 130 140 / 0.45),
+    inset -12px 0 18px -12px rgb(100 200 255 / 0.55);
+}

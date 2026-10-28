@@ -1,0 +1,49 @@
+---
+import './Hero.css';
+import './PageHero.css';
+import FrostedCTA from './FrostedCTA.astro';
+import LinkUnder from './LinkUnder.astro';
+
+/* Hero des pages de service : même langage que l'accueil (maillage, verre, bouton principal), mais autre
+   composition : texte aligné à gauche et exemple livré à droite, au lieu du bloc centré de l'accueil. */
+interface Props {
+  crumb: string;
+  kicker: string;
+  line1: string;
+  line2: string;
+  lead: string;
+  ctaHref: string;
+  ctaLabel: string;
+  linkHref?: string;
+  linkLabel?: string;
+  note?: string;
+}
+const hasVisual = Astro.slots.has("default");
+const { crumb, kicker, line1, line2, lead, ctaHref, ctaLabel, linkHref, linkLabel, note } = Astro.props;
+---
+
+<div class="hero-zone hero-zone--page" data-sticky-watch>
+  <div class={`wrap ph-grid${hasVisual ? "" : " ph-grid--solo"}`}>
+    <div class="ph-copy">
+      <nav class="ph-crumbs" aria-label="Fil d’Ariane">
+        <a href="/">Accueil</a><span aria-hidden="true">/</span><span aria-current="page">{crumb}</span>
+      </nav>
+      <h1>
+        <span class="ph-kicker">{kicker}</span>{' '}
+        <span class="ph-l1">{line1}</span>{' '}
+        <span class="ph-l2">{line2}</span>
+      </h1>
+      <p class="ph-lead">{lead}</p>
+      <div class="ph-actions">
+        <FrostedCTA href={ctaHref}>{ctaLabel}</FrostedCTA>
+        {linkHref && linkLabel && <LinkUnder href={linkHref} label={linkLabel} />}
+      </div>
+      {note && <p class="ph-note">{note}</p>}
+    </div>
+    {hasVisual && (
+      <div class="ph-visual">
+        <slot />
+      </div>
+    )}
+  </div>
+</div>
