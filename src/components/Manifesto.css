@@ -458,3 +458,62 @@
   -webkit-mask-image: radial-gradient(circle at 30% 26%, transparent 42%, #000 88%);
   mask-image: radial-gradient(circle at 30% 26%, transparent 42%, #000 88%);
 }
+
+@media (max-width: 760px) {
+  .manifesto-quote {
+    font-size: clamp(2rem, 9vw, 2.5rem);
+    max-width: 15ch;
+  }
+
+  .manifesto-lead {
+    margin-top: var(--space-4);
+    font-size: 1.04rem;
+    text-wrap: balance;
+  }
+
+  /* Le comparatif devient un carrousel qui déborde à droite : on voit que la carte suivante existe */
+  .versus {
+    display: flex;
+    gap: 14px;
+    margin: 28px calc(var(--edge) * -1) 0;
+    padding: 0 var(--edge) 6px;
+    max-width: none;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--edge);
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .versus::-webkit-scrollbar {
+    display: none;
+  }
+
+  .versus-card {
+    flex: 0 0 min(84%, 360px);
+    margin-bottom: 0;
+    scroll-snap-align: start;
+  }
+
+  .versus-card h3 {
+    margin: 18px 0 6px;
+  }
+
+  .versus-card li {
+    padding-block: 14px;
+    font-size: 15.5px;
+  }
+
+  .versus-card li::before {
+    top: calc(14px + 0.78em);
+  }
+
+  .versus-card--made li::before {
+    top: calc(14px + 0.6em);
+  }
+
+  .vs-mock {
+    max-width: none;
+  }
+}

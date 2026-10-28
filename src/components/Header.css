@@ -17,7 +17,7 @@
 
 @media (max-width: 560px) {
   .site-header {
-    height: 78px;
+    height: 64px;
   }
 }
 
@@ -282,8 +282,35 @@
 
 @media (max-width: 560px) {
   .header-nav {
-    top: 78px;
+    top: 72px;
     left: var(--space-3);
     right: var(--space-3);
+    max-height: calc(100svh - 72px - var(--space-3) - env(safe-area-inset-bottom));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: var(--space-2);
+    border-radius: 22px;
+  }
+
+  .header-nav a:not(.btn) {
+    min-height: 52px;
+    padding-inline: 16px;
+    border-radius: 14px;
+    font-size: 18px;
+  }
+
+  .header-nav a:not(.btn):active {
+    background: rgb(20 80 154 / 0.08);
+  }
+
+  .header-nav .btn {
+    min-height: 54px;
+    border-radius: 14px;
+    font-size: 17px;
+  }
+
+  .menu-btn {
+    min-height: 44px;
+    padding: 0 14px 0 16px;
   }
 }

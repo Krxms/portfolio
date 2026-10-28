@@ -9,10 +9,9 @@
     position: fixed;
     inset: auto 0 0 0;
     z-index: 30;
-    padding: 10px var(--edge) calc(10px + env(safe-area-inset-bottom));
-    background: color-mix(in srgb, var(--paper) 92%, transparent);
-    border-top: 1px solid var(--line);
-    transform: translateY(100%);
+    padding: 0 var(--space-4) calc(var(--space-3) + env(safe-area-inset-bottom));
+    pointer-events: none;
+    transform: translateY(140%);
     visibility: hidden;
     transition: transform 0.3s var(--ease-out), visibility 0s linear 0.3s;
   }
@@ -23,8 +22,21 @@
     transition: transform 0.3s var(--ease-out);
   }
 
+  /* une pastille de verre bleu qui flotte au-dessus du contenu, au pouce */
   .sticky-cta .btn {
+    pointer-events: auto;
     width: 100%;
+    max-width: 420px;
+    min-height: 56px;
     justify-content: center;
+    border-radius: 18px;
+    font-size: 17px;
+    background: linear-gradient(180deg, rgb(48 112 200 / 0.94), rgb(20 80 154 / 0.96));
+    -webkit-backdrop-filter: blur(14px) saturate(160%);
+    backdrop-filter: blur(14px) saturate(160%);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.4),
+      0 0 0 1px rgb(255 255 255 / 0.22),
+      0 18px 34px -12px rgb(8 30 80 / 0.55);
   }
 }

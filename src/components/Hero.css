@@ -144,3 +144,61 @@
     font-size: 15.5px;
   }
 }
+
+@media (max-width: 560px) {
+  .hero-zone {
+    min-height: 100svh;
+    padding-bottom: calc(var(--space-7) + env(safe-area-inset-bottom));
+  }
+
+  .hero {
+    gap: 18px;
+  }
+
+  .hero-role {
+    margin-bottom: 20px;
+    font-size: 0.95rem;
+    text-wrap: balance;
+  }
+
+  .hero h1 {
+    font-size: clamp(2.2rem, 10.2vw, 3rem);
+    line-height: 1;
+  }
+
+  .hero-sub {
+    margin-top: 6px;
+    font-size: 1.04rem;
+    line-height: 1.5;
+    text-wrap: balance;
+  }
+
+  .hero-sub br {
+    display: none;
+  }
+
+  /* le texte reste lisible quand une bulle de lave passe derrière */
+  .hero-role,
+  .hero-sub {
+    text-shadow: 0 0 14px rgb(245 243 234 / 0.85), 0 0 3px rgb(245 243 234 / 0.6);
+  }
+
+  .hero-actions {
+    align-self: stretch;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    gap: 12px;
+    margin-top: var(--space-4);
+  }
+
+  .hero-actions > * {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .hero-actions .link-under {
+    min-height: 54px;
+    font-size: 16.5px;
+  }
+}

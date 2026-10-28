@@ -189,3 +189,28 @@
   color: #d6f1e8;
 }
 
+@media (max-width: 560px) {
+  .tile {
+    padding-block: 56px;
+  }
+
+  .tile-head {
+    margin-bottom: 28px;
+  }
+
+  .tile h2 {
+    font-size: clamp(1.9rem, 8.6vw, 2.4rem);
+  }
+
+  .tile-sub {
+    margin-top: var(--space-3);
+    font-size: 1.04rem;
+  }
+
+  .tile-actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-3);
+    margin-top: var(--space-4);
+  }
+}

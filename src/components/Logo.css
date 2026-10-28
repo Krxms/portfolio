@@ -17,7 +17,7 @@
 @media (max-width: 560px) {
   .logo-mark {
     width: auto;
-    height: 46px;
+    height: 40px;
   }
   /* cible tactile de 44 px sans déplacer le logo à l'écran */
   .logo {

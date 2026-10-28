@@ -112,3 +112,25 @@
   }
 }
 
+
+/* Mobile : deux colonnes de liens, la marque et le contact sur toute la largeur, rien de superflu */
+@media (max-width: 560px) {
+  .footer-inner {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px 16px;
+    padding: 32px 0 20px;
+  }
+
+  .footer-brand,
+  .footer-contact {
+    grid-column: 1 / -1;
+  }
+
+  .footer-cta {
+    display: none;
+  }
+
+  .footer-bottom {
+    padding-bottom: calc(24px + env(safe-area-inset-bottom));
+  }
+}

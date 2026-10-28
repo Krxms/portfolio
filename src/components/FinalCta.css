@@ -67,3 +67,31 @@
   color: #fff;
   text-underline-offset: 3px;
 }
+
+@media (max-width: 560px) {
+  .cta-panel {
+    padding: 36px 20px;
+  }
+
+  .cta-final-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-4);
+    margin-top: var(--space-5);
+  }
+
+  .cta-final-row > * {
+    justify-content: center;
+  }
+
+  .cta-final-direct {
+    align-items: center;
+  }
+
+  .cta-facts {
+    margin-top: var(--space-5);
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-1);
+  }
+}

@@ -240,6 +240,47 @@
   }
 }
 
+/* Mobile : un carrousel qui déborde, la carte suivante dépasse. Le pouce parcourt les trois offres sans longue page. */
+@media (max-width: 700px) {
+  .cards {
+    display: flex;
+    gap: 14px;
+    margin-inline: calc(var(--edge) * -1);
+    padding: 4px var(--edge) 18px;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--edge);
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .cards::-webkit-scrollbar {
+    display: none;
+  }
+
+  .card {
+    flex: 0 0 min(82%, 340px);
+    scroll-snap-align: start;
+    border-radius: 28px;
+    transform: none;
+  }
+
+  .card-art {
+    margin-bottom: 18px;
+    border-radius: 20px;
+  }
+
+  .card-title {
+    font-size: 1.5rem;
+  }
+
+  .card-text {
+    font-size: 15.5px;
+    line-height: 1.55;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .card {
     transform: none;
@@ -256,4 +297,23 @@
 
 #methode.tile--light {
   background: var(--paper);
+}
+
+@media (max-width: 700px) {
+  .cards {
+    padding-bottom: 40px;
+    margin-bottom: -22px;
+  }
+
+  .cards-cta {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-3);
+    margin-top: var(--space-4);
+  }
+
+  .cards-cta > * {
+    justify-content: center;
+    text-align: center;
+  }
 }

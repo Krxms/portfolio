@@ -211,3 +211,27 @@ main:focus {
   transform: translateX(3px);
 }
 
+/* ---------- Mobile : comportement d'application ----------
+   Pas de flash gris au toucher, pas de zoom au double tap, pas de rebond qui révèle un fond blanc, texte non gonflé
+   par le navigateur. */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  html {
+    -webkit-tap-highlight-color: transparent;
+    overscroll-behavior-y: none;
+  }
+
+  a,
+  button,
+  .btn {
+    touch-action: manipulation;
+  }
+
+  .btn:active {
+    transform: scale(0.97);
+  }
+}
