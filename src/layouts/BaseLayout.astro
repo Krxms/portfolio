@@ -1,11 +1,13 @@
 ---
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import Loader from '../components/Loader.astro';
 import '../styles/fonts.css';
 import '../styles/tokens.css';
 import '../styles/global.css';
 import '../styles/sections.css';
 import '../styles/glass.css';
+import '../styles/motion.css';
 
 interface Props {
   title: string;
@@ -120,11 +122,13 @@ const jsonLd = {
         ...(isHome ? ['bricolage-grotesque-200-800'] : []),
       ].map((f) => <link rel="preload" href={`/fonts/${f}.woff2`} as="font" type="font/woff2" crossorigin />)
     }
+    {isHome && <script is:inline set:html={"(function(){try{var d=document.documentElement;var q=location.search.indexOf(\"loader\")>-1;var rm=matchMedia(\"(prefers-reduced-motion: reduce)\").matches;if(q||(!rm&&!sessionStorage.getItem(\"ld\")))d.classList.add(\"has-loader\")}catch(e){}})()"} />}
     <slot name="head" />
     {isHome && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
     {schema && <script type="application/ld+json" set:html={JSON.stringify(schema)} />}
   </head>
   <body>
+    {isHome && <Loader />}
     <a class="skip-link" href="#main">Aller au contenu</a>
     <svg class="glass-defs" width="0" height="0" aria-hidden="true" focusable="false">
       <filter id="liquid-glass" x="-30%" y="-30%" width="160%" height="160%" color-interpolation-filters="sRGB">
@@ -143,6 +147,11 @@ const jsonLd = {
       <filter id="ink" x="-10%" y="-30%" width="120%" height="160%" color-interpolation-filters="sRGB">
         <feTurbulence type="fractalNoise" baseFrequency="0.035 0.06" numOctaves="2" seed="3" result="grit" />
         <feDisplacementMap in="SourceGraphic" in2="grit" scale="3.2" xChannelSelector="R" yChannelSelector="G" />
+      </filter>
+      <!-- Légère irrégularité du geste : le trait se courbe très doucement, comme une main qui n'est jamais tout à fait droite -->
+      <filter id="wobble" x="-2%" y="-80%" width="104%" height="260%" color-interpolation-filters="sRGB">
+        <feTurbulence type="fractalNoise" baseFrequency="0.0045 0.012" numOctaves="2" seed="7" result="bend" />
+        <feDisplacementMap in="SourceGraphic" in2="bend" scale="9" xChannelSelector="R" yChannelSelector="G" />
       </filter>
     </svg>
     <Header />

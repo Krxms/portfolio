@@ -13,6 +13,18 @@
   background: transparent;
 }
 
+/* Effet « grès » : le grain d'une céramique émaillée, mouchetée de fer, avec un très léger relief (tools/stoneware-tile.mjs). Il
+   uniformise les sections claires (le pied de page porte le même, voir Footer.css) ; la tuile est raccordable, l'intensité se règle avec l'opacité. */
+.tile--light::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: url('../assets/riso/stoneware.webp') 0 0 / 512px 512px repeat;
+  opacity: 0.55;
+}
+
 /* Performance : le verre dépoli des grandes zones sombres n'utilise PAS backdrop-filter. Floutter un dégradé déjà
    parfaitement lisse ne change rien à l'œil, mais recalculer ce flou sur plusieurs milliers de pixels à chaque
    image de défilement rendait le scroll lourd. Le rendu laiteux vient du voile, du grain et de l'arête lumineuse.
@@ -120,7 +132,7 @@
 }
 
 .tile--dark .tile-label {
-  color: #d6f1e8;
+  color: var(--cream);
 }
 
 .tile h2 {
@@ -186,7 +198,7 @@
 }
 
 .tile--dark .more {
-  color: #d6f1e8;
+  color: var(--cream);
 }
 
 @media (max-width: 560px) {
@@ -209,8 +221,13 @@
 
   .tile-actions {
     flex-direction: column;
-    align-items: stretch;
+    align-items: center;
     gap: var(--space-3);
     margin-top: var(--space-4);
+  }
+
+  .tile-actions > * {
+    width: min(100%, 300px);
+    justify-content: center;
   }
 }

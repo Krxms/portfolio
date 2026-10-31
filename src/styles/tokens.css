@@ -1,7 +1,38 @@
+/* ============================================================
+   Palette : primitives (teintes brutes), puis rôles. On écrit un rôle, jamais une teinte.
+   Source : fichier Figma « Portfolio AB — UX/UI Design » et design-system/tokens.json.
+   ============================================================ */
 :root {
+  /* Primitives */
+  --color-ink-50: #f4f6f8; --color-ink-100: #e8ebef; --color-ink-200: #d5dae0; --color-ink-300: #b4bcc5; --color-ink-400: #8b96a2;
+  --color-ink-500: #6b7885; --color-ink-600: #4a5864; --color-ink-700: #3a4955; --color-ink-800: #25323e; --color-ink-900: #12202b;
+  --color-paper-white: #ffffff; --color-paper-card: #fffefa; --color-paper-base: #f5f3ea; --color-paper-soft: #ecebdf; --color-paper-cool: #f2f4f7; --color-paper-mist: #eef3fb;
+  --color-klein-50: #eef2fe; --color-klein-100: #dce5fd; --color-klein-200: #b8cbfb; --color-klein-300: #8ca8f6; --color-klein-400: #5f83ee; --color-klein-500: #386beb;
+  --color-klein-600: #1f45d6; --color-klein-700: #1a37a8; --color-klein-800: #13247c; --color-klein-900: #0b2170; --color-klein-950: #081742;
+  --color-cerulean-50: #eef5fb; --color-cerulean-100: #d4e5f6; --color-cerulean-200: #a9ccec; --color-cerulean-300: #7fb0e0; --color-cerulean-400: #4f8ccb;
+  --color-cerulean-500: #2b6fb5; --color-cerulean-600: #14509a; --color-cerulean-700: #0f4280; --color-cerulean-800: #0c3a73; --color-cerulean-900: #0a2d59;
+  --color-lagoon-500: #1f94bf; --color-lagoon-400: #3daac9; --color-lagoon-300: #6cc4dc;
+  --color-mint-100: #d6f1e8; --color-mint-300: #86e6d8; --color-mint-500: #27b3a3;
+  --color-violet-400: #836ce8; --color-violet-500: #6b4de0; --color-violet-800: #2a1c70; --color-orchid-300: #cda3ee; --color-orchid-500: #9e5cdb;
+  --color-cream-100: #fff6cf; --color-cream-200: #fff0b3; --color-cream-300: #ffe48a; --color-cream-400: #f1c14f; --color-cream-500: #f5a02a;
+  --color-corail-200: #ffd9c4; --color-corail-300: #ffb48a; --color-corail-500: #f16141; --color-corail-600: #b83f25;
+  --color-status-danger: #9b1c1c; --color-status-ok: #3d6a4b;
+
+  /* Rôles (mode clair) */
+  --color-surface-page: var(--color-paper-base);
+  --color-surface-card: var(--color-paper-card);
+  --color-text-primary: var(--color-ink-900);
+  --color-text-secondary: var(--color-ink-700);
+  --color-text-muted: var(--color-ink-600);
+  --color-text-accent: var(--color-cerulean-600);
+  --color-action-primary: var(--color-cerulean-600);
+  --color-focus-ring: var(--color-cerulean-800);
+  --color-brand-mark: var(--color-corail-500);
+
   /* Base neutrals — crème légèrement verte / encre bleu-nuit (ni blanc ni noir purs) */
   --paper: #f5f3ea;
   --paper-soft: #ecebdf;
+  --paper-cool: #f2f4f7;
   --ink: #12202b;
   --ink-soft: #3a4955;
   --muted: #4a5864;
@@ -9,12 +40,15 @@
   --line-strong: rgba(40, 28, 51, 0.26);
 
   /* Accent signature — bleu klein tiré vers le vert */
-  --signal: #14509a;
-  --signal-deep: #0c3a73;
+  --signal: var(--color-cerulean-600);
+  --signal-deep: var(--color-cerulean-800);
   --signal-ink: #f7fbff;
 
+  /* Accent clair, pour les touches d'accentuation sur fond sombre (mot-clé du manifeste, nom, zones, survol des CTA) */
+  --cream: var(--color-cream-200);
+
   /* Logo navy — used sparingly for continuity with the mark */
-  --brand-navy: #202559;
+  --brand-navy: var(--color-klein-800);
 
   /* Slate — Hello */
   --slate: #506180;
@@ -23,8 +57,8 @@
   --nav-bg: #eceee4;
 
   /* Tracés faits main (une seule famille) : abricot sur clair, plus clair sur sombre */
-  --mark: #e8764f;
-  --mark-on-dark: #ffb48a;
+  --mark: var(--color-corail-500);
+  --mark-on-dark: var(--color-corail-300);
 
   /* Grain : bruit fin, posé sur le fond et sur les tuiles sombres */
   --grain-soft: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");

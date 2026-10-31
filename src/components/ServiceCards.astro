@@ -5,24 +5,27 @@ const cards = [
   {
     tone: 'warm',
     mark: 'sparkle',
+    href: '/creation-site-web/',
     kicker: 'Création de site',
-    title: 'Votre site, pensé pour vous.',
-    text: 'À partir de vos besoins : Structure, maquettes, intégration, SEO, optimisation IA, mise en ligne.',
+    title: 'Un site neuf, bâti sur vos besoins.',
+    text: 'Structure, maquettes, intégration, SEO et optimisation IA, jusqu’à la mise en ligne. Un seul interlocuteur, trois à cinq semaines.',
   },
   {
     tone: 'blue',
     mark: 'loop',
+    href: '/refonte-site-web/',
     kicker: 'Refonte de site',
     title: 'Votre site ne vous ressemble plus.',
-    text: 'Ou il ne répond plus à vos besoins. On commence par un audit, puis je reconstruis ce qui doit l’être.',
+    text: 'Vieilli, décalé de votre activité ? Je commence par un audit, puis je ne refais que ce qui le mérite, sans perdre votre référencement.',
   },
   {
     tone: 'mint',
     mark: 'lens',
+    href: '/audit-ux-ui/',
     kicker: 'Audit UX/UI',
     title: 'Voir clair avant de décider.',
-    text: 'Je parcours votre site, repère ce qui freine et classe les corrections par priorité.',
-    note: ' Le montant de l’audit est déduit du projet si nous poursuivons ensemble.',
+    text: 'Je parcours votre site, je repère ce qui freine vos visiteurs et je classe les corrections par priorité, restitution en visio comprise.',
+    note: ' Son montant est déduit du projet si nous poursuivons ensemble.',
   },
 ] as const;
 ---
@@ -33,7 +36,7 @@ const cards = [
       <li class={`card card--${c.tone}`} data-tilt>
         <div class="card-art" aria-hidden="true"><i class="s s1"></i><i class="s s2"></i><i class="s s3"></i></div>
         <p class="card-kicker">{c.kicker}</p>
-        <h3 class="card-title">{c.title}</h3>
+        <h3 class="card-title"><a class="card-hit" href={c.href}>{c.title}</a></h3>
         <p class="card-text">
           {c.text}
           {c.note && <span class="card-note">{c.note}</span>}
@@ -44,7 +47,7 @@ const cards = [
 </ul>
 
 <script>
-  // Parallaxe très légère : seule la carte s'incline de quelques degrés vers le pointeur, son texte
+  // Parallaxe très légère : seule la carte s'incline de deux degrés au plus vers le pointeur, son texte
   // reste collé à elle. Désactivée au tactile et avec « réduire les animations ».
   const fine = matchMedia('(hover: hover) and (pointer: fine)').matches;
   const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -58,8 +61,8 @@ const cards = [
         cancelAnimationFrame(frame);
         frame = requestAnimationFrame(() => {
           card.classList.add('is-tilting');
-          card.style.setProperty('--rx', `${(-y * 5).toFixed(2)}deg`);
-          card.style.setProperty('--ry', `${(x * 5).toFixed(2)}deg`);
+          card.style.setProperty('--rx', `${(-y * 2).toFixed(2)}deg`);
+          card.style.setProperty('--ry', `${(x * 2).toFixed(2)}deg`);
         });
       });
       card.addEventListener('pointerleave', () => {

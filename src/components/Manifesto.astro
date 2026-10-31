@@ -3,20 +3,22 @@ import './Tile.css';
 import './Manifesto.css';
 import ProgressiveBlur from './ProgressiveBlur.astro';
 
-const flat = ['Une structure pensée pour convenir au plus grand nombre.', 'Vos contenus adaptés à une structure déjà définie.', 'Performance et référencement traités selon des réglages standards.'];
-const made = ['Une structure pensée autour de vos clients et de leurs attentes.', 'Contenus, parcours et interface conçus ensemble.', 'Performance et référencement intégrés dès la conception.'];
+const flat = ['Une structure générique, la même que celle de milliers d’autres sites.', 'Vos contenus rentrent dans des cases prévues d’avance.', 'Performance et référencement laissés aux réglages par défaut.'];
+const made = ['Une structure bâtie autour de ce que vos clients cherchent.', 'Textes, parcours et interface pensés ensemble, pas l’un après l’autre.', 'Performance et référencement prévus dès la première maquette.'];
 
 ---
 
 <section class="tile tile--dark manifesto" id="manifeste" aria-labelledby="manifeste-title">
   <ProgressiveBlur toward="top" />
+  {/* effet halftone désactivé : <div class="riso-layer" aria-hidden="true"></div> */}
+  <div class="grain-layer" aria-hidden="true"></div>
   <div class="wrap tile-inner">
     <h2 id="manifeste-title" class="manifesto-quote">
-      Que reste-t-il de votre <em class="manifesto-word">identité de marque</em> quand tout se ressemble ?
+      Que reste-t-il de votre <em class="manifesto-word">identité</em> quand tout se ressemble ?
     </h2>
     <p class="manifesto-lead">
       Votre projet commence par une conversation, pas par un modèle.<br>
-      Comprendre votre activité, vos enjeux et ce qui vous distingue pour concevoir un produit efficace et différenciant.
+      Je cherche d’abord ce qui vous distingue de vos concurrents, puis je dessine le site à partir de là.
     </p>
 
     <div class="versus">
@@ -25,7 +27,7 @@ const made = ['Une structure pensée autour de vos clients et de leurs attentes.
           <i class="vs-bar"></i>
           <div class="vs-bricks"><i></i><i></i><i></i><i></i><i></i><i></i></div>
         </div>
-        <h3>Un modèle</h3>
+        <h3>Un site sur modèle</h3>
         <ul role="list">{flat.map((t) => <li>{t}</li>)}</ul>
       </article>
 

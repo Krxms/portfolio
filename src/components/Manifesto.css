@@ -17,7 +17,7 @@
   font-style: normal;
   font-weight: 700;
   letter-spacing: -0.03em;
-  color: #86e6d8;
+  color: var(--cream);
 }
 
 .manifesto-lead {
@@ -61,43 +61,20 @@
 
 .versus-card li {
   position: relative;
-  padding: 17px 0 17px 32px;
+  padding: 17px 0;
   border-top: 1px solid rgb(255 255 255 / 0.16);
   font-size: 16.5px;
   line-height: 1.5;
 }
 
-.versus-card li::before {
-  content: '';
-  position: absolute;
-  left: 2px;
-  top: calc(17px + 0.78em);
-}
-
-/* À gauche : le modèle, en retrait (texte atténué, tiret) */
+/* À gauche : le modèle, en retrait (texte atténué) */
 .versus-card--flat li {
   color: rgb(255 255 255 / 0.76);
 }
 
-.versus-card--flat li::before {
-  width: 10px;
-  height: 2px;
-  border-radius: 2px;
-  background: rgb(255 255 255 / 0.5);
-}
-
-/* À droite : le site conçu pour vous, en avant (texte blanc, coche) */
+/* À droite : le site conçu pour vous, en avant (texte blanc) */
 .versus-card--made li {
   color: #fff;
-}
-
-.versus-card--made li::before {
-  width: 11px;
-  height: 6px;
-  top: calc(17px + 0.6em);
-  border-left: 2px solid #86e6d8;
-  border-bottom: 2px solid #86e6d8;
-  transform: rotate(-45deg);
 }
 
 /* ---------- Les deux maquettes (à plat, sans perspective) ----------
@@ -155,7 +132,7 @@
   width: var(--w);
   height: 16%;
   border-radius: 8px;
-  background: #d6f1e8;
+  background: var(--cream);
 }
 
 /* Une balle : cercle parfait, qui se déforme au rebond (voir blob-drop) */
@@ -337,7 +314,39 @@
   overflow-x: clip;
 }
 
-/* Aucune texture sur le fond de la section : seul reste le voile sombre qui donne du contraste au texte */
+/* Grain de risographie, le même que sur « Qui suis-je » : les manques d'encre (le papier qui perce) et le grain de pellicule,
+   nul en haut de la section et plein en bas */
+.manifesto > .grain-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    var(--grain-soft) 0 0 / 160px 160px repeat,
+    url('../assets/riso/speck.png') 30px 70px / 256px 256px repeat;
+  background-blend-mode: soft-light, normal;
+  opacity: 0.55;
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, rgb(0 0 0 / 0.25) 45%, #000 100%);
+  mask-image: linear-gradient(180deg, transparent 0%, rgb(0 0 0 / 0.25) 45%, #000 100%);
+}
+
+/* Risographie : un vrai grain de papier imprimé (demi-teinte fine, poussières), tiré d'un scan (tools/riso-paper-tile.mjs). Deux encres,
+   points clairs et points sombres, posées sur le bleu ; nul en haut de la section (le bas de la Hero y transparaît) et plein en bas.
+   Elle est sous le grain de pellicule (.grain-layer), qui passe par-dessus. */
+/* Effet halftone désactivé (à réactiver en retirant ce commentaire) :
+.manifesto > .riso-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: url('../assets/riso/paper-halftone.webp') 0 0 / 760px 760px repeat;
+  opacity: 0.18;
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, rgb(0 0 0 / 0.5) 30%, #000 100%);
+  mask-image: linear-gradient(180deg, transparent 0%, rgb(0 0 0 / 0.5) 30%, #000 100%);
+}
+*/
+
+/* Aucune autre texture sur le fond de la section : seul reste le voile sombre qui donne du contraste au texte */
 .manifesto.tile--dark::after {
   background: linear-gradient(180deg, rgb(2 12 20 / 0.3), rgb(2 12 20 / 0.24));
   background-blend-mode: normal;
@@ -435,7 +444,7 @@
   --sx: 90px;
   --sy: 200px;
   --mis: 0.3cqw 0.3cqw 0 rgb(80 130 255 / 0.8);
-  background: linear-gradient(180deg, #ffd864, #f5a02a);
+  background: linear-gradient(180deg, var(--color-cream-400), #f5a02a);
 }
 
 .vs-mock--made .vs-btn {
@@ -476,12 +485,11 @@
     display: flex;
     gap: 14px;
     margin: 28px calc(var(--edge) * -1) 0;
-    padding: 0 var(--edge) 6px;
+    padding: 0 0 6px;
     max-width: none;
     overflow-x: auto;
     overscroll-behavior-x: contain;
     scroll-snap-type: x mandatory;
-    scroll-padding-inline: var(--edge);
     scrollbar-width: none;
     -webkit-overflow-scrolling: touch;
   }
@@ -490,10 +498,17 @@
     display: none;
   }
 
+  /* chaque carte s'arrête au centre de l'écran, y compris la première et la dernière : deux cales (comme sur les offres) */
+  .versus::before,
+  .versus::after {
+    content: '';
+    flex: 0 0 max(0px, calc((100vw - min(82vw, 340px)) / 2 - 14px));
+  }
+
   .versus-card {
-    flex: 0 0 min(84%, 360px);
+    flex: 0 0 min(82vw, 340px);
     margin-bottom: 0;
-    scroll-snap-align: start;
+    scroll-snap-align: center;
   }
 
   .versus-card h3 {
@@ -503,14 +518,6 @@
   .versus-card li {
     padding-block: 14px;
     font-size: 15.5px;
-  }
-
-  .versus-card li::before {
-    top: calc(14px + 0.78em);
-  }
-
-  .versus-card--made li::before {
-    top: calc(14px + 0.6em);
   }
 
   .vs-mock {

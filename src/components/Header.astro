@@ -20,20 +20,23 @@ const isCurrent = (href: string) => (href === '/' ? path === '/' : path.startsWi
   <div class="wrap header-inner">
     <Logo />
     <button class="menu-btn" type="button" aria-expanded="false" aria-controls="site-nav" data-menu-btn>
-      <span class="menu-btn-label">Menu</span>
+      <span class="visually-hidden" data-menu-label>Ouvrir le menu</span>
       <span class="menu-btn-bars" aria-hidden="true"><i></i><i></i></span>
     </button>
     <nav class="header-nav" id="site-nav" aria-label="Navigation principale">
       <div class="nav-links">
         {
-          links.map((l) => (
-            <a href={l.href} data-text={l.label} class={l.cls} aria-current={isCurrent(l.href) ? 'page' : undefined}>
+          links.map((l, i) => (
+            <a href={l.href} data-text={l.label} class={l.cls} style={`--i:${i}`} aria-current={isCurrent(l.href) ? 'page' : undefined}>
               <span class="nl"><span class="nl-a">{l.label}</span><span class="nl-b" aria-hidden="true">{l.label}</span></span>
             </a>
           ))
         }
       </div>
-      <a class="btn btn-primary" href="/contact/">Me contacter</a>
+      <a class="btn btn-primary" href="/contact/" style="--i:7">Me contacter</a>
+      <p class="nav-direct" style="--i:8">
+        <a href="tel:+33609111838">Appeler directement</a>
+      </p>
     </nav>
   </div>
 </header>
@@ -42,11 +45,19 @@ const isCurrent = (href: string) => (href === '/' ? path === '/' : path.startsWi
   const header = document.querySelector<HTMLElement>('[data-header]');
   const btn = document.querySelector<HTMLButtonElement>('[data-menu-btn]');
   if (header && btn) {
+    const label = header.querySelector<HTMLElement>('[data-menu-label]');
     const set = (open: boolean) => {
       header.toggleAttribute('data-open', open);
+      document.documentElement.toggleAttribute('data-nav-open', open);
       btn.setAttribute('aria-expanded', String(open));
+      if (label) label.textContent = open ? 'Fermer le menu' : 'Ouvrir le menu';
     };
     btn.addEventListener('click', () => set(!header.hasAttribute('data-open')));
+    // un toucher sur le voile (hors feuille) ferme le menu
+    header.querySelector('.header-inner')?.addEventListener('click', (e) => {
+      if (e.target === e.currentTarget && header.hasAttribute('data-open')) set(false);
+    });
+    matchMedia('(min-width: 1201px)').addEventListener('change', (e) => e.matches && set(false));
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && header.hasAttribute('data-open')) {
         set(false);

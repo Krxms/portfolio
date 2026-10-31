@@ -14,13 +14,29 @@ const { href = '/contact/' } = Astro.props;
 <script>
   // Visible tant qu'aucune zone marquée data-sticky-watch (hero, CTA final) n'est à l'écran.
   const bar = document.querySelector<HTMLElement>('[data-sticky-cta]');
-  const watched = document.querySelectorAll('[data-sticky-watch], .site-footer');
+  const watched = document.querySelectorAll('[data-sticky-watch]:not(.hero), .site-footer');
   if (bar && 'IntersectionObserver' in window && watched.length) {
     const inView = new Set<Element>();
+    // La Hero reste épinglée derrière les sections (effet rideau) : elle est « à l'écran » tant qu'on n'a pas défilé d'un
+    // demi-écran, pas tant qu'elle intersecte la fenêtre.
+    let heroShown = scrollY < innerHeight * 0.5;
+    const update = () => bar.classList.toggle('is-visible', !heroShown && inView.size === 0);
     const io = new IntersectionObserver((entries) => {
       entries.forEach((e) => (e.isIntersecting ? inView.add(e.target) : inView.delete(e.target)));
-      bar.classList.toggle('is-visible', inView.size === 0);
+      update();
     });
     watched.forEach((el) => io.observe(el));
+    addEventListener(
+      'scroll',
+      () => {
+        const shown = scrollY < innerHeight * 0.5;
+        if (shown !== heroShown) {
+          heroShown = shown;
+          update();
+        }
+      },
+      { passive: true },
+    );
+    update();
   }
 </script>

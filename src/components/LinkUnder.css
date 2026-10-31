@@ -56,3 +56,70 @@
     text-decoration: underline;
   }
 }
+
+/* Mobile : le lien secondaire de « Ce que je peux faire » (hors Hero, qui a déjà sa pastille) prend la forme d'une pastille
+   de verre, même gabarit que les boutons. Le lien de « Qui suis-je » reste un texte souligné. */
+@media (max-width: 700px) {
+  .cards-cta .link-under {
+    box-sizing: border-box;
+    justify-content: center;
+    min-height: 50px;
+    padding: 0 22px;
+    border: 1px solid var(--signal);
+    border-radius: 12px;
+    background: rgb(255 255 255 / 0.55);
+    -webkit-backdrop-filter: blur(10px) saturate(140%);
+    backdrop-filter: blur(10px) saturate(140%);
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.7);
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  .cards-cta .link-under:hover,
+  .cards-cta .link-under:focus-visible {
+    background-size: auto;
+    font-weight: 600;
+    color: var(--ink);
+  }
+}
+
+/* Version « flèche » : le libellé suivi d'une flèche dans un rond, sans soulignement. Au survol (ou au clavier), le rond
+   se remplit et la flèche avance de quelques pixels. */
+.link-under--arrow {
+  gap: 12px;
+  padding-bottom: 0;
+  background: none;
+}
+
+.link-under--arrow:hover,
+.link-under--arrow:focus-visible {
+  background: none;
+  font-weight: 600;
+  color: inherit;
+}
+
+.link-under-arrow {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, currentColor 45%, transparent);
+  transition: background-color 0.4s var(--ease-out), border-color 0.4s var(--ease-out), color 0.4s var(--ease-out), transform 0.5s var(--ease-out);
+}
+
+.link-under--arrow:hover .link-under-arrow,
+.link-under--arrow:focus-visible .link-under-arrow {
+  background: var(--lu-fill);
+  border-color: var(--lu-fill);
+  color: #06133f;
+  transform: translateX(4px);
+}
+
+.link-under--arrow:focus-visible {
+  outline: 3px solid var(--lu-fill);
+  outline-offset: 4px;
+  border-radius: 999px;
+}

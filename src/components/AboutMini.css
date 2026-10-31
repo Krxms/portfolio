@@ -62,7 +62,7 @@
   font-weight: 600;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: #d6f1e8;
+  color: #fff;
 }
 
 .about-values h3 {
@@ -97,6 +97,7 @@
 
 .about-zones li {
   padding: 6px 14px;
+  color: #fff;
   border-radius: 999px;
   font-size: 14px;
   font-weight: 500;
@@ -122,6 +123,10 @@
 
 .portrait img {
   display: block;
+  border-radius: inherit;
+}
+
+.portrait-frame {
   border-radius: inherit;
 }
 
@@ -167,3 +172,122 @@
     margin-top: var(--space-5);
   }
 }
+
+/* Moins de vide entre « Comment se passe un projet » et « Qui suis-je » */
+.dark-zone > .tile.about {
+  padding-top: clamp(40px, 7vw, 96px);
+}
+
+@media (max-width: 860px) {
+  /* le portrait un peu plus petit, centré ; le contenu un peu plus étroit : plus d'air de chaque côté */
+  .portrait {
+    width: 84%;
+    margin-inline: auto;
+  }
+
+  .about > .wrap {
+    padding-inline: calc(var(--edge) + 6px);
+  }
+}
+
+@media (max-width: 560px) {
+  .dark-zone > .tile.about {
+    padding-top: 32px;
+  }
+}
+
+/* Les zones à gauche, le lien « En savoir plus » et sa flèche à droite, sur la même ligne. */
+.about-zones-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+  align-self: stretch;
+  margin-top: var(--space-4);
+}
+
+.about-zones-row .about-zones {
+  flex: 0 1 auto;
+  min-width: 0;
+  margin: 0;
+}
+
+.about-zones-row .link-under {
+  flex: none;
+  margin: 0;
+}
+
+/* Survol : le rond de la flèche se remplit d'un orange doux, et le libellé prend la même couleur */
+.about-zones-row .link-under--arrow {
+  --lu-fill: #ffa65a;
+}
+.about-zones-row .link-under--arrow .link-under-text {
+  transition: color 0.4s var(--ease-out);
+}
+.about-zones-row .link-under--arrow:hover .link-under-text,
+.about-zones-row .link-under--arrow:focus-visible .link-under-text {
+  color: var(--lu-fill);
+}
+/* le rond se remplit progressivement, par la gauche */
+.about-zones-row .link-under-arrow {
+  background: linear-gradient(var(--lu-fill), var(--lu-fill)) 0 0 / 0% 100% no-repeat;
+  transition:
+    background-size 0.55s var(--ease-out),
+    border-color 0.4s var(--ease-out),
+    color 0.4s var(--ease-out),
+    box-shadow 0.5s var(--ease-out),
+    transform 0.5s var(--ease-out);
+}
+.about-zones-row .link-under--arrow:hover .link-under-arrow,
+.about-zones-row .link-under--arrow:focus-visible .link-under-arrow {
+  background: linear-gradient(var(--lu-fill), var(--lu-fill)) 0 0 / 100% 100% no-repeat;
+  box-shadow: 0 0 18px -4px rgb(255 150 60 / 0.5);
+}
+
+/* Mobile et tablette : la flèche seule (le libellé reste pour les lecteurs d'écran). L'espace entre les zones et la flèche est
+   plus grand que celui entre les zones, pour que la flèche se lise comme une action à part. Le libellé reste pour les
+   lecteurs d'écran. */
+@media (max-width: 860px) {
+  .about-zones-row .link-under {
+    position: relative;
+    justify-content: center;
+    min-width: 48px;
+    min-height: 48px;
+  }
+
+  .about-zones-row .link-under-text {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .about-zones-row .link-under-arrow {
+    width: 44px;
+    height: 44px;
+  }
+}
+
+/* Plus d'air entre « Qui suis-je » et « Parlons de votre projet » : les deux blocs se lisent séparément */
+.dark-zone > .tile.about {
+  padding-bottom: clamp(64px, 9vw, 128px);
+}
+
+.dark-zone > .tile.tile--dark.cta-final {
+  padding-top: clamp(16px, 3vw, 40px);
+}
+
+/* Risographie : le même grain de papier imprimé que sur le manifeste (tools/riso-paper-tile.mjs), très léger. Même quantité du haut en bas de la section. */
+/* Effet halftone désactivé (à réactiver en retirant ce commentaire) :
+.about > .riso-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: url('../assets/riso/paper-halftone.webp') 0 0 / 760px 760px repeat;
+  opacity: 0.18;
+}
+*/
+

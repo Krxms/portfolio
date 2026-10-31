@@ -9,43 +9,46 @@ const zones = ['Yvelines', 'Val-d’Oise', 'Oise'];
 ---
 
 <section class="tile tile--dark tile--mesh-b about" id="qui-suis-je" aria-labelledby="about-title">
+  {/* effet halftone désactivé : <div class="riso-layer" aria-hidden="true"></div> */}
   <div class="wrap tile-inner about-grid">
     <figure class="portrait">
-      <img
-        src={portrait.src}
-        width={portrait.width}
-        height={portrait.height}
-        alt="Portrait d’Antoine Bruneau, webdesigner et designer UX/UI freelance"
-        loading="lazy"
-        decoding="async"
-      />
+      <div class="portrait-frame">
+        <img
+          src={portrait.src}
+          width={portrait.width}
+          height={portrait.height}
+          alt="Portrait d’Antoine Bruneau, webdesigner et designer UX/UI freelance"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
     </figure>
 
     <div class="about-copy">
       <p class="tile-label">Qui suis-je ?</p>
       <h2 id="about-title">Antoine Bruneau</h2>
       <p class="about-lead">
-        Spécialiste du web, j’accompagne les entreprises dans leur quête de visibilité digitale. Offrant des services
-        complets, de la conception de sites internet avec audit et design UX/UI et SEO.
+        Je suis webdesigner et designer UX/UI, à mon compte depuis 2017. Je m’occupe du site de A à Z : audit, design,
+        intégration et référencement.
       </p>
 
       <div class="about-values">
-        <p class="about-values-label">Mes valeurs</p>
-        <h3>Confiance, écoute et disponibilité</h3>
+        <p class="about-values-label">Ma façon de travailler</p>
+        <h3>Un seul interlocuteur, des réponses claires</h3>
         <p>
-          À mon compte depuis 2017, j’accompagne des entreprises variées dans leur stratégie digitale. Parce que le
-          numérique doit être au service de l’humain, je mets un point d’honneur à collaborer dans un cadre de confiance
-          et d’écoute pour vous proposer les meilleures prestations adaptées à vos besoins.
+          Je travaille seul : vous parlez toujours à la personne qui conçoit votre site. J’explique mes choix en termes
+          simples et je réponds vite, sous 24 h ouvrées.
         </p>
       </div>
 
       <p class="about-zone">
-        Tous les services d’une agence web dans les Yvelines (78), avec la flexibilité, la proximité et la réactivité d’un
-        freelance.
+        Basé à Guitrancourt (78), je travaille avec des entreprises des Yvelines, du Val-d’Oise, de l’Oise et du reste de la
+        France, à distance.
       </p>
-      <ul class="about-zones" role="list">{zones.map((z) => <li>{z}</li>)}</ul>
-
-      <LinkUnder href="/a-propos/" label="En savoir plus sur moi" tone="light" />
+      <div class="about-zones-row">
+        <ul class="about-zones" role="list">{zones.map((z) => <li>{z}</li>)}</ul>
+        <LinkUnder href="/a-propos/" label="En savoir plus" tone="light" arrow />
+      </div>
     </div>
   </div>
 </section>

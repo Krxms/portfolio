@@ -26,11 +26,11 @@
   .sticky-cta .btn {
     pointer-events: auto;
     width: 100%;
-    max-width: 420px;
-    min-height: 56px;
+    max-width: 320px;
+    min-height: 52px;
     justify-content: center;
     border-radius: 18px;
-    font-size: 17px;
+    font-size: 16.5px;
     background: linear-gradient(180deg, rgb(48 112 200 / 0.94), rgb(20 80 154 / 0.96));
     -webkit-backdrop-filter: blur(14px) saturate(160%);
     backdrop-filter: blur(14px) saturate(160%);

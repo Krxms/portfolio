@@ -13,24 +13,24 @@ import Process from '../components/Process.astro';
 import AboutMini from '../components/AboutMini.astro';
 import FinalCta from '../components/FinalCta.astro';
 import StickyCta from '../components/StickyCta.astro';
-import LinkUnder from '../components/LinkUnder.astro';
+import '../styles/scenes.css';
 
 const steps = [
   {
     title: 'Échange',
-    text: 'Nous parlons de votre activité, de vos clients et de ce que le site doit permettre, par téléphone, visio ou email.',
+    text: 'Vous me parlez de votre activité, de vos clients et de ce que le site doit vous apporter. Par téléphone, en visio ou par e-mail.',
   },
   {
     title: 'Audit et cadrage',
-    text: "Pour une refonte, je commence par auditer l'existant. Une fois le devis signé et l'acompte versé, nous fixons la structure : quelles pages, quel contenu sur chacune.",
+    text: 'Pour une refonte, je commence par auditer l’existant. Après la signature du devis et l’acompte, nous fixons la structure : quelles pages, avec quel contenu.',
   },
   {
     title: 'Conception',
-    text: "Je dessine les écrans pour ordinateur et pour mobile. Vous me donnez vos retours, j'ajuste.",
+    text: 'Je dessine les écrans pour ordinateur et mobile. Vous réagissez, j’ajuste jusqu’à votre validation.',
   },
   {
     title: 'Réalisation',
-    text: "J'intègre, je teste sur plusieurs écrans et je mets en ligne. Le solde est dû à la livraison.",
+    text: 'Je construis le site, je le teste sur plusieurs écrans et je le mets en ligne. Le solde est dû à la livraison.',
   },
 ];
 ---
@@ -39,6 +39,7 @@ const steps = [
   title="Antoine Bruneau"
   description="Webdesigner et designer UX/UI freelance dans les Yvelines : création de site, refonte et audit UX/UI. À distance partout en France. Devis gratuit."
 >
+  <div class="curtain">
   <div class="hero-zone">
     <LavaBackground />
     <ProgressiveBlur toward="bottom" />
@@ -49,22 +50,22 @@ const steps = [
   </div>
 
   <Manifesto />
+  </div>
 
-  <Tile id="services" title="Ce que je peux faire pour vous" sub="Trois manières de travailler ensemble, selon où en est votre projet.">
+  <Tile id="services" title="Ce que je peux faire pour vous" sub="Votre site n’existe pas encore, il a vieilli, ou vous voulez d’abord un avis.">
     <ServiceCards />
     <div class="cards-cta">
       <FrostedCTA href="/contact/">Décrire mon projet</FrostedCTA>
-      <LinkUnder href="/audit-ux-ui/" label="Commencer par un audit" />
     </div>
   </Tile>
 
   {/* Dernier projet : désactivé pour l'instant, à réactiver en décommentant l'import et la ligne ci-dessous.
   <ProjectTeaser /> */}
 
-  <Tile id="methode" title="Comment se passe un projet" sub="Quatre étapes, avec quelque chose de concret à la fin de chacune.">
-    <Process steps={steps} />
+  <Tile id="methode" title="Comment se passe un projet" sub="Quatre étapes. Chacune se termine par quelque chose que vous pouvez valider.">
+    <Process steps={steps} scene />
     <p class="proc-after">
-      <strong>Après la livraison :</strong> une prise en main de votre site, et un accompagnement mensuel si vous en avez envie.
+      <strong>Après la livraison :</strong> une prise en main de votre site, puis un suivi mensuel si vous le souhaitez.
     </p>
   </Tile>
 
@@ -73,10 +74,14 @@ const steps = [
 
     <FinalCta
       title="Parlons de votre projet"
-      text="Écrivez-moi quelques lignes sur votre projet. Je réponds sous 24 h ouvrées, et ce premier échange ne coûte rien."
+      text="Quelques lignes suffisent : votre activité, ce que vous voulez changer. Je réponds sous 24 h ouvrées, et ce premier échange est gratuit."
       label="Décrire mon projet"
     />
   </div>
 
   <StickyCta />
 </BaseLayout>
+
+<script>
+  import '../scripts/scenes.js';
+</script>

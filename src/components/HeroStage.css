@@ -43,7 +43,7 @@
 .win-logo {
   width: 18px;
   height: 30px;
-  border: 1.5px solid #202559;
+  border: 1.5px solid var(--color-klein-800);
   border-radius: 9px;
 }
 

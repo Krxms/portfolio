@@ -1,0 +1,272 @@
+/* Scènes de défilement : le dessin. Tout part des variables écrites par src/scripts/scenes.js (--e, --ee, --p, --hp,
+   --d…). Tout est sous .has-scenes : sans JavaScript, ou avec « réduire les animations », la page reste statique.
+   Les propriétés individuelles (translate, rotate, scale) sont utilisées pour ne pas écraser les transform déjà posés
+   (inclinaison des cartes au pointeur, etc.).
+
+   Les scènes :
+   1. Le rideau : la Hero reste en place et recule, les sections montent par-dessus.
+   2. Les mots du manifeste s'allument un à un.
+   3. Les offres sont empilées en paquet de cartes, puis se déploient en éventail 3D.
+   4. Les deux maquettes du comparatif arrivent chacune de son côté.
+   5. Les étapes de la méthode se dressent comme des panneaux.
+   6. Le portrait respire ; trois formes du logo passent devant, puis derrière.
+   7. Grain de risographie qui monte vers le bas de « Qui suis-je ». */
+
+/* ---------- 1. Le rideau ---------- */
+.has-scenes .curtain {
+  position: relative;
+}
+
+.has-scenes .curtain > .hero-zone {
+  position: sticky;
+  top: 0;
+  z-index: 0;
+}
+
+.has-scenes .curtain > .manifesto {
+  z-index: 2;
+}
+
+/* Le recul de la Hero est appliqué à chaque bloc, pas au conteneur : un conteneur qui porte une transformation ou un filtre
+   isole ses enfants, et le titre ne pourrait plus se mélanger à la lave qui passe derrière lui (voir le négatif du titre). */
+.has-scenes .hero > * {
+  transform-origin: 50% 50%;
+  scale: calc(1 - var(--hp, 0) * 0.1);
+  translate: 0 calc(var(--hp, 0) * 9svh);
+  opacity: calc(1 - var(--hp, 0) * 0.6);
+  filter: blur(calc(var(--hp, 0) * 6px));
+  will-change: transform, opacity;
+}
+
+/* le titre de la Hero ne doit plus clignoter : l'entrée de page (motion.css) reste sur les enfants */
+
+/* ---------- titres de section : un à un ---------- */
+.has-scenes .tile-head > * {
+  --t: clamp(0, calc(var(--e, 0) * 2.2 - var(--i, 0) * 0.35), 1);
+  opacity: var(--t);
+  translate: 0 calc((1 - var(--t)) * 34px);
+}
+
+/* ---------- 2. Les mots s'allument ---------- */
+.has-scenes .w {
+  display: inline-block;
+  opacity: clamp(0.14, calc(var(--e, 0) * (var(--n, 1) + 5) - var(--i, 0)), 1);
+}
+
+/* ---------- 3. Les offres : un paquet de cartes qui se déploie ---------- */
+@media (min-width: 701px) {
+  .has-scenes .cards {
+    perspective: 1700px;
+  }
+
+  .has-scenes .card {
+    /* les trois cartes partagent la même progression, sans décalage : les deux latérales sont rigoureusement symétriques */
+    --t0: clamp(0, calc(var(--e, 0) * 1.25), 1);
+    --t: calc(var(--t0) * var(--t0) * (3 - 2 * var(--t0)));
+    --u: calc(1 - var(--t));
+    translate:
+      calc(var(--u) * (1 - var(--i, 0)) * (100% + var(--gap)))
+      calc(var(--u) * 50px)
+      calc(var(--u) * -90px * (var(--i, 0) - 1) * (var(--i, 0) - 1));
+    rotate: y calc(var(--u) * (var(--i, 0) - 1) * 26deg);
+  }
+
+  /* la carte du centre est un verre dépoli : tant que les cartes sont empilées, son fond floute ce qui passe dessous (les
+     cartes latérales restent nettes, c'est le verre qui les brouille), puis le flou se retire en s'écartant */
+  .has-scenes .card:nth-child(2) {
+    z-index: 3;
+    background: rgb(255 255 255 / calc(0.84 - var(--u) * 0.14));
+    /* Rayon fixe, posé sur la carte elle-même : un calque enfant ne voyait pas les cartes voisines (la carte est composée à
+       part par ses transformations 3D), et faire varier le rayon à chaque image faisait saccader l'arrivée. Une fois les
+       cartes écartées, il n'y a plus rien derrière : le flou ne se voit plus. */
+    -webkit-backdrop-filter: blur(22px) saturate(1.45);
+    backdrop-filter: blur(22px) saturate(1.45);
+  }
+
+  .has-scenes .card-art .s1 {
+    translate: 0 calc((var(--p, 0.5) - 0.5) * -34px);
+  }
+
+  .has-scenes .card-art .s2 {
+    translate: 0 calc((var(--p, 0.5) - 0.5) * -68px);
+  }
+
+  .has-scenes .card-art .s3 {
+    translate: 0 calc((var(--p, 0.5) - 0.5) * 24px);
+  }
+}
+
+/* Carrousels (mobile) : coverflow, la carte au centre se redresse, les voisines basculent en retrait */
+@media (max-width: 760px) {
+  .has-scenes .versus {
+    perspective: 900px;
+  }
+}
+
+@media (max-width: 700px) {
+  .has-scenes .cards {
+    perspective: 900px;
+  }
+}
+
+@media (max-width: 760px) {
+  .has-scenes .versus > * {
+    rotate: y calc(var(--d, 0) * -16deg);
+    scale: calc(1 - var(--ad, 0) * 0.07);
+    opacity: calc(1 - var(--ad, 0) * 0.35);
+    transform-origin: 50% 50%;
+  }
+}
+
+@media (max-width: 700px) {
+  .has-scenes .cards > * {
+    rotate: y calc(var(--d, 0) * -16deg);
+    scale: calc(1 - var(--ad, 0) * 0.07);
+    opacity: calc(1 - var(--ad, 0) * 0.35);
+  }
+}
+
+/* ---------- 4. Le comparatif : chaque maquette arrive de son côté ----------
+   Celle de gauche entre par la gauche, celle de droite par la droite, avec un fondu d'opacité : même logique que les cartes
+   de la section suivante (qui, elles, partent du centre). Une seule courbe douce (départ et arrivée en douceur). La 3D
+   (inclinaison, profondeur) n'existe qu'en cours de route : elles se posent à plat, à la largeur exacte de leur liste. */
+@media (min-width: 761px) {
+  .has-scenes .versus {
+    --vdist: clamp(120px, 20vw, 320px);
+    perspective: 1500px;
+  }
+
+  .has-scenes .versus-card .vs-mock {
+    --a0: clamp(0, calc(var(--e, 0) * 1.6), 1);
+    --a: calc(var(--a0) * var(--a0) * (3 - 2 * var(--a0)));
+    --h: sin(calc(var(--a) * 180deg));
+    opacity: var(--a);
+    scale: calc(0.94 + var(--a) * 0.06);
+    transform-origin: 50% 60%;
+  }
+
+  .has-scenes .versus-card--flat .vs-mock {
+    translate: calc((1 - var(--a)) * var(--vdist) * -1) calc((1 - var(--a)) * 26px);
+    transform: rotateY(calc(var(--h) * 9deg)) translateZ(calc(var(--h) * -50px));
+  }
+
+  .has-scenes .versus-card--made .vs-mock {
+    translate: calc((1 - var(--a)) * var(--vdist)) calc((1 - var(--a)) * 26px);
+    transform: rotateY(calc(var(--h) * -9deg)) translateZ(calc(var(--h) * 50px));
+    box-shadow:
+      inset 0 0 0 1px rgb(255 255 255 / 0.2),
+      inset 0 1px 0 rgb(255 255 255 / 0.4),
+      0 calc(var(--a) * 50px) calc(var(--a) * 70px) calc(var(--a) * -34px) rgb(2 4 40 / 0.8);
+  }
+
+  /* titre et listes arrivent une fois les maquettes presque en place, l'un après l'autre */
+  .has-scenes .versus-card :is(h3, li) {
+    --k: 0;
+    --l0: clamp(0, calc((var(--e, 0) - 0.4 - var(--k) * 0.05) * 2.4), 1);
+    --l: calc(var(--l0) * var(--l0) * (3 - 2 * var(--l0)));
+    opacity: var(--l);
+    translate: 0 calc((1 - var(--l)) * 20px);
+  }
+
+  .has-scenes .versus-card li:nth-child(1) {
+    --k: 1;
+  }
+
+  .has-scenes .versus-card li:nth-child(2) {
+    --k: 2;
+  }
+
+  .has-scenes .versus-card li:nth-child(3) {
+    --k: 3;
+  }
+}
+
+/* ---------- 5. La méthode : des panneaux qui se dressent ---------- */
+.has-scenes .proc {
+  perspective: 1300px;
+}
+
+.has-scenes .proc-step {
+  --t: clamp(0, calc(var(--e, 0) * 1.7 - var(--i, 0) * 0.24), 1);
+  transform-origin: 50% 100%;
+  rotate: x calc((1 - var(--t)) * 42deg);
+  translate: 0 calc((1 - var(--t)) * 36px);
+  opacity: var(--t);
+}
+
+/* La flèche chronologique avance au rythme des tuiles : sa pointe atteint une tuile quand celle-ci est à moitié dressée,
+   jamais avant (les tuiles se dressent avec --e * 1.7, décalées de 0,24 chacune) */
+.has-scenes .proc-timeline {
+  --f: clamp(0, calc(var(--e, 0) * 1.786 - 0.42), 1);
+  clip-path: inset(-20% calc((1 - var(--f)) * 100%) -20% 0);
+}
+
+/* la ligne « après la livraison » est sa propre scène (elle est à côté de la méthode, pas dedans) */
+.has-scenes .proc-after {
+  opacity: var(--e, 0);
+  translate: 0 calc((1 - var(--e, 0)) * 16px);
+}
+
+/* ---------- 6. Qui suis-je : le portrait respire ---------- */
+.has-scenes .about {
+  overflow-x: clip;
+}
+
+.portrait {
+  position: relative;
+}
+
+.portrait-frame {
+  position: relative;
+  overflow: hidden;
+  border-radius: inherit;
+}
+
+.has-scenes .portrait-frame img {
+  scale: 1.14;
+  translate: 0 calc((var(--p, 0.5) - 0.5) * -9%);
+}
+
+/* ---------- 7. Grain de risographie de « Qui suis-je » et de l'appel final ----------
+   Le même grain que sur les affiches : les manques d'encre (le papier qui perce) et le grain de pellicule. Il est le même
+   du haut en bas de la section, puis continue à l'identique sous l'appel final, sans arête entre les deux. */
+.dark-zone > .tile.tile--dark.about::after,
+.dark-zone > .tile.tile--dark.cta-final::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    var(--grain-soft) 0 0 / 160px 160px repeat,
+    url('../assets/riso/speck.png') 30px 70px / 256px 256px repeat;
+  background-blend-mode: soft-light, normal;
+  opacity: 0.55;
+  box-shadow: none;
+}
+
+/* ---------- Filet de progression de lecture sous l'en-tête ---------- */
+.has-scenes .site-header::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  height: 2px;
+  transform-origin: 0 50%;
+  transform: scaleX(var(--page-p, 0));
+  background: linear-gradient(90deg, var(--signal), var(--cream) 60%, var(--mark));
+  pointer-events: none;
+}
+
+/* Le haut de la section identité couvre la Hero : presque opaque, pour que son titre ne transparaisse pas en fantôme */
+.has-scenes .manifesto.tile--dark::before {
+  -webkit-mask-image: linear-gradient(180deg, rgb(0 0 0 / 0.9), #000 180px);
+  mask-image: linear-gradient(180deg, rgb(0 0 0 / 0.9), #000 180px);
+}
+
+/* Les formes en vol (portrait, appel final) ne doivent jamais élargir la page */
+.has-scenes .tile {
+  overflow-x: clip;
+}

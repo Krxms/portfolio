@@ -76,7 +76,13 @@
   width: 100%;
   height: auto;
   margin-bottom: var(--space-5);
-  color: var(--mark);
+  color: var(--signal);
+}
+
+/* bords légèrement rongés (comme les autres tracés), puis une très légère irrégularité du geste ; le préfixe .proc-wrap l'emporte
+   sur la règle .mark, chargée après */
+.proc-wrap .proc-timeline {
+  filter: url(#ink) url(#wobble);
 }
 
 /* Flèche d'annotation : une seule fois, dans la marge à gauche de la rangée « Vous recevez » */
@@ -95,7 +101,8 @@
   line-height: 1;
   letter-spacing: -0.04em;
   font-variant-numeric: tabular-nums;
-  color: var(--signal);
+  /* la couleur de l'étape, sur le spectre violet, bleu klein, lagon, menthe (posée par Process.astro) */
+  color: var(--num-c, var(--signal));
 }
 
 .proc-step h3 {
