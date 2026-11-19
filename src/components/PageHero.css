@@ -1,44 +1,23 @@
-/* Variante « page de service » de la zone hero : le fond (mesh + grain) vient de Hero.css, seules la hauteur
-   et la composition changent. */
+/* Variante « page de service » de la zone hero. La structure vient de Hero.css et la matière de HeroAtelier.css (papier grené, arches et
+   disque en béton) : ici, seulement la hauteur, le texte aligné à gauche et la position, plus sobre, des formes. */
 .hero-zone--page {
-  min-height: clamp(560px, 82svh, 780px);
+  min-height: clamp(540px, 74svh, 720px);
   justify-content: center;
   padding-top: calc(var(--header-h) + clamp(16px, 3vw, 40px));
-  padding-bottom: clamp(48px, 7vw, 96px);
-  /* Calque riso (points d'encre) : dense sur le bord droit, nul sous le texte, donc la lecture n'est jamais gênée */
-  background:
-    var(--grain) 0 0 / 160px 160px repeat,
-    url('../assets/mesh/hero-riso-right.webp') right center / cover no-repeat,
-    url('../assets/mesh/hero.webp') center / cover no-repeat,
-    var(--paper);
-  background-blend-mode: soft-light, multiply, normal, normal;
+  padding-bottom: clamp(48px, 6vw, 88px);
 }
 
-/* Écrans étroits : le texte occupe toute la largeur, le riso passe donc sous le texte (bord bas) */
-@media (max-width: 1100px) {
-  .hero-zone--page {
-    padding-bottom: clamp(150px, 40vw, 280px);
-    background:
-      var(--grain) 0 0 / 160px 160px repeat,
-      url('../assets/mesh/hero-riso-bottom.webp') center bottom / cover no-repeat,
-      url('../assets/mesh/hero.webp') center / cover no-repeat,
-      var(--paper);
-    background-blend-mode: soft-light, multiply, normal, normal;
-  }
-}
-
+/* ---------- le texte ---------- */
 .ph-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
   gap: clamp(36px, 5vw, 88px);
   align-items: center;
-}
-
-/* Texte calé plus à gauche que le conteneur : le riso a toute la place à droite */
-.hero-zone--page .ph-grid--solo {
+  /* mêmes bords que le texte de la Hero de l'accueil */
+  width: min(calc(100% - 2 * var(--edge, 24px)), 1280px);
   max-width: none;
-  margin-inline: 0;
-  padding-left: clamp(var(--edge), 7vw, 128px);
+  margin-inline: auto;
+  padding-inline: 0;
 }
 
 .ph-grid--solo {
@@ -46,7 +25,7 @@
 }
 
 .ph-grid--solo .ph-copy {
-  max-width: min(100%, 640px);
+  max-width: min(100%, 780px);
 }
 
 .ph-copy {
@@ -60,9 +39,15 @@
 .ph-crumbs {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
-  font-size: 14px;
-  color: var(--ink-soft);
+  gap: 6px;
+  font-size: 12.5px;
+  letter-spacing: 0.01em;
+  color: var(--muted);
+}
+
+/* le séparateur s'efface : le fil d'Ariane situe la page, il ne doit pas concurrencer le titre */
+.ph-crumbs > span[aria-hidden] {
+  opacity: 0.45;
 }
 
 .ph-crumbs a {
@@ -80,33 +65,44 @@
 }
 
 .ph-crumbs [aria-current] {
-  color: var(--ink);
-  font-weight: 600;
+  color: var(--ink-soft);
+  font-weight: 500;
 }
 
-/* Le mot-clé de la page (création de site web) vit dans le h1 sous forme de surtitre, visible et sans artifice */
+/* Le mot-clé de la page (création de site web) vit dans le h1 sous forme de surtitre. Comme la ligne de rôle de l'accueil, il est
+   précédé d'une barre orange : une forme de plus de la composition. */
 .ph-copy h1 {
-  font-family: var(--font-display);
+  font-family: var(--font-title);
   font-weight: 700;
   line-height: 1;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.021em;
 }
 
 .ph-kicker {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 16px;
   margin-bottom: 22px;
   font-family: var(--font-body);
   font-size: clamp(1rem, 1.6vw, 1.2rem);
-  font-weight: 600;
+  font-weight: 500;
   line-height: 1.3;
   letter-spacing: -0.005em;
-  color: var(--signal-deep);
+  color: var(--ink);
+}
+
+.ph-kicker::before {
+  content: '';
+  flex: none;
+  width: 44px;
+  height: 4px;
+  background: #ee8532;
 }
 
 .ph-l1,
 .ph-l2 {
   display: block;
-  font-size: clamp(2.5rem, 5.6vw, 5rem);
+  font-size: var(--h1-size);
 }
 
 .ph-l1 {
@@ -117,31 +113,244 @@
   color: var(--signal);
 }
 
+/* Un saut de ligne écrit « \n » dans le chapô (prop lead de PageHero.astro, à écrire lead={'Première phrase.\nSeconde phrase.'}) devient un
+   retour à la ligne : chaque phrase peut ainsi commencer sur sa propre ligne. Même règle que le texte des cartes de l'accueil (white-space: pre-line). */
 .ph-lead {
-  max-width: 36ch;
+  /* 36 caractères de large : la note de dessous reprend cette largeur */
+  --ph-text-w: calc(24.34 * clamp(1.1rem, 1.9vw, 1.3rem));
+  max-width: min(100%, calc(24.34 * clamp(1.1rem, 1.9vw, 1.3rem)));
   font-size: clamp(1.1rem, 1.9vw, 1.3rem);
   line-height: 1.55;
+  white-space: pre-line;
   color: var(--ink);
 }
 
+.ph-lead--wide {
+  max-width: min(100%, 31em);
+  text-wrap: balance;
+}
+
 .ph-actions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--space-3) var(--space-6);
+  justify-content: flex-start;
 }
 
 .ph-note {
+  /* Groupe compact : largeur du contenu (jamais étirée sur le conteneur), espacement constant entre les mentions et leurs séparateurs.
+     Avant, sur ordinateur, la largeur du chapô et justify-content: space-between écartaient les mentions aux deux bouts. */
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: flex-start;
+  width: fit-content;
+  max-width: 100%;
+  gap: 4px 12px;
   font-size: 14px;
   color: var(--ink-soft);
+}
+
+.ph-note > span {
+  white-space: nowrap;
+}
+
+/* téléphone : une mention longue (« 50 % de l'audit déduit… ») doit pouvoir passer à la ligne, sinon elle élargit la page au-delà d'un écran de 320 px */
+@media (max-width: 700px) {
+  .ph-note > span {
+    white-space: normal;
+  }
+}
+
+/* ordinateur : la hauteur de la zone est la même sur toutes les pages de service ; le fil d'Ariane remonte un peu, le titre et ce qui le suit
+   gagnent de l'air */
+@media (min-width: 901px) {
+  .hero-zone--page {
+    /* la hauteur suit celle de l'écran (plafonnée à 880 px) : le texte et les boutons restent dans le premier écran */
+    min-height: clamp(620px, 100svh, 880px);
+    /* le texte part toujours du même point : le fil d'Ariane, le titre et le reste sont à la même hauteur sur toutes les pages de service */
+    justify-content: flex-start;
+    padding-top: calc(var(--header-h) + clamp(4px, 3.6svh - 4px, 43px));
+    padding-bottom: clamp(24px, 4.4svh, 64px);
+  }
+
+  .ph-copy {
+    gap: clamp(12px, 2.8svh, 24px);
+  }
+
+  .ph-crumbs {
+    translate: 0 -14px;
+    margin-bottom: clamp(4px, 2svh, 18px);
+  }
 }
 
 .ph-visual {
   min-width: 0;
 }
 
+/* ---------- l'illustration de droite (ordinateur) ----------
+   Une composition propre aux pages de service, différente de l'affiche de l'accueil : une gélule bleue penchée et son double en
+   pointillés, un disque menthe, un quart de disque orange ancré en bas à droite. La matière (béton, mouchetures, trame) est celle de
+   HeroAtelier.css. Tailles et positions horizontales suivent la largeur de l'écran (vw), les positions verticales la hauteur de la zone. */
+@media (min-width: 901px) {
+  .hero-zone--page .ph-pill,
+  .hero-zone--page .ph-dash,
+  .hero-zone--page .ph-disc,
+  .hero-zone--page .ph-quarter {
+    display: block;
+    position: absolute;
+  }
+
+  /* le voile de lisibilité se centre sur le texte */
+  .hero-zone--page .at-lift {
+    background: radial-gradient(ellipse 38% 60% at 24% 52%, rgb(248 250 252 / 0.72), rgb(248 250 252 / 0) 100%);
+  }
+
+  .hero-zone--page .at-quarter {
+    display: none;
+  }
+
+  /* la gélule bleue, penchée */
+  .hero-zone--page .ph-pill {
+    right: 15vw;
+    top: calc(var(--header-h) + 7%);
+    width: 11vw;
+    height: 28vw;
+    border-radius: 999px;
+    rotate: 10deg;
+  }
+
+  /* son tracé en pointillés, décalé : le site avant qu'il soit construit */
+  .hero-zone--page .ph-dash {
+    right: 12.4vw;
+    top: calc(var(--header-h) + 7% + 2.6vw);
+    width: 11vw;
+    height: 28vw;
+    border: 1.5px dashed rgb(31 69 214 / 0.5);
+    border-radius: 999px;
+    rotate: 10deg;
+  }
+
+  /* le disque menthe, au pied de la gélule */
+  .hero-zone--page .ph-disc {
+    right: 28vw;
+    top: calc(var(--header-h) + 36%);
+    width: 8vw;
+    aspect-ratio: 1;
+    border-radius: 50%;
+  }
+
+  /* le quart de disque orange, collé au coin bas droit (il ne suit pas le défilement : il reste ancré) */
+  .hero-zone--page .ph-quarter {
+    --k: 0;
+    right: 0;
+    bottom: 0;
+    width: 15vw;
+    aspect-ratio: 1;
+    border-radius: 100% 0 0 0;
+  }
+}
+
+/* ---------- tablette et mobile ----------
+   La même composition que sur ordinateur (gélule bleue penchée et son tracé en pointillés, disque menthe, quart de disque orange), en bande
+   compacte sous les boutons : le texte garde toute la largeur (ses lignes varient d'une page à l'autre, rien ne doit passer dessous), et la
+   bande reste dans le premier écran. Tailles et positions suivent la largeur de l'écran (vw). Le quart de cercle pâle à courbes de niveau de
+   la Hero de l'accueil est remplacé par ces formes. */
 @media (max-width: 900px) {
   .ph-grid {
     grid-template-columns: 1fr;
+  }
+
+  .hero-zone--page {
+    min-height: 0;
+    padding-top: calc(var(--header-h) + 8px);
+    padding-bottom: calc(36vw + 8px);
+  }
+
+  /* un texte plus serré : l'entête tient dans le premier écran, boutons compris */
+  .ph-copy {
+    gap: 16px;
+  }
+
+  .ph-kicker {
+    margin-bottom: 10px;
+  }
+
+  .ph-l1,
+  .ph-l2 {
+  }
+
+  .ph-lead {
+    max-width: none;
+    font-size: 1.02rem;
+    line-height: 1.5;
+  }
+
+  .hero-zone--page .at-quarter {
+    display: none;
+  }
+
+  .hero-zone--page .ph-pill,
+  .hero-zone--page .ph-dash,
+  .hero-zone--page .ph-disc,
+  .hero-zone--page .ph-quarter {
+    display: block;
+    position: absolute;
+  }
+
+  .hero-zone--page .ph-pill {
+    right: 23vw;
+    bottom: 8vw;
+    width: 12vw;
+    height: 30vw;
+    border-radius: 999px;
+    rotate: 10deg;
+  }
+
+  .hero-zone--page .ph-dash {
+    right: 20.6vw;
+    bottom: 5.4vw;
+    width: 12vw;
+    height: 30vw;
+    border: 1.5px dashed rgb(31 69 214 / 0.5);
+    border-radius: 999px;
+    rotate: 10deg;
+  }
+
+  .hero-zone--page .ph-disc {
+    right: 42vw;
+    bottom: 6vw;
+    width: 10vw;
+    aspect-ratio: 1;
+    border-radius: 50%;
+  }
+
+  .hero-zone--page .ph-quarter {
+    --k: 0;
+    right: 0;
+    bottom: 0;
+    width: 22vw;
+    aspect-ratio: 1;
+    border-radius: 100% 0 0 0;
+  }
+
+  /* le texte reste aligné à gauche : les boutons aussi, sur toute la largeur de la colonne */
+  .ph-actions {
+    align-self: stretch;
+    width: 100%;
+  }
+}
+
+/* sur téléphone, les deux actions s'empilent, pleine largeur, sur TOUTES les pages de service : avant, elles se partageaient une ligne quand
+   les libellés étaient assez courts (Création) et s'empilaient sinon (Refonte, Audit), selon la longueur des mots. Même disposition que la Hero de l'accueil. */
+@media (max-width: 560px) {
+  .hero-zone--page .ph-actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .hero-zone--page .ph-actions > * {
+    width: 100%;
+    min-height: 50px;
+    padding-inline: 14px;
+    font-size: 15px;
   }
 }

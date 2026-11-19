@@ -1,365 +1,7 @@
-/* Page « Création de site web ». Même langage que l'accueil, composition propre : texte à gauche et exemple livré
-   en hero, liste éditoriale en verre, frise à cinq étapes, curseur d'autonomie, bande sombre pour le cadre. */
-
-/* ---------- Ce que vous recevez ---------- */
-.cs-split {
-  display: grid;
-  grid-template-columns: minmax(0, 3.4fr) minmax(0, 8.6fr);
-  gap: clamp(32px, 6vw, 96px);
-  align-items: start;
-}
-
-/* Le titre reste visible pendant qu'on parcourt les cinq livrables */
-.cs-split-head {
-  position: sticky;
-  top: calc(var(--header-h) + 24px);
-}
-
-.cs-split-head h2 {
-  max-width: 14ch;
-  font-size: clamp(2rem, 3.4vw, 2.9rem);
-}
-
-.cs-split-head .tile-label {
-  margin-bottom: var(--space-3);
-}
-
-.cs-split-sub {
-  max-width: 30ch;
-  margin-top: var(--space-4);
-  font-size: clamp(1.05rem, 1.7vw, 1.2rem);
-  line-height: 1.55;
-  color: var(--ink-soft);
-}
-
-.cs-received {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  border-top: 2px solid var(--ink);
-}
-
-.cs-row {
-  display: grid;
-  grid-template-columns: 32px minmax(0, 1fr) minmax(0, 212px);
-  gap: var(--space-5) clamp(16px, 2.4vw, 32px);
-  align-items: center;
-  padding-block: clamp(22px, 2.6vw, 34px);
-  border-bottom: 1px solid var(--line-strong);
-}
-
-.cs-row-num {
-  align-self: start;
-  padding-top: 0.35em;
-  font-size: 14px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  font-variant-numeric: tabular-nums;
-  color: var(--signal-deep);
-}
-
-.cs-row h3 {
-  font-size: clamp(1.2rem, 1.9vw, 1.5rem);
-  line-height: 1.15;
-  text-wrap: balance;
-  letter-spacing: -0.02em;
-}
-
-.cs-row p {
-  margin-top: var(--space-2);
-  max-width: 42ch;
-  font-size: 16.5px;
-  line-height: 1.6;
-  color: var(--ink-soft);
-}
-
-/* Vignettes : de petites interfaces dessinées en CSS, sur les mêmes mesh que les cartes de l'accueil.
-   Décoratives (aria-hidden) : elles illustrent le texte voisin sans rien affirmer de plus. */
-.cs-viz {
-  position: relative;
-  isolation: isolate;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  gap: 10px;
-  height: 148px;
-  padding: 18px 18px 0;
-  overflow: hidden;
-  border-radius: 22px;
-  background-size: cover;
-  background-position: center;
-  box-shadow:
-    inset 0 1px 0 rgb(255 255 255 / 0.85),
-    inset 0 0 0 1px rgb(255 255 255 / 0.35),
-    0 0 0 1px rgb(18 32 43 / 0.07);
-}
-
-.cs-viz::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  background: var(--grain) 0 0 / 160px 160px repeat;
-  mix-blend-mode: soft-light;
-  opacity: 0.5;
-}
-
-.cs-viz-tone-0 {
-  background-image: url('../assets/mesh/card-blue.webp');
-}
-.cs-viz-tone-1 {
-  background-image: url('../assets/mesh/card-mint.webp');
-}
-.cs-viz-tone-2 {
-  background-image: url('../assets/mesh/card-warm.webp');
-}
-
-.cs-viz i {
-  display: block;
-}
-
-/* cadres d'écran (conception, intégration) */
-.v-frame {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  padding: 8px;
-  border-radius: 10px 10px 0 0;
-  background: rgb(255 255 255 / 0.88);
-  box-shadow: 0 -1px 0 rgb(255 255 255 / 0.9), 0 10px 24px -12px rgb(18 32 43 / 0.45);
-}
-
-.v-desk {
-  width: 128px;
-  height: 100px;
-}
-.v-tab {
-  width: 74px;
-  height: 84px;
-}
-.v-phone {
-  width: 50px;
-  height: 92px;
-  border-radius: 12px 12px 0 0;
-}
-
-.v-bar {
-  height: 5px;
-  width: 38%;
-  border-radius: 3px;
-  background: var(--signal);
-}
-.v-hero {
-  flex: 1 1 auto;
-  min-height: 16px;
-  border-radius: 6px;
-  background: linear-gradient(135deg, rgb(20 80 154 / 0.2), rgb(53 179 148 / 0.28));
-}
-.v-line {
-  height: 5px;
-  border-radius: 3px;
-  background: rgb(18 32 43 / 0.16);
-}
-.v-line.s {
-  width: 60%;
-}
-.v-col {
-  display: inline-block;
-  height: 14px;
-  width: calc(50% - 3px);
-  border-radius: 4px;
-  background: rgb(18 32 43 / 0.12);
-}
-.v-desk .v-col + .v-col {
-  margin-left: 6px;
-}
-.v-desk:has(.v-col) {
-  display: block;
-}
-.v-desk:has(.v-col) .v-bar {
-  margin-bottom: 6px;
-}
-.v-desk:has(.v-col) .v-hero {
-  height: 40px;
-  margin-bottom: 6px;
-}
-
-/* cartes (référencement, mise en ligne, prise en main) */
-.v-card {
-  width: 100%;
-  max-width: 196px;
-  margin-bottom: 18px;
-  padding: 12px 14px;
-  border-radius: 14px;
-  background: rgb(255 255 255 / 0.9);
-  box-shadow: 0 12px 26px -14px rgb(18 32 43 / 0.5), inset 0 1px 0 #fff;
-  font-size: 12px;
-  line-height: 1.35;
-  color: var(--ink);
-}
-
-.v-serp {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-.v-url {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 11px;
-  color: var(--ink-soft);
-}
-.v-dot {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: var(--signal);
-}
-.v-serp b {
-  font-size: 13.5px;
-  font-weight: 600;
-  color: #1a4fb8;
-}
-
-.v-browser {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.v-addr {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 5px 9px;
-  border-radius: 999px;
-  background: rgb(18 32 43 / 0.07);
-  font-size: 11px;
-  color: var(--ink-soft);
-}
-.v-browser .v-hero {
-  flex: none;
-  height: 26px;
-}
-.v-live {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 11px;
-  font-weight: 600;
-  color: #1f6b4f;
-}
-.v-live i {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #35b394;
-  box-shadow: 0 0 0 3px rgb(53 179 148 / 0.25);
-}
-
-.v-guide {
-  display: flex;
-  flex-direction: column;
-  gap: 9px;
-  font-weight: 500;
-}
-.v-guide span {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-}
-.v-tick {
-  position: relative;
-  flex: none;
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  background: var(--signal);
-}
-.v-tick::after {
-  content: '';
-  position: absolute;
-  left: 4.5px;
-  top: 4px;
-  width: 7px;
-  height: 4px;
-  border-left: 1.8px solid #fff;
-  border-bottom: 1.8px solid #fff;
-  transform: rotate(-45deg);
-}
-
-/* ---------- Niveaux d'autonomie ---------- */
-.cs-panel {
-  position: relative;
-  isolation: isolate;
-  max-width: 1120px;
-  margin: 0 auto;
-  padding: clamp(20px, 3vw, 36px);
-  border-radius: clamp(28px, 3.4vw, 44px);
-  background: url('../assets/mesh/hero.webp') center / cover no-repeat, var(--paper-soft);
-  box-shadow:
-    inset 0 1px 0 rgb(255 255 255 / 0.85),
-    0 0 0 1px rgb(18 32 43 / 0.07),
-    0 40px 60px -40px rgb(18 32 43 / 0.45);
-}
-
-.cs-panel::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  border-radius: inherit;
-  pointer-events: none;
-  background: var(--grain) 0 0 / 160px 160px repeat;
-  mix-blend-mode: soft-light;
-  opacity: 0.5;
-}
-
-/* Axe : de « je délègue » à « je gère moi-même », avec une flèche dessinée qui court d'un bout à l'autre */
-.cs-axis {
-  position: relative;
-  display: flex;
-  justify-content: space-between;
-  gap: var(--space-4);
-  padding-bottom: 16px;
-  margin-bottom: clamp(16px, 2.4vw, 28px);
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--signal-deep);
-}
-
-.cs-axis::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 2px;
-  border-radius: 2px;
-  background: linear-gradient(90deg, var(--signal), #35b394);
-}
-
-.cs-levels {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: clamp(14px, 2vw, 24px);
-}
-
-.cs-level {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
-  padding: clamp(22px, 2.6vw, 32px);
-  border-radius: 26px;
-  text-align: left;
-}
+/* Pages de service « Création de site » et « Refonte de site » (la seconde réutilise cette feuille, préfixe cs-). Même langage que l'accueil :
+   scène annotée (un site fini, ou l'ancien site) avec sa liste numérotée, panneau bleu à trois lignes qui devient un carrousel de cartes sur mobile,
+   puis la zone sombre (engagements, phrase d'appui, autres portes d'entrée). Le style générique des jauges (.cs-share) et du surtitre (.cs-level-n)
+   est ci-dessous ; l'habillage propre au panneau est dans la section « Vous gardez la main ». */
 
 .cs-level-n {
   font-size: 13px;
@@ -384,6 +26,20 @@
   height: 100%;
   border-radius: 999px;
   background: linear-gradient(90deg, var(--signal-deep), var(--signal));
+}
+
+/* Trois crans, sans pourcentage : la jauge se lit « léger, moyen, complet ». Deux encoches marquent le tiers et les deux tiers ;
+   la valeur --me ne prend que trois positions (un tiers, deux tiers, tout). */
+.cs-share::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, transparent calc(33.333% - 1px), rgb(255 255 255 / 0.7) calc(33.333% - 1px) calc(33.333% + 1px), transparent calc(33.333% + 1px)),
+    linear-gradient(90deg, transparent calc(66.667% - 1px), rgb(255 255 255 / 0.7) calc(66.667% - 1px) calc(66.667% + 1px), transparent calc(66.667% + 1px));
 }
 
 /* Repère : une petite barre à la frontière « moi / vous », pour lire la jauge comme un équilibre */
@@ -411,298 +67,1594 @@
   color: var(--ink-soft);
 }
 
-.cs-level h3 {
-  margin-top: var(--space-2);
-  font-size: clamp(1.25rem, 2vw, 1.6rem);
-  line-height: 1.15;
-  letter-spacing: -0.02em;
-  text-wrap: balance;
-}
-
-.cs-level > p:not(.cs-level-n):not(.cs-tech) {
-  font-size: 16.5px;
-  line-height: 1.6;
-  color: var(--ink-soft);
-}
-
-.cs-tech {
-  margin-top: auto;
-  min-height: 5.4em;
-  padding-top: var(--space-3);
-  border-top: 1px solid var(--line-strong);
-  color: var(--ink);
-  font-size: 16px;
-  line-height: 1.5;
-}
-
-.cs-tech span {
-  display: block;
-  margin-bottom: 2px;
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-
-.cs-pick {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  align-items: baseline;
-  gap: var(--space-2) var(--space-5);
-  max-width: 880px;
-  margin: clamp(24px, 3.6vw, 44px) auto 0;
-  padding: clamp(20px, 2.4vw, 28px) clamp(22px, 3vw, 36px);
-  border-radius: 24px;
-}
-
-.cs-pick-label {
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--signal-deep);
-}
-
-.cs-pick p:not(.cs-pick-label) {
-  font-size: 17px;
-  line-height: 1.6;
-  color: var(--ink);
-}
-
-.cs-tools {
-  max-width: 1120px;
-  margin: clamp(56px, 8vw, 104px) auto 0;
-}
-
-.cs-tools h3 {
-  font-size: clamp(1.4rem, 2.4vw, 1.8rem);
-  letter-spacing: -0.025em;
-  text-align: center;
-}
-
-.cs-tools dl {
-  margin: var(--space-6) 0 0;
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  border-top: 2px solid var(--ink);
-}
-
-.cs-tools dl > div {
-  padding: var(--space-5) clamp(14px, 1.8vw, 28px) var(--space-2);
-}
-
-.cs-tools dl > div + div {
-  border-left: 1px solid var(--line-strong);
-}
-
-.cs-tools dl > div:first-child {
-  padding-left: 0;
-}
-
-.cs-tools dt {
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--signal-deep);
-}
-
-.cs-tools dd {
-  margin: var(--space-3) 0 0;
-}
-
-.cs-tools dd ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.cs-tools dd li {
-  font-size: 17px;
-  font-weight: 500;
-  line-height: 1.4;
-  letter-spacing: -0.01em;
-  color: var(--ink);
-}
-
-/* ---------- Le cadre (tuile sombre) ---------- */
-.cs-figures {
-  list-style: none;
-  margin: 0 auto;
-  padding: 0;
-  max-width: 1000px;
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: var(--gap);
-  text-align: center;
-}
-
-.cs-figures li {
-  padding: clamp(24px, 3vw, 40px) clamp(16px, 2vw, 28px);
-  border-radius: 26px;
-}
-
-.cs-figures b {
-  display: block;
-  white-space: nowrap;
-  font-size: clamp(2rem, 4vw, 3.3rem);
-  font-weight: 600;
-  line-height: 1.05;
-  letter-spacing: -0.035em;
-  color: #fff;
-}
-
-.cs-figures small {
-  margin-left: 0.28em;
-  font-size: 0.42em;
-  font-weight: 500;
-  letter-spacing: -0.01em;
-  color: rgb(255 255 255 / 0.92);
-}
-
-.cs-figures span {
-  display: block;
-  max-width: 24ch;
-  margin: var(--space-2) auto 0;
-  font-size: 16px;
-  line-height: 1.5;
-  color: rgb(255 255 255 / 0.9);
-}
-
-.cs-cols {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--gap);
-  max-width: 1000px;
-  margin: var(--gap) auto 0;
-}
-
-.cs-cols > div {
-  padding: clamp(24px, 3vw, 40px);
-  border-radius: 26px;
-}
-
-.cs-cols h3 {
-  margin-bottom: var(--space-4);
-  font-size: 1.2rem;
-  color: #fff;
-}
-
-.cs-ticks {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
-}
-
-.cs-ticks li {
-  position: relative;
-  padding-left: 28px;
-  font-size: 16.5px;
-  line-height: 1.55;
-  color: rgb(255 255 255 / 0.95);
-}
-
-.cs-ticks li::before {
-  content: '';
-  position: absolute;
-  left: 2px;
-  top: 0.35em;
-  width: 11px;
-  height: 6px;
-  border-left: 2px solid #8fe3c4;
-  border-bottom: 2px solid #8fe3c4;
-  transform: rotate(-45deg);
-}
-
-.cs-ticks--plain li::before {
-  width: 10px;
-  height: 0;
-  top: 0.8em;
-  border-left: 0;
-  border-bottom: 2px solid rgb(255 255 255 / 0.7);
-  transform: none;
-}
-
-.cs-audit {
-  max-width: 62ch;
-  margin: clamp(32px, 5vw, 56px) auto 0;
-  text-align: center;
-  font-size: 17px;
-  line-height: 1.7;
-  color: rgb(255 255 255 / 0.95);
-}
-
-.cs-audit .link-under {
-  min-height: 0;
-  vertical-align: baseline;
-}
-
 .cs-more {
   margin-top: var(--space-5);
   text-align: center;
 }
 
-@media (max-width: 900px) {
-  .cs-split {
-    grid-template-columns: 1fr;
-  }
-  .cs-split-head {
-    position: static;
-  }
-  .cs-row {
-    grid-template-columns: 36px minmax(0, 1fr);
-  }
-  .cs-viz {
-    grid-column: 2;
-    max-width: 340px;
-  }
-  .cs-levels {
-    grid-template-columns: 1fr;
-  }
-  .cs-tools dl {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  .cs-tools dl > div:nth-child(odd) {
-    padding-left: 0;
-    border-left: 0;
-  }
-  .cs-pick {
-    grid-template-columns: 1fr;
-  }
-  .cs-figures,
-  .cs-cols {
+/* Audit : la méthode et ses limites, sous les engagements (même filet que .cs-start), un court titre puis quatre paragraphes */
+.cs-limits h3 {
+  margin: 0 0 var(--space-3);
+  font-size: clamp(1.15rem, 1.6vw, 1.35rem);
+  line-height: 1.3;
+  color: #fff;
+}
+
+.cs-limits p + p {
+  margin-top: var(--space-3);
+}
+
+/* la phrase sous les engagements : une ligne de texte simple, séparée par un filet fin, qui dit qu'on peut démarrer sans cahier des charges */
+.cs-start {
+  margin: clamp(32px, 4.6vw, 56px) 0 0;
+  padding-top: var(--space-5);
+  border-top: 1px solid rgb(255 255 255 / 0.22);
+}
+
+.cs-start p {
+  max-width: 78ch;
+  font-size: 16.5px;
+  line-height: 1.65;
+  color: rgb(255 255 255 / 0.9);
+}
+
+.cs-start strong {
+  font-weight: 600;
+  color: #ffc79b;
+}
+
+/* d'autres portes d'entrée : deux lignes à filet, le nom de l'offre puis son bénéfice */
+.cs-next {
+  /* un peu d'air au-dessus : la phrase « pas besoin de cahier des charges » et les autres portes d'entrée se lisent séparément */
+  margin: clamp(52px, 6.8vw, 92px) 0 0;
+}
+
+.cs-next-label {
+  margin-bottom: var(--space-3);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgb(255 255 255 / 0.72);
+}
+
+.cs-next ul {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 clamp(24px, 4vw, 56px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cs-next a {
+  position: relative;
+  display: block;
+  padding: var(--space-4) 36px var(--space-4) 0;
+  border-top: 1px solid rgb(255 255 255 / 0.32);
+  color: #fff;
+  text-decoration: none;
+}
+
+.cs-next a::after {
+  content: '›';
+  position: absolute;
+  right: 4px;
+  top: var(--space-4);
+  font-size: 1.6rem;
+  line-height: 1;
+  color: #ffc79b;
+  transition: transform 0.35s var(--spring);
+}
+
+.cs-next a:hover::after,
+.cs-next a:focus-visible::after {
+  transform: translateX(4px);
+}
+
+.cs-next strong {
+  display: block;
+  font-size: clamp(1.15rem, 1.7vw, 1.4rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.cs-next span {
+  display: block;
+  margin-top: 6px;
+  font-size: 16px;
+  line-height: 1.55;
+  color: rgb(255 255 255 / 0.9);
+}
+
+@media (max-width: 700px) {
+  .cs-next ul {
     grid-template-columns: 1fr;
   }
 }
 
-@media (max-width: 560px) {
-  .cs-tools dl {
-    grid-template-columns: 1fr;
+/* ---------- Ce que vous recevez : un site fini, annoté ----------
+   Une scène montre le site livré (ordinateur, mobile, résultat de recherche, mise en ligne, espace de gestion) ; cinq repères orange
+   numérotés pointent chaque livrable, détaillé dans la liste dessous sous le même numéro. C'est le schéma annoté des pages produit :
+   l'image prouve le texte au lieu de le décorer.
+
+   Conçue d'abord pour le mobile : la scène est un cadre presque carré où le téléphone est au premier plan ; au-dessus de 700 px elle devient
+   un cadre large (ordinateur à gauche, téléphone à sa droite). Toutes les mesures sont en cqw (largeur de la scène). Chaque élément a
+   son échelle --q (la longueur d'une « unité » du dessin) : le dessin est écrit en unités, et seule l'échelle change d'un format à l'autre.
+   Le fond est celui des affiches des cartes de l'accueil ; le béton et le grain restent DERRIÈRE les éléments, qui sont opaques : le
+   texte et les interfaces dessinées restent nets. */
+.cs-stage {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  container-type: inline-size;
+  aspect-ratio: 100 / 122;
+  border-radius: var(--radius-xl);
+  background: radial-gradient(70% 90% at 22% 8%, rgb(120 160 255 / 0.5), transparent 62%), linear-gradient(158deg, #2f5de6 0%, #1f45d6 38%, #1a3cbf 66%, #13247c 100%);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.3), 0 30px 50px -34px rgb(19 36 124 / 0.6);
+}
+
+.cs-stage::before,
+.cs-stage::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* La matière du fond : le béton du site (concrete-zoom.webp), rendu raccordable (tools/concrete-tile.mjs) et posé en tuile de 256 px. Étiré sur
+   toute la scène (640 px pour plus de 1300 px), il était flou et grossier ; en tuile à demi-échelle, le grain est fin, net même sur écran dense,
+   et léger (soft-light, faible opacité). */
+.cs-stage::before {
+  background: url('../assets/riso/concrete-tile.webp') 0 0 / 256px 256px repeat;
+  mix-blend-mode: soft-light;
+  opacity: 0.4;
+}
+
+.cs-stage::after {
+  background: var(--grain-soft) 0 0 / 160px 160px repeat;
+  mix-blend-mode: soft-light;
+  opacity: 0.22;
+}
+
+.cs-stage .concrete {
+  --concrete: 0.16;
+}
+
+.cs-shape {
+  position: absolute;
+  z-index: 0;
+  display: block;
+}
+
+.cs-disc {
+  right: -12cqw;
+  top: -14cqw;
+  width: 44cqw;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 24%, rgb(255 214 170 / 0.55), rgb(255 214 170 / 0) 42%), linear-gradient(150deg, #ff9a58, #f2733c 60%, #e0602a);
+  box-shadow: inset -2cqw -2.6cqw 5cqw -1.6cqw rgb(150 50 10 / 0.35);
+}
+
+.cs-arch {
+  left: 74cqw;
+  bottom: 0;
+  width: 24cqw;
+  height: 32cqw;
+  border-radius: 999px 999px 0 0;
+  background: linear-gradient(172deg, #d8f3ec 0%, #a6d4ca 55%, #82bdb0 100%);
+  box-shadow: inset 0.8cqw 0.8cqw 0 -0.2cqw rgb(255 255 255 / 0.4), inset -3cqw -3.6cqw 6cqw -2.4cqw rgb(20 80 70 / 0.3);
+}
+
+.cs-quarter {
+  left: 0;
+  top: 0;
+  width: 16cqw;
+  aspect-ratio: 1;
+  border-radius: 0 0 100% 0;
+  background: linear-gradient(150deg, #e3edff, #b4cdfa);
+}
+
+/* le site sur ordinateur */
+.cs-site {
+  --q: calc(88cqw / 54);
+  position: absolute;
+  z-index: 1;
+  left: 6cqw;
+  top: 8cqw;
+  width: calc(54 * var(--q));
+  overflow: hidden;
+  border-radius: calc(1.6 * var(--q));
+  background: #fff;
+  box-shadow:
+    0 calc(0.3 * var(--q)) calc(0.6 * var(--q)) rgb(4 10 56 / 0.42),
+    0 calc(2.2 * var(--q)) calc(4 * var(--q)) calc(-1.4 * var(--q)) rgb(4 10 56 / 0.55);
+}
+
+.cs-site-bar {
+  display: flex;
+  align-items: center;
+  gap: calc(0.6 * var(--q));
+  height: calc(3.2 * var(--q));
+  padding-inline: calc(1.2 * var(--q)) calc(3.6 * var(--q));
+  background: #f1f4f9;
+  box-shadow: inset 0 -1px 0 rgb(18 32 43 / 0.08);
+}
+
+.cs-site-bar > i {
+  width: calc(0.9 * var(--q));
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #ee8532;
+}
+
+.cs-site-bar > i:nth-child(2) {
+  background: #f2cf86;
+}
+
+.cs-site-bar > i:nth-child(3) {
+  background: #a6d4ca;
+}
+
+.cs-addr {
+  display: flex;
+  align-items: center;
+  gap: calc(0.5 * var(--q));
+  height: calc(2 * var(--q));
+  margin-left: var(--q);
+  padding-inline: calc(0.9 * var(--q));
+  border-radius: 999px;
+  background: #fff;
+  font-size: calc(1.05 * var(--q));
+  color: var(--ink-soft);
+}
+
+.cs-addr svg {
+  width: calc(0.8 * var(--q));
+  height: auto;
+}
+
+.cs-live {
+  display: flex;
+  align-items: center;
+  gap: calc(0.5 * var(--q));
+  margin-left: auto;
+  font-size: calc(1.05 * var(--q));
+  font-weight: 600;
+  color: #1f6b4f;
+}
+
+.cs-live i {
+  width: calc(0.8 * var(--q));
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #35b394;
+  box-shadow: 0 0 0 calc(0.3 * var(--q)) rgb(53 179 148 / 0.25);
+}
+
+.cs-site-body {
+  padding: calc(2.2 * var(--q)) calc(2.6 * var(--q)) calc(2.6 * var(--q));
+}
+
+.cs-site-nav {
+  display: flex;
+  align-items: center;
+  gap: calc(1.5 * var(--q));
+  height: calc(2.2 * var(--q));
+  margin-bottom: calc(2.6 * var(--q));
+}
+
+.cs-site-nav b {
+  width: calc(5 * var(--q));
+  height: calc(1.5 * var(--q));
+  border-radius: calc(0.4 * var(--q));
+  background: #1a3cbf;
+}
+
+.cs-site-nav span {
+  width: calc(4 * var(--q));
+  height: calc(0.65 * var(--q));
+  border-radius: calc(0.4 * var(--q));
+  background: rgb(18 32 43 / 0.16);
+}
+
+.cs-site-nav span:first-of-type {
+  margin-left: calc(2 * var(--q));
+}
+
+.cs-site-nav em {
+  width: calc(6.5 * var(--q));
+  height: calc(2 * var(--q));
+  margin-left: auto;
+  border-radius: 999px;
+  background: #13247c;
+}
+
+.cs-site-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: calc(2.6 * var(--q));
+  align-items: center;
+}
+
+.cs-site-copy strong {
+  display: block;
+  font-size: calc(2.5 * var(--q));
+  line-height: 1.12;
+  font-weight: 600;
+  letter-spacing: -0.021em;
+  color: var(--ink);
+}
+
+.cs-site-copy p {
+  margin-top: calc(0.8 * var(--q));
+  font-size: calc(1.15 * var(--q));
+  line-height: 1.4;
+  color: var(--ink-soft);
+}
+
+.cs-site-cta {
+  display: inline-block;
+  margin-top: calc(1.4 * var(--q));
+  padding: calc(0.8 * var(--q)) calc(1.7 * var(--q));
+  border-radius: 999px;
+  background: linear-gradient(180deg, #3566ee, #1f45d6);
+  box-shadow: calc(0.4 * var(--q)) calc(0.4 * var(--q)) 0 rgb(238 133 50 / 0.9);
+  font-size: calc(1.1 * var(--q));
+  font-weight: 600;
+  color: #fff;
+}
+
+/* la vignette : une photo suggérée (dégradé, arche claire, petit disque orange), pas de grosses formes */
+.cs-site-img {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  border-radius: calc(1.3 * var(--q));
+  background: linear-gradient(150deg, #e4f4ef 0%, #bcd5f8 100%);
+}
+
+.cs-site-img::before,
+.cs-site-img::after {
+  content: '';
+  position: absolute;
+}
+
+.cs-site-img::before {
+  left: 14%;
+  bottom: 0;
+  width: 40%;
+  height: 66%;
+  border-radius: 999px 999px 0 0;
+  background: linear-gradient(180deg, rgb(255 255 255 / 0.85), rgb(255 255 255 / 0.4));
+}
+
+.cs-site-img::after {
+  right: 14%;
+  top: 16%;
+  width: 18%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #ee8532;
+}
+
+.cs-site-cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: calc(1.2 * var(--q));
+  margin-top: calc(2.8 * var(--q));
+}
+
+.cs-site-cards i {
+  display: block;
+  height: calc(5 * var(--q));
+  border-radius: calc(0.9 * var(--q));
+  background: #f3f6fb;
+  box-shadow: inset 0 0 0 1px rgb(18 32 43 / 0.07);
+}
+
+/* le site sur mobile : au premier plan sur mobile, devant le site sur ordinateur */
+.cs-phone {
+  --q: 2.2cqw;
+  position: absolute;
+  z-index: 2;
+  left: 62cqw;
+  top: 46cqw;
+  display: flex;
+  flex-direction: column;
+  gap: var(--q);
+  width: calc(13.5 * var(--q));
+  height: calc(28 * var(--q));
+  padding: calc(1.2 * var(--q));
+  border-radius: calc(2.4 * var(--q));
+  background: #fff;
+  box-shadow:
+    0 calc(0.3 * var(--q)) calc(0.6 * var(--q)) rgb(4 10 56 / 0.42),
+    0 calc(2.4 * var(--q)) calc(4.4 * var(--q)) calc(-1.6 * var(--q)) rgb(4 10 56 / 0.55);
+}
+
+.cs-phone i {
+  display: block;
+}
+
+.cs-phone-hero {
+  flex: none;
+  height: calc(10 * var(--q));
+  aspect-ratio: auto;
+}
+
+.cs-phone-line {
+  height: calc(0.7 * var(--q));
+  border-radius: calc(0.4 * var(--q));
+  background: rgb(18 32 43 / 0.16);
+}
+
+.cs-phone-line.s {
+  width: 60%;
+}
+
+.cs-phone-btn {
+  height: calc(2.4 * var(--q));
+  margin-top: auto;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #3566ee, #1f45d6);
+  box-shadow: calc(0.35 * var(--q)) calc(0.35 * var(--q)) 0 rgb(238 133 50 / 0.9);
+}
+
+/* le résultat dans un moteur de recherche */
+.cs-serp {
+  --q: 1.7cqw;
+  position: absolute;
+  z-index: 2;
+  left: 6cqw;
+  top: 66cqw;
+  display: flex;
+  flex-direction: column;
+  gap: calc(0.7 * var(--q));
+  width: calc(28 * var(--q));
+  padding: calc(1.5 * var(--q)) calc(1.7 * var(--q));
+  border-radius: calc(1.8 * var(--q));
+  background: #fff;
+  box-shadow:
+    0 calc(0.3 * var(--q)) calc(0.6 * var(--q)) rgb(4 10 56 / 0.42),
+    0 calc(2 * var(--q)) calc(3.6 * var(--q)) calc(-1.4 * var(--q)) rgb(4 10 56 / 0.55);
+}
+
+.cs-serp-url {
+  display: flex;
+  align-items: center;
+  gap: calc(0.6 * var(--q));
+  font-size: calc(1 * var(--q));
+  color: var(--ink-soft);
+}
+
+.cs-serp-url i {
+  width: calc(1.2 * var(--q));
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #1a3cbf;
+}
+
+.cs-serp b {
+  font-size: calc(1.5 * var(--q));
+  line-height: 1.2;
+  font-weight: 600;
+  color: #1a4fb8;
+}
+
+.cs-serp-line {
+  display: block;
+  height: calc(0.6 * var(--q));
+  border-radius: calc(0.4 * var(--q));
+  background: rgb(18 32 43 / 0.14);
+}
+
+.cs-serp-line.s {
+  width: 62%;
+}
+
+/* l'espace de gestion : ce que vous saurez faire seul */
+.cs-guide {
+  --q: 2.2cqw;
+  position: absolute;
+  z-index: 2;
+  left: 6cqw;
+  top: 90cqw;
+  display: flex;
+  flex-direction: column;
+  gap: var(--q);
+  width: calc(21 * var(--q));
+  padding: calc(1.6 * var(--q)) calc(1.7 * var(--q));
+  border-radius: calc(1.8 * var(--q));
+  background: #fff;
+  box-shadow:
+    0 calc(0.3 * var(--q)) calc(0.6 * var(--q)) rgb(4 10 56 / 0.42),
+    0 calc(2 * var(--q)) calc(3.6 * var(--q)) calc(-1.4 * var(--q)) rgb(4 10 56 / 0.55);
+}
+
+.cs-guide span {
+  display: flex;
+  align-items: center;
+  gap: calc(0.9 * var(--q));
+  font-size: calc(1.25 * var(--q));
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.cs-guide i {
+  position: relative;
+  flex: none;
+  width: calc(1.7 * var(--q));
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #1a3cbf;
+}
+
+.cs-guide i::after {
+  content: '';
+  position: absolute;
+  left: calc(0.5 * var(--q));
+  top: calc(0.45 * var(--q));
+  width: calc(0.75 * var(--q));
+  height: calc(0.4 * var(--q));
+  border-left: calc(0.2 * var(--q)) solid #fff;
+  border-bottom: calc(0.2 * var(--q)) solid #fff;
+  transform: rotate(-45deg);
+}
+
+/* les repères : le même rond orange que la barre du surtitre de la Hero, numéroté comme la liste */
+.cs-pin {
+  --pin: max(22px, 7cqw);
+  position: absolute;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  width: var(--pin);
+  aspect-ratio: 1;
+  margin: calc(var(--pin) / -2) 0 0 calc(var(--pin) / -2);
+  border-radius: 50%;
+  background: #ee8532;
+  font-size: calc(var(--pin) * 0.5);
+  font-weight: 700;
+  line-height: 1;
+  color: #fff;
+}
+
+.cs-pin--1 {
+  left: 50cqw;
+  top: 24.3cqw;
+}
+.cs-pin--2 {
+  left: 62cqw;
+  top: 58cqw;
+}
+.cs-pin--3 {
+  left: 6cqw;
+  top: 66cqw;
+}
+.cs-pin--4 {
+  left: 94cqw;
+  top: 10.6cqw;
+}
+.cs-pin--5 {
+  left: 6cqw;
+  top: 90cqw;
+}
+
+/* Ordinateur : un cadre large, le site à gauche et le téléphone qui le déborde à droite */
+@media (min-width: 701px) {
+  .cs-stage {
+    aspect-ratio: 100 / 44;
   }
-  .cs-tools dl > div + div {
-    border-left: 0;
-    border-top: 1px solid var(--line-strong);
-    padding-left: 0;
+
+  .cs-disc {
+    right: -4cqw;
+    top: -9cqw;
+    width: 26cqw;
+  }
+
+  .cs-arch {
+    left: 3cqw;
+    width: 14cqw;
+    height: 22cqw;
+  }
+
+  .cs-quarter {
+    width: 11cqw;
+  }
+
+  .cs-site {
+    --q: 1cqw;
+    left: 10cqw;
+    top: 5cqw;
+  }
+
+  .cs-phone {
+    --q: 1cqw;
+    left: 60cqw;
+    top: 11cqw;
+  }
+
+  .cs-serp {
+    --q: 1cqw;
+    left: 3cqw;
+    top: 32cqw;
+  }
+
+  .cs-guide {
+    --q: 1cqw;
+    left: 77cqw;
+    top: 25cqw;
+  }
+
+  .cs-pin {
+    --pin: max(20px, 2.8cqw);
+  }
+
+  .cs-pin--1 {
+    left: 37cqw;
+    top: 15cqw;
+  }
+  .cs-pin--2 {
+    left: 60cqw;
+    top: 22cqw;
+  }
+  .cs-pin--3 {
+    left: 31cqw;
+    top: 32.5cqw;
+  }
+  .cs-pin--4 {
+    left: 64cqw;
+    top: 6.6cqw;
+  }
+  .cs-pin--5 {
+    left: 77cqw;
+    top: 25cqw;
   }
 }
 
-/* Deux tuiles claires qui se suivent : moins de vide entre elles */
-#deroule {
+/* Parallaxe douce, comme la scène du projet sur l'accueil : quand la scène traverse l'écran, chaque plan glisse de quelques pixels à son
+   propre rythme (le téléphone et les cartes, devant, un peu plus ; le site au milieu ; les formes, derrière, à peine). Chaque repère
+   suit le plan qu'il désigne. Animation CSS liée au défilement : jouée par la carte graphique, sans script. Navigateurs sans cette
+   fonction, ou « réduire les animations » : la scène reste immobile. */
+@keyframes cs-drift {
+  from {
+    translate: 0 calc(var(--a) * 1cqw);
+  }
+
+  to {
+    translate: 0 calc(var(--a) * -1cqw);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .cs-stage {
+      view-timeline: --cs block;
+    }
+
+    .cs-shape,
+    .cs-site,
+    .cs-phone,
+    .cs-serp,
+    .cs-guide,
+    .cs-pin {
+      animation-name: cs-drift;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-timeline: --cs;
+      animation-range: cover 0% cover 100%;
+      will-change: translate;
+    }
+
+    .cs-shape {
+      --a: 0.35;
+    }
+
+    .cs-site,
+    .cs-pin--1,
+    .cs-pin--4 {
+      --a: 0.6;
+    }
+
+    .cs-serp,
+    .cs-guide,
+    .cs-pin--3,
+    .cs-pin--5 {
+      --a: 1.1;
+    }
+
+    .cs-phone,
+    .cs-pin--2 {
+      --a: 1.5;
+    }
+  }
+}
+
+/* la liste : sur mobile, une ligne par livrable (le numéro à gauche) ; sur ordinateur, cinq colonnes sous un filet épais */
+.cs-deliv {
+  display: grid;
+  grid-template-columns: 1fr;
+  margin: clamp(24px, 3.6vw, 52px) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cs-deliv li {
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr);
+  column-gap: 16px;
+  padding-block: 18px;
+  border-top: 1px solid rgb(18 32 43 / 0.16);
+}
+
+.cs-deliv li:last-child {
+  border-bottom: 1px solid rgb(18 32 43 / 0.16);
+}
+
+.cs-deliv-n {
+  grid-row: 1 / span 2;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #ee8532;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1;
+  color: #fff;
+}
+
+.cs-deliv h3 {
+  font-size: clamp(1.15rem, 1.6vw, 1.3rem);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+.cs-deliv p {
+  margin-top: var(--space-2);
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--ink-soft);
+}
+
+@media (min-width: 701px) {
+  .cs-deliv {
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: var(--space-5) clamp(20px, 2.4vw, 36px);
+  }
+
+  .cs-deliv li {
+    display: block;
+    padding-top: var(--space-4);
+    padding-bottom: 0;
+    border-top: 2px solid var(--ink);
+  }
+
+  .cs-deliv li:last-child {
+    border-bottom: 0;
+  }
+
+  .cs-deliv-n {
+    margin-bottom: var(--space-3);
+  }
+}
+
+/* ---------- Vous gardez la main : un panneau bleu, trois lignes ----------
+   Le même panneau bleu que la scène du projet (.panel-blue, matiere.css), avec le grain de la zone sombre (.panel-blue--riso), un seul pour
+   les trois formules, des filets fins entre les lignes. Sur chaque ligne : la formule, la jauge de répartition du travail, la situation pour
+   laquelle elle convient. Sur mobile (voir plus bas), chaque ligne devient une carte bleue dans un carrousel latéral. */
+.cs-lv-panel {
+  padding: clamp(26px, 3.2vw, 48px) clamp(22px, 4.2vw, 68px) clamp(8px, 1vw, 16px);
+}
+
+.cs-lv-axis,
+.cs-lv {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 4fr) minmax(0, 4fr);
+  gap: var(--space-4) clamp(24px, 3.4vw, 56px);
+}
+
+/* l'axe « je m'en occupe » / « vous gérez seul » se lit au-dessus de la colonne des jauges, relié par un filet à flèche */
+.cs-lv-axis {
+  margin-bottom: var(--space-3);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: rgb(255 255 255 / 0.88);
+}
+
+.cs-lv-axis-track {
+  grid-column: 2;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* le filet qui relie les deux pôles : une ligne qui s'éclaire vers l'orange clair, terminée par une vraie pointe de flèche */
+.cs-lv-axis-track i {
+  position: relative;
+  flex: 1;
+  height: 2px;
+  border-radius: 1px;
+  background: linear-gradient(90deg, rgb(255 255 255 / 0.3), #ffc79b);
+}
+
+.cs-lv-axis-track i::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 50%;
+  width: 10px;
+  height: 10px;
+  margin-top: -5px;
+  border: solid #ffc79b;
+  border-width: 2px 2px 0 0;
+  border-radius: 1px;
+  rotate: 45deg;
+}
+
+.cs-lv-list:focus-visible {
+  outline: 3px solid var(--signal-deep);
+  outline-offset: 4px;
+  border-radius: 12px;
+}
+
+.cs-lv-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid rgb(255 255 255 / 0.4);
+}
+
+.cs-lv {
+  align-items: center;
+  padding-block: clamp(26px, 3.2vw, 44px);
+  border-bottom: 1px solid rgb(255 255 255 / 0.18);
+}
+
+.cs-lv:last-child {
+  border-bottom: 0;
+}
+
+/* le surtitre prend la barre orange de la Hero */
+.cs-lv .cs-level-n {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #ffc79b;
+}
+
+.cs-lv .cs-level-n::before {
+  content: '';
+  width: 24px;
+  height: 3px;
+  background: #ee8532;
+}
+
+.cs-lv h3 {
+  margin-top: 8px;
+  font-size: clamp(1.4rem, 2.4vw, 2rem);
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  color: #fff;
+}
+
+.cs-lv-main p:not(.cs-level-n) {
+  max-width: 44ch;
+  margin-top: var(--space-2);
+  font-size: 16.5px;
+  line-height: 1.6;
+  color: rgb(255 255 255 / 0.9);
+}
+
+/* sur ordinateur, la zone « affiche » (formes) et sa fenêtre n'existent que pour le mobile : la fenêtre laisse passer ses enfants */
+.cs-lv-sh {
+  display: none;
+}
+
+.cs-lv-win {
+  display: contents;
+}
+
+/* la jauge : piste fine, remplissage lumineux, poignée ronde */
+.cs-lv .cs-share {
+  height: 10px;
+  margin-block: 12px 8px;
+  background: rgb(255 255 255 / 0.16);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.08);
+}
+
+.cs-lv .cs-share i {
+  width: calc(var(--me) * var(--k, 1));
+  background: linear-gradient(90deg, #ffd9bd, #ee8532);
+  box-shadow: 0 0 16px -2px rgb(238 133 50 / 0.55);
+}
+
+/* la poignée : un rond blanc net (sans halo), à la frontière entre ma part et la vôtre */
+.cs-lv .cs-share::after {
+  top: 50%;
+  bottom: auto;
+  left: min(max(calc(var(--me) * var(--k, 1)), 11px), calc(100% - 11px));
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  box-shadow: 0 2px 5px rgb(4 10 56 / 0.35);
+}
+
+/* Le remplissage suit le défilement : --e (0 à 1) est celui du panneau entier (scenes.js, avec un amorti qui rend le mouvement très doux),
+   et non celui de chaque barre : le panneau est plus haut que l'œil, une barre jugée sur sa propre position ne serait pas pleine quand
+   l'ensemble est centré à l'écran. Chaque ligne démarre un peu après la précédente (--i), le remplissage est étalé sur une longue course et le moteur le rattrape
+   lentement (voir damp dans scenes.js) : le mouvement est souple. Tout est plein quand le panneau est au centre de l'écran. Sans script ou avec « réduire les animations », --k n'existe pas :
+   la jauge est pleine. */
+.has-scenes .cs-lv {
+  --g: clamp(0, calc((var(--e, 0) - 0.06 - var(--i, 0) * 0.14) / 0.56), 1);
+  /* courbe en S très douce (smootherstep) : départ et arrivée presque immobiles */
+  --k: calc(var(--g) * var(--g) * var(--g) * (var(--g) * (var(--g) * 6 - 15) + 10));
+}
+
+.cs-lv .cs-share-legend {
+  margin-top: 0;
+  color: rgb(255 255 255 / 0.88);
+}
+
+.cs-lv .cs-share-legend span:first-child {
+  color: #ffc79b;
+}
+
+/* la situation du client, séparée du reste de la ligne par un filet */
+.cs-fit {
+  padding-left: clamp(20px, 2.4vw, 32px);
+  border-left: 1px solid rgb(255 255 255 / 0.22);
+  font-size: 16.5px;
+  line-height: 1.5;
+  color: #fff;
+}
+
+.cs-fit span {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: rgb(255 255 255 / 0.72);
+}
+
+/* Les deux sections claires qui se suivent se lisent d'un trait : l'espace entre elles est celui d'un changement de sujet, pas d'une
+   page. Le titre des étapes (xp--plain) a son propre air au-dessus. */
+#livrables {
   padding-bottom: clamp(40px, 5vw, 72px);
 }
-#autonomie,
-#ampleur {
+
+#autonomie {
   padding-top: clamp(40px, 5vw, 72px);
+  padding-bottom: clamp(32px, 4vw, 56px);
 }
 
-/* Après la bande sombre, l'encart du dernier projet respire */
-#projet {
-  padding-top: clamp(56px, 8vw, 112px);
+/* ---------- Le cadre : quatre engagements, valables pour tout projet ---------- */
+.cs-commit {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(28px, 3.4vw, 56px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* la barre orange du surtitre de la Hero, comme repère de chaque engagement */
+.cs-commit li::before {
+  content: '';
+  display: block;
+  width: 44px;
+  height: 4px;
+  margin-bottom: var(--space-4);
+  background: #ee8532;
+}
+
+.cs-commit h3 {
+  font-size: clamp(1.2rem, 1.8vw, 1.45rem);
+  letter-spacing: -0.02em;
+  color: #fff;
+}
+
+.cs-commit p {
+  margin-top: var(--space-2);
+  font-size: 16px;
+  line-height: 1.6;
+  color: rgb(255 255 255 / 0.92);
+}
+
+@media (max-width: 1000px) {
+  .cs-commit {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 900px) {
+  .cs-lv-axis {
+    display: none;
+  }
+
+  .cs-lv {
+    grid-template-columns: 1fr;
+    align-items: start;
+    row-gap: var(--space-4);
+  }
+
+  .cs-fit {
+    padding-left: 0;
+    border-left: 0;
+  }
+}
+
+/* Mobile : chaque formule devient une carte bleue (le fond et le grain du panneau), et les trois cartes se parcourent par un défilement
+   latéral, avec l'arrêt au centre et l'effet coverflow des offres de l'accueil (scenes.js et scenes.css). Même construction que ces offres :
+   en haut une « affiche » (aplat bleu klein, menthe ou orange, formes du logo, béton et grain) où une fenêtre blanche porte la jauge, puis
+   le texte, puis la situation du client en pied de carte. Les mesures de l'affiche sont en cqw. */
+@media (max-width: 700px) {
+  /* le panneau n'a plus de fond : ce sont les cartes qui sont bleues */
+  .cs-lv-panel.panel-blue {
+    padding: 0;
+    overflow: visible;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+  }
+
+  .cs-lv-panel.panel-blue::after {
+    content: none;
+  }
+
+  /* l'axe est posé sur la page claire : ses couleurs passent au bleu et à l'orange, il se lit comme une invitation à faire défiler */
+  .cs-lv-axis {
+    display: block;
+    margin-bottom: var(--space-3);
+    color: var(--signal-deep);
+  }
+
+  .cs-lv-axis-track {
+    grid-column: auto;
+  }
+
+  .cs-lv-axis-track i {
+    background: linear-gradient(90deg, rgb(26 60 191 / 0.25), #ee8532);
+  }
+
+  .cs-lv-axis-track i::after {
+    border-color: #ee8532;
+  }
+
+  .cs-lv-list {
+    display: flex;
+    gap: 14px;
+    margin-inline: calc(var(--edge) * -1);
+    /* le bas laisse la place à l'ombre des cartes, que le conteneur défilant rognerait sinon ; la marge négative rend l'espace pris */
+    padding: 6px 0 46px;
+    margin-bottom: -22px;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    border-top: 0;
+  }
+
+  .cs-lv-list::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* chaque carte s'arrête au centre de l'écran, y compris la première et la dernière : deux cales */
+  .cs-lv-list::before,
+  .cs-lv-list::after {
+    content: '';
+    flex: 0 0 max(0px, calc((100vw - min(80vw, 330px)) / 2 - 14px));
+  }
+
+  .cs-lv {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    flex: 0 0 min(80vw, 330px);
+    scroll-snap-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    --card-pad: 10px;
+    padding: var(--card-pad) var(--card-pad) 26px;
+    border-bottom: 0;
+    border-radius: var(--radius-xl);
+    color: #fff;
+    background: var(--panel-blue-bg);
+    background-blend-mode: soft-light, normal, normal;
+    box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.14), 0 24px 36px -26px rgb(11 26 74 / 0.6);
+  }
+
+  /* le grain de risographie de la zone sombre, comme sur le panneau */
+  .cs-lv::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+      var(--grain-soft) 0 0 / 160px 160px repeat,
+      var(--speck) 30px 70px / 256px 256px repeat;
+    background-blend-mode: soft-light, normal;
+    opacity: 0.55;
+  }
+
+  /* l'affiche du haut */
+  .cs-lv-gauge {
+    order: -1;
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    container-type: inline-size;
+    aspect-ratio: 16 / 10;
+    border-radius: max(var(--radius-xs), calc(var(--radius-xl) - var(--card-pad, 10px)));
+    background: var(--art);
+    box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.4), inset 0 1px 0 rgb(255 255 255 / 0.7);
+  }
+
+  /* le béton (même intensité que partout) et un grain fin, au-dessus des formes et sous la fenêtre */
+  .cs-lv-gauge::before,
+  .cs-lv-gauge::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .cs-lv-gauge::before {
+    background: url('../assets/riso/concrete-zoom.webp') 50% 50% / cover no-repeat;
+    mix-blend-mode: soft-light;
+    opacity: var(--concrete, 0.3);
+  }
+
+  .cs-lv-gauge::after {
+    background: var(--grain-soft) 0 0 / 160px 160px repeat;
+    mix-blend-mode: soft-light;
+    opacity: 0.4;
+  }
+
+  /* les trois affiches : bleu klein, menthe, orange, dans l'ordre des offres de l'accueil */
+  .cs-lv:nth-child(1) .cs-lv-gauge {
+    --art: radial-gradient(70% 90% at 22% 8%, rgb(120 160 255 / 0.5), transparent 62%), linear-gradient(158deg, #2f5de6 0%, #1f45d6 38%, #1a3cbf 66%, #13247c 100%);
+  }
+
+  .cs-lv:nth-child(2) .cs-lv-gauge {
+    --art: radial-gradient(70% 90% at 20% 6%, rgb(255 255 255 / 0.55), transparent 62%), linear-gradient(158deg, #d8f3ec 0%, #a6d4ca 52%, #86c3b5 100%);
+  }
+
+  .cs-lv:nth-child(3) .cs-lv-gauge {
+    --art: radial-gradient(70% 90% at 20% 6%, rgb(255 214 170 / 0.6), transparent 62%), linear-gradient(158deg, #ff9a58 0%, #f2733c 55%, #e0602a 100%);
+  }
+
+  /* les formes du logo, derrière la fenêtre */
+  .cs-lv-sh {
+    display: block;
+    position: absolute;
+    z-index: 0;
+  }
+
+  .cs-lv:nth-child(1) .cs-lv-sh:nth-child(1),
+  .cs-lv:nth-child(2) .cs-lv-sh:nth-child(1) {
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 24%, rgb(255 214 170 / 0.55), rgb(255 214 170 / 0) 42%), linear-gradient(150deg, #ff9a58, #f2733c 60%, #e0602a);
+    box-shadow: inset -1.2cqw -1.6cqw 3cqw -1cqw rgb(150 50 10 / 0.35);
+  }
+
+  .cs-lv:nth-child(1) .cs-lv-sh:nth-child(1) {
+    right: -7cqw;
+    top: -10cqw;
+    width: 30cqw;
+  }
+
+  .cs-lv:nth-child(2) .cs-lv-sh:nth-child(1) {
+    left: -7cqw;
+    top: -9cqw;
+    width: 26cqw;
+  }
+
+  .cs-lv:nth-child(1) .cs-lv-sh:nth-child(2) {
+    left: 5cqw;
+    bottom: 0;
+    width: 19cqw;
+    height: 30cqw;
+    border-radius: 999px 999px 0 0;
+    background: linear-gradient(172deg, #d8f3ec 0%, #a6d4ca 55%, #82bdb0 100%);
+    box-shadow: inset 0.5cqw 0.5cqw 0 -0.1cqw rgb(255 255 255 / 0.4), inset -2cqw -2.4cqw 4cqw -1.5cqw rgb(20 80 70 / 0.3);
+  }
+
+  .cs-lv:nth-child(2) .cs-lv-sh:nth-child(2),
+  .cs-lv:nth-child(3) .cs-lv-sh:nth-child(2) {
+    bottom: 0;
+    border-radius: 999px 999px 0 0;
+    background: linear-gradient(172deg, #5b88f8 0%, #2147d4 46%, #13247c 100%);
+    box-shadow: inset 0.5cqw 0.5cqw 0 -0.1cqw rgb(255 255 255 / 0.3), inset -2cqw -2.4cqw 4cqw -1.5cqw rgb(4 10 56 / 0.4);
+  }
+
+  .cs-lv:nth-child(2) .cs-lv-sh:nth-child(2) {
+    right: 6cqw;
+    width: 22cqw;
+    height: 36cqw;
+  }
+
+  .cs-lv:nth-child(3) .cs-lv-sh:nth-child(2) {
+    right: 5cqw;
+    width: 20cqw;
+    height: 30cqw;
+  }
+
+  .cs-lv:nth-child(3) .cs-lv-sh:nth-child(1) {
+    left: 0;
+    top: 0;
+    width: 17cqw;
+    aspect-ratio: 1;
+    border-radius: 0 0 100% 0;
+    background: linear-gradient(150deg, #e3edff, #b4cdfa);
+  }
+
+  /* la fenêtre blanche qui porte la jauge */
+  .cs-lv-win {
+    display: block;
+    position: absolute;
+    z-index: 2;
+    left: 11cqw;
+    right: 11cqw;
+    top: 50%;
+    translate: 0 -50%;
+    padding: 5.4cqw 6.4cqw 5cqw;
+    border-radius: 3.2cqw;
+    background: #fff;
+    box-shadow: 0 0 0 1px rgb(255 255 255 / 0.5), 0 2.6cqw 4.6cqw -1.6cqw rgb(4 10 56 / 0.5);
+  }
+
+  .cs-lv .cs-share {
+    height: max(10px, 3.2cqw);
+    margin: 0 0 max(9px, 2.8cqw);
+    background: rgb(26 60 191 / 0.14);
+    box-shadow: none;
+  }
+
+  .cs-lv .cs-share i {
+    box-shadow: none;
+  }
+
+  .cs-lv .cs-share::after {
+    left: min(max(calc(var(--me) * var(--k, 1)), max(9px, 3cqw)), calc(100% - max(9px, 3cqw)));
+    width: max(18px, 6cqw);
+    height: max(18px, 6cqw);
+    box-shadow:
+      0 0 0 max(3px, 0.9cqw) rgb(238 133 50 / 0.5),
+      0 0.8cqw 1.6cqw rgb(4 10 56 / 0.4);
+  }
+
+  .cs-lv .cs-share-legend {
+    margin: 0;
+    font-size: max(10.5px, 2.9cqw);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--signal-deep);
+  }
+
+  .cs-lv .cs-share-legend span:first-child {
+    color: #b4520c;
+  }
+
+  /* le texte, sous l'affiche */
+  .cs-lv-main,
+  .cs-fit {
+    padding-inline: 12px;
+  }
+
+  .cs-lv-main {
+    margin: 24px 0 var(--space-5);
+  }
+
+  .cs-lv h3 {
+    margin-top: 10px;
+    font-size: 1.6rem;
+  }
+
+  .cs-lv-main p:not(.cs-level-n) {
+    margin-top: var(--space-3);
+    font-size: 15.5px;
+    line-height: 1.55;
+  }
+
+  /* la situation du client descend en pied de carte, sous un filet */
+  .cs-fit {
+    margin: auto 12px 0;
+    padding: var(--space-4) 0 0;
+    border-top: 1px solid rgb(255 255 255 / 0.22);
+  }
+}
+
+@media (max-width: 600px) {
+  .cs-commit {
+    grid-template-columns: 1fr;
+  }
+
+}
+
+/* La zone sombre respire un peu plus entre « Un cadre clair » et la FAQ. Les marges de la FAQ et de l'appel final sont communes à toutes les pages
+   (« Rythme vertical commun », Tile.css). */
+.dark-zone > #cadre.tile,
+.dark-zone > #livrable.tile {
+  padding-bottom: clamp(56px, 7vw, 96px);
+}
+
+/* ---------- Refonte : la scène montre l'ancien site ----------
+   Même scène que sur la page Création (mêmes positions, même parallaxe), mais l'ancien site : couleurs ternes, fenêtre légèrement de travers, une
+   date au lieu de « En ligne », un espace de gestion dont les actions sont barrées. */
+.cs-stage--old :is(.cs-site, .cs-phone, .cs-serp, .cs-guide) {
+  filter: saturate(0.22) contrast(0.94);
+}
+
+.cs-stage--old .cs-site {
+  rotate: -1.2deg;
+}
+
+.cs-live--old {
+  font-weight: 500;
+  color: var(--muted);
+}
+
+/* les actions barrées : une croix grise au lieu de la coche bleue */
+.cs-guide--locked i {
+  background: #aeb6c4;
+}
+
+.cs-guide--locked i::after {
+  content: '×';
+  left: 0;
+  top: 0;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  transform: none;
+  font-size: calc(1.6 * var(--q));
+  font-weight: 700;
+  line-height: 1;
+  color: #fff;
+}
+
+/* ---------- Audit : la scène montre une page en cours d'examen ----------
+   Même scène que sur les pages Création et Refonte (mêmes éléments, même parallaxe) : les points examinés sont cernés en pointillés orange, et la
+   carte du bas à gauche montre un constat. Les repères tombent sur les éléments examinés (voir l'ordre de la liste dans audit-ux-ui.astro). */
+/* Le cerne est un pseudo-élément à bordure pleine largeur de pixel (et non « outline ») : Safari sur iPhone perdait les côtés d'un contour
+   fin, dessiné hors de l'élément, dans un cadre qui défile. */
+.cs-stage--audit :is(.cs-site-cta, .cs-site-copy strong, .cs-site-nav) {
+  position: relative;
+}
+
+.cs-stage--audit :is(.cs-site-cta, .cs-site-copy strong, .cs-site-nav, .cs-phone)::after {
+  --gap: calc(0.6 * var(--q));
+  content: '';
+  position: absolute;
+  inset: calc(-1 * var(--gap) - 2px);
+  border: 2px dashed #ee8532;
+  border-radius: calc(var(--gap) + 1.2 * var(--q));
+  pointer-events: none;
+}
+
+.cs-stage--audit .cs-site-nav::after {
+  --gap: calc(0.3 * var(--q));
+}
+
+.cs-stage--audit :is(.cs-site-cta, .cs-phone)::after {
+  border-radius: calc(var(--gap) + 2.4 * var(--q));
+}
+
+.cs-stage--audit .cs-site-cta::after {
+  border-radius: 999px;
+}
+
+/* sur mobile, un trait plus fin pour ne pas charger l'image (1 px entier : les traits fins fractionnaires perdaient leurs côtés sur iPhone) */
+@media (max-width: 700px) {
+  .cs-stage--audit :is(.cs-site-cta, .cs-site-copy strong, .cs-site-nav, .cs-phone)::after {
+    inset: calc(-1 * var(--gap) - 1px);
+    border-width: 1px;
+  }
+}
+
+.cs-live--audit {
+  font-weight: 600;
+  color: #b4520c;
+}
+
+.cs-stage--audit .cs-serp-url i {
+  background: #ee8532;
+}
+
+.cs-stage--audit .cs-pin--1 {
+  left: 36.5cqw;
+  top: 45.5cqw;
+}
+.cs-stage--audit .cs-pin--2 {
+  left: 58cqw;
+  top: 26.5cqw;
+}
+.cs-stage--audit .cs-pin--3 {
+  left: 51.6cqw;
+  top: 18.6cqw;
+}
+.cs-stage--audit .cs-pin--4 {
+  left: 62cqw;
+  top: 58cqw;
+}
+.cs-stage--audit .cs-pin--5 {
+  left: 6cqw;
+  top: 90cqw;
+}
+
+@media (min-width: 701px) {
+  .cs-stage--audit .cs-pin--1 {
+    left: 27cqw;
+    top: 28cqw;
+  }
+  .cs-stage--audit .cs-pin--2 {
+    left: 38.4cqw;
+    top: 16.2cqw;
+  }
+  .cs-stage--audit .cs-pin--3 {
+    left: 38cqw;
+    top: 11.5cqw;
+  }
+  .cs-stage--audit .cs-pin--4 {
+    left: 60cqw;
+    top: 22cqw;
+  }
+  .cs-stage--audit .cs-pin--5 {
+    left: 77cqw;
+    top: 25cqw;
+  }
+}
+
+/* la parallaxe des repères suit l'élément qu'ils désignent : les trois premiers sont sur le site */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .cs-stage--audit :is(.cs-pin--1, .cs-pin--2, .cs-pin--3) {
+      --a: 0.6;
+    }
+
+    .cs-stage--audit .cs-pin--4 {
+      --a: 1.5;
+    }
+
+    .cs-stage--audit .cs-pin--5 {
+      --a: 1.1;
+    }
+  }
+}
+
+/* ---------- Audit : « Quand un audit est utile », sous la liste des points examinés ----------
+   La scène annotée ouvre la page, puis la liste dit ce qui est examiné ; ce bloc la prolonge avec les trois situations où cela sert. Les
+   mêmes colonnes à barre orange que les engagements de la zone sombre, mais sur le papier clair, sous un filet fin (la liste du dessus a un
+   filet épais) : un coda, pas un nouveau grand visuel. */
+.cs-when {
+  margin-top: clamp(44px, 6vw, 80px);
+  padding-top: clamp(24px, 3vw, 40px);
+  border-top: 1px solid rgb(18 32 43 / 0.16);
+}
+
+.cs-when > h3 {
+  color: var(--ink);
+  margin-bottom: clamp(20px, 2.6vw, 32px);
+  font-size: clamp(1.35rem, 2.2vw, 1.8rem);
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+/* seul le mot-clé est orange (7:1 sur le papier clair) */
+.cs-when > h3 em {
+  font-style: normal;
+  color: #b4520c;
+}
+
+.cs-commit--light {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.cs-commit--light strong {
+  display: block;
+  font-family: var(--font-display);
+  font-size: clamp(1.1rem, 1.6vw, 1.3rem);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.cs-commit--light p {
+  color: var(--ink-soft);
+}
+
+@media (max-width: 900px) {
+  .cs-commit--light {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+}
+
+/* sur mobile, la liste du dessus se termine déjà par un filet : on n'en double pas un second */
+@media (max-width: 700px) {
+  .cs-when {
+    margin-top: 40px;
+    padding-top: 0;
+    border-top: 0;
+  }
+}
+
+/* Scène retravaillée dans Figma : sur ordinateur, l'illustration remplace le dessin construit en CSS (mêmes proportions, 1297 x 571).
+   Elle est en deux dessins superposés : le fond (dégradé et formes), puis la texture du site (béton et grain, comme les autres scènes),
+   puis les maquettes par-dessus, nettes. Chaque plan glisse à son rythme au défilement (cs-drift, plus haut). Sur mobile, la scène en CSS
+   (cadre presque carré, téléphone au premier plan) reste en place : l'image large y serait trop petite pour être lue. */
+.cs-art {
+  display: none;
+}
+
+@media (min-width: 701px) {
+  .cs-stage {
+    background: none;
+  }
+
+  .cs-stage::before,
+  .cs-stage::after {
+    z-index: 1;
+  }
+
+  .cs-stage > :not(.cs-art) {
+    display: none;
+  }
+
+  .cs-art {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    pointer-events: none;
+  }
+
+  .cs-art--back {
+    z-index: 0;
+  }
+
+  .cs-art--front {
+    z-index: 2;
+  }
+}
+
+@media (min-width: 701px) and (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .cs-art-shapes,
+    .sc-l {
+      animation-name: cs-drift;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-timeline: --cs;
+      animation-range: cover 0% cover 100%;
+    }
+
+    .cs-art-shapes {
+      --a: 0.35;
+    }
+  }
 }

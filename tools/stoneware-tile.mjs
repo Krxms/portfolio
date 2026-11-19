@@ -3,7 +3,8 @@
 //    1. un relief doux : un bruit continu (plusieurs échelles) éclairé en biais (reflet clair d'un côté, ombre chaude de l'autre) ;
 //    2. des mouchetures de fer (brun rouille, brun sombre, gris-bleu, corail), fines : même finesse que le grain des sections bleues.
 // Les tuiles sont raccordables sur leurs quatre bords. L'intensité se règle avec l'opacité de la couche qui les porte.
-// Usage : node tools/stoneware-tile.mjs   →   src/assets/riso/stoneware.webp
+//  flecks.webp : mouchetures claires (crème, bleu pâle, pêche) pour les aplats de couleur, les boutons.
+// Usage : node tools/stoneware-tile.mjs   →   src/assets/riso/stoneware.webp, src/assets/riso/flecks.webp
 import sharp from 'sharp';
 
 const N = 512;
@@ -124,4 +125,21 @@ const makeLayer = () => {
   await L.save('src/assets/riso/stoneware.webp');
 }
 
+// ---------- aplats de couleur (boutons) : des mouchetures claires, bien visibles sur un bleu profond ----------
+{
+  const L = makeLayer();
+  L.specks({
+    count: 650,
+    seed: 0x51ed270b,
+    rScale: 0.9,
+    rMax: 1.8,
+    alpha: [0.3, 0.75],
+    inks: [
+      [0.55, [255, 238, 200]], // crème
+      [0.3, [170, 200, 255]], // bleu pâle
+      [0.15, [255, 190, 150]], // pêche
+    ],
+  });
+  await L.save('src/assets/riso/flecks.webp');
+}
 console.log('ok');

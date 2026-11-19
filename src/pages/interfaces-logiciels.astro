@@ -1,0 +1,311 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import R from '../components/R.astro';
+import { plain } from '../lib/fmt';
+import Tile from '../components/Tile.astro';
+import PageHero from '../components/PageHero.astro';
+import Faq from '../components/Faq.astro';
+import ExplodedProcess from '../components/ExplodedProcess.astro';
+import LinkUnder from '../components/LinkUnder.astro';
+import FinalCta from '../components/FinalCta.astro';
+import StickyCta from '../components/StickyCta.astro';
+import '../styles/scenes.css';
+// Même langage visuel et mêmes composants que les pages « Création » et « Refonte » : on réutilise leur feuille de style (préfixe cs-)
+import './creation-site-web.css';
+import './interfaces-logiciels.css';
+
+const site = 'https://antoinebruneau.fr';
+const description =
+  'Conception UX/UI de logiciels métier, de produits SaaS et d’outils internes : parcours, prototypes, design system. Mission de conception ou renfort ponctuel.';
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Service',
+      '@id': `${site}/interfaces-logiciels/#interfaces`,
+      name: 'Conception d’interfaces et de logiciels',
+      serviceType: 'Conception UX/UI',
+      description:
+        'Conception UX/UI d’interfaces de logiciels métier, de produits SaaS et d’outils internes : parcours, prototypes, conception UI, design system, spécifications. Mission de conception ou renfort UX/UI.',
+      url: `${site}/interfaces-logiciels/`,
+      inLanguage: 'fr-FR',
+      areaServed: { '@type': 'Country', name: 'France' },
+      provider: { '@type': 'ProfessionalService', '@id': `${site}/#service`, name: 'Antoine Bruneau' },
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Accueil', item: `${site}/` },
+        { '@type': 'ListItem', position: 2, name: 'Interfaces et logiciels', item: `${site}/interfaces-logiciels/` },
+      ],
+    },
+  ],
+};
+
+// Les situations où faire appel à moi : un nouveau produit comme un existant.
+const situations = [
+  { t: 'Un nouveau produit ou un nouveau module', d: 'Une fonctionnalité à concevoir, des parcours à imaginer avant le développement.' },
+  { t: 'Un produit qui a perdu sa cohérence', d: 'Des écrans ajoutés au fil des besoins, sans vue d’ensemble.' },
+  { t: 'Des parcours trop longs', d: 'Des utilisateurs qui cherchent, se trompent ou contournent l’outil.' },
+  { t: 'Pas de système commun', d: 'Chaque nouvel écran est redessiné à partir de rien, et les écarts s’accumulent.' },
+  { t: 'Un besoin de renfort', d: 'Votre équipe produit a besoin d’un designer UX/UI sur une période ou une fonctionnalité.' },
+];
+
+// Ce que je peux prendre en charge, selon le besoin : une partie ou l'ensemble.
+const tasks = [
+  { t: 'Comprendre l’existant', d: 'Audit de l’interface, analyse des parcours et des retours dont vous disposez.' },
+  { t: 'Organiser l’information', d: 'Architecture des écrans, navigation, priorités de chaque vue.' },
+  { t: 'Prototyper', d: 'Wireframes et prototypes pour valider les parcours avant de les développer.' },
+  { t: 'Concevoir l’interface', d: 'Maquettes, composants et design system pour garder des écrans cohérents.' },
+  { t: 'Accompagner le développement', d: 'Spécifications et échanges avec les développeurs. Intégration front-end lorsque je réalise le projet.' },
+];
+
+// Deux façons de travailler ensemble (mêmes lignes que les formules des pages Création et Refonte, sans jauge).
+const modes = [
+  {
+    name: 'Mission de conception',
+    t: 'Un périmètre, un livrable complet',
+    d: 'Un produit, un module, un parcours ou une évolution d’interface : de l’analyse aux maquettes validées. Je peux aussi réaliser l’intégration front-end lorsque la mission le prévoit.',
+    fit: 'vous avez un besoin identifié et voulez un livrable complet.',
+  },
+  {
+    name: 'Renfort d’équipe',
+    t: 'Designer UX/UI dans votre équipe',
+    d: 'Renfort ponctuel en conception UX/UI, selon le projet et les modalités définies ensemble, au sein de votre équipe produit. Facturation au temps effectué.',
+    fit: 'votre équipe produit existe et a besoin d’un designer UX/UI.',
+  },
+];
+
+const commitments = [
+  { t: 'Un périmètre écrit', d: 'Ce qui est inclus, ce qui ne l’est pas, les livrables et leurs formats, avant de commencer.' },
+  { t: 'Vos outils', d: 'Je m’adapte à votre environnement et à vos conventions.' },
+  { t: 'La confidentialité', d: 'Ce que vous me confiez reste confidentiel. Un accord de confidentialité peut être signé lorsque la mission le nécessite. Si la mission implique des données personnelles, un accord de sous-traitance est prévu.' },
+  { t: 'Des livrables exploitables', d: 'Maquettes, composants et spécifications remis dans les formats convenus, notamment les fichiers Figma, que votre équipe peut reprendre.' },
+];
+
+const nextOffers = [
+  { t: 'Audit UX/UI', d: 'Un avis clair sur votre interface avant de décider.', href: '/audit-ux-ui/' },
+  { t: 'Refonte de site', d: 'Votre besoin concerne un site web ? Gardez ce qui marche, refaites le reste.', href: '/refonte-site-web/' },
+];
+
+const faq = [
+  {
+    q: 'Travaillez-vous avec des équipes de développement ?',
+    a: 'Oui. Je fournis des maquettes et des spécifications exploitables, et je réponds aux questions pendant le développement. Lorsque je réalise moi-même un projet, je peux aussi intégrer le front-end.',
+  },
+  {
+    q: 'En renfort, intervenez-vous comme développeur ?',
+    a: 'Non. En renfort d’une équipe, j’interviens comme designer UX/UI. Le développement front-end fait partie de mes prestations lorsque je conçois et réalise un projet complet.',
+  },
+  {
+    q: 'Pouvez-vous reprendre un design system existant ?',
+    a: 'Oui. Je pars de ce qui existe, je complète les composants manquants et je documente les règles.',
+  },
+  {
+    q: 'Faut-il un accès au logiciel ?',
+    a: 'Pour un audit ou une évolution, oui : un accès de test ou de démonstration suffit. Nous réglons ce point avant le devis.',
+  },
+  {
+    q: 'Intervenez-vous à distance ?',
+    a: 'Oui. Je travaille en Île-de-France et à distance, partout en France.',
+  },
+];
+// Les questions de la page, exactement celles qui sont affichées
+schema['@graph'].push({
+  '@type': 'FAQPage',
+  '@id': `${site}/interfaces-logiciels/#faq`,
+  inLanguage: 'fr-FR',
+  mainEntity: faq.map((item) => ({ '@type': 'Question', name: plain(item.q), acceptedAnswer: { '@type': 'Answer', text: plain(item.a) } })),
+});
+---
+
+<BaseLayout title="Conception UX/UI d’interfaces et logiciels" description={description} schema={schema}>
+  <PageHero
+    crumb="Interfaces et logiciels"
+    kicker="Conception UX/UI · Logiciels métier, SaaS, outils internes"
+    wideLead
+    line1="Des logiciels pensés"
+    line2="pour ceux qui les utilisent."
+    lead={'Je conçois des parcours et des interfaces pour les logiciels métier, les SaaS et les outils internes. En mission de conception ou en renfort d’équipe UX/UI.'}
+    ctaHref="/contact/?sujet=interface"
+    ctaLabel="Échanger sur mon interface"
+    linkHref="#experience"
+    linkLabel="Voir mon expérience métier"
+    note="Premier échange gratuit · Devis gratuit et détaillé"
+  />
+
+  <section class="tile tile--light" id="situations" aria-labelledby="situations-title">
+    <div class="wrap wrap--wide tile-inner">
+      <header class="tile-head">
+        <p class="tile-label">Quand faire appel à moi</p>
+        <h2 id="situations-title">À créer, à améliorer ou à repenser.</h2>
+        <p class="tile-sub">J’interviens sur un produit en préparation comme sur une interface existante.</p>
+      </header>
+      <div class="il-split">
+        {/* La scène : un écran de logiciel métier, abstrait. Chaque repère orange désigne une situation de la liste, sous le même numéro. */}
+        <div class="il-stage" aria-hidden="true">
+          <span class="cs-shape cs-disc concrete"></span>
+          <span class="cs-shape cs-arch concrete"></span>
+          <span class="cs-shape cs-quarter concrete"></span>
+          <div class="il-app">
+            <div class="il-bar"><i></i><i></i><i></i><span class="il-team"><b></b><b></b><b></b></span></div>
+            <div class="il-body">
+              <div class="il-nav"><b></b><span></span><span></span><span></span><span></span><span></span><span></span></div>
+              <div class="il-main">
+                <div class="il-tools"><span class="il-search"></span><em></em></div>
+                <div class="il-row"><i></i><s class="c1"></s></div>
+                <div class="il-row il-row--off"><i></i><s class="c2"></s></div>
+                <div class="il-row"><i></i><s class="c3"></s></div>
+                <div class="il-new"></div>
+              </div>
+              <div class="il-detail"><b class="il-av"></b><i></i><i></i><em class="il-btn1"></em><em class="il-btn2"></em></div>
+            </div>
+          </div>
+          {situations.map((_, i) => <span class={`cs-pin il-pin il-pin--${i + 1}`}>{i + 1}</span>)}
+        </div>
+
+        <ol class="cs-deliv il-list" role="list">
+          {
+            situations.map((r, i) => (
+              <li>
+                <span class="cs-deliv-n" aria-hidden="true">{i + 1}</span>
+                <h3><R t={r.t} /></h3>
+                <p><R t={r.d} /></p>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <ExplodedProcess
+    plain
+    title="De la compréhension du besoin aux écrans."
+    sub="Une intervention adaptée à votre équipe et à votre projet."
+    steps={tasks.map((r) => ({ title: r.t, text: r.d }))}
+    after="Je travaille avec les informations et les utilisateurs auxquels vous me donnez accès. Quand une question mérite d’être testée auprès d’eux, je vous le signale."
+  />
+
+  <Tile id="collaboration" wide title="Deux façons de travailler ensemble." sub="Les modalités sont définies avec vous avant de commencer.">
+    <div class="cs-lv-panel panel-blue panel-blue--riso il-modes">
+      <ol class="cs-lv-list" role="list">
+        {
+          modes.map((l) => (
+            <li class="cs-lv">
+              <div class="cs-lv-main">
+                <p class="cs-level-n"><R t={l.name} /></p>
+                <h3><R t={l.t} /></h3>
+                <p><R t={l.d} /></p>
+              </div>
+              <p class="cs-fit"><span>Pour vous si</span> {l.fit}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </Tile>
+
+  <section class="tile tile--light il-xp" id="experience" aria-labelledby="experience-title">
+    <div class="wrap wrap--wide tile-inner il-xp-grid">
+      <div class="il-xp-copy">
+        <p class="tile-label">Expérience</p>
+        <h2 id="experience-title">Environ deux ans sur un logiciel de maintenance.</h2>
+        <p>
+          Avant de me mettre à mon compte, j’ai été designer UX/UI pendant environ deux ans sur un logiciel SaaS de gestion de maintenance (GMAO), chez
+          un éditeur de logiciel.
+        </p>
+        <p>
+          Concevoir une interface destinée à des professionnels, avec leurs contraintes et leurs usages métier, est une exigence que j’apporte à chaque
+          projet.
+        </p>
+      </div>
+      {/* Schéma original et abstrait : une interface métier (barre latérale, filtres, liste, panneau de détail), dessinée avec les formes et les
+          couleurs du site. Aucun élément du logiciel ni de l'entreprise. */}
+      <figure class="il-xp-art" aria-hidden="true">
+        <svg viewBox="0 0 480 320" role="presentation">
+          <rect x="0" y="0" width="480" height="320" rx="22" fill="#14205f" />
+          <circle cx="430" cy="40" r="74" fill="#ee8532" opacity="0.9" />
+          <path d="M28 320V230a46 46 0 0 1 92 0v90z" fill="#a6d4ca" />
+          <rect x="44" y="34" width="392" height="252" rx="12" fill="#f5f3ea" />
+          <rect x="44" y="34" width="392" height="26" rx="12" fill="#e3e6f1" />
+          <rect x="44" y="48" width="392" height="12" fill="#e3e6f1" />
+          <circle cx="60" cy="47" r="4" fill="#ee8532" />
+          <circle cx="74" cy="47" r="4" fill="#f1c56b" />
+          <circle cx="88" cy="47" r="4" fill="#a6d4ca" />
+          <rect x="56" y="72" width="70" height="200" rx="8" fill="#1f45d6" opacity="0.12" />
+          <rect x="66" y="86" width="50" height="8" rx="4" fill="#1f45d6" />
+          <rect x="66" y="104" width="40" height="6" rx="3" fill="#13247c" opacity="0.35" />
+          <rect x="66" y="118" width="44" height="6" rx="3" fill="#13247c" opacity="0.35" />
+          <rect x="66" y="132" width="36" height="6" rx="3" fill="#13247c" opacity="0.35" />
+          <rect x="138" y="72" width="168" height="22" rx="11" fill="#fff" stroke="#13247c" stroke-opacity="0.2" />
+          <rect x="314" y="72" width="44" height="22" rx="11" fill="#1f45d6" />
+          <g fill="#fff" stroke="#13247c" stroke-opacity="0.12">
+            <rect x="138" y="104" width="220" height="34" rx="8" />
+            <rect x="138" y="146" width="220" height="34" rx="8" />
+            <rect x="138" y="188" width="220" height="34" rx="8" />
+            <rect x="138" y="230" width="220" height="34" rx="8" />
+          </g>
+          <g fill="#13247c" opacity="0.4">
+            <rect x="150" y="117" width="90" height="8" rx="4" />
+            <rect x="150" y="159" width="110" height="8" rx="4" />
+            <rect x="150" y="201" width="80" height="8" rx="4" />
+            <rect x="150" y="243" width="100" height="8" rx="4" />
+          </g>
+          <rect x="310" y="113" width="36" height="16" rx="8" fill="#a6d4ca" />
+          <rect x="310" y="155" width="36" height="16" rx="8" fill="#f1c56b" />
+          <rect x="310" y="197" width="36" height="16" rx="8" fill="#a6d4ca" />
+          <rect x="310" y="239" width="36" height="16" rx="8" fill="#ee8532" opacity="0.8" />
+          <rect x="368" y="104" width="56" height="160" rx="8" fill="#fff" stroke="#13247c" stroke-opacity="0.12" />
+          <rect x="378" y="116" width="36" height="36" rx="18" fill="#1f45d6" opacity="0.2" />
+          <rect x="378" y="162" width="36" height="6" rx="3" fill="#13247c" opacity="0.35" />
+          <rect x="378" y="176" width="28" height="6" rx="3" fill="#13247c" opacity="0.35" />
+          <rect x="378" y="236" width="36" height="16" rx="8" fill="#1f45d6" />
+        </svg>
+      </figure>
+    </div>
+  </section>
+
+  <div class="dark-zone">
+    <Tile tone="dark" wide id="cadre" title="Un cadre clair.">
+      <div class="cs-follow">
+        <ul class="cs-commit" role="list">
+          {commitments.map((c) => <li><h3><R t={c.t} /></h3><p><R t={c.d} /></p></li>)}
+        </ul>
+        <div class="cs-next">
+          <p class="cs-next-label">Autres façons de commencer</p>
+          <ul role="list">
+            {
+              nextOffers.map((o) => (
+                <li>
+                  <a href={o.href}>
+                    <strong><R t={o.t} /></strong>
+                    <span><R t={o.d} /></span>
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+    </Tile>
+
+    <Tile id="faq" tone="dark" title="Avant de vous lancer" sub="Les questions qui reviennent le plus, en quelques lignes. Une autre vous vient ? Un message suffit.">
+      <Faq items={faq} />
+      <p class="cs-more"><LinkUnder href="/#faq" label="Toutes les questions" tone="light" /></p>
+    </Tile>
+
+    <FinalCta
+      title="Une interface à concevoir ou à faire évoluer ?"
+      text="Décrivez-moi votre produit, ceux qui l’utilisent et ce que vous voulez construire ou améliorer. Nous verrons ensemble quelle forme d’intervention convient."
+      label="Échanger sur mon interface"
+      href="/contact/?sujet=interface"
+    />
+  </div>
+  <StickyCta href="/contact/?sujet=interface" label="Échanger sur mon interface" />
+</BaseLayout>
+
+<script>
+  import '../scripts/scenes.js';
+</script>

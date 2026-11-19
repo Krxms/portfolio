@@ -1,5 +1,6 @@
 ---
 import './Tile.css';
+import R from './R.astro';
 
 interface Props {
   tone?: 'light' | 'dark';
@@ -8,16 +9,18 @@ interface Props {
   label?: string;
   title: string;
   sub?: string;
+  /** contenu étiré (1360 px), comme la vitrine du projet sur l'accueil */
+  wide?: boolean;
 }
-const { tone = 'light', mesh = 'a', id, label, title, sub } = Astro.props;
+const { tone = 'light', mesh = 'a', id, label, title, sub, wide = false } = Astro.props;
 ---
 
 <section class:list={['tile', `tile--${tone}`, tone === 'dark' && `tile--mesh-${mesh}`]} id={id} aria-labelledby={id ? `${id}-title` : undefined}>
-  <div class="wrap tile-inner">
+  <div class:list={['wrap', 'tile-inner', wide && 'wrap--wide']}>
     <header class="tile-head">
-      {label && <p class="tile-label">{label}</p>}
-      <h2 id={id ? `${id}-title` : undefined}>{title}</h2>
-      {sub && <p class="tile-sub">{sub}</p>}
+      {label && <p class="tile-label"><R t={label} /></p>}
+      <h2 id={id ? `${id}-title` : undefined}><R t={title} /></h2>
+      {sub && <p class="tile-sub"><R t={sub} /></p>}
       <div class="tile-actions"><slot name="actions" /></div>
     </header>
     <slot />

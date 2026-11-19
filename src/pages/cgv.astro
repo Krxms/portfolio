@@ -1,100 +1,459 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import './legal.css';
+
+/* Texte : docs/dossier-final/02-cgv.md. Ce texte n'est pas une validation juridique : les clauses marquées « VALIDATION PRO » dans les
+   commentaires ci-dessous (en-tête TVA, articles 1, 9, 13, 15, 16, 21) doivent être relues par un professionnel du droit avant
+   publication. La date de version (19 novembre 2026) est à mettre à jour si le texte change avant la mise en ligne. */
 ---
 
 <BaseLayout
   noindex
   title="Conditions générales de vente"
-  description="Conditions générales de vente des prestations de design UX/UI et développement d'Antoine Bruneau."
+  description="Conditions générales de vente des prestations d’Antoine Bruneau : sites web, interfaces et logiciels, audit UX/UI et renfort d’équipe."
 >
   <section class="section legal-page wrap">
     <div class="page-head">
       <span class="label">Conditions</span>
       <h1>Conditions générales de vente</h1>
-      <p class="sub">Applicables à toute prestation commandée auprès d'Antoine Bruneau, entrepreneur individuel.</p>
+      <p class="sub">Version du 19 novembre 2026.</p>
     </div>
 
     <div class="legal-body">
       <section>
-        <h2>1. Objet</h2>
+        <h2>Prestataire</h2>
+        <p>Antoine Bruneau, entrepreneur individuel (micro-entreprise).</p>
+        <ul>
+          <li>Adresse : 8 rue Odette Roger, 78440 Guitrancourt.</li>
+          <li>SIREN : 788 566 719. SIRET : 788 566 719 00035. Immatriculé au Registre national des entreprises le 09/04/2025.</li>
+          <li>Contact : <a href="mailto:contact@antoinebruneau.fr">contact@antoinebruneau.fr</a> · <a href="tel:+33609111838">06 09 11 18 38</a>.</li>
+          {/* VALIDATION PRO : référence fiscale à jour de la franchise en base (article 293 B du CGI ou L223-3 du CIBS) */}
+          <li>TVA : prestations facturées sans TVA, en application de la franchise en base.</li>
+        </ul>
+      </section>
+
+      {/* VALIDATION PRO (article 1) : statut des associations et organismes non professionnels, et incidence sur les articles 9, 15 et 17 */}
+      <section>
+        <h2>1. Objet et champ d’application</h2>
+        <p>Les présentes conditions générales de vente (CGV) régissent les prestations d’Antoine Bruneau (« le Prestataire ») :</p>
+        <ul>
+          <li>conception et réalisation de sites web, et refonte de sites existants ;</li>
+          <li>conception UX/UI d’interfaces d’applications et de logiciels, avec intégration front-end lorsque la mission le prévoit ;</li>
+          <li>audit UX/UI ;</li>
+          <li>interventions en renfort d’équipe comme designer UX/UI ;</li>
+          <li>en complément d’un projet, identité visuelle, création de logo et direction artistique.</li>
+        </ul>
         <p>
-          Les présentes conditions générales de vente (CGV) régissent les relations contractuelles entre Antoine
-          Bruneau (« le Prestataire ») et toute personne physique ou morale (« le Client ») souhaitant faire
-          appel à ses services de design UX/UI, identité de marque et développement de sites sur-mesure.
+          Elles s’adressent aux clients qui agissent pour les besoins de leur activité professionnelle, associative ou institutionnelle (« le
+          Client »). Elles sont communiquées avec chaque devis et acceptées avec lui. Elles ne privent pas le Client des dispositions protectrices
+          qui s’imposent à sa situation, notamment celles de l’article 16.
         </p>
       </section>
 
       <section>
-        <h2>2. Devis et commande</h2>
+        <h2>2. Documents contractuels</h2>
+        <p>Le contrat est formé :</p>
+        <ul>
+          <li>du devis accepté ;</li>
+          <li>des présentes CGV ;</li>
+          <li>le cas échéant, d’un contrat de mission (renfort d’équipe), d’un accord de confidentialité et d’un accord de sous-traitance des données personnelles.</li>
+        </ul>
+        <p>En cas de contradiction, les conditions particulières du devis ou du contrat de mission prévalent sur les CGV.</p>
+        <p>Le devis précise notamment :</p>
+        <ul>
+          <li>le périmètre et ses exclusions ;</li>
+          <li>les livrables et leurs formats ;</li>
+          <li>les étapes de validation et le nombre de séries de retours ;</li>
+          <li>le calendrier indicatif ;</li>
+          <li>le prix et l’échéancier ;</li>
+          <li>la prise en main éventuelle ;</li>
+          <li>les services tiers ;</li>
+          <li>l’étendue de la cession de droits et les fichiers sources remis.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>3. Premier échange, lecture préalable et devis</h2>
+        <ul>
+          <li><strong>Premier échange</strong> : il est gratuit et sans engagement.</li>
+          <li>
+            <strong>Lecture préalable</strong> : pour établir un devis de refonte, le Prestataire peut procéder à une lecture rapide et gratuite du
+            site existant. Cette lecture ne donne lieu à aucun rapport ni livrable.
+          </li>
+          <li><strong>Audit</strong> : un diagnostic détaillé et documenté relève de la prestation d’audit UX/UI, facturée selon son propre devis.</li>
+          <li>
+            <strong>Devis</strong> : il est gratuit et détaillé. Il est valable trente (30) jours calendaires à compter de son émission, sauf
+            indication contraire. Au-delà, il peut être prolongé par écrit ou remplacé par un nouveau devis.
+          </li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>4. Commande et démarrage</h2>
+        <ul>
+          <li><strong>Commande</strong> : elle est formée par l’acceptation du devis, par signature ou par accord écrit (e-mail).</li>
+          <li><strong>Démarrage</strong> : les travaux débutent après cette acceptation et l’encaissement de l’acompte prévu.</li>
+          <li><strong>Calendrier</strong> : il court à compter du démarrage.</li>
+        </ul>
+        <p>Sous réserve de l’article 16 pour les contrats concernés.</p>
+      </section>
+
+      <section>
+        <h2>5. Prix, facturation et paiement</h2>
+        <ul>
+          <li><strong>Prix</strong> : en euros, sans TVA (franchise en base, voir l’en-tête).</li>
+          <li><strong>Projet standard</strong> : 40 % d’acompte à la commande, 60 % à la livraison.</li>
+          <li>
+            <strong>Projet long ou important</strong> : 40 % à la commande, 30 % à la validation des maquettes, 30 % à la livraison. L’échéancier
+            peut être adapté au devis.
+          </li>
+          <li>
+            <strong>Renfort d’équipe</strong> : facturation mensuelle du temps réellement effectué, au tarif journalier ou à la demi-journée fixé au
+            devis ou au contrat de mission.
+          </li>
+          <li><strong>Nature des sommes versées</strong> : les sommes versées à la commande sont des acomptes.</li>
+          <li><strong>Délai de paiement</strong> : les factures sont payables à réception.</li>
+          <li>
+            <strong>Retard de paiement</strong> : il entraîne de plein droit, à compter du lendemain de la date d’échéance :
+            <ul>
+              <li>
+                des pénalités de retard au taux d’intérêt appliqué par la Banque centrale européenne à son opération de refinancement la plus récente,
+                majoré de 10 points de pourcentage ;
+              </li>
+              <li>
+                pour les Clients professionnels, une indemnité forfaitaire pour frais de recouvrement de quarante euros (40 €). Une indemnisation
+                complémentaire peut être demandée sur justificatifs lorsque les frais exposés dépassent ce montant.
+              </li>
+            </ul>
+          </li>
+          <li>
+            <strong>Suspension pour impayé</strong> : en cas de défaut de paiement d’une échéance, le Prestataire peut suspendre ses travaux après
+            relance écrite restée sans effet pendant 15 jours calendaires. Le calendrier est décalé d’autant.
+          </li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>6. Conception, retours et validations</h2>
+        <ul>
+          <li>
+            <strong>Validation par étape</strong> : chaque étape de conception (par exemple le plan du site, les maquettes, la réalisation) est
+            soumise à la validation écrite du Client.
+          </li>
+          <li>
+            <strong>Séries de retours</strong> : sauf adaptation au devis, deux séries de retours sont incluses par étape de conception. Une série de
+            retours est un ensemble de remarques regroupées, transmises en une fois.
+          </li>
+          <li><strong>Corrections d’erreurs</strong> : la correction d’une erreur imputable au Prestataire n’est pas décomptée comme une série de retours.</li>
+          <li><strong>Délai de réponse</strong> : le Client répond aux demandes de validation dans un délai de dix (10) jours ouvrés.</li>
+          <li>
+            <strong>Sans réponse</strong> : le calendrier est suspendu et le Prestataire adresse une relance écrite. Aucune étape intermédiaire n’est
+            réputée validée en l’absence de réponse. La reprise des travaux est replanifiée selon les disponibilités du Prestataire.
+          </li>
+          <li><strong>Étape validée</strong> : une demande qui remet en cause une étape validée est traitée comme une modification (article 8).</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>7. Obligations du Client</h2>
+        <p>Le Client s’engage à :</p>
+        <ul>
+          <li>désigner un interlocuteur ;</li>
+          <li>fournir dans les délais convenus les informations, contenus, accès et validations nécessaires ;</li>
+          <li>disposer des droits d’utilisation des éléments qu’il transmet (textes, images, marques, données) ;</li>
+          <li>garantir le Prestataire contre toute réclamation relative à ces éléments.</li>
+        </ul>
+        <p>Il reste responsable :</p>
+        <ul>
+          <li>
+            des contenus publiés sur son site et de leur conformité légale, notamment ses mentions légales, sa politique de confidentialité et ses
+            traitements de données personnelles ;
+          </li>
+          <li>de l’exploitation de son site après la livraison, sauf contrat de maintenance.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>8. Modifications et avenants</h2>
         <p>
-          Chaque prestation fait l'objet d'un devis détaillé, gratuit et sans engagement, décrivant la nature, le
-          périmètre, le délai indicatif et le prix des travaux. La commande est considérée comme ferme à réception
-          du devis signé ou d'un accord écrit du Client (email), accompagné le cas échéant de l'acompte demandé.
+          Toute demande excédant le périmètre du devis ou les séries de retours prévues fait l’objet d’un devis complémentaire ou d’un avenant,
+          accepté avant exécution. Le calendrier est ajusté en conséquence.
         </p>
       </section>
 
       <section>
-        <h2>3. Tarifs et paiement</h2>
+        <h2>9. Livraison et réception</h2>
+        <p><strong>Livraison.</strong> Elle intervient :</p>
+        <ul>
+          <li>pour un site web : à la mise en ligne et à la remise des accès convenus ;</li>
+          <li>pour une mission de conception UX/UI : à la remise des fichiers et livrables prévus au devis ;</li>
+          <li>pour un audit : à la remise du rapport et à la restitution convenue.</li>
+        </ul>
+        <p>Le solde est facturé à la livraison et payable à réception de facture.</p>
+        {/* VALIDATION PRO (article 9) : réception constatée après rappel sans réponse, surtout face à un client non professionnel */}
         <p>
-          Les prix sont indiqués en euros. Sauf accord contraire précisé au devis, un acompte est demandé à la
-          commande, le solde étant dû à la livraison. Les factures sont payables selon les modalités indiquées
-          sur celles-ci. Tout retard de paiement peut entraîner l'application de pénalités conformément à la
-          législation en vigueur.
+          <strong>Réception.</strong> À compter de la livraison, le Client dispose de dix (10) jours ouvrés pour signaler par écrit les anomalies
+          constatées. Une anomalie est un écart avec ce qui a été validé ou un dysfonctionnement. À défaut de signalement dans ce délai, le
+          Prestataire adresse un rappel écrit. Sans réponse à ce rappel, la réception sans réserve apparente peut être constatée.
+        </p>
+        <p>Cette procédure ne supprime ni l’obligation de correction prévue à l’article 10, ni les droits que la loi reconnaît au Client.</p>
+        <p>
+          <strong>Prise en main.</strong> Les accès concernés sont remis à la livraison. Lorsque le Client doit administrer lui-même son site, une
+          prise en main adaptée est incluse. Une formation approfondie ou une documentation détaillée n’est fournie que si le devis la prévoit.
         </p>
       </section>
 
       <section>
-        <h2>4. Délais</h2>
+        <h2>10. Corrections après livraison</h2>
+        <ul>
+          <li>
+            <strong>Période de signalement</strong> : pendant trente (30) jours calendaires après la réception, le Client peut signaler les anomalies
+            imputables à la prestation du Prestataire.
+          </li>
+          <li>
+            <strong>Correction</strong> : ces anomalies sont corrigées sans frais. Une anomalie signalée pendant cette période reste à corriger même si
+            sa résolution intervient après la fin de la période.
+          </li>
+          <li>
+            <strong>Hors correction</strong> : ne relèvent pas de cette garantie, et sont facturés séparément :
+            <ul>
+              <li>les évolutions et les demandes hors périmètre ;</li>
+              <li>les dysfonctionnements résultant de modifications faites par le Client ou par un tiers après la livraison ;</li>
+              <li>les dysfonctionnements résultant de la mise à jour ou de la défaillance d’un service tiers non imputable au Prestataire.</li>
+            </ul>
+          </li>
+          <li><strong>Droits légaux</strong> : le présent article s’applique sans préjudice des garanties légales dont le Client peut bénéficier.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>11. Maintenance et évolutions</h2>
+        <ul>
+          <li><strong>Maintenance</strong> : facultative. Elle fait l’objet d’un devis ou d’un contrat distinct, qui en fixe les prestations et la périodicité.</li>
+          <li><strong>Évolutions</strong> : elles sont facturées séparément.</li>
+          <li>Aucun suivi permanent n’est inclus par défaut.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>12. Sauvegardes et mise en ligne d’une refonte</h2>
+        <ul>
+          <li>
+            <strong>Sauvegarde</strong> : avant la mise en ligne d’une refonte, le Prestataire réalise ou vérifie une sauvegarde du site existant
+            selon les besoins du projet, les contraintes techniques et les accès disponibles. Les responsabilités et limites de cette opération sont
+            précisées au devis.
+          </li>
+          <li>
+            <strong>Mise en ligne</strong> : il prend les précautions de mise en ligne et, lorsque c’est nécessaire, prévoit une possibilité de retour
+            en arrière.
+          </li>
+          <li>
+            <strong>Limite</strong> : il ne peut garantir une sauvegarde intégrale ni une restauration possible dans tous les cas, notamment lorsque
+            les accès ou l’hébergement existant ne le permettent pas.
+          </li>
+        </ul>
+      </section>
+
+      {/* VALIDATION PRO (article 13) : formalisme de l'article L131-3 du CPI, règles propres au logiciel et au logo, cohérence avec le devis */}
+      <section>
+        <h2>13. Propriété intellectuelle et fichiers</h2>
         <p>
-          Les délais annoncés sont donnés à titre indicatif et dépendent notamment de la réactivité du Client
-          dans la fourniture des éléments nécessaires (contenus, retours, validations). Un retard raisonnable ne
-          saurait engager la responsabilité du Prestataire.
+          <strong>13.1 Créations cédées.</strong> Sous réserve du paiement intégral du prix, le Prestataire cède au Client les droits patrimoniaux
+          suivants sur les créations finales originales retenues et livrées dans le cadre du devis :
+        </p>
+        <ul>
+          <li>le droit de reproduction, sur tout support ;</li>
+          <li>le droit de représentation, par tout moyen de diffusion ;</li>
+          <li>le droit d’adaptation, y compris la modification, la déclinaison et l’intégration dans d’autres supports.</li>
+        </ul>
+        <p>Le domaine d’exploitation est le suivant :</p>
+        <ul>
+          <li><strong>Destination</strong> : l’exploitation liée à l’activité et à la communication du Client.</li>
+          <li><strong>Territoire</strong> : le monde entier.</li>
+          <li><strong>Durée</strong> : la durée légale de protection des droits d’auteur.</li>
+          <li><strong>Étendue précise</strong> : le devis l’adapte aux livrables concernés (site, logo, supports imprimés, interfaces, code).</li>
+          <li>
+            <strong>Prise d’effet</strong> : au paiement intégral du prix. Jusqu’au paiement, le Client dispose d’un droit d’usage limité aux
+            besoins de la validation.
+          </li>
+        </ul>
+        <p>
+          Le devis précise, le cas échéant, les règles propres à certaines créations, notamment le code logiciel et les logos (par exemple
+          l’éventuel dépôt de marque par le Client).
+        </p>
+        <p><strong>13.2 Éléments exclus.</strong> Restent la propriété du Prestataire ou de leurs auteurs, et ne sont pas cédés :</p>
+        <ul>
+          <li>les propositions non retenues ;</li>
+          <li>les recherches et explorations ;</li>
+          <li>les méthodes et savoir-faire ;</li>
+          <li>les composants génériques réutilisables du Prestataire ;</li>
+          <li>les éléments de tiers, soumis à leurs propres licences (article 14).</li>
+        </ul>
+        <p><strong>13.3 Fichiers remis.</strong> La cession des droits est distincte de la remise matérielle des fichiers.</p>
+        <ul>
+          <li><strong>Fichiers finaux</strong> : les fichiers finaux exploitables sont remis au Client.</li>
+          <li>
+            <strong>Sources</strong> : les sources éditables nécessaires à la prestation sont incluses, notamment les fichiers Figma pour les
+            missions UX/UI et le code spécifique pour les sites développés. D’autres sources sont remises selon le devis.
+          </li>
+          <li><strong>Non remis</strong> : les explorations, les propositions non retenues, les fichiers internes et les composants génériques.</li>
+          <li><strong>Formats</strong> : ils sont précisés dans chaque devis.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>14. Éléments et services tiers</h2>
+        <ul>
+          <li>
+            <strong>Licences</strong> : les solutions de tiers utilisées pour le projet restent régies par leurs propres licences et conditions (CMS,
+            thèmes, extensions, bibliothèques, polices, images, hébergement, noms de domaine, outils en ligne).
+          </li>
+          <li>
+            <strong>Comptes</strong> : les comptes, noms de domaine, hébergements et abonnements sont ouverts au nom du Client lorsque c’est possible,
+            avec paiement direct par le Client. Les exceptions techniques, transferts et refacturations ponctuelles sont précisés au devis. Les accès
+            sont remis au Client.
+          </li>
+          <li><strong>Coûts</strong> : les coûts de ces services sont à la charge du Client.</li>
+          <li>
+            <strong>Responsabilité</strong> : le Prestataire ne répond pas des évolutions, interruptions ou changements de conditions de ces services.
+            Il reste responsable de ses propres erreurs de configuration ou d’intégration.
+          </li>
+        </ul>
+      </section>
+
+      {/* VALIDATION PRO (article 15) : plafond et exclusions (C. civ. 1170 et 1231-3 ; C. consom. R212-1 6° et L212-2) */}
+      <section>
+        <h2>15. Responsabilité</h2>
+        <ul>
+          <li>
+            <strong>Obligation de moyens</strong> : le Prestataire exécute ses prestations avec soin et selon les règles de l’art. Il est tenu d’une
+            obligation de moyens.
+          </li>
+          <li>
+            <strong>Sans garantie</strong> :
+            <ul>
+              <li>aucun résultat commercial, aucun volume de trafic ni aucun positionnement dans les moteurs de recherche n’est garanti ;</li>
+              <li>la conformité complète d’un site à un référentiel d’accessibilité n’est pas garantie ;</li>
+              <li>un audit UX/UI est une revue experte : il ne constitue ni un test utilisateur ni un audit de conformité.</li>
+            </ul>
+          </li>
+          <li>
+            <strong>Ce qui reste couvert</strong> : le Prestataire reste responsable des erreurs qui lui sont imputables, y compris celles qui
+            résultent de sa configuration ou de son intégration.
+          </li>
+          <li>
+            <strong>Exclusions</strong> : sa responsabilité ne peut être engagée pour les dommages résultant de contenus fournis par le Client, d’une
+            utilisation non conforme des livrables, de modifications ultérieures du Client ou de tiers, ou de la défaillance d’un service tiers non
+            imputable au Prestataire.
+          </li>
+          <li>
+            <strong>Plafond</strong> : la responsabilité du Prestataire est limitée aux dommages directs et plafonnée au montant hors taxes de la
+            prestation concernée. Ce plafond ne s’applique pas en cas de faute lourde ou dolosive, ni dans les cas où la loi interdit une telle
+            limitation.
+          </li>
+        </ul>
+      </section>
+
+      {/* VALIDATION PRO (article 16) : information précontractuelle, formulaire de rétractation, encaissement de l'acompte (L221-3, L221-5, L221-10, L221-18, L221-25) */}
+      <section>
+        <h2>16. Contrats conclus hors établissement avec certains professionnels</h2>
+        <p>
+          Lorsque le contrat est conclu hors établissement avec un professionnel employant cinq salariés au plus, et que son objet n’entre pas dans
+          le champ de l’activité principale de ce professionnel, certaines dispositions du Code de la consommation s’appliquent (article L221-3).
+          Notamment :
+        </p>
+        <ul>
+          <li>une information précontractuelle ;</li>
+          <li>un droit de rétractation de quatorze jours, avec un formulaire de rétractation joint au devis ;</li>
+          <li>l’interdiction de recevoir un paiement avant l’expiration d’un délai de sept jours à compter de la conclusion du contrat (article L221-10).</li>
+        </ul>
+        <p>
+          Si le Client demande expressément que la prestation commence avant la fin du délai de rétractation, et se rétracte ensuite, il doit un
+          montant proportionné à ce qui a été fourni (article L221-25).
+        </p>
+        <p>Dans ce cas, l’acompte n’est encaissé qu’à l’issue du délai légal, et les articles 4, 5 et 17 s’appliquent sous réserve de ces dispositions.</p>
+      </section>
+
+      <section>
+        <h2>17. Annulation, interruption et résiliation</h2>
+        <p>
+          <strong>17.1 Annulation avant démarrage.</strong> Si le Client annule après l’acceptation du devis et avant le démarrage des travaux, le
+          Prestataire retient sur l’acompte le travail préparatoire réellement effectué et les frais engagés, justifiés et non récupérables. Il
+          restitue le solde de l’acompte. Les droits légaux de rétractation, lorsqu’ils s’appliquent (article 16), sont respectés.
+        </p>
+        <p>
+          <strong>17.2 Interruption en cours de projet.</strong> Si le Client met fin au projet après le démarrage, le travail réalisé jusqu’à cette
+          date et les frais engagés et justifiés sont dus. Ils font l’objet d’un décompte, sur lequel les acomptes déjà versés sont imputés.
+        </p>
+        <p>
+          <strong>17.3 Inactivité du Client.</strong> Le calendrier est suspendu après dix (10) jours ouvrés sans retour (article 6). Après soixante
+          (60) jours calendaires d’inactivité, le Prestataire adresse au Client une mise en demeure écrite. Sans régularisation dans un délai de
+          quinze (15) jours calendaires, le Prestataire peut résilier le contrat, dans les conditions légales et contractuelles. Le travail réalisé
+          et les frais engagés et justifiés font alors l’objet d’un décompte, sur lequel les acomptes versés sont imputés.
+        </p>
+        <p>
+          <strong>17.4 Manquement grave.</strong> Chaque partie peut résilier le contrat en cas de manquement grave de l’autre, notamment un défaut
+          de paiement, après mise en demeure restée sans effet pendant quinze (15) jours calendaires.
         </p>
       </section>
 
       <section>
-        <h2>5. Propriété intellectuelle</h2>
-        <p>
-          Les droits de propriété intellectuelle sur les livrables (créations graphiques, code) sont cédés au
-          Client au fur et à mesure du paiement intégral des factures correspondantes, sauf mention contraire au
-          devis. Le Prestataire conserve le droit de mentionner la réalisation à titre de référence, sauf
-          demande contraire du Client.
-        </p>
+        <h2>18. Confidentialité et présentation des réalisations</h2>
+        <p><strong>Confidentialité.</strong></p>
+        <ul>
+          <li>Chaque partie garde confidentielles les informations non publiques reçues de l’autre pour l’exécution du contrat, pendant sa durée et après son terme.</li>
+          <li>Un accord de confidentialité spécifique peut être signé lorsque la mission le nécessite.</li>
+        </ul>
+        <p><strong>Présentation des réalisations.</strong></p>
+        <ul>
+          <li>
+            <strong>Projets publics</strong> : le Prestataire peut présenter les réalisations publiques dans son portfolio et ses supports
+            professionnels, sauf opposition écrite du Client ou restriction prévue au contrat.
+          </li>
+          <li>
+            <strong>Projets non publics</strong> : la présentation d’un projet non public ou d’éléments internes nécessite l’autorisation écrite
+            préalable du Client.
+          </li>
+          <li>
+            <strong>Limites</strong> : aucune information confidentielle, aucune donnée personnelle et aucun élément soumis aux droits de tiers n’est
+            publié sans autorisation appropriée.
+          </li>
+          <li><strong>Après la cession</strong> : ce droit de présentation est maintenu après la cession des droits prévue à l’article 13.</li>
+        </ul>
       </section>
 
       <section>
-        <h2>6. Obligations du Client</h2>
-        <p>
-          Le Client s'engage à fournir dans des délais raisonnables les informations, contenus et validations
-          nécessaires à la bonne exécution de la prestation, et à disposer des droits d'utilisation des éléments
-          qu'il transmet (textes, images, marques).
-        </p>
+        <h2>19. Données personnelles</h2>
+        <ul>
+          <li>
+            <strong>Données du Client</strong> : le Prestataire traite les données de contact du Client pour la gestion de la relation et du contrat,
+            conformément à sa <a href="/confidentialite/">politique de confidentialité</a>.
+          </li>
+          <li>
+            <strong>Sous-traitance</strong> : lorsque la mission implique un traitement de données personnelles pour le compte du Client
+            (formulaires, bases de contacts, outils métier), les parties concluent un accord de sous-traitance conforme à l’article 28 du RGPD. Cet
+            accord fixe l’objet, la durée, la nature et la finalité du traitement, les catégories de données et de personnes concernées, et les
+            obligations de chaque partie. Il est distinct d’un accord de confidentialité.
+          </li>
+        </ul>
       </section>
 
       <section>
-        <h2>7. Responsabilité</h2>
+        <h2>20. Force majeure</h2>
         <p>
-          Le Prestataire s'engage à exécuter sa prestation avec soin et selon les règles de l'art. Sa
-          responsabilité ne saurait être engagée en cas de mauvaise utilisation des livrables par le Client ou de
-          contenus fournis par ce dernier.
+          Aucune partie n’est responsable d’un manquement causé par un événement de force majeure au sens de l’article 1218 du Code civil. Les
+          obligations concernées sont suspendues pendant la durée de l’empêchement. Si celui-ci se prolonge au-delà de soixante (60) jours, chaque
+          partie peut résilier le contrat. Le travail réalisé est alors réglé selon le décompte de l’article 17.2.
         </p>
       </section>
 
+      {/* VALIDATION PRO (article 21) : désignation d'une juridiction et opposabilité aux clients non commerçants */}
       <section>
-        <h2>8. Résiliation</h2>
-        <p>
-          En cas d'annulation par le Client après le démarrage de la prestation, les sommes déjà engagées ainsi
-          que le travail réalisé jusqu'à la date d'annulation restent dus au Prestataire.
-        </p>
-      </section>
-
-      <section>
-        <h2>9. Droit applicable et litiges</h2>
-        <p>
-          Les présentes CGV sont soumises au droit français. À défaut de résolution amiable, tout litige relève
-          de la compétence des tribunaux français.
-        </p>
+        <h2>21. Droit applicable et litiges</h2>
+        <ul>
+          <li><strong>Droit applicable</strong> : les présentes CGV sont soumises au droit français.</li>
+          <li><strong>Litiges</strong> : les parties recherchent d’abord une solution amiable. À défaut, le litige est porté devant les juridictions compétentes.</li>
+        </ul>
       </section>
     </div>
   </section>

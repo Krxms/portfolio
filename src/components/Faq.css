@@ -1,3 +1,9 @@
+/* Pas d'ancrage automatique du défilement : le script de la FAQ garde lui-même la question touchée immobile (voir Faq.astro), et
+   l'ancrage natif entrerait en conflit avec lui. */
+html {
+  overflow-anchor: none;
+}
+
 .faq {
   max-width: 800px;
   margin-inline: auto;
@@ -6,6 +12,10 @@
 
 .faq details {
   border-top: 1px solid var(--line-strong);
+  /* le contenu d'une question est isolé du reste de la page (moins de calcul quand elle s'ouvre ou se ferme), et le navigateur ne
+     corrige pas le défilement de son côté : c'est le script qui le fait, une seule fois (voir Faq.astro) */
+  contain: layout style;
+  overflow-anchor: none;
 }
 
 .faq summary {
@@ -15,6 +25,8 @@
   gap: var(--space-5);
   min-height: 68px;
   padding-block: var(--space-3);
+  /* de la place à droite pour l'ombre du bouton : pendant l'animation la question est rognée (overflow: hidden) et l'ombre l'était aussi */
+  padding-right: 14px;
   cursor: pointer;
   list-style: none;
   font-weight: 600;
@@ -26,17 +38,69 @@
   display: none;
 }
 
-.faq summary::after {
-  content: '+' / '';
+/* Le bouton « + » : le rond (et son ombre) reste fixe, seul le signe tourne. Le signe est dessiné par deux barres centrées par la
+   géométrie (inset: 0 + marge auto), donc exactement au milieu du rond, quelle que soit la police. L'ouverture remplit le rond d'orange
+   (un calque dont l'opacité change) : rien d'autre ne bouge, tout passe par transform et opacity. */
+.faq-icon {
+  position: relative;
   flex: none;
-  font-size: 28px;
-  font-weight: 300;
-  line-height: 1;
-  color: var(--signal-deep);
-  transition: transform 0.45s var(--spring);
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  /* le signe + / − est orange (blanc sur le disque orange une fois ouvert) */
+  color: #ee8532;
+  background: linear-gradient(145deg, #ffffff, #dfe7f1);
+  box-shadow: 3px 4px 8px rgb(2 8 40 / 0.35), inset 0 1px 0 #fff;
+  transition: color 0.45s cubic-bezier(0.32, 0.72, 0, 1);
 }
 
-.faq details[open] summary::after {
+.faq-icon::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: #ee8532;
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.5);
+  opacity: 0;
+  transition: opacity 0.45s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.faq-icon i {
+  position: absolute;
+  inset: 0;
+  transition: transform 0.55s cubic-bezier(0.32, 0.72, 0, 1);
+  will-change: transform;
+}
+
+.faq-icon i::before,
+.faq-icon i::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  border-radius: 1px;
+  background: currentColor;
+}
+
+.faq-icon i::before {
+  width: 14px;
+  height: 2px;
+}
+
+.faq-icon i::after {
+  width: 2px;
+  height: 14px;
+}
+
+.faq details[open]:not([data-open='false']) .faq-icon {
+  color: #fff;
+}
+
+.faq details[open]:not([data-open='false']) .faq-icon::before {
+  opacity: 1;
+}
+
+.faq details[open]:not([data-open='false']) .faq-icon i {
   transform: rotate(135deg);
 }
 
@@ -47,7 +111,7 @@
 .faq summary:focus-visible {
   outline: 2px solid var(--signal-deep);
   outline-offset: -2px;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
 }
 
 .faq details > p {
@@ -56,18 +120,31 @@
   font-size: 17px;
   line-height: 1.7;
   color: var(--ink-soft);
+  /* un retour à la ligne dans le texte de la réponse devient un saut de ligne */
+  white-space: pre-line;
 }
 
-@supports (interpolate-size: allow-keywords) {
-  .faq details {
-    interpolate-size: allow-keywords;
-  }
-  .faq details::details-content {
-    block-size: 0;
-    overflow: clip;
-    transition: block-size 0.4s var(--ease-out), content-visibility 0.4s allow-discrete;
-  }
-  .faq details[open]::details-content {
-    block-size: auto;
-  }
+/* sur fond sombre : filets et texte clairs, accent orange (#f29a52 : 7,8:1 sur le marine, AAA) */
+:is(.tile--dark, .dark-zone) .faq {
+  border-bottom-color: rgb(255 255 255 / 0.28);
+}
+
+:is(.tile--dark, .dark-zone) .faq details {
+  border-top-color: rgb(255 255 255 / 0.28);
+}
+
+:is(.tile--dark, .dark-zone) .faq summary {
+  color: #fff;
+}
+
+:is(.tile--dark, .dark-zone) .faq summary:hover {
+  color: #f29a52;
+}
+
+:is(.tile--dark, .dark-zone) .faq summary:focus-visible {
+  outline-color: #f29a52;
+}
+
+:is(.tile--dark, .dark-zone) .faq details > p {
+  color: rgb(255 255 255 / 0.9);
 }

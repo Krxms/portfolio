@@ -22,21 +22,14 @@
     transition: transform 0.3s var(--ease-out);
   }
 
-  /* une pastille de verre bleu qui flotte au-dessus du contenu, au pouce */
+  /* une pastille qui flotte au-dessus du contenu, au pouce */
   .sticky-cta .btn {
     pointer-events: auto;
     width: 100%;
     max-width: 320px;
     min-height: 52px;
     justify-content: center;
-    border-radius: 18px;
     font-size: 16.5px;
-    background: linear-gradient(180deg, rgb(48 112 200 / 0.94), rgb(20 80 154 / 0.96));
-    -webkit-backdrop-filter: blur(14px) saturate(160%);
-    backdrop-filter: blur(14px) saturate(160%);
-    box-shadow:
-      inset 0 1px 0 rgb(255 255 255 / 0.4),
-      0 0 0 1px rgb(255 255 255 / 0.22),
-      0 18px 34px -12px rgb(8 30 80 / 0.55);
+    /* matière, coins et ombres : le style commun des boutons (src/styles/cta.css) */
   }
 }

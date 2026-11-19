@@ -1,0 +1,7 @@
+---
+/* Un texte mis en forme à la main : \n, *italique*, **gras**, HTML (voir src/lib/fmt.ts). Sans balise propre : il s'insère dans l'élément parent. */
+import { rich } from '../lib/fmt';
+const { t } = Astro.props;
+---
+
+<Fragment set:html={rich(t)} />

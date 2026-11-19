@@ -1,0 +1,21 @@
+---
+import ErrorPage from '../../components/ErrorPage.astro';
+
+// Les pages d'erreur du site, une par code HTTP : /erreurs/404/, /erreurs/500/… Le Worker les sert avec le bon statut (worker/index.js).
+export function getStaticPaths() {
+  const pages: Record<number, [string, string]> = {
+    400: ['La requête est incorrecte.', 'Le serveur n’a pas compris la demande envoyée. Rechargez la page, ou repartez de l’accueil.'],
+    403: ['Accès refusé.', 'Vous n’avez pas l’autorisation d’ouvrir cette page. Si vous pensez que c’est une erreur, écrivez-moi.'],
+    404: ['Cette page n’existe pas, ou plus.', 'L’adresse est peut-être mal saisie, ou la page a changé de place. Reprenons depuis un endroit sûr.'],
+    405: ['Cette action n’est pas permise ici.', 'La page demandée n’accepte pas cette méthode. Retournez à l’accueil ou utilisez le formulaire de contact.'],
+    410: ['Cette page a été supprimée.', 'Elle n’existe plus et ne reviendra pas. Les pages ci-dessous sont à jour.'],
+    429: ['Trop de demandes en peu de temps.', 'Patientez quelques minutes avant de réessayer. Pour me joindre sans attendre, écrivez ou appelez directement.'],
+    500: ['Une erreur est survenue de notre côté.', 'Le site a rencontré un problème. Réessayez dans un instant ; si cela persiste, écrivez-moi.'],
+    503: ['Le site est momentanément indisponible.', 'Une maintenance est en cours. Le site revient très vite : réessayez dans quelques minutes.'],
+  };
+  return Object.entries(pages).map(([code, [title, lead]]) => ({ params: { code }, props: { code: Number(code), title, lead } }));
+}
+const { code, title, lead } = Astro.props;
+---
+
+<ErrorPage code={code} title={title} lead={lead} />

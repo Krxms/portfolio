@@ -5,11 +5,10 @@ import Mark from './Mark.astro';
 import LinkUnder from './LinkUnder.astro';
 import portrait from '../assets/portrait-cine.webp';
 
-const zones = ['Yvelines', 'Val-d’Oise', 'Oise'];
+const zones = ['Île-de-France', 'À distance'];
 ---
 
 <section class="tile tile--dark tile--mesh-b about" id="qui-suis-je" aria-labelledby="about-title">
-  {/* effet halftone désactivé : <div class="riso-layer" aria-hidden="true"></div> */}
   <div class="wrap tile-inner about-grid">
     <figure class="portrait">
       <div class="portrait-frame">
@@ -17,7 +16,7 @@ const zones = ['Yvelines', 'Val-d’Oise', 'Oise'];
           src={portrait.src}
           width={portrait.width}
           height={portrait.height}
-          alt="Portrait d’Antoine Bruneau, webdesigner et designer UX/UI freelance"
+          alt="Portrait d’Antoine Bruneau, concepteur numérique"
           loading="lazy"
           decoding="async"
         />
@@ -25,29 +24,32 @@ const zones = ['Yvelines', 'Val-d’Oise', 'Oise'];
     </figure>
 
     <div class="about-copy">
-      <p class="tile-label">Qui suis-je ?</p>
-      <h2 id="about-title">Antoine Bruneau</h2>
+      <p class="tile-label">Qui suis-je ? Antoine Bruneau</p>
+      <h2 id="about-title">Je conçois. Je réalise. Vous savez à qui vous parlez.</h2>
       <p class="about-lead">
-        Je suis webdesigner et designer UX/UI, à mon compte depuis 2017. Je m’occupe du site de A à Z : audit, design,
-        intégration et référencement.
+        De la création sonore à l’UX/UI, en passant par la création numérique et le développement : un parcours qui réunit création,
+        conception et compréhension technique.
       </p>
 
+      {/* tout ce qui suit le texte d'introduction apparaît d'un seul bloc, en fondu, quand les mots de l'introduction arrivent vers la fin (scenes.js) */}
+      <div class="about-follow">
       <div class="about-values">
         <p class="about-values-label">Ma façon de travailler</p>
-        <h3>Un seul interlocuteur, des réponses claires</h3>
+        <h3>Vous choisissez jusqu’où je vais.</h3>
         <p>
-          Je travaille seul : vous parlez toujours à la personne qui conçoit votre site. J’explique mes choix en termes
-          simples et je réponds vite, sous 24 h ouvrées.
+          Je dessine les écrans, puis je les construis, ou je les transmets à votre équipe avec ce qu’il faut pour les développer.
         </p>
+        {/* la phrase clé, mise en exergue (voir .about-key dans AboutMini.css) */}
+        <p class="about-key">Je vous explique chaque choix simplement, de la première conversation à la mise en ligne.</p>
       </div>
 
       <p class="about-zone">
-        Basé à Guitrancourt (78), je travaille avec des entreprises des Yvelines, du Val-d’Oise, de l’Oise et du reste de la
-        France, à distance.
+        Je travaille en Île-de-France et à distance, partout en France.
       </p>
       <div class="about-zones-row">
         <ul class="about-zones" role="list">{zones.map((z) => <li>{z}</li>)}</ul>
-        <LinkUnder href="/a-propos/" label="En savoir plus" tone="light" arrow />
+        <LinkUnder href="/a-propos/" label="Voir mon parcours" tone="light" arrow />
+      </div>
       </div>
     </div>
   </div>

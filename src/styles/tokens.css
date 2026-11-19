@@ -47,13 +47,13 @@
   /* Accent clair, pour les touches d'accentuation sur fond sombre (mot-clé du manifeste, nom, zones, survol des CTA) */
   --cream: var(--color-cream-200);
 
-  /* Logo navy — used sparingly for continuity with the mark */
+  /* Bleu marine du logo : à employer avec parcimonie, pour la continuité avec la marque */
   --brand-navy: var(--color-klein-800);
 
-  /* Slate — Hello */
+  /* Gris-bleu, pour les textes secondaires sur fond clair */
   --slate: #506180;
 
-  /* Navbar */
+  /* Fond de la barre de navigation */
   --nav-bg: #eceee4;
 
   /* Tracés faits main (une seule famille) : abricot sur clair, plus clair sur sombre */
@@ -61,20 +61,36 @@
   --mark-on-dark: var(--color-corail-300);
 
   /* Grain : bruit fin, posé sur le fond et sur les tuiles sombres */
-  --grain-soft: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
-  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  /* grains fins : des tuiles WebP préchargées (tools/grain-tile.mjs), plus un filtre SVG que le navigateur calculait après le reste */
+  --grain: url('../assets/riso/grain.webp');
 
-  --radius-sm: 10px;
-  --radius-md: 18px;
-  --radius-lg: 32px;
-  --radius-btn: 16px;
+  /* Rayons : une échelle unique. Les coins lisses (superellipse 1,5 : entre l'arrondi simple et le squircle d'Apple) s'appliquent aux
+     composants dans global.css. */
+  /* Échelle d'arrondis : 4, 8, 12, 16, 24, 32. Chaque marche est la précédente plus un padding courant, pour que l'emboîtement soit juste.
+     RÈGLE D'EMBOÎTEMENT : le rayon d'un contenant = le rayon de ce qu'il contient + le padding qui les sépare (ou, à l'inverse, rayon intérieur =
+     rayon extérieur − padding, jamais moins de 0). Un contenant avec 10 px de padding autour d'une image de 22 px de rayon est donc à 32 px.
+       xs  4 : repères, barres, graduations                          sm  8 : pastilles carrées, puces, éléments des maquettes
+       btn 12 : boutons et champs                                    md 16 : cartes simples, fenêtres, maquettes
+       lg  24 : grands blocs, légendes                               xl 32 : cartes à verre épais, panneaux bleus, scènes
+     Les formes du logo (50 %, 999 px, quarts de disque, arches) restent à part : ce sont des formes, pas des coins arrondis. */
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-btn: 12px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-xl: 32px;
+  --corner: superellipse(1.5);
 
   /* Signature display face — titre du hero uniquement */
-  --font-display: 'Bricolage Grotesque', 'Be Vietnam Pro', sans-serif;
+  --font-display: 'Bricolage Grotesque', 'Bricolage Fallback', 'Be Vietnam Pro', sans-serif;
+  /* Titres h1 à h3 : Bricolage Grotesque (Funnel Display a été testée puis retirée). */
+  /* Taille des titres h1 de la Hero et des en-têtes de page : une seule valeur pour tous (téléphone ici, ordinateur plus bas). */
+  --h1-size: clamp(1.9rem, 9.4vw, 3.4rem);
+  --font-title: 'Bricolage Grotesque', 'Bricolage Fallback', 'Be Vietnam Pro', sans-serif;
   /* Be Vietnam Pro — tout le reste du site */
-  --font-body: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: 'Be Vietnam Pro', 'BVP Fallback', -apple-system, BlinkMacSystemFont, sans-serif;
   /* Labels, eyebrows, status */
-  --font-mono: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'Be Vietnam Pro', 'BVP Fallback', -apple-system, BlinkMacSystemFont, sans-serif;
 
   --card: #fffefa;
   --danger: #9b1c1c;
@@ -103,5 +119,11 @@
 @media (max-width: 560px) {
   :root {
     --header-h: 64px;
+  }
+}
+
+@media (min-width: 901px) {
+  :root {
+    --h1-size: clamp(2.5rem, 4.8vw, 4.5rem);
   }
 }

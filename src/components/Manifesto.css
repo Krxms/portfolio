@@ -5,7 +5,7 @@
   font-size: clamp(2.3rem, 6.6vw, 5.2rem);
   font-weight: 600;
   line-height: 1.02;
-  letter-spacing: -0.035em;
+  letter-spacing: -0.024em;
   text-wrap: balance;
 }
 
@@ -16,12 +16,13 @@
   font-family: var(--font-display);
   font-style: normal;
   font-weight: 700;
-  letter-spacing: -0.03em;
-  color: var(--cream);
+  letter-spacing: -0.021em;
+  /* l'orange de la charte : le mot-clé se détache du blanc de la phrase */
+  color: #ee8532;
 }
 
 .manifesto-lead {
-  max-width: 50;
+  max-width: 60ch;
   margin: var(--space-6) auto 0;
   text-align: center;
   font-size: clamp(1.1rem, 2vw, 1.35rem);
@@ -29,259 +30,6 @@
   color: rgb(255 255 255 / 0.92);
 }
 
-/* ---------- Comparatif ouvert : deux maquettes à plat, puis les listes, sans cadre autour ---------- */
-.versus {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  grid-template-rows: auto auto repeat(3, auto);
-  column-gap: clamp(28px, 5vw, 72px);
-  max-width: 1120px;
-  margin: clamp(40px, 6vw, 80px) auto 0;
-}
-
-.versus-card {
-  display: grid;
-  grid-template-rows: subgrid;
-  grid-row: 1 / span 5;
-  row-gap: 0;
-}
-
-.versus-card h3 {
-  margin: 24px 0 10px;
-  font-size: clamp(1.3rem, 2.2vw, 1.65rem);
-  letter-spacing: -0.02em;
-}
-
-.versus-card ul {
-  display: contents;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.versus-card li {
-  position: relative;
-  padding: 17px 0;
-  border-top: 1px solid rgb(255 255 255 / 0.16);
-  font-size: 16.5px;
-  line-height: 1.5;
-}
-
-/* À gauche : le modèle, en retrait (texte atténué) */
-.versus-card--flat li {
-  color: rgb(255 255 255 / 0.76);
-}
-
-/* À droite : le site conçu pour vous, en avant (texte blanc) */
-.versus-card--made li {
-  color: #fff;
-}
-
-/* ---------- Les deux maquettes (à plat, sans perspective) ----------
-   À gauche tout est lissé, identique ; à droite une composition qui a du caractère. Tailles en cqw : tout suit la
-   largeur de la maquette. */
-.vs-mock {
-  container-type: inline-size;
-  position: relative;
-  aspect-ratio: 16 / 10;
-  border-radius: 18px;
-  padding: 14px;
-  background: linear-gradient(160deg, rgb(255 255 255 / 0.13), rgb(255 255 255 / 0.05));
-  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.16), inset 0 1px 0 rgb(255 255 255 / 0.3);
-  overflow: hidden;
-}
-
-.vs-mock i {
-  display: block;
-}
-
-.vs-mock--flat {
-  opacity: 0.85;
-  filter: saturate(0.6);
-}
-
-.vs-bar {
-  height: 8px;
-  width: 100%;
-  border-radius: 4px;
-  background: rgb(255 255 255 / 0.22);
-}
-
-.vs-bricks {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
-  margin-top: 12px;
-}
-
-.vs-bricks i {
-  aspect-ratio: 4 / 3;
-  border-radius: 8px;
-  background: rgb(255 255 255 / 0.16);
-}
-
-.vs-mock--made {
-  display: block;
-}
-
-.vs-title {
-  position: absolute;
-  left: 7%;
-  top: 14%;
-  --w: 46%;
-  width: var(--w);
-  height: 16%;
-  border-radius: 8px;
-  background: var(--cream);
-}
-
-/* Une balle : cercle parfait, qui se déforme au rebond (voir blob-drop) */
-.vs-blob {
-  position: absolute;
-  right: 6%;
-  top: 14%;
-  width: 30cqw;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background: linear-gradient(160deg, #7fe3e0, #3f7bf0);
-  z-index: 2;
-  transform-origin: 50% 100%;
-}
-
-.vs-line {
-  position: absolute;
-  left: 7%;
-  height: 6px;
-  border-radius: 3px;
-  background: rgb(255 255 255 / 0.45);
-}
-
-.vs-line--1 {
-  top: 42%;
-  --w: 40%;
-  width: var(--w);
-}
-
-.vs-line--2 {
-  top: 52%;
-  --w: 28%;
-  width: var(--w);
-}
-
-.vs-btn {
-  position: absolute;
-  left: 7%;
-  bottom: 14%;
-  --w: 27%;
-  width: var(--w);
-  height: 20%;
-  border-radius: 10px;
-  background: #fff;
-}
-
-/* ---- Animation d'entrée (se joue une fois, ~2,7 s au total) ----
-   Séquence : 1) le bloc titre s'étire de gauche à droite, 2) les deux lignes de texte, 3) le bouton, 4) la balle
-   tombe, rebondit en se déformant et se cale. Armée par le script : les blocs sont à largeur nulle, la balle
-   attend hors cadre. */
-.vs-mock--made.is-armed .vs-title,
-.vs-mock--made.is-armed .vs-line,
-.vs-mock--made.is-armed .vs-btn {
-  width: 0;
-}
-
-.vs-mock--made.is-playing .vs-title {
-  animation: grow-x 0.55s 0.1s cubic-bezier(0.22, 0.8, 0.28, 1) both;
-}
-
-.vs-mock--made.is-playing .vs-line--1 {
-  animation: grow-x 0.4s 0.35s cubic-bezier(0.22, 0.8, 0.28, 1) both;
-}
-
-.vs-mock--made.is-playing .vs-line--2 {
-  animation: grow-x 0.38s 0.5s cubic-bezier(0.22, 0.8, 0.28, 1) both;
-}
-
-.vs-mock--made.is-playing .vs-btn {
-  animation: grow-x 0.4s 0.75s cubic-bezier(0.22, 0.8, 0.28, 1) both;
-}
-
-@keyframes grow-x {
-  from {
-    width: 0;
-  }
-  to {
-    width: var(--w);
-  }
-}
-
-.vs-mock--made.is-armed .vs-blob {
-  transform: translateY(-190%) scale(0.94, 1.1);
-}
-
-/* La balle tombe du haut du cadre en s'étirant, s'écrase au contact (appui au bas), rebondit en
-   s'étirant puis en se tassant, de moins en moins haut, et se cale sur le carré. */
-.vs-mock--made.is-playing .vs-blob {
-  animation: blob-drop 1.45s 1.25s both;
-}
-
-@keyframes blob-drop {
-  0% {
-    transform: translateY(-190%) scale(0.94, 1.1);
-    animation-timing-function: cubic-bezier(0.5, 0, 0.9, 0.55);
-  }
-  38% {
-    transform: translateY(0) scale(1.24, 0.72);
-    animation-timing-function: cubic-bezier(0.1, 0.6, 0.35, 1);
-  }
-  52% {
-    transform: translateY(-34%) scale(0.9, 1.14);
-    animation-timing-function: cubic-bezier(0.2, 0.5, 0.5, 1);
-  }
-  62% {
-    transform: translateY(-42%) scale(0.98, 1.03);
-    animation-timing-function: cubic-bezier(0.55, 0, 0.85, 0.5);
-  }
-  74% {
-    transform: translateY(0) scale(1.16, 0.82);
-    animation-timing-function: cubic-bezier(0.1, 0.6, 0.35, 1);
-  }
-  84% {
-    transform: translateY(-13%) scale(0.96, 1.07);
-    animation-timing-function: cubic-bezier(0.55, 0, 0.85, 0.5);
-  }
-  92% {
-    transform: translateY(0) scale(1.07, 0.92);
-    animation-timing-function: ease-out;
-  }
-  100% {
-    transform: translateY(0) scale(1, 1);
-  }
-}
-
-@media (max-width: 760px) {
-  .versus {
-    grid-template-columns: 1fr;
-    grid-template-rows: none;
-    gap: 6px;
-  }
-
-  .versus-card {
-    display: flex;
-    flex-direction: column;
-    grid-row: auto;
-    margin-bottom: 18px;
-  }
-
-  .versus-card ul {
-    display: block;
-  }
-
-  .vs-mock {
-    max-width: 440px;
-    width: 100%;
-    margin-inline: auto;
-  }
-}
 
 /* Fond de la section : un indigo qui tire vers le prune, avec une lueur chaude (corail, ambre) pour ne pas tout plonger dans
    le bleu. Fixe : rien n'y bouge, l'information reste le centre. */
@@ -323,28 +71,12 @@
   pointer-events: none;
   background:
     var(--grain-soft) 0 0 / 160px 160px repeat,
-    url('../assets/riso/speck.png') 30px 70px / 256px 256px repeat;
+    var(--speck) 30px 70px / 256px 256px repeat;
   background-blend-mode: soft-light, normal;
   opacity: 0.55;
   -webkit-mask-image: linear-gradient(180deg, transparent 0%, rgb(0 0 0 / 0.25) 45%, #000 100%);
   mask-image: linear-gradient(180deg, transparent 0%, rgb(0 0 0 / 0.25) 45%, #000 100%);
 }
-
-/* Risographie : un vrai grain de papier imprimé (demi-teinte fine, poussières), tiré d'un scan (tools/riso-paper-tile.mjs). Deux encres,
-   points clairs et points sombres, posées sur le bleu ; nul en haut de la section (le bas de la Hero y transparaît) et plein en bas.
-   Elle est sous le grain de pellicule (.grain-layer), qui passe par-dessus. */
-/* Effet halftone désactivé (à réactiver en retirant ce commentaire) :
-.manifesto > .riso-layer {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  background: url('../assets/riso/paper-halftone.webp') 0 0 / 760px 760px repeat;
-  opacity: 0.18;
-  -webkit-mask-image: linear-gradient(180deg, transparent 0%, rgb(0 0 0 / 0.5) 30%, #000 100%);
-  mask-image: linear-gradient(180deg, transparent 0%, rgb(0 0 0 / 0.5) 30%, #000 100%);
-}
-*/
 
 /* Aucune autre texture sur le fond de la section : seul reste le voile sombre qui donne du contraste au texte */
 .manifesto.tile--dark::after {
@@ -353,119 +85,61 @@
 }
 
 
-/* ---------- Frame de droite : verre sombre translucide, éléments en relief, grain sur l'ensemble ---------- */
-.vs-mock--made {
-  isolation: isolate;
+/* ---------- Trois preuves de méthode : trois colonnes ouvertes, un filet en haut, sans cadre ---------- */
+.proofs {
+  max-width: 1120px;
+  margin: clamp(40px, 6vw, 80px) auto 0;
+  padding: 0;
+  list-style: none;
+  border-bottom: 1px solid rgb(255 255 255 / 0.2);
 }
 
-/* grain de pellicule sur toute la frame, éléments compris */
-.vs-mock--made::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: 4;
-  border-radius: inherit;
-  pointer-events: none;
-  background: var(--grain-soft) 0 0 / 160px 160px repeat;
-  mix-blend-mode: soft-light;
-  opacity: 0.75;
+/* Trois lignes éditoriales, sans carte (les offres de l'accueil, juste après, en utilisent déjà) : le numéro en grand à gauche, le titre,
+   puis le texte, séparés par un filet. Sur mobile, le texte passe sous le titre. */
+.proof {
+  display: grid;
+  grid-template-columns: clamp(64px, 9vw, 112px) minmax(0, 1fr) minmax(0, 1.25fr);
+  align-items: baseline;
+  column-gap: clamp(16px, 3vw, 48px);
+  padding-block: clamp(22px, 3vw, 36px);
+  border-top: 1px solid rgb(255 255 255 / 0.2);
 }
 
-/* filet de verre : liseré clair en haut, léger reflet sur les côtés */
-.vs-mock--made::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: 3;
-  border-radius: inherit;
-  pointer-events: none;
-  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.2), inset 0 1px 0 rgb(255 255 255 / 0.45), inset 10px 0 16px -12px rgb(255 140 150 / 0.35), inset -10px 0 16px -12px rgb(120 210 255 / 0.4);
+.proof-art {
+  display: block;
 }
 
-/* Éléments imprimés façon risographie : un aplat d'encre légèrement dégradé, des manques d'encre très fins (le papier
-   perce), une trame de points qui assombrit le bas (ou le côté opposé à la lumière sur la sphère), et un second passage
-   d'encre décalé d'un cheveu (repérage imparfait) en couleur complémentaire. Textures : tools/riso-speck-tile.mjs. */
-.vs-mock--made .vs-title,
-.vs-mock--made .vs-line,
-.vs-mock--made .vs-btn,
-.vs-mock--made .vs-blob {
-  box-shadow:
-    var(--mis, 0.4cqw 0.35cqw 0 rgb(255 92 140 / 0.75)),
-    0 1.6cqw 2.6cqw -1.1cqw rgb(1 5 30 / 0.75);
+.proof-shape {
+  display: none;
 }
 
-.vs-mock--made .vs-title::before,
-.vs-mock--made .vs-line::before,
-.vs-mock--made .vs-btn::before,
-.vs-mock--made .vs-blob::before,
-.vs-mock--made .vs-title::after,
-.vs-mock--made .vs-line::after,
-.vs-mock--made .vs-btn::after,
-.vs-mock--made .vs-blob::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  pointer-events: none;
+.proof-n {
+  font-family: var(--font-display);
+  font-size: clamp(2.4rem, 4.4vw, 3.8rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.021em;
+  /* numéros du manifeste : l'orange de la charte */
+  color: #ee8532;
 }
 
-/* manques d'encre : points et fibres clairs, décalés d'un élément à l'autre pour qu'ils ne se répètent pas */
-.vs-mock--made .vs-title::before,
-.vs-mock--made .vs-line::before,
-.vs-mock--made .vs-btn::before,
-.vs-mock--made .vs-blob::before {
-  background: url('../assets/riso/speck.png') var(--sx, 0px) var(--sy, 0px) / 256px 256px repeat;
+.proof-body {
+  display: contents;
 }
 
-/* trame de points (demi-ton) : plus dense vers le bas */
-.vs-mock--made .vs-title::after,
-.vs-mock--made .vs-line::after,
-.vs-mock--made .vs-btn::after {
-  background: radial-gradient(circle, rgb(2 8 50 / 0.5) 0 32%, transparent 38%) 0 0 / 0.7cqw 0.7cqw;
-  -webkit-mask-image: linear-gradient(180deg, transparent 38%, #000 135%);
-  mask-image: linear-gradient(180deg, transparent 38%, #000 135%);
+.proof h3 {
+  margin: 0;
+  font-size: clamp(1.3rem, 2vw, 1.75rem);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
 }
 
-.vs-mock--made .vs-title {
-  --sx: 40px;
-  --sy: 90px;
-  --mis: 0.4cqw 0.35cqw 0 rgb(255 92 140 / 0.7);
-  background: linear-gradient(180deg, #7de9d8, #27b3a3);
-}
-
-.vs-mock--made .vs-line--1 {
-  --sx: 150px;
-  --sy: 30px;
-  --mis: 0.3cqw 0.3cqw 0 rgb(255 170 60 / 0.8);
-  background: linear-gradient(180deg, #6f93ff, #3550e6);
-}
-
-.vs-mock--made .vs-line--2 {
-  --sx: 90px;
-  --sy: 200px;
-  --mis: 0.3cqw 0.3cqw 0 rgb(80 130 255 / 0.8);
-  background: linear-gradient(180deg, var(--color-cream-400), #f5a02a);
-}
-
-.vs-mock--made .vs-btn {
-  --sx: 200px;
-  --sy: 140px;
-  --mis: 0.4cqw 0.35cqw 0 rgb(255 110 90 / 0.8);
-  background: linear-gradient(180deg, #6384ff, #2a3fc4);
-}
-
-/* La sphère : orangé vers rouge, trame sur la face opposée à la lumière, repérage décalé en bleu */
-.vs-mock--made .vs-blob {
-  --sx: 20px;
-  --sy: 60px;
-  --mis: 0.5cqw 0.45cqw 0 rgb(70 120 255 / 0.75);
-  background: radial-gradient(circle at 34% 28%, rgb(255 255 255 / 0.35), transparent 38%), linear-gradient(160deg, #ffa83e, #ff4540);
-}
-
-.vs-mock--made .vs-blob::after {
-  background: radial-gradient(circle, rgb(120 6 20 / 0.55) 0 32%, transparent 38%) 0 0 / 0.7cqw 0.7cqw;
-  -webkit-mask-image: radial-gradient(circle at 30% 26%, transparent 42%, #000 88%);
-  mask-image: radial-gradient(circle at 30% 26%, transparent 42%, #000 88%);
+.proof p {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.6;
+  color: rgb(255 255 255 / 0.86);
 }
 
 @media (max-width: 760px) {
@@ -480,47 +154,18 @@
     text-wrap: balance;
   }
 
-  /* Le comparatif devient un carrousel qui déborde à droite : on voit que la carte suivante existe */
-  .versus {
-    display: flex;
-    gap: 14px;
-    margin: 28px calc(var(--edge) * -1) 0;
-    padding: 0 0 6px;
-    max-width: none;
-    overflow-x: auto;
-    overscroll-behavior-x: contain;
-    scroll-snap-type: x mandatory;
-    scrollbar-width: none;
-    -webkit-overflow-scrolling: touch;
+  .proof {
+    grid-template-columns: 56px minmax(0, 1fr);
+    row-gap: 8px;
+    padding-block: 22px;
   }
 
-  .versus::-webkit-scrollbar {
-    display: none;
+  .proof-art {
+    grid-row: 1 / span 2;
   }
 
-  /* chaque carte s'arrête au centre de l'écran, y compris la première et la dernière : deux cales (comme sur les offres) */
-  .versus::before,
-  .versus::after {
-    content: '';
-    flex: 0 0 max(0px, calc((100vw - min(82vw, 340px)) / 2 - 14px));
-  }
-
-  .versus-card {
-    flex: 0 0 min(82vw, 340px);
-    margin-bottom: 0;
-    scroll-snap-align: center;
-  }
-
-  .versus-card h3 {
-    margin: 18px 0 6px;
-  }
-
-  .versus-card li {
-    padding-block: 14px;
+  .proof p {
+    grid-column: 2;
     font-size: 15.5px;
-  }
-
-  .vs-mock {
-    max-width: none;
   }
 }

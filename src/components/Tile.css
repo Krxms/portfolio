@@ -1,6 +1,5 @@
-/* Tuiles pleine largeur façon apple.com : un titre court centré, une ligne de sous-titre,
-   des actions, puis le contenu. Les tuiles claires laissent voir le mesh de la page ;
-   les tuiles sombres portent leur propre mesh (la couleur que le verre réfracte), plus du grain. */
+/* Tuiles pleine largeur : un titre court centré, une ligne de sous-titre, des actions, puis le contenu. Les tuiles claires laissent voir
+   le papier crème de la page ; les tuiles sombres portent leur propre dégradé (la couleur que le verre réfracte), plus du grain. */
 .tile {
   position: relative;
   isolation: isolate;
@@ -25,7 +24,7 @@
   opacity: 0.55;
 }
 
-/* Performance : le verre dépoli des grandes zones sombres n'utilise PAS backdrop-filter. Floutter un dégradé déjà
+/* Performance : le verre dépoli des grandes zones sombres n'utilise PAS backdrop-filter. Flouter un dégradé déjà
    parfaitement lisse ne change rien à l'œil, mais recalculer ce flou sur plusieurs milliers de pixels à chaque
    image de défilement rendait le scroll lourd. Le rendu laiteux vient du voile, du grain et de l'arête lumineuse.
 
@@ -97,9 +96,25 @@
   padding-top: clamp(8px, 2vw, 24px);
 }
 
-.dark-zone > .tile.tile--dark::before,
-.dark-zone > .tile.tile--dark::after {
+.dark-zone > .tile.tile--dark::before {
   content: none;
+}
+
+/* Grain de risographie de toute la zone : le même que sur les affiches, avec les manques d'encre (le papier qui perce) et le grain de
+   pellicule. Il est identique d'une tuile à l'autre, donc sans arête entre elles. Il vit ici, et non dans scenes.css, parce que la
+   page Création partage cette zone sans charger les scènes de l'accueil. */
+.dark-zone > .tile.tile--dark::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    var(--grain-soft) 0 0 / 160px 160px repeat,
+    var(--speck) 30px 70px / 256px 256px repeat;
+  background-blend-mode: soft-light, normal;
+  opacity: 0.55;
+  box-shadow: none;
 }
 
 .tile--mesh-a::before {
@@ -140,12 +155,14 @@
   font-size: clamp(2.2rem, 5.6vw, 4.4rem);
   font-weight: 600;
   line-height: 1.04;
-  letter-spacing: -0.035em;
+  letter-spacing: -0.024em;
   text-wrap: balance;
 }
 
 .tile-sub {
   max-width: 44ch;
+  /* un retour à la ligne dans le sous-titre est respecté (deux lignes voulues) */
+  white-space: pre-line;
   margin-top: var(--space-4);
   font-size: clamp(1.1rem, 2vw, 1.4rem);
   line-height: 1.45;
@@ -229,5 +246,59 @@
   .tile-actions > * {
     width: min(100%, 300px);
     justify-content: center;
+  }
+}
+
+/* ---------- Rythme vertical commun à toutes les pages ----------
+   Les mêmes blocs ont les mêmes respirations partout (accueil, pages de service, À propos) : un seul endroit pour les régler.
+   - deux sections claires qui se suivent : un écart court (le rythme des pages de service) au lieu de deux marges pleines qui s'additionnent ;
+   - la dernière tuile avant l'appel final (FAQ…) finit sur la même marge ;
+   - l'appel final : de l'air au-dessus (le disque orange de l'encart dépasse par le haut) et en dessous (avant le pied de page). */
+:root {
+  --rhythm-link: clamp(40px, 5vw, 72px);
+  --rhythm-before-cta: clamp(56px, 7vw, 96px);
+  --rhythm-cta-top: clamp(96px, 11vw, 160px);
+  --rhythm-cta-bottom: clamp(96px, 11vw, 160px);
+}
+
+.tile--light + .tile--light {
+  padding-top: var(--rhythm-link);
+}
+
+.tile--light:has(+ .tile--light) {
+  padding-bottom: var(--rhythm-link);
+}
+
+.dark-zone > .tile:has(+ .cta-final) {
+  padding-bottom: var(--rhythm-before-cta);
+}
+
+.dark-zone > .tile.tile--dark.cta-final {
+  padding-top: var(--rhythm-cta-top);
+  padding-bottom: var(--rhythm-cta-bottom);
+}
+
+/* Accueil, sur téléphone : les titres des offres et de la FAQ sont ferrés à gauche, sur l'axe des cartes et des questions qu'ils annoncent
+   (le titre de la méthode suit la même règle, voir ExplodedProcess.css). Les autres têtes de section restent centrées. */
+@media (max-width: 700px) {
+  #services .tile-head,
+  #faq .tile-head {
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  #services .tile-head h2,
+  #faq .tile-head h2,
+  #services .tile-sub,
+  #faq .tile-sub {
+    max-width: none;
+    margin-inline: 0;
+  }
+}
+
+/* Accueil, ordinateur : « Un site pour votre activité. / Des interfaces pour vos métiers. » tient sur deux lignes (une phrase par ligne), sans « métiers. » seul */
+@media (min-width: 901px) {
+  #services .tile-head h2 {
+    max-width: none;
   }
 }

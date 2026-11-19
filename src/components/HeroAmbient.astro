@@ -1,0 +1,93 @@
+---
+import './HeroAmbient.css';
+import './HeroAtelier.css';
+---
+
+{/* Fond de la Hero : un papier clair, et à droite la composition « atelier » aux formes du logo (arches, disque orange, fenêtre d'interface en verre), la même
+    langue que les en-têtes des pages de service. Purement décoratif, d'où aria-hidden. La matière et les positions sont dans HeroAtelier.css. */}
+<div class="amb" data-v="atelier" aria-hidden="true">
+  <div class="amb-atelier">
+    <div class="at-paper"></div>
+    <div class="at-grid"></div>
+    {/* composition de droite (ordinateur seulement) : deux arches pâles en fond, l'arche bleue grainée, le disque orange qui la chevauche */}
+    <div class="at-arch-pale"></div>
+    <div class="at-arch-mint"></div>
+    <div class="at-arch"></div>
+    {/* l'angle d'un volume en béton (deux pans, une bande de fenêtres), dans le haut de l'arche */}
+    <div class="at-building"><i class="b-left"></i><i class="b-right"></i><i class="b-win b-win-l"></i><i class="b-win b-win-r"></i></div>
+    <div class="at-orb"></div>
+    {/* une fenêtre d'interface en verre, posée sur l'arche : un clin d'œil au métier, sans texte ni image réelle */}
+    <div class="at-window">
+      <div class="at-win-bar"><i></i><i></i><i></i></div>
+      <div class="at-win-body">
+        <div class="at-win-art"><b></b><u></u></div>
+        <div class="at-win-lines"><s></s><s></s><s></s><s></s><em></em></div>
+      </div>
+    </div>
+    <div class="at-disc"></div>
+    <svg class="at-ring" viewBox="0 0 200 200" focusable="false"><circle cx="100" cy="100" r="97" pathLength="1"></circle><g class="at-sat"><circle cx="100" cy="3" r="2.8"></circle></g></svg>
+    <div class="at-quarter"></div>
+    <div class="at-dot"></div>
+    <div class="at-lift"></div>
+    {/* Grain argentique par-dessus toute la composition */}
+    <div class="at-film"></div>
+  </div>
+</div>
+
+<script>
+  // Parallaxe de la composition au défilement (ordinateur, animations autorisées).
+  //
+  // Les navigateurs qui savent lier une animation au défilement (Chrome, Edge, Safari 26) n'ont besoin d'aucun script : tout est en CSS
+  // (voir HeroAtelier.css) et ce code ne fait rien. Pour les autres (Firefox, Safari plus ancien), on écrit une seule variable sur .amb,
+  // --py (le défilement en pixels, plafonné), que chaque forme lit avec son propre coefficient.
+  const amb = document.querySelector<HTMLElement>('.amb');
+  const nativeScroll = typeof CSS !== 'undefined' && CSS.supports('animation-timeline: scroll()');
+  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (!nativeScroll && !reduceMotion && amb?.parentElement) {
+    const zone = amb.parentElement;
+    const desktop = matchMedia('(min-width: 901px)');
+    const MAX_SCROLL = 700;
+    const EASE = 0.2; // part de l'écart rattrapée à chaque image : la valeur suit le défilement en douceur
+    let current = -1;
+    let target = 0;
+    let frame = 0;
+    let visible = true;
+
+    const tick = () => {
+      frame = 0;
+      if (!desktop.matches) return;
+      if (current < 0) current = target;
+      current += (target - current) * EASE;
+      const settled = Math.abs(target - current) < 0.15;
+      if (settled) current = target;
+      amb.style.setProperty('--py', current.toFixed(1));
+      // la boucle s'arrête dès que la valeur a rejoint sa cible, ou quand la Hero est hors écran
+      if (!settled && visible) frame = requestAnimationFrame(tick);
+    };
+
+    const wake = () => {
+      if (!frame && visible) frame = requestAnimationFrame(tick);
+    };
+
+    const onScroll = () => {
+      target = Math.min(MAX_SCROLL, Math.max(0, scrollY));
+      wake();
+    };
+
+    addEventListener('scroll', onScroll, { passive: true });
+    desktop.addEventListener('change', () => {
+      if (desktop.matches) {
+        onScroll();
+      } else {
+        amb.style.removeProperty('--py');
+        current = -1;
+      }
+    });
+    new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting;
+      if (visible) wake();
+    }).observe(zone);
+    onScroll();
+  }
+</script>

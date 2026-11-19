@@ -1,0 +1,25 @@
+/* Conteneur du fond de la Hero : en position absolue derrière le contenu, découpé aux bords de la zone.
+   Les formes elles-mêmes sont décrites dans HeroAtelier.css. */
+.amb {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  contain: paint;
+  transition: opacity 0.7s var(--ease-out);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .amb {
+    transition: none;
+  }
+}
+
+/* Avec ce fond, le titre garde ses vraies couleurs : le négatif (mélange « différence ») n'a de sens que sur un fond qui bouge derrière. */
+@media (min-width: 561px) {
+  .hero-zone--atelier.neg-on .hero-l2 {
+    mix-blend-mode: normal;
+    color: var(--signal);
+  }
+}

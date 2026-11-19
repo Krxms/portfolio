@@ -7,9 +7,11 @@
    Safari. */
 @media (prefers-reduced-motion: no-preference) {
   /* ---------- 1. Entrée de la Hero ---------- */
+  /* L'entrée part d'une opacité de 0,01 et non de 0 : à l'œil c'est la même chose, mais le navigateur considère le texte comme affiché dès
+     la première image. Le premier écran est donc mesuré au moment où il est réellement dessiné (LCP), pas à la fin de la cascade. */
   @keyframes m-hero-in {
     from {
-      opacity: 0;
+      opacity: 0.01;
       translate: 0 22px;
       filter: blur(8px);
     }
@@ -25,23 +27,42 @@
   .hero-l2,
   .hero-sub,
   .hero-actions {
-    animation: m-hero-in 0.9s var(--ease-out) both;
+    /* « backwards » et non « both » : une fois l'entrée jouée, l'animation rend la main au défilement (scenes.css), qui pose le recul,
+       le flou et la transparence de la Hero. Avec « both », la dernière image de l'animation les écrasait et le texte ne se floutait plus. */
+    animation: m-hero-in 0.75s var(--ease-out) backwards;
   }
 
+  /* Une cascade serrée : tout le texte est lisible en moins d'une seconde. Le paragraphe est le plus grand bloc du premier écran, celui
+     dont le navigateur mesure l'arrivée (LCP) : il ne doit pas attendre son tour trop longtemps. */
   .hero-role {
-    animation-delay: 0.05s;
+    animation-delay: 0s;
   }
   .hero-l1 {
-    animation-delay: 0.16s;
+    animation-delay: 0.06s;
   }
   .hero-l2 {
-    animation-delay: 0.28s;
+    animation-delay: 0.13s;
   }
   .hero-sub {
-    animation-delay: 0.42s;
+    animation-delay: 0.2s;
   }
   .hero-actions {
-    animation-delay: 0.56s;
+    animation-delay: 0.28s;
+  }
+
+  /* Téléphone : pas de flou pendant l'entrée. Flouter cinq blocs de texte image par image coûte cher à un processeur modeste, pour un
+     effet qu'on ne perçoit presque pas sur un petit écran ; le glissement et le fondu suffisent. */
+  @media (max-width: 700px) {
+    @keyframes m-hero-in {
+      from {
+        opacity: 0.01;
+        translate: 0 16px;
+      }
+      to {
+        opacity: 1;
+        translate: 0 0;
+      }
+    }
   }
 
   /* ---------- 2. Transitions de page ---------- */
@@ -49,27 +70,27 @@
     navigation: auto;
   }
 
+  /* D'une page à l'autre : l'ancienne s'efface vite, la nouvelle monte de quelques pixels en apparaissant. Pas de flou : flouter la capture
+     d'une page entière coûte cher et faisait saccader le passage ; l'opacité et le déplacement sont rendus par la carte graphique. */
   @keyframes m-vt-out {
     to {
       opacity: 0;
-      filter: blur(6px);
-      transform: translateY(-10px);
+      transform: translateY(-8px);
     }
   }
 
   @keyframes m-vt-in {
     from {
       opacity: 0;
-      filter: blur(6px);
-      transform: translateY(14px);
+      transform: translateY(12px);
     }
   }
 
   ::view-transition-old(root) {
-    animation: m-vt-out 0.22s ease-in both;
+    animation: m-vt-out 0.18s cubic-bezier(0.4, 0, 1, 1) both;
   }
 
   ::view-transition-new(root) {
-    animation: m-vt-in 0.45s var(--ease-out) 0.08s both;
+    animation: m-vt-in 0.42s var(--ease-out) 0.06s both;
   }
 }

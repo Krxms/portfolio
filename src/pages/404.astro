@@ -1,0 +1,7 @@
+---
+import ErrorPage from '../components/ErrorPage.astro';
+
+// Page 404 : servie par Astro en développement, et par Cloudflare (404.html) pour toute adresse inconnue. Le Worker renvoie aussi /erreurs/404/ avec le statut 404.
+---
+
+<ErrorPage code={404} title="Cette page n’existe pas, ou plus." lead="L’adresse est peut-être mal saisie, ou la page a changé de place. Reprenons depuis un endroit sûr." />

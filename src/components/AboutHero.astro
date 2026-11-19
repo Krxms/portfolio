@@ -1,0 +1,66 @@
+---
+import './Hero.css';
+import R from './R.astro';
+import './HeroAmbient.css';
+import './HeroAtelier.css';
+import './AboutHero.css';
+import portraitSrc from '../assets/portrait-cine-hero.webp';
+import { responsive } from '../lib/responsive';
+
+/* Entête de la page « À propos » : pas un entête de page, un panneau. Le même panneau bleu que les scènes du reste du site (matière, béton, grain
+   de risographie), posé sur le papier de la Hero de l'accueil. Le portrait, dans son arche, est posé sur son bord bas ; une arche menthe
+   (la forme du logo) passe derrière lui.
+   Le titre porte le nom (surtitre) ; l'arche menthe est décorative (aria-hidden). */
+interface Props {
+  kicker: string;
+  line1: string;
+  line2: string;
+  /** un « \n » dans le texte devient un retour à la ligne : écrire lead={'Première phrase.\nSeconde phrase.'} */
+  lead: string;
+  zones: string[];
+  alt: string;
+}
+const { kicker, line1, line2, lead, zones, alt } = Astro.props;
+// téléphone : environ 240 px de large ; ordinateur : jusqu'à 30 % de la largeur de l'écran
+const portrait = await responsive(portraitSrc, [360, 480, 720], '(max-width: 700px) 60vw, 30vw');
+---
+
+<div class="hero-zone hero-zone--page ah" data-sticky-watch>
+  <div class="amb" aria-hidden="true">
+    <div class="amb-atelier">
+      <div class="at-paper"></div>
+      <div class="at-film"></div>
+    </div>
+  </div>
+
+  <div class="wrap wrap--wide">
+    <div class="ah-panel panel-blue panel-blue--riso">
+      <div class="ah-copy">
+        <h1>
+          <span class="ah-kicker"><R t={kicker} /></span><span class="visually-hidden">. </span>{' '}
+          <span class="ah-l1"><R t={line1} /></span>{' '}
+          <span class="ah-l2"><R t={line2} /></span>
+        </h1>
+        <p class="ah-lead"><R t={lead} /></p>
+        <ul class="ah-zones" role="list">{zones.map((z) => <li>{z}</li>)}</ul>
+      </div>
+
+      <div class="ah-stage">
+        <div class="at-arch-mint ah-mint" aria-hidden="true"></div>
+        <figure class="at-arch ah-photo">
+          <img
+            src={portrait.src}
+            srcset={portrait.srcset}
+            sizes={portrait.sizes}
+            width={portrait.width}
+            height={portrait.height}
+            alt={alt}
+            loading="eager"
+            fetchpriority="high"
+            decoding="async"
+          />
+        </figure>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,7 +1,6 @@
-/* Polices auto-hébergées (sous-ensemble latin, licence OFL) : plus d'appel à Google Fonts. Les fichiers vivent dans
-   public/fonts/ pour avoir des URL stables, préchargées dans BaseLayout. Avec un préchargement et un
-   font-display: swap, le remplacement de la police de secours se fait avant le premier rendu utile, ce qui supprime
-   le décalage de mise en page mesuré (CLS). */
+/* Polices auto-hébergées (sous-ensemble latin, licence OFL) : aucun appel à Google Fonts. Les fichiers vivent dans public/fonts/ pour
+   avoir des URL stables, préchargées dans BaseLayout. Avec le préchargement et font-display: swap, la police de secours est remplacée
+   avant le premier rendu utile, ce qui évite le décalage de mise en page (CLS). */
 @font-face {
   font-family: 'Be Vietnam Pro';
   font-style: normal;
@@ -23,26 +22,54 @@
   font-display: swap;
   src: url('/fonts/be-vietnam-pro-600.woff2') format('woff2');
 }
-@font-face {
-  font-family: 'Be Vietnam Pro';
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: url('/fonts/be-vietnam-pro-700.woff2') format('woff2');
-}
-@font-face {
-  font-family: 'Be Vietnam Pro';
-  font-style: italic;
-  font-weight: 400;
-  font-display: swap;
-  src: url('/fonts/be-vietnam-pro-400-italic.woff2') format('woff2');
-}
+
 @font-face {
   font-family: 'Bricolage Grotesque';
   font-style: normal;
   font-weight: 200 800;
   font-display: swap;
   src: url('/fonts/bricolage-grotesque-200-800.woff2') format('woff2');
+}
+
+/* Polices de secours calées sur les vraies : même largeur de ligne et même hauteur (size-adjust, mesuré sur les textes du site). Tant que la
+   police n'est pas arrivée, le texte occupe déjà sa place définitive : pas de retour à la ligne qui saute au moment de l'échange, et le
+   premier affichage du texte est le bon (mesure LCP). Arial sur ordinateur et iPhone, Roboto sur Android. */
+@font-face {
+  font-family: 'BVP Fallback';
+  font-weight: 100 400;
+  src: local('Arial'), local('Roboto'), local('Helvetica Neue');
+  size-adjust: 110%;
+  ascent-override: 91%;
+  descent-override: 24%;
+  line-gap-override: 0%;
+}
+/* graisse 500 : un rien plus large que la vraie police, pour que l'échange ne fasse jamais grandir le bloc de texte */
+@font-face {
+  font-family: 'BVP Fallback';
+  font-weight: 500;
+  src: local('Arial'), local('Roboto'), local('Helvetica Neue');
+  size-adjust: 112%;
+  ascent-override: 89.3%;
+  descent-override: 23.7%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: 'BVP Fallback';
+  font-weight: 600 900;
+  src: local('Arial Bold'), local('Roboto Bold'), local('Helvetica Neue Bold');
+  size-adjust: 105%;
+  ascent-override: 95.2%;
+  descent-override: 25.2%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: 'Bricolage Fallback';
+  font-weight: 100 900;
+  src: local('Arial Bold'), local('Roboto Bold'), local('Helvetica Neue Bold');
+  size-adjust: 90.3%;
+  ascent-override: 103%;
+  descent-override: 30%;
+  line-gap-override: 0%;
 }
 
 /* Page projet « Le Cuistologue » : polices de la marque du client, présentées dans ses plaques uniquement */
@@ -66,11 +93,4 @@
   font-weight: 800;
   font-display: swap;
   src: url('/fonts/poppins-800.woff2') format('woff2');
-}
-@font-face {
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 100 900;
-  font-display: swap;
-  src: url('/fonts/inter-variable.woff2') format('woff2');
 }

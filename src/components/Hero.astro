@@ -6,15 +6,17 @@ import LinkUnder from './LinkUnder.astro';
 
 <section class="hero wrap" data-sticky-watch>
   <h1>
-    <span class="hero-role">Webdesigner &amp; designer UX/UI freelance · Yvelines</span>{' '}
-    <span class="hero-l1">Votre site,</span>{' '}
-    <span class="hero-l2">avec du <em class="hero-word">caractère</em>.</span>
+    <span class="hero-role"><span class="hero-role-a">Concepteur numérique</span></span>{' '}
+    <span class="hero-l1">Vos besoins</span>{' '}
+    <span class="hero-l2">prennent <em class="hero-word">forme</em>.</span>
   </h1>
   <p class="hero-sub">
-    Je conçois, refais ou audite votre site pour qu’il dise clairement ce que vous faites, et donne envie de vous écrire.
+    Je conçois des sites web et des interfaces de logiciels adaptés à vos besoins et à ceux qui les utilisent.
   </p>
   <div class="hero-actions">
-    <FrostedCTA href="/contact/">Décrire mon projet</FrostedCTA>
-    <LinkUnder href="/audit-ux-ui/" label="Commencer par un audit" glow />
+    {/* bouton principal : le contact. Lien secondaire : l'étude de cas existante (Le Cuistologue), faute d'une page liste de réalisations */}
+    <FrostedCTA href="/contact/" ink>Parlons de votre projet</FrostedCTA>
+    <LinkUnder href="/projets/le-cuistologue/" label="Voir l’étude de cas" glow />
+    <p class="hero-assure">Premier échange gratuit et sans engagement</p>
   </div>
 </section>

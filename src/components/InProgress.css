@@ -1,0 +1,41 @@
+/* Deux cartes sobres : le type de projet en cours, sous la barre orange du site. */
+.ip {
+  list-style: none;
+  margin: 0 auto;
+  padding: 0;
+  max-width: 880px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(20px, 3vw, 40px);
+}
+
+.ip-card {
+  padding: clamp(24px, 3vw, 36px);
+  border-radius: var(--radius-xl);
+  background: rgb(255 255 255 / 0.62);
+  color: var(--ink);
+  box-shadow: inset 0 1px 0 #fff, 0 0 0 1px rgb(18 32 43 / 0.07);
+}
+
+/* la barre orange des engagements, puis le type du projet */
+.ip-card::before {
+  content: '';
+  display: block;
+  width: 44px;
+  height: 4px;
+  margin-bottom: var(--space-3);
+  background: #ee8532;
+}
+
+.ip-card h3 {
+  margin: 0;
+  font-size: clamp(1.4rem, 2.2vw, 1.8rem);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+@media (max-width: 860px) {
+  .ip {
+    grid-template-columns: 1fr;
+  }
+}

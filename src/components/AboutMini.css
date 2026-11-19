@@ -1,25 +1,24 @@
 .about-grid {
   display: grid;
-  grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
+  grid-template-columns: minmax(0, 6fr) minmax(0, 7fr);
   align-items: center;
-  gap: clamp(32px, 6vw, 96px);
+  gap: clamp(32px, 5vw, 80px);
 }
 
-/* Portrait : pas de cadre, la photo se dissout dans le fond par un masque doux (ellipse, plein au centre,
-   transparent sur les bords). Le gris de l'arrière-plan s'efface dans le mesh. */
+/* Portrait : la photo est centrée dans sa colonne ; sa forme (arche) et son liseré sont définis plus bas et dans matiere.css. */
 .portrait {
   margin: 0;
-  max-width: 460px;
+  max-width: 640px;
   justify-self: center;
 }
 
 .portrait img {
   width: 100%;
   height: auto;
-  aspect-ratio: 3 / 4;
+  /* cadrage serré : la photo s'arrête juste sous les épaules */
+  aspect-ratio: 10 / 9;
   object-fit: cover;
-  /*mask-image: radial-gradient(ellipse 46% 49% at 50% 45%, #000 40%, rgb(0 0 0 / 0.8) 56%, rgb(0 0 0 / 0.42) 74%, rgb(0 0 0 / 0.12) 90%, transparent 100%);
-  mask-image: radial-gradient(ellipse 46% 49% at 50%; */
+  object-position: 50% 4%;
 }
 
 .about-copy {
@@ -32,15 +31,12 @@
   margin-bottom: var(--space-2);
 }
 
+/* le titre est une phrase (« Je conçois. Je réalise. Vous savez à qui vous parlez. ») et non plus le seul nom : un cran plus petit,
+   et des lignes équilibrées pour ne pas couper « Je / réalise » */
 .about h2 {
   max-width: none;
-  font-size: clamp(2.4rem, 5vw, 4rem);
-}
-
-.about-mark {
-  width: min(260px, 60%);
-  height: 18px;
-  margin-top: 6px;
+  font-size: clamp(2.2rem, 3.8vw, 3.3rem);
+  text-wrap: balance;
 }
 
 .about-lead {
@@ -48,6 +44,10 @@
   max-width: 44ch;
   font-size: clamp(1.15rem, 2vw, 1.4rem);
   line-height: 1.5;
+}
+
+.about-follow {
+  align-self: stretch;
 }
 
 .about-values {
@@ -71,11 +71,42 @@
   letter-spacing: -0.02em;
 }
 
-.about-values p:last-child {
+.about-values p:not(.about-values-label):not(.about-key) {
   margin-top: var(--space-3);
   font-size: 16.5px;
   line-height: 1.65;
   color: rgb(255 255 255 / 0.94);
+}
+
+/* La phrase clé, en exergue : la barre orange verticale est celle de la ligne de rôle de la Hero et de l'étape active de la méthode (le même
+   repère, à la même épaisseur), le texte passe en police d'affichage, un cran plus grand et plus clair. Pas de soulignement, pas de fond :
+   la mise en valeur vient de la typographie et d'un seul trait de couleur. */
+.about-values .about-key {
+  position: relative;
+  max-width: 34ch;
+  margin-top: var(--space-5);
+  padding-left: 20px;
+  font-family: var(--font-display);
+  font-size: clamp(1.2rem, 1.9vw, 1.45rem);
+  font-weight: 500;
+  line-height: 1.32;
+  letter-spacing: -0.015em;
+  color: #fff;
+}
+
+.about-values .about-key::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.18em;
+  bottom: 0.18em;
+  width: 4px;
+  border-radius: 2px;
+  background: #ee8532;
+  /* la barre se déploie de haut en bas pendant l'apparition du bloc (--t vient de .about-follow, voir scenes.css), comme celle des étapes de
+     la méthode ; sans le moteur de scènes, --t n'existe pas et la barre est entière. */
+  transform-origin: 50% 0;
+  scale: 1 clamp(0, calc((var(--t, 1) - 0.35) * 2), 1);
 }
 
 .about-zone {
@@ -117,7 +148,7 @@
 /* Portrait : coins arrondis et filet de verre épais (liseré clair, franges de dispersion) pour rejoindre le reste de la DA */
 .portrait {
   position: relative;
-  border-radius: 32px;
+  border-radius: var(--radius-xl);
   box-shadow: 0 34px 70px -34px rgb(2 8 40 / 0.85);
 }
 
@@ -147,12 +178,12 @@
   .portrait {
     width: 100%;
     max-width: none;
-    border-radius: 26px;
+    border-radius: var(--radius-lg);
   }
 
   .portrait img {
-    aspect-ratio: 5 / 4;
-    object-position: 50% 18%;
+    aspect-ratio: 10 / 8;
+    object-position: 50% 6%;
   }
 
   .about-grid {
@@ -179,9 +210,9 @@
 }
 
 @media (max-width: 860px) {
-  /* le portrait un peu plus petit, centré ; le contenu un peu plus étroit : plus d'air de chaque côté */
+  /* le portrait centré, presque pleine largeur ; le contenu un peu plus étroit : plus d'air de chaque côté */
   .portrait {
-    width: 84%;
+    width: 100%;
     margin-inline: auto;
   }
 
@@ -201,7 +232,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 28px;
+  flex-wrap: nowrap;
+  gap: clamp(14px, 2vw, 28px);
   align-self: stretch;
   margin-top: var(--space-4);
 }
@@ -212,61 +244,24 @@
   margin: 0;
 }
 
+/* le lien et sa flèche restent sur la même ligne que les zones */
 .about-zones-row .link-under {
   flex: none;
   margin: 0;
+  white-space: nowrap;
 }
 
-/* Survol : le rond de la flèche se remplit d'un orange doux, et le libellé prend la même couleur */
-.about-zones-row .link-under--arrow {
-  --lu-fill: #ffa65a;
-}
-.about-zones-row .link-under--arrow .link-under-text {
-  transition: color 0.4s var(--ease-out);
-}
-.about-zones-row .link-under--arrow:hover .link-under-text,
-.about-zones-row .link-under--arrow:focus-visible .link-under-text {
-  color: var(--lu-fill);
-}
-/* le rond se remplit progressivement, par la gauche */
-.about-zones-row .link-under-arrow {
-  background: linear-gradient(var(--lu-fill), var(--lu-fill)) 0 0 / 0% 100% no-repeat;
-  transition:
-    background-size 0.55s var(--ease-out),
-    border-color 0.4s var(--ease-out),
-    color 0.4s var(--ease-out),
-    box-shadow 0.5s var(--ease-out),
-    transform 0.5s var(--ease-out);
-}
-.about-zones-row .link-under--arrow:hover .link-under-arrow,
-.about-zones-row .link-under--arrow:focus-visible .link-under-arrow {
-  background: linear-gradient(var(--lu-fill), var(--lu-fill)) 0 0 / 100% 100% no-repeat;
-  box-shadow: 0 0 18px -4px rgb(255 150 60 / 0.5);
-}
-
-/* Mobile et tablette : la flèche seule (le libellé reste pour les lecteurs d'écran). L'espace entre les zones et la flèche est
-   plus grand que celui entre les zones, pour que la flèche se lise comme une action à part. Le libellé reste pour les
-   lecteurs d'écran. */
+/* Mobile et tablette : le libellé « Voir mon parcours » reste visible avec sa flèche (une flèche seule n'a pas de nom lisible par l'oeil).
+   La rangée peut passer à la ligne : les zones d'abord, puis le lien. */
 @media (max-width: 860px) {
+  .about-zones-row {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    row-gap: 6px;
+  }
+
   .about-zones-row .link-under {
-    position: relative;
-    justify-content: center;
-    min-width: 48px;
     min-height: 48px;
-  }
-
-  .about-zones-row .link-under-text {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip-path: inset(50%);
-    white-space: nowrap;
-  }
-
-  .about-zones-row .link-under-arrow {
-    width: 44px;
-    height: 44px;
   }
 }
 
@@ -274,20 +269,4 @@
 .dark-zone > .tile.about {
   padding-bottom: clamp(64px, 9vw, 128px);
 }
-
-.dark-zone > .tile.tile--dark.cta-final {
-  padding-top: clamp(16px, 3vw, 40px);
-}
-
-/* Risographie : le même grain de papier imprimé que sur le manifeste (tools/riso-paper-tile.mjs), très léger. Même quantité du haut en bas de la section. */
-/* Effet halftone désactivé (à réactiver en retirant ce commentaire) :
-.about > .riso-layer {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  background: url('../assets/riso/paper-halftone.webp') 0 0 / 760px 760px repeat;
-  opacity: 0.18;
-}
-*/
 

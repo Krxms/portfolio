@@ -1,8 +1,11 @@
 ---
 import './Logo.css';
+// Le logo est une image matricielle légère (7 Ko), trois fois la taille affichée : net sur écran dense. L'original vectoriel pesait 13 Mo
+// (une photo de texture y était incorporée) et se téléchargeait sur chaque page.
+import mark from '../assets/logo-mark.webp';
 ---
 
 <a href="/" class="logo" aria-label="Antoine Bruneau — accueil">
-  <img class="logo-mark" src="/test/Logo2.svg" width="37" height="53" alt="" decoding="async" />
+  <img class="logo-mark" src={mark.src} width="37" height="53" alt="" decoding="async" />
   <span class="logo-name">Antoine Bruneau</span>
 </a>

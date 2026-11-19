@@ -1,0 +1,325 @@
+/* Page « Interfaces et logiciels » : elle réutilise la feuille des pages Création et Refonte (préfixe cs-). Seuls les ajouts propres à la
+   page sont ici : la phrase sous la liste des prises en charge, les deux façons de travailler (sans jauge) et la section Expérience. */
+
+/* rien n'est écrit au-dessus de la première ligne : le filet du haut de la liste n'a pas de raison d'être */
+.il-modes .cs-lv-list {
+  border-top: 0;
+}
+
+/* deux lignes au lieu de trois, sans jauge : le texte et la situation du client, côte à côte */
+.il-modes .cs-lv {
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+}
+
+/* ---------- Expérience : le texte à gauche, un schéma original à droite ---------- */
+.il-xp-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(28px, 5vw, 72px);
+}
+
+.il-xp-copy h2 {
+  margin: var(--space-2) 0 var(--space-4);
+}
+
+.il-xp-copy p:not(.tile-label) {
+  max-width: 52ch;
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--ink-soft);
+}
+
+.il-xp-copy p + p {
+  margin-top: var(--space-3);
+}
+
+.il-xp-art {
+  margin: 0;
+}
+
+.il-xp-art svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 30px 60px -36px rgb(11 26 74 / 0.55);
+}
+
+@media (max-width: 900px) {
+  .il-xp-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .il-modes .cs-lv {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* ---------- Quand faire appel à moi : la liste et, à côté, une scène (les repères numérotés) ---------- */
+/* la scène au-dessus, la liste horizontale dessous : même présentation que les pages Création et Refonte */
+.il-split {
+  display: block;
+}
+
+/* La scène reprend le fond des scènes des pages Création et Refonte (dégradé bleu, béton et grain derrière, formes du logo). Elle ne porte pas
+   la classe .cs-stage : au-dessus de 700 px, celle-ci laisse la place à l'illustration Figma de ces pages. */
+.il-stage {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  container-type: inline-size;
+  aspect-ratio: 100 / 92;
+  width: min(100%, 520px);
+  margin: clamp(24px, 3.6vw, 52px) auto 0;
+  border-radius: var(--radius-xl);
+  background: radial-gradient(70% 90% at 22% 8%, rgb(120 160 255 / 0.5), transparent 62%), linear-gradient(158deg, #2f5de6 0%, #1f45d6 38%, #1a3cbf 66%, #13247c 100%);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.3), 0 30px 50px -34px rgb(19 36 124 / 0.6);
+}
+
+.il-stage::before,
+.il-stage::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.il-stage::before {
+  background: url('../assets/riso/concrete-tile.webp') 0 0 / 256px 256px repeat;
+  mix-blend-mode: soft-light;
+  opacity: 0.4;
+}
+
+.il-stage::after {
+  background: var(--grain-soft) 0 0 / 160px 160px repeat;
+  mix-blend-mode: soft-light;
+  opacity: 0.22;
+}
+
+.il-stage .concrete {
+  --concrete: 0.16;
+}
+
+/* l'écran du logiciel, en cqw (la largeur de la scène) */
+.il-app {
+  position: absolute;
+  z-index: 1;
+  left: 7cqw;
+  top: 12cqw;
+  width: 86cqw;
+  height: 70cqw;
+  overflow: hidden;
+  border-radius: 2.4cqw;
+  background: #f5f3ea;
+  box-shadow: 0 3cqw 5cqw -2.4cqw rgb(6 19 63 / 0.55), 0 0 0 0.3cqw rgb(255 255 255 / 0.5);
+}
+
+.il-bar {
+  display: flex;
+  align-items: center;
+  gap: 1.2cqw;
+  height: 6.4cqw;
+  padding-inline: 2.4cqw;
+  background: #e3e6f1;
+}
+
+.il-bar > i {
+  width: 1.5cqw;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #ee8532;
+}
+
+.il-bar > i:nth-child(2) { background: #f1c56b; }
+.il-bar > i:nth-child(3) { background: #a6d4ca; }
+
+.il-team {
+  display: flex;
+  margin-left: auto;
+}
+
+.il-team b {
+  width: 3.4cqw;
+  aspect-ratio: 1;
+  margin-left: -0.8cqw;
+  border-radius: 50%;
+  background: #1f45d6;
+  box-shadow: 0 0 0 0.45cqw #e3e6f1;
+}
+
+.il-team b:nth-child(2) { background: #ee8532; }
+.il-team b:nth-child(3) { background: #8fc9bb; }
+
+.il-body {
+  display: grid;
+  grid-template-columns: 13cqw minmax(0, 1fr) 20cqw;
+  gap: 2cqw;
+  height: calc(100% - 6.4cqw);
+  padding: 2.4cqw;
+}
+
+.il-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 1.8cqw;
+  padding: 2cqw 1.6cqw;
+  border-radius: 1.6cqw;
+  background: rgb(31 69 214 / 0.12);
+}
+
+.il-nav b,
+.il-nav span {
+  display: block;
+  height: 1.3cqw;
+  border-radius: 1cqw;
+  background: rgb(19 36 124 / 0.35);
+}
+
+.il-nav b {
+  height: 1.8cqw;
+  background: #1f45d6;
+}
+
+.il-main {
+  display: flex;
+  flex-direction: column;
+  gap: 1.8cqw;
+  min-width: 0;
+}
+
+.il-tools {
+  display: flex;
+  gap: 1.6cqw;
+}
+
+.il-search {
+  flex: 1;
+  height: 4.6cqw;
+  border-radius: 2.3cqw;
+  background: #fff;
+  box-shadow: inset 0 0 0 0.25cqw rgb(19 36 124 / 0.2);
+}
+
+.il-tools em {
+  width: 9cqw;
+  border-radius: 2.3cqw;
+  background: #1f45d6;
+}
+
+.il-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 7cqw;
+  padding-inline: 2cqw;
+  border-radius: 1.4cqw;
+  background: #fff;
+  box-shadow: inset 0 0 0 0.25cqw rgb(19 36 124 / 0.12);
+}
+
+.il-row > i {
+  width: 22cqw;
+  height: 1.5cqw;
+  border-radius: 1cqw;
+  background: rgb(19 36 124 / 0.38);
+}
+
+.il-row > s {
+  width: 7cqw;
+  height: 3cqw;
+  border-radius: 1.5cqw;
+  background: #a6d4ca;
+}
+
+.il-row > s.c2 { background: #f1c56b; }
+.il-row > s.c3 { background: #ee8532; }
+
+/* une ligne qui ne suit pas l'alignement des autres : l'incohérence que l'absence de système laisse s'installer */
+.il-row--off {
+  margin-left: 2.4cqw;
+}
+
+.il-new {
+  flex: 1;
+  min-height: 7cqw;
+  border-radius: 1.4cqw;
+  border: 0.35cqw dashed rgb(31 69 214 / 0.5);
+  background: rgb(31 69 214 / 0.05);
+}
+
+.il-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6cqw;
+  padding: 2cqw;
+  border-radius: 1.6cqw;
+  background: #fff;
+  box-shadow: inset 0 0 0 0.25cqw rgb(19 36 124 / 0.12);
+}
+
+.il-av {
+  width: 7cqw;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: rgb(31 69 214 / 0.2);
+}
+
+.il-detail > i {
+  height: 1.3cqw;
+  border-radius: 1cqw;
+  background: rgb(19 36 124 / 0.3);
+}
+
+.il-detail > i:nth-of-type(2) { width: 70%; }
+
+.il-detail em {
+  height: 4cqw;
+  border-radius: 1.2cqw;
+  background: #1f45d6;
+}
+
+/* deux boutons de styles différents : pas de système commun */
+.il-detail .il-btn2 {
+  border-radius: 2cqw;
+  background: #ee8532;
+}
+
+/* les repères : en pourcentages de la scène */
+.il-pin--1 { left: 54%; top: 66%; }
+.il-pin--2 { left: 41%; top: 46%; }
+.il-pin--3 { left: 17%; top: 38%; }
+.il-pin--4 { left: 88%; top: 68%; }
+.il-pin--5 { left: 80%; top: 17%; }
+
+/* ordinateur et tablette : la scène est un cadre large, comme celles des autres pages. L'écran du logiciel garde son dessin (86 x 70 cqw) et
+   se réduit de moitié, au centre ; les repères suivent. */
+@media (min-width: 701px) {
+  .il-stage {
+    aspect-ratio: 100 / 46;
+    width: 100%;
+  }
+
+  .il-app {
+    left: 7cqw;
+    top: -12cqw;
+    transform: scale(0.5);
+    transform-origin: center;
+  }
+
+  .il-stage .cs-pin {
+    --pin: max(22px, 2.6cqw);
+  }
+
+  .il-pin--1 { left: 52%; top: 65%; }
+  .il-pin--2 { left: 45.5%; top: 45%; }
+  .il-pin--3 { left: 34.3%; top: 37%; }
+  .il-pin--4 { left: 69%; top: 67%; }
+  .il-pin--5 { left: 65%; top: 16%; }
+
+  /* les formes du logo, à la mesure du cadre large */
+  .il-stage .cs-disc { top: -9cqw; right: -5cqw; width: 22cqw; }
+  .il-stage .cs-arch { left: 80cqw; width: 12cqw; height: 16cqw; }
+  .il-stage .cs-quarter { width: 8cqw; }
+}

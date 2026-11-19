@@ -1,0 +1,38 @@
+# Antoine Bruneau
+
+> Concepteur numérique indépendant, en Île-de-France et à distance partout en France. Il conçoit et réalise des sites web pour les indépendants, les PME et les associations, et conçoit des interfaces de logiciels métier, de produits SaaS et d'outils internes pour les équipes produit. Un seul interlocuteur, de la compréhension du besoin au développement.
+
+Antoine Bruneau travaille seul, en entrepreneur individuel (micro-entreprise), et exerce à son compte depuis 2026. Il a été designer UX/UI pendant environ deux ans sur un logiciel SaaS de gestion de maintenance (GMAO), chez un éditeur de logiciel, après une formation UX/UI à la Wild Code School (titre professionnel de concepteur UI). Son parcours va de la composition, du sound design et du spectacle vivant à la création numérique et visuelle, puis au développement et à l'UX/UI. Pour un site, il couvre la conception, la réalisation (WordPress classique ou headless, Webflow, no-code ou code sur mesure : HTML, CSS, JavaScript, React, Astro), les bases du référencement et la mise en ligne. Pour une interface de logiciel, il conçoit les parcours et les écrans ; il réalise l'intégration front-end lorsqu'il prend en charge le projet complet. En renfort d'une équipe, il intervient comme designer UX/UI. Les projets sont chiffrés sur devis gratuit et détaillé, sans tarif public.
+
+## Offres
+
+- [Création de site web](https://antoinebruneau.fr/creation-site-web/) : organisation des contenus, UX/UI, réalisation, bases du référencement et mise en ligne. L'identité visuelle et le logo peuvent s'y ajouter si le projet le demande.
+- [Refonte de site web](https://antoinebruneau.fr/refonte-site-web/) : lecture de l'existant, puis corrections ciblées, refonte partielle ou complète, avec un plan de redirection pour limiter les risques de perte de référencement.
+- [Interfaces et logiciels](https://antoinebruneau.fr/interfaces-logiciels/) : conception UX/UI d'interfaces de logiciels métier, de produits SaaS et d'outils internes, en mission de conception ou en renfort UX/UI ponctuel.
+- [Audit UX/UI](https://antoinebruneau.fr/audit-ux-ui/) : revue experte d'un site ou d'une interface (parcours, clarté, navigation, mobile, accessibilité avec les WCAG comme référentiel de travail), constats illustrés et recommandations classées. Ce n'est ni un test utilisateur ni un audit de conformité. 50 % du montant hors taxes de l'audit est déduit d'un projet de conception ou de refonte commandé dans les trois mois suivant sa restitution.
+
+## Pages
+
+- [Accueil](https://antoinebruneau.fr/) : présentation, deux domaines (sites web, interfaces et logiciels), méthode, réalisation, questions fréquentes.
+- [À propos](https://antoinebruneau.fr/a-propos/) : parcours, façon de concevoir, compétences.
+- [Le Cuistologue](https://antoinebruneau.fr/projets/le-cuistologue/) : étude de cas (identité visuelle, imprimés, site web).
+- [Contact](https://antoinebruneau.fr/contact/) : formulaire, téléphone ou e-mail ; réponse généralement sous deux jours ouvrés.
+
+## Méthode (projet de site web)
+
+1. Comprendre : premier échange gratuit et sans engagement ; pour une refonte, lecture rapide du site existant.
+2. Cadrer : périmètre, calendrier et devis ; démarrage à la validation du devis et au versement de l'acompte.
+3. Concevoir : plan du site et maquettes, avec deux séries de retours par étape sauf adaptation au devis.
+4. Réaliser : réalisation, tests, mise en ligne ; solde facturé à la livraison.
+
+Pour les interfaces de logiciels, la démarche s'adapte à l'organisation du client.
+
+## Faits utiles
+
+- Zone : Île-de-France, et toute la France à distance.
+- Clientèle : professionnels et structures agissant pour leur activité.
+- Paiement : 40 % d'acompte à la commande, solde à la livraison (échéancier adapté pour les projets longs) ; renfort facturé mensuellement au temps effectué.
+- Droits : les créations finales originales sont cédées au paiement intégral ; les composants tiers restent sous leurs licences ; domaine et hébergement au nom du client lorsque c'est possible.
+- Corrections : 30 jours après la réception pour les anomalies relevant de la prestation.
+- Maintenance : facultative, sur devis ou contrat distinct.
+- Contact : contact@antoinebruneau.fr, 06 09 11 18 38.

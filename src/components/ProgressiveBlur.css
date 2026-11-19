@@ -17,7 +17,7 @@
 }
 
 .pblur i {
-  --s: calc(var(--i) * 16%);
+  --s: calc(var(--i) * 24%);
   position: absolute;
   inset: 0;
   -webkit-backdrop-filter: blur(var(--b));

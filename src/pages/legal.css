@@ -58,6 +58,16 @@
   gap: 6px;
 }
 
+/* listes imbriquées (CGV) : un peu d'air au-dessus, même rythme */
+.legal-body ul ul {
+  margin-top: 6px;
+}
+
+.legal-body strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+
 .legal-body a {
   color: var(--ink);
   text-decoration: underline;

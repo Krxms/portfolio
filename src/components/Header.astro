@@ -2,14 +2,15 @@
 import './Header.css';
 import Logo from './Logo.astro';
 
+// Le logo mène à l'accueil ; la FAQ est dans le pied de page.
 const links = [
-  { href: '/', label: 'Accueil', cls: '' },
   { href: '/creation-site-web/', label: 'Création de site', cls: '' },
   { href: '/refonte-site-web/', label: 'Refonte de site', cls: '' },
+  { href: '/interfaces-logiciels/', label: 'Interfaces et logiciels', cls: '' },
   { href: '/audit-ux-ui/', label: 'Audit UX/UI', cls: '' },
-  { href: '/projets/', label: 'Projets', cls: '' },
+  /* « Réalisations » mène à l'étude de cas existante, faute d'une page liste (une seule étude de cas publiée pour l'instant). */
+  { href: '/projets/le-cuistologue/', label: 'Réalisations', cls: '' },
   { href: '/a-propos/', label: 'À propos', cls: '' },
-  { href: '/faq/', label: 'FAQ', cls: '' },
 ];
 const path = Astro.url.pathname;
 const isCurrent = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
@@ -23,7 +24,7 @@ const isCurrent = (href: string) => (href === '/' ? path === '/' : path.startsWi
       <span class="visually-hidden" data-menu-label>Ouvrir le menu</span>
       <span class="menu-btn-bars" aria-hidden="true"><i></i><i></i></span>
     </button>
-    <nav class="header-nav" id="site-nav" aria-label="Navigation principale">
+    <nav class="header-nav" id="site-nav" aria-label="Navigation principale" data-lenis-prevent>
       <div class="nav-links">
         {
           links.map((l, i) => (
@@ -33,7 +34,7 @@ const isCurrent = (href: string) => (href === '/' ? path === '/' : path.startsWi
           ))
         }
       </div>
-      <a class="btn btn-primary" href="/contact/" style="--i:7">Me contacter</a>
+      <a class="btn btn-primary" href="/contact/" style="--i:7">Parlons de votre projet</a>
       <p class="nav-direct" style="--i:8">
         <a href="tel:+33609111838">Appeler directement</a>
       </p>
@@ -58,12 +59,34 @@ const isCurrent = (href: string) => (href === '/' ? path === '/' : path.startsWi
       if (e.target === e.currentTarget && header.hasAttribute('data-open')) set(false);
     });
     matchMedia('(min-width: 1201px)').addEventListener('change', (e) => e.matches && set(false));
+    // le focus quitte le menu ouvert (Tab après le dernier lien, Maj+Tab avant le bouton) : il se referme, le focus ne se perd pas derrière le voile
+    header.addEventListener('focusout', (e) => {
+      const next = e.relatedTarget as Node | null;
+      if (header.hasAttribute('data-open') && next && !header.contains(next)) set(false);
+    });
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && header.hasAttribute('data-open')) {
         set(false);
         btn.focus();
       }
     });
-    header.querySelectorAll('.header-nav a').forEach((a) => a.addEventListener('click', () => set(false)));
+    // Un lien vers une autre page ne referme pas le menu : sa fermeture s'animerait pendant que le navigateur attend la page suivante, et
+    // la transition de page figerait le menu à mi-course. Il reste tel quel et s'efface avec le fondu de page ; le lien est aussi la seule
+    // chose qui bouge (pas de double animation). Seuls les liens de la page courante (ancres, appel) referment le menu.
+    header.querySelectorAll('.header-nav a').forEach((a) =>
+      a.addEventListener('click', (e) => {
+        const link = a as HTMLAnchorElement;
+        const samePage = link.origin === location.origin && link.pathname === location.pathname;
+        const external = link.protocol === 'tel:' || link.protocol === 'mailto:';
+        if (samePage || external) set(false);
+        else if ((e as MouseEvent).button === 0 && !(e.metaKey || e.ctrlKey || e.shiftKey || e.altKey)) header.setAttribute('data-leaving', '');
+      }),
+    );
+    // retour arrière : la page revient du cache avec le menu tel qu'on l'a quitté, on le referme sans animation
+    addEventListener('pageshow', (e) => {
+      if (!e.persisted) return;
+      header.removeAttribute('data-leaving');
+      set(false);
+    });
   }
 </script>

@@ -1,67 +1,51 @@
 ---
 import './Tile.css';
+import R from './R.astro';
 import './Manifesto.css';
 import ProgressiveBlur from './ProgressiveBlur.astro';
 
-const flat = ['Une structure générique, la même que celle de milliers d’autres sites.', 'Vos contenus rentrent dans des cases prévues d’avance.', 'Performance et référencement laissés aux réglages par défaut.'];
-const made = ['Une structure bâtie autour de ce que vos clients cherchent.', 'Textes, parcours et interface pensés ensemble, pas l’un après l’autre.', 'Performance et référencement prévus dès la première maquette.'];
-
+const proofs = [
+  {
+    t: 'Une structure qui suit les parcours',
+    d: 'Les pages, les parcours et les contenus sont organisés autour de ce que vos visiteurs ou vos utilisateurs viennent faire.',
+  },
+  {
+    t: 'Des écrans pensés pour ceux qui s’en servent',
+    d: 'Lisibles, cohérents entre eux, utilisables au clavier et adaptés aux différents écrans.',
+  },
+  {
+    t: 'Une qualité vérifiée avant la mise en ligne',
+    d: 'Performance, accessibilité et bases du référencement sont prises en compte dès la conception, puis vérifiées lors de la réalisation.',
+  },
+];
 ---
 
 <section class="tile tile--dark manifesto" id="manifeste" aria-labelledby="manifeste-title">
   <ProgressiveBlur toward="top" />
-  {/* effet halftone désactivé : <div class="riso-layer" aria-hidden="true"></div> */}
   <div class="grain-layer" aria-hidden="true"></div>
   <div class="wrap tile-inner">
     <h2 id="manifeste-title" class="manifesto-quote">
-      Que reste-t-il de votre <em class="manifesto-word">identité</em> quand tout se ressemble ?
+      Avant les écrans, il y a vos <em class="manifesto-word">besoins</em>.
     </h2>
     <p class="manifesto-lead">
-      Votre projet commence par une conversation, pas par un modèle.<br>
-      Je cherche d’abord ce qui vous distingue de vos concurrents, puis je dessine le site à partir de là.
+      Je commence par comprendre votre activité, vos utilisateurs et ce que le projet doit permettre.
     </p>
 
-    <div class="versus">
-      <article class="versus-card versus-card--flat">
-        <div class="vs-mock vs-mock--flat" aria-hidden="true">
-          <i class="vs-bar"></i>
-          <div class="vs-bricks"><i></i><i></i><i></i><i></i><i></i><i></i></div>
-        </div>
-        <h3>Un site sur modèle</h3>
-        <ul role="list">{flat.map((t) => <li>{t}</li>)}</ul>
-      </article>
-
-      <article class="versus-card versus-card--made">
-        <div class="vs-mock vs-mock--made" aria-hidden="true">
-          <i class="vs-title"></i>
-          <i class="vs-blob"></i>
-          <i class="vs-line vs-line--1"></i>
-          <i class="vs-line vs-line--2"></i>
-          <span class="vs-btn"></span>
-        </div>
-        <h3>Un site conçu pour vous</h3>
-        <ul role="list">{made.map((t) => <li>{t}</li>)}</ul>
-      </article>
-    </div>
+    <ol class="proofs" role="list">
+      {
+        proofs.map((p, i) => (
+          <li class={`proof proof--${i + 1}`}>
+            <div class="proof-art" aria-hidden="true">
+              <i class="proof-shape" />
+              <span class="proof-n">{String(i + 1).padStart(2, '0')}</span>
+            </div>
+            <div class="proof-body">
+              <h3><R t={p.t} /></h3>
+              <p><R t={p.d} /></p>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
   </div>
 </section>
-
-<script>
-  // Animation d'entrée de la maquette de droite : le titre, les lignes et le bouton s'allongent de gauche à droite, puis la balle
-  // tombe, rebondit en se déformant et se cale Elle se joue une seule fois, quand la maquette est bien visible. Sans JavaScript,
-  // ou avec « réduire les animations », la maquette reste dans son état final.
-  const mock = document.querySelector<HTMLElement>('.vs-mock--made');
-  if (mock && 'IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    mock.classList.add('is-armed');
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          mock.classList.add('is-playing');
-          io.disconnect();
-        }
-      },
-      { threshold: 0.6 },
-    );
-    io.observe(mock);
-  }
-</script>

@@ -1,3 +1,5 @@
+import 'lenis/dist/lenis.css';
+
 document.querySelectorAll('[data-year]').forEach((el) => {
   el.textContent = String(new Date().getFullYear());
 });
@@ -13,3 +15,67 @@ if (window.matchMedia('(hover: hover)').matches) {
   });
 }
 
+
+// Survol « encre » (bouton principal de la Hero) : la tache de matière part de l'endroit où le pointeur entre, et se retire vers
+// l'endroit où il sort. Le script ne fait que noter ces deux points (--ox / --oy) ; l'animation est en CSS (cta.css).
+if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+  document.querySelectorAll('[data-ink]').forEach((el) => {
+    const mark = (e) => {
+      const r = el.getBoundingClientRect();
+      el.style.setProperty('--ox', e.clientX - r.left + 'px');
+      el.style.setProperty('--oy', e.clientY - r.top + 'px');
+    };
+    el.addEventListener('pointerenter', mark);
+    el.addEventListener('pointerleave', mark);
+  });
+}
+
+// Défilement fluide (Lenis) : la molette glisse avec de l'inertie au lieu de sauter de cran en cran. Souris et pavé tactile seulement :
+// le tactile garde le défilement natif (le plus fidèle au doigt), et rien du tout avec « réduire les animations ». La bibliothèque n'est
+// donc téléchargée et exécutée que sur les appareils à pointeur fin : un téléphone ne la charge pas et ne fait tourner aucune boucle pour
+// elle. Les scènes de scenes.js lisent déjà la position à chaque image : elles suivent sans rien changer.
+if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+  import('lenis').then(({ default: Lenis }) => {
+    const root = document.documentElement;
+    const lenis = new Lenis({
+      lerp: 0.09, // plus petit : plus de glisse
+      wheelMultiplier: 0.95,
+      smoothWheel: true,
+      anchors: { offset: -96 }, // les liens vers une ancre (#qui-suis-je) glissent aussi, sous l'en-tête
+    });
+    window.__lenis = lenis;
+    const raf = (time) => {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    };
+    requestAnimationFrame(raf);
+
+    // le défilement s'arrête quand la page est verrouillée : menu ouvert, ouverture de page (loader) en cours
+    const sync = () => {
+      if (root.hasAttribute('data-nav-open') || root.classList.contains('has-loader')) lenis.stop();
+      else lenis.start();
+    };
+    new MutationObserver(sync).observe(root, { attributes: true, attributeFilter: ['data-nav-open', 'class'] });
+    sync();
+  });
+}
+
+// Carrousel des niveaux (.cs-lv-list) : quand il défile (téléphone), il devient une zone atteignable au clavier (tabindex, nom accessible) ;
+// quand tout tient à l'écran (ordinateur), il reste hors de l'ordre de tabulation.
+(() => {
+  const lists = document.querySelectorAll('.cs-lv-list');
+  if (!lists.length) return;
+  const fit = () =>
+    lists.forEach((el) => {
+      if (el.scrollWidth > el.clientWidth + 1) {
+        el.setAttribute('tabindex', '0');
+        el.setAttribute('aria-label', 'Niveaux d’autonomie');
+      } else {
+        el.removeAttribute('tabindex');
+        el.removeAttribute('aria-label');
+      }
+    });
+  fit();
+  addEventListener('resize', fit);
+  addEventListener('load', fit);
+})();

@@ -1,0 +1,212 @@
+/* En-têtes de page sur téléphone (jusqu'à 700 px) : un seul réglage pour toutes les pages.
+   Un bloc centré, qui respire, et dont le contenu est équilibré dans l'écran.
+   - le surtitre est léger : plus petit, plus clair, sans la grande barre (une petite barre orange centrée au-dessus) ;
+   - le titre et le chapô sont centrés, les lignes équilibrées (text-wrap: balance) ;
+   - pages de service : la hauteur suit le contenu, puis la bande d'illustration du bas ; le fil d'Ariane est discret et centré ;
+   - panneaux bleus (À propos, Le Cuistologue, Contact) : le texte est centré, avec plus d'air autour.
+   Les sélecteurs sont préfixés par « html » pour passer devant ceux des composants (qui sont chargés après cette feuille). */
+@media (max-width: 700px) {
+  /* ---------- le surtitre : léger ---------- */
+  html .ph-kicker,
+  html .ah-kicker,
+  html .ct-eyebrow {
+    display: block;
+    margin: 0 0 12px;
+    font-size: 13.5px;
+    font-weight: 500;
+    line-height: 1.45;
+    letter-spacing: 0.01em;
+    text-align: center;
+    text-wrap: balance;
+  }
+
+  html .ph-kicker {
+    color: var(--ink-soft);
+  }
+
+  html .ah-kicker,
+  html .ct-eyebrow {
+    color: rgb(255 255 255 / 0.78);
+  }
+
+  /* panneau bleu du Cuistologue : l'eyebrow n'a plus la petite barre orange sur téléphone */
+  html .ah-kicker::before {
+    display: none;
+  }
+
+  html .ph-kicker::before,
+  html .ct-eyebrow::before {
+    display: block;
+    width: 28px;
+    height: 3px;
+    margin: 0 auto 14px;
+  }
+
+  /* ---------- titres, chapôs : centrés et équilibrés ---------- */
+  html .ph-l1,
+  html .ph-l2,
+  html .ah-l1,
+  html .ah-l2,
+  html .ct-l1,
+  html .ct-l2 {
+    text-align: center;
+    text-wrap: balance;
+  }
+
+  html .ph-lead,
+  html .ah-lead,
+  html .ct-lead {
+    max-width: 34ch;
+    margin-inline: auto;
+    font-size: 1rem;
+    line-height: 1.55;
+    text-align: center;
+    text-wrap: balance;
+  }
+
+  /* le chapô des pages de service prend la largeur des boutons et de la note (340 px) */
+  html .ph-lead {
+    max-width: min(100%, 340px);
+    /* « pretty » remplit la largeur ; « balance » resserrait les lignes bien en dessous de celle des boutons */
+    text-wrap: pretty;
+  }
+
+  /* ---------- pages de service ---------- */
+  /* une en-tête interne est une composition compacte : sa hauteur suit son contenu (fil d'Ariane, surtitre, titre, chapô, actions), puis la bande
+     d'illustration. Elle ne remplit pas l'écran : la Hero de l'accueil est la seule à occuper une grande hauteur. */
+  html .hero-zone--page {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    min-height: 0;
+    padding-top: calc(var(--header-h) + 14px);
+    padding-bottom: calc(34vw + 16px);
+  }
+
+  /* Même langage que la Hero de l'accueil : texte aligné à gauche, surtitre en capitales précédé d'une barre orange, titre gras de la même famille,
+     chapô, boutons pleine largeur, mentions à pastilles orange. */
+  html .hero-zone--page {
+    /* titre : plus petit que celui de l'accueil, car les lignes sont plus longues (« Gardez ce qui marche, » doit tenir sur une ligne : 29 px à 320 px, 36 px à 390 px) */
+    --h1-size: clamp(1.7rem, 9.2vw, 2.7rem);
+  }
+
+  html .hero-zone--page .ph-copy {
+    align-items: flex-start;
+    gap: clamp(12px, 1.8svh, 18px);
+    text-align: left;
+  }
+
+  html .hero-zone--page .ph-crumbs {
+    align-self: flex-start;
+    justify-content: flex-start;
+    margin-bottom: 8px;
+    font-size: 12px;
+    opacity: 0.8;
+  }
+
+  html .hero-zone--page .ph-copy h1 {
+    width: auto;
+    margin-right: -10px;
+    letter-spacing: -0.035em;
+  }
+
+  html .hero-zone--page .ph-kicker {
+    display: block;
+    margin: 0 0 clamp(14px, 2.6svh, 24px);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    line-height: 1.5;
+    text-align: left;
+    text-transform: uppercase;
+    text-wrap: balance;
+    color: var(--ink-soft);
+  }
+
+  html .hero-zone--page .ph-kicker::before {
+    display: inline-block;
+    width: 32px;
+    height: 3px;
+    margin: 0 12px 0 0;
+    vertical-align: middle;
+    translate: 0 -1px;
+  }
+
+  html .hero-zone--page .ph-l1,
+  html .hero-zone--page .ph-l2 {
+    text-align: left;
+    text-wrap: pretty;
+  }
+
+  html .hero-zone--page .ph-lead {
+    max-width: none;
+    margin-inline: 0;
+    text-align: left;
+    text-wrap: pretty;
+  }
+
+  html .hero-zone--page .ph-actions {
+    align-self: stretch;
+    width: 100%;
+    margin-top: 6px;
+  }
+
+  /* la note : mentions en ligne, à gauche, qui passent à la ligne selon la place. Chacune porte sa pastille orange : aucun séparateur ne reste
+     seul en bout de ligne. */
+  html .ph-note {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: baseline;
+    width: 100%;
+    gap: 6px 16px;
+    font-size: 12.5px;
+    line-height: 1.4;
+    text-align: left;
+  }
+
+  html .ph-note .ph-sep {
+    display: none;
+  }
+
+  html .ph-note > span:not(.ph-sep)::before {
+    content: '';
+    display: inline-block;
+    width: 5px;
+    height: 5px;
+    margin-right: 7px;
+    border-radius: 50%;
+    background: #ee8532;
+    vertical-align: middle;
+    translate: 0 -1px;
+  }
+
+  /* ---------- panneaux bleus : À propos, Le Cuistologue ---------- */
+  html .ah-copy {
+    align-items: center;
+    gap: 18px;
+    padding-block: 34px 40px;
+    text-align: center;
+  }
+
+  html .ah-zones {
+    justify-content: center;
+  }
+
+  html .pj-live {
+    align-self: center;
+  }
+
+  /* ---------- panneau bleu : Contact ---------- */
+  html .ct-panel {
+    gap: 18px;
+    padding: 36px 20px 30px;  /* même retrait du texte que les panneaux de À propos et du Cuistologue (20 px) */
+  }
+
+  html .ct-panel h1,
+  html .ct-eyebrow,
+  html .ct-lead {
+    align-self: center;
+    text-align: center;
+  }
+}

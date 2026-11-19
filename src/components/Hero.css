@@ -1,5 +1,5 @@
-/* Zone hero : le mesh gradient (bleu klein tiré vers le vert) passe aussi derrière l'en-tête translucide,
-   et s'arrête net au bord de la tuile sombre suivante. */
+/* Zone hero : le fond (HeroAmbient pour l'accueil, PageHero pour les pages de service) passe aussi derrière l'en-tête translucide,
+   et s'arrête net au bord de la section suivante. */
 .hero-zone {
   position: relative;
   isolation: isolate;
@@ -11,11 +11,10 @@
   flex-direction: column;
   justify-content: center;
   padding-bottom: calc(var(--header-h) * 0.2);
-  background:
-    var(--grain) 0 0 / 160px 160px repeat,
-    url('../assets/mesh/hero.webp') center / cover no-repeat,
-    var(--paper);
-  background-blend-mode: soft-light, normal, normal;
+  /* Le fond visible est le papier de la composition (.at-paper, HeroAtelier.css), opaque, posé par-dessus : ici, seulement la couleur du
+     papier pendant les premières millisecondes. L'ancienne image de fond (mesh/hero.webp) était entièrement cachée, mais téléchargée sur
+     chaque page, et le navigateur la prenait pour le contenu principal de l'écran. */
+  background: var(--paper);
 }
 
 .hero {
@@ -28,8 +27,8 @@
   padding-block: 0;
 }
 
-/* Ligne de rôle : à l'intérieur du h1 pour que le titre de la page porte les mots-clés (webdesigner, UX/UI,
-   freelance, Yvelines), mais présentée comme avant, en petit texte au-dessus du grand titre. */
+/* Ligne de rôle : à l'intérieur du h1 pour que le titre de la page porte les mots-clés (concepteur numérique, sites web, interfaces et logiciels),
+   mais présentée en petit texte au-dessus du grand titre. */
 .hero-role {
   display: block;
   margin-bottom: 32px;
@@ -41,34 +40,50 @@
   color: var(--ink);
 }
 
-/* Négatif : le titre se mélange à ce qui passe derrière lui (mode « différence »). Sur le papier clair, il retombe sur l'encre et
-   le bleu habituels ; là où une goutte de lave passe sous les lettres, la couleur s'inverse. Les teintes ci-dessous sont
-   donc des compléments : papier moins encre, papier moins bleu. */
-.hero {
-  --neg-ink: #d4cdca;
-  --neg-signal: #d29d5b;
+/* Ordinateur : le bloc de texte et de boutons est décalé un peu vers la gauche, du côté opposé à la composition. Le décalage est
+   court : le texte reste à l'intérieur des lignes du cadre (à 5 vw du bord), sans les toucher. */
+@media (min-width: 901px) {
+  .hero {
+    translate: calc(clamp(14px, 2vw, 32px) * -1) 0;
+  }
 }
 
-/* Le négatif n'existe qu'au-dessus de 560 px : sur mobile, le titre garde ses vraies couleurs (encre et bleu), sans mélange. */
-@media (min-width: 561px) {
-  .hero-zone.neg-on .hero h1 {
-    mix-blend-mode: difference;
+/* Négatif : seule la seconde ligne du titre (« au travail. ») se mélange à ce qui passe derrière elle (mode « différence »). Sur le
+   papier clair, elle retombe sur le bleu habituel ; sur une forme sombre, la couleur s'inverse. La teinte ci-dessous est le complément
+   de ce bleu. La ligne de rôle, la première ligne du titre et la réassurance restent en noir, sans négatif. */
+.hero {
+  --neg-signal: #d29d5b;
+  --hero-h1-size: clamp(2rem, 10.3vw, 3.8rem);
+}
+
+/* téléphone : le titre grandit plus vite avec la largeur (34 px à 320 px, 44,5 px à 390 px, plafonné à 47 px) ; « prennent forme. » reste sur une ligne */
+@media (max-width: 700px) {
+  .hero {
+    --hero-h1-size: clamp(2rem, calc(34px + (100vw - 320px) * 0.15), 2.95rem);
+  }
+}
+
+@media (min-width: 901px) {
+  .hero {
+    --hero-h1-size: clamp(2.8rem, 5.6vw, 5.4rem);
   }
 }
 
 .hero h1 {
   margin-bottom: 0.18em;
-  font-family: var(--font-display);
-  font-size: clamp(2.5rem, 9.2vw, 7.4rem);
-  font-weight: 700;
+  font-family: var(--font-title);
+  /* le titre de la Hero est plus installé que celui des en-têtes de page : plus grand, graisse « black » (800, la plus lourde de Bricolage Grotesque) */
+  font-size: var(--hero-h1-size);
+  font-weight: 800;
   line-height: 0.98;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.021em;
   margin-top: 0;
 }
 
 .hero-l1,
 .hero-l2 {
   display: block;
+  letter-spacing: 0.02em;
 }
 
 .hero-l1 {
@@ -79,14 +94,10 @@
   color: var(--signal);
 }
 
-/* les teintes complémentaires ne servent qu'avec le mélange : sans lui (lave pas encore visible, WebGL absent), le titre garde ses vraies couleurs */
+/* La teinte complémentaire ne sert qu'avec le mélange « différence », au-dessus de 560 px : sur mobile, le titre garde ses vraies couleurs. */
 @media (min-width: 561px) {
-  .hero-zone.neg-on .hero-role,
-  .hero-zone.neg-on .hero-l1 {
-    color: var(--neg-ink);
-  }
-
   .hero-zone.neg-on .hero-l2 {
+    mix-blend-mode: difference;
     color: var(--neg-signal);
   }
 }
@@ -104,6 +115,20 @@
   line-height: 1.55;
   max-width: 42ch;
   margin-top: 14px;
+  text-wrap: balance;
+}
+
+/* Ligne de réassurance : dans le bloc des boutons (elle entre donc avec eux, en douceur), sur sa propre rangée, en noir */
+.hero-assure {
+  flex-basis: 100%;
+  margin: 0;
+  margin-top: calc(var(--space-2) * -1);
+  text-align: center;
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: var(--ink);
 }
 
 .hero-actions {
@@ -115,7 +140,7 @@
   margin-top: var(--space-3);
 }
 
-/* Flou progressif en bas de la Hero : la lave se fond dans la section suivante */
+/* Flou progressif en bas de la Hero : le fond se fond dans la section suivante */
 .hero-zone > .pblur {
   z-index: -1;
   --pb-h: 240px;
@@ -129,6 +154,7 @@
   gap: var(--space-5) clamp(22px, 3vw, 36px);
 }
 
+.card-links .link-under,
 .hero-actions .link-under {
   position: relative;
   isolation: isolate;
@@ -137,7 +163,7 @@
   min-height: 54px;
   padding: 0 26px;
   border: 1px solid var(--signal);
-  border-radius: 12px;
+  border-radius: var(--radius-btn);
   background: rgb(255 255 255 / 0.5);
   -webkit-backdrop-filter: blur(12px) saturate(140%);
   backdrop-filter: blur(12px) saturate(140%);
@@ -148,12 +174,15 @@
   transition: background-color 0.5s var(--ease-out), box-shadow 0.5s var(--ease-out), backdrop-filter 0.5s var(--ease-out), border-color 0.5s var(--ease-out);
 }
 
+.card-links .link-under[data-glow]::after,
 .hero-actions .link-under[data-glow]::after {
   background: radial-gradient(150px circle at var(--mx, 50%) var(--my, 0%), rgb(255 255 255 / 0.75), rgb(255 255 255 / 0) 70%);
   transition-duration: 0.5s;
 }
 
+.card-links .link-under:hover,
 .hero-actions .link-under:hover,
+.card-links .link-under:focus-visible,
 .hero-actions .link-under:focus-visible {
   background: rgb(255 255 255 / 0.68);
   -webkit-backdrop-filter: blur(16px) saturate(170%);
@@ -165,6 +194,7 @@
 }
 
 @media (max-width: 480px) {
+  .card-links .link-under,
   .hero-actions .link-under {
     min-height: 50px;
     padding: 0 20px;
@@ -173,52 +203,49 @@
 }
 
 @media (max-width: 560px) {
-  /* Pleine hauteur d'écran ; le bloc de texte occupe l'espace par la taille de ses éléments (titre au maximum de la
-     largeur, sous-titre et boutons plus grands, respirations plus franches) plutôt que par du vide autour */
+  /* Composition mobile : un bloc centré (surtitre, titre en deux lignes, description, actions). La hauteur n'est pas forcée à celle de l'écran :
+     elle suit le contenu, avec de l'air autour, et reste plafonnée pour que la section suivante apparaisse dès le premier écran. Les marges
+     se règlent sur la hauteur (svh) : le bloc respire sur un grand écran et se resserre sur un petit. */
   .hero-zone {
-    min-height: 100svh;
-    justify-content: flex-start;
-    padding-bottom: calc(var(--space-7) + env(safe-area-inset-bottom));
+    min-height: min(86svh, 720px);
+    justify-content: center;
+    padding-top: calc(var(--header-h) + clamp(20px, 5svh, 48px));
+    padding-bottom: calc(clamp(32px, 6svh, 56px) + env(safe-area-inset-bottom));
   }
 
-  /* La Hero occupe toute la hauteur : la ligne de rôle se pose en haut, juste sous l'en-tête, le titre prend de l'ampleur au
-     milieu, puis le sous-titre et les boutons ferment la page. Le vide se répartit au lieu de s'accumuler autour d'un bloc centré. */
   .hero {
-    flex: 1 1 auto;
-    gap: 22px;
-    /* remonte le sous-titre et les boutons : le bloc ne colle plus au bas de l'écran */
-    padding-bottom: 30px;
+    /* jamais plus large que l'écran : sinon le plus long mot du titre élargit la page et ajoute un défilement latéral */
+    width: 100%;
+    min-width: 0;
+    gap: 0;
+    padding-bottom: 0;
   }
 
+  /* « Vos besoins / prennent forme. » : deux lignes, la plus longue (« prennent forme. », 15 signes) occupe presque toute la colonne. La taille
+     suit la largeur ; la coupure vient des deux blocs (.hero-l1, .hero-l2), pas d'un retour à la ligne codé. */
   .hero h1 {
-    display: flex;
-    flex: 1 1 auto;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-end;
-    font-size: clamp(2.8rem, 19.6vw, 5.3rem);
-    line-height: 0.96;
-    letter-spacing: -0.035em;
+    display: block;
+    line-height: 0.98;
+    letter-spacing: -0.024em;
   }
 
   .hero-role {
-    margin-top: clamp(26px, 5.2svh, 52px);
-    margin-bottom: auto;
-    padding-bottom: 16px;
-    font-size: 1.06rem;
+    margin: 0 0 clamp(16px, 3.2svh, 26px);
+    padding: 0;
+    font-size: 1rem;
     line-height: 1.4;
     text-wrap: balance;
   }
 
-  /* « avec du / caractère. » sur deux lignes : trois lignes au total, plus grosses, qui remplissent la largeur */
+  .hero-l1,
   .hero-l2 {
-    max-width: 5.5em;
-    margin-inline: auto;
+    text-wrap: balance;
   }
 
   .hero-sub {
-    margin-top: 10px;
-    font-size: 1.17rem;
+    max-width: 30ch;
+    margin: clamp(18px, 3.4svh, 26px) auto 0;
+    font-size: 1.1rem;
     line-height: 1.5;
     text-wrap: balance;
   }
@@ -227,7 +254,7 @@
     display: none;
   }
 
-  /* le texte reste lisible quand une bulle de lave passe derrière */
+  /* halo clair derrière le texte : il reste lisible quelle que soit la forme qui passe dessous */
   .hero-role,
   .hero-sub {
     text-shadow: 0 0 14px rgb(245 243 234 / 0.85), 0 0 3px rgb(245 243 234 / 0.6);
@@ -240,12 +267,13 @@
     align-items: center;
     width: min(100%, 320px);
     gap: 12px;
-    margin-top: var(--space-5);
+    margin-top: clamp(24px, 4.4svh, 34px);
   }
 
-  .hero-actions .frosted-cta {
-    min-height: 56px;
-    font-size: 17px;
+  .hero-actions .frosted-cta,
+  .hero-actions .link-under {
+    min-height: 54px;
+    font-size: 16.5px;
   }
 
   .hero-actions > * {
@@ -253,34 +281,59 @@
     justify-content: center;
   }
 
-  .hero-actions .link-under {
-    min-height: 56px;
-    font-size: 17px;
+  .hero-actions .hero-assure {
+    flex-basis: 100%;
+    width: 100%;
+    margin: 4px 0 0;
+    font-size: 13px;
+    text-wrap: balance;
+    text-shadow: 0 0 14px rgb(245 243 234 / 0.85), 0 0 3px rgb(245 243 234 / 0.6);
   }
 }
 
-/* Bouton principal : les bulles de lave derrière lui sont bleues, un verre bleu s'y perdait. Il passe à un orange un peu plus soutenu que celui de « En savoir plus »
-   (#ee8532 en bas) qui ressort sur le bleu comme sur le fond clair, texte bleu nuit. */
-.hero-actions .frosted-cta {
-  color: #0b1a4a;
-  background: linear-gradient(180deg, rgb(255 255 255 / 0.3), rgb(255 255 255 / 0) 55%), linear-gradient(180deg, #fba24f, #ee8532);
-  box-shadow:
-    inset 0 1px 0 rgb(255 255 255 / 0.7),
-    0 0 0 1px rgb(255 255 255 / 0.55),
-    0 16px 30px -14px rgb(140 60 5 / 0.5);
+/* Écrans courts (iPhone avec la barre Safari déployée : environ 645 px de haut visibles) : le titre se cale aussi sur la hauteur. */
+@media (max-width: 560px) and (max-height: 700px) {
+
+  .hero-sub {
+    font-size: 1rem;
+    line-height: 1.42;
+  }
+
+  .hero-actions .frosted-cta,
+  .hero-actions .link-under {
+    min-height: 50px;
+  }
 }
 
-/* Survol du bouton principal : le reflet qui suit le pointeur passe au rose orchidée de la palette, un peu néon */
-.hero-actions .frosted-cta[data-glow]::after {
-  background: radial-gradient(170px circle at var(--mx, 50%) var(--my, 0%), rgb(255 92 214 / 0.62), rgb(255 92 214 / 0) 70%);
+/* Les boutons du site suivent un seul système « Bauhaus + grès » (src/styles/cta.css). Ici, seulement ce qui est propre à la Hero : le
+   padding régulier du bouton principal. */
+.hero-actions .frosted-cta {
+  gap: 16px;
+  padding: 0 28px;
 }
-@media (hover: hover) {
-  .hero-actions .frosted-cta:hover {
-    background: linear-gradient(180deg, rgb(255 255 255 / 0.3), rgb(255 255 255 / 0) 55%), linear-gradient(180deg, #fba24f, #ee8532);
-    box-shadow:
-      inset 0 1px 0 rgb(255 255 255 / 0.7),
-      0 0 0 1.5px rgb(255 160 232 / 0.9),
-      0 0 26px -2px rgb(255 92 214 / 0.65),
-      0 18px 36px -16px rgb(140 60 5 / 0.55);
+
+/* Le bouton secondaire (papier, filet bleu, ombre dure, survol « lampe ») est dans src/styles/cta.css : c'est le même que le bouton de
+   l'appel final. */
+
+/* La preuve d'expérience, sous la réassurance : une ligne discrète, en retrait (pas un second titre). */
+.hero-proof {
+  flex-basis: 100%;
+  margin: 0;
+  margin-top: calc(var(--space-2) * -1);
+  text-align: center;
+  font-family: var(--font-body);
+  font-size: 13.5px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: var(--ink-soft);
+}
+
+@media (max-width: 560px) {
+  .hero-proof {
+    flex-basis: calc(100% + 30px);
+    width: calc(100% + 30px);
+    margin-inline: -15px;
+    font-size: 12.5px;
+    text-wrap: balance;
   }
 }

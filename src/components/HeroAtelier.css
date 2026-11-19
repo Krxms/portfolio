@@ -1,0 +1,1041 @@
+/* =====================================================================================================================
+   HERO « ATELIER » : l'affiche. Un papier clair, et à droite une composition de formes : des arches de hauteurs différentes qui se chevauchent, un volume de béton, une
+   sphère, une fenêtre d'interface. La matière : aplats de la palette, mouchetures claires, et le même béton que sur le reste du site.
+   Légèreté au défilement : aucun backdrop-filter. Le béton est mélangé une fois, dans chaque forme (isolation), et chaque forme est un
+   calque indépendant que le processeur graphique déplace (voir le mouvement en bas de ce fichier).
+   Toutes les positions de la composition sont en vw (largeur de l'écran) : c'est une affiche qui se met à l'échelle sans jamais se
+   déformer, la même à toutes les largeurs à partir de 901 px.
+   ===================================================================================================================== */
+.amb-atelier {
+  position: absolute;
+  inset: 0;
+  --at-navy: #0b1a4a;
+  --at-klein: #1f45d6;
+  --at-orange: #ee8532;
+  --at-cream: #f4ead9;
+  --at-mint: #a6d4ca;
+  --at-sky: #cddbf8;
+  --at-sun: #f2cf86;
+  /* l'en-tête a une hauteur fixe (en pixels), l'affiche une taille qui suit la largeur : cet écart (nul à 1440 px) décale toute l'affiche d'un bloc,
+     sans la déformer, pour qu'elle reste à la même distance sous l'en-tête */
+  --at-y: calc(var(--header-h, 100px) - 6.94vw);
+  /* l'ombre dure orange, la même partout dans la composition */
+  --at-off: clamp(5px, 0.5vw, 8px);
+}
+
+/* ---------- le papier ---------- */
+.at-paper {
+  position: absolute;
+  inset: 0;
+  /* le grain de grès (mouchetures à transparence) sur un papier qui se creuse un peu vers le bas */
+  background:
+    url('../assets/riso/stoneware.webp') 0 0 / 512px 512px repeat,
+    radial-gradient(ellipse 72% 40% at 50% -6%, #ffffff 0%, rgb(255 255 255 / 0) 100%),
+    linear-gradient(180deg, #f6f8fb 0%, #edf1f6 60%, #e4ebf3 100%);
+}
+
+/* un voile clair sous le texte : la lisibilité ne dépend jamais de la composition */
+.at-lift {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 54% 46% at 50% 52%, rgb(248 250 252 / 0.7), rgb(248 250 252 / 0) 100%);
+}
+
+/* ---------- le béton : le même calque que sur le reste du site ----------
+   La texture de .concrete (matiere.css), des cartes et des couches de la vue éclatée : concrete-zoom.webp en « soft-light » à l'intensité
+   commune --concrete. Chaque forme est un calque indépendant (isolation) : le mélange se fait dans la forme, une fois, et la forme
+   bouge ensuite sans que rien ne soit recalculé. */
+.at-arch-pale,
+.at-arch-mint,
+.at-arch,
+.at-orb,
+.at-disc,
+.at-quarter,
+.at-win-art,
+.at-building .b-left,
+.at-building .b-right {
+  isolation: isolate;
+}
+
+.at-arch-pale::before,
+.at-arch-mint::before,
+.at-arch::before,
+.at-orb::before,
+.at-disc::before,
+.at-quarter::before,
+.at-win-art::before,
+.at-building .b-left::before,
+.at-building .b-right::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: url('../assets/riso/concrete-zoom.webp') 50% 50% / cover no-repeat;
+  mix-blend-mode: soft-light;
+  opacity: var(--concrete, 0.3);
+}
+
+/* ---------- le grain argentique ----------
+   Une tuile de bruit à transparence (tools/film-grain.mjs : grains clairs et sombres, légèrement estompés) posée par-dessus toute la
+   composition, formes comprises : le tirage a un grain, les arches et la fenêtre en font partie. Elle ne bouge pas avec les formes (le
+   grain est celui de la pellicule, pas des objets) : en défilant, la composition glisse sous lui. Mode normal, rien à recalculer. */
+.at-film {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: url('../assets/riso/film-grain.webp') 0 0 / 320px 320px repeat;
+  opacity: 1;
+}
+
+@media (max-width: 700px) {
+  .at-film {
+    background-size: 200px 200px;
+  }
+}
+
+/* ---------- l'apparence des grandes formes ----------
+   Partagée avec l'entête des pages de service (PageHero.css) : ici la matière, là-bas seulement la position et la taille. */
+.at-arch-pale {
+  border-radius: 999px 999px 0 0;
+  background: linear-gradient(180deg, rgb(198 218 251 / 0.62), rgb(198 218 251 / 0.14));
+}
+
+.at-arch-mint {
+  border-radius: 999px 999px 0 0;
+  background: linear-gradient(180deg, rgb(172 226 212 / 0.7), rgb(172 226 212 / 0.2));
+}
+
+/* l'arche bleue : la matière des boutons (bleu klein voilé, mouchetures claires), lumière en haut à gauche, ombre interne en bas à droite */
+.at-arch {
+  border-radius: 999px 999px 0 0;
+  background:
+    var(--flecks) 0 0 / 420px 420px repeat,
+    var(--flecks) 170px 120px / 310px 310px repeat,
+    radial-gradient(circle at 24% 16%, rgb(150 190 255 / 0.5), rgb(150 190 255 / 0) 36%),
+    linear-gradient(rgb(19 36 124 / 0.32), rgb(19 36 124 / 0.32)),
+    linear-gradient(172deg, #5b88f8 0%, #3262ea 22%, #2147d4 46%, #162c9a 74%, #0e1c6c 100%);
+  box-shadow:
+    inset 3px 3px 0 -1px rgb(255 255 255 / 0.3),
+    inset 18px 20px 40px -14px rgb(150 190 255 / 0.28),
+    inset -22px -26px 50px -10px rgb(4 10 56 / 0.4),
+    0 50px 70px -36px rgb(8 20 90 / 0.5);
+}
+
+/* le disque orange : gros plan de béton */
+.at-orb {
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 30% 24%, rgb(255 214 170 / 0.75), rgb(255 214 170 / 0) 40%),
+    linear-gradient(150deg, #ff9a58, #f2733c 58%, #e0602a);
+  box-shadow:
+    inset 2px 3px 0 -1px rgb(255 255 255 / 0.5),
+    inset -10px -12px 22px -6px rgb(150 50 10 / 0.35),
+    0 26px 40px -20px rgb(110 40 8 / 0.45);
+}
+
+/* la trame (riso) : des points plus denses vers le bord bas droit */
+:is(.hero-zone--atelier, .hero-zone--page) .at-arch::after,
+:is(.hero-zone--atelier, .hero-zone--page) .at-orb::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(circle, rgb(6 12 80 / 0.6) 0 30%, transparent 37%) 0 0 / 5px 5px;
+  -webkit-mask-image: linear-gradient(155deg, transparent 38%, #000 100%);
+  mask-image: linear-gradient(155deg, transparent 38%, #000 100%);
+}
+
+:is(.hero-zone--atelier, .hero-zone--page) .at-orb::after {
+  background: radial-gradient(circle, rgb(130 28 6 / 0.6) 0 30%, transparent 37%) 0 0 / 4px 4px;
+  -webkit-mask-image: linear-gradient(155deg, transparent 34%, #000 100%);
+  mask-image: linear-gradient(155deg, transparent 34%, #000 100%);
+}
+
+/* ---------- les petites formes du bas (tablette et mobile) ---------- */
+/* une pastille orange : le point sur le « i » */
+.at-dot {
+  position: absolute;
+  left: clamp(18px, 4.5vw, 84px);
+  top: calc(var(--header-h, 72px) + 8vmin);
+  width: clamp(10px, 1.1vmax, 16px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--at-orange);
+}
+
+/* le quart de cercle : le lagon du site (le bleu tiré vers le vert), très pâle, en relief doux comme le papier. Des courbes de niveau
+   marine très fines, le grain du béton. */
+.at-quarter {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: clamp(150px, 22vmax, 330px);
+  aspect-ratio: 1;
+  border-top-left-radius: 100%;
+  background:
+    repeating-radial-gradient(circle at 100% 100%, transparent 0 26px, rgb(19 36 124 / 0.14) 26px 27px),
+    linear-gradient(145deg, #e6f3f4, #cfe6ea);
+  box-shadow:
+    -12px -12px 26px rgb(255 255 255 / 0.95),
+    -6px -6px 18px rgb(98 120 160 / 0.16),
+    inset 1px 1px 0 rgb(255 255 255 / 0.8);
+}
+
+/* Les formes de l'affiche ne s'affichent que sur ordinateur (voir « Disposition affiche » plus bas) */
+.at-disc,
+.at-ring,
+.at-arch-pale,
+.at-arch-mint,
+.at-arch,
+.at-orb,
+.at-window,
+.at-outline,
+.at-building {
+  display: none;
+}
+
+/* ---------- mobile ---------- */
+@media (max-width: 700px) {
+  .at-quarter {
+    width: 130px;
+  }
+
+  /* le point orange du haut n'a pas sa place sur mobile */
+  .at-dot {
+    display: none;
+  }
+}
+
+/* =====================================================================================================================
+   DISPOSITION « AFFICHE » (ordinateur, 901 px et plus) : le texte s'aligne à gauche, et la composition prend toute la moitié droite.
+   Sous 901 px, la Hero reste centrée.
+   ===================================================================================================================== */
+@media (min-width: 901px) {
+  /* ----- la Hero montre toute l'affiche : au moins 51 vw de haut (écran large et bas : elle dépasse un peu de l'écran) ----- */
+  .hero-zone.hero-zone--atelier {
+    min-height: max(min(100svh, 980px), 51vw);
+    /* le bloc de texte est centré dans la Hero : du vide en plus en bas le fait monter d'autant de moitié (≈ 40 px à 1440 px) */
+    padding-bottom: calc(var(--header-h) * 0.2 + 5.6vw);
+  }
+
+  /* ----- le texte à gauche ----- */
+  .hero-zone--atelier .hero {
+    align-items: flex-start;
+    text-align: left;
+    /* même largeur et mêmes bords que le quadrillage : le texte s'aligne sur le cadre */
+    width: min(calc(100% - 2 * var(--edge, 24px)), 1280px);
+    max-width: none;
+    margin-inline: auto;
+  }
+
+  .hero-zone--atelier .hero-sub {
+    max-width: min(40ch, 40vw);
+    text-align: left;
+  }
+
+  /* les boutons sur une rangée, et les deux lignes dessous centrées sur toute leur largeur : la grille prend la largeur des boutons */
+  .hero-zone--atelier .hero-actions {
+    display: grid;
+    grid-template-columns: auto auto;
+    justify-content: start;
+    justify-items: stretch;
+  }
+
+  .hero-zone--atelier .hero-actions > .frosted-cta,
+  .hero-zone--atelier .hero-actions > .link-under {
+    justify-content: center;
+  }
+
+  .hero-zone--atelier .hero-assure,
+  .hero-zone--atelier .hero-proof {
+    grid-column: 1 / -1;
+    width: auto;
+    text-align: center;
+  }
+
+  .hero-zone--atelier .hero-proof {
+    margin-top: calc(var(--space-3) * -1);
+  }
+
+  /* le recul au défilement part du bord gauche des blocs, pas de leur centre */
+  html .has-scenes .hero-zone--atelier .hero > *,
+  html .has-scenes .hero-zone--atelier .hero h1 > * {
+    transform-origin: 0 50%;
+  }
+
+  /* la ligne de rôle : une barre orange (une forme de plus) devant le texte */
+  .hero-zone--atelier .hero-role::before {
+    content: '';
+    display: inline-block;
+    width: 44px;
+    height: 4px;
+    background: #ee8532;
+    margin-right: 16px;
+    vertical-align: middle;
+    translate: 0 -2px;
+  }
+
+  /* le voile de lisibilité et l'estompe du quadrillage se centrent sur le texte */
+  .hero-zone--atelier .at-lift {
+    background: radial-gradient(ellipse 38% 46% at 27% 52%, rgb(248 250 252 / 0.72), rgb(248 250 252 / 0) 100%);
+  }
+
+  .hero-zone--atelier .at-quarter {
+    display: none;
+  }
+
+  /* ----- la composition de droite ----- */
+  .hero-zone--atelier .at-arch-pale,
+  .hero-zone--atelier .at-arch-mint,
+  .hero-zone--atelier .at-arch,
+  .hero-zone--atelier .at-orb,
+  .hero-zone--atelier .at-window,
+  .hero-zone--atelier .at-outline,
+  .hero-zone--atelier .at-building,
+  .hero-zone--atelier .at-disc,
+  .hero-zone--atelier .at-ring {
+    display: block;
+    position: absolute;
+  }
+
+  /* l'arche au trait : derrière l'arche bleue, qui la masque en partie ; elle ressort à droite */
+  .hero-zone--atelier .at-outline {
+    left: 81vw;
+    width: 19vw;
+    top: calc(6.8vw + var(--at-y));
+    height: 53.5vw;
+    rotate: 2deg;
+    transform-origin: 50% 100%;
+    overflow: visible;
+    fill: none;
+    stroke: rgb(31 69 214 / 0.55);
+    stroke-width: 1.4;
+  }
+
+  .hero-zone--atelier .at-outline path {
+    vector-effect: non-scaling-stroke;
+  }
+
+  /* arche pâle, bleu ciel : au fond, la plus haute des deux pâles, penchée de deux degrés comme posée à la main (le pied reste en place) */
+  .hero-zone--atelier .at-arch-pale {
+    left: 49vw;
+    width: 11.5vw;
+    top: calc(23.3vw + var(--at-y));
+    bottom: -12vw;
+    rotate: -2deg;
+    transform-origin: 50% 100%;
+  }
+
+  /* arche menthe : plus basse, au pied de la précédente */
+  .hero-zone--atelier .at-arch-mint {
+    left: 53vw;
+    width: 10.5vw;
+    top: calc(41.6vw + var(--at-y));
+    bottom: -12vw;
+    rotate: 3deg;
+    transform-origin: 50% 100%;
+  }
+
+  /* l'arche bleue */
+  .hero-zone--atelier .at-arch {
+    left: 63vw;
+    width: 24vw;
+    top: calc(14.8vw + var(--at-y));
+    bottom: -12vw;
+  }
+
+  /* la trame (riso) du disque bleu : comme celle de l'arche */
+  .hero-zone--atelier .at-disc::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    background: radial-gradient(circle, rgb(6 12 80 / 0.6) 0 30%, transparent 37%) 0 0 / 5px 5px;
+    -webkit-mask-image: linear-gradient(155deg, transparent 38%, #000 100%);
+    mask-image: linear-gradient(155deg, transparent 38%, #000 100%);
+  }
+
+  /* le volume de béton (référence) : deux pans, le gauche dans l'ombre, le droit dans la lumière, une bande de fenêtres sous chacun */
+  .hero-zone--atelier .at-building {
+    left: 64.8vw;
+    top: calc(20.8vw + var(--at-y));
+    width: 21.4vw;
+    aspect-ratio: 1.62;
+  }
+
+  .at-building i {
+    position: absolute;
+    display: block;
+  }
+
+  .at-building .b-left,
+  .at-building .b-right {
+    inset: 0;
+    isolation: isolate;
+  }
+
+  .at-building .b-left {
+    clip-path: polygon(46% 0, 0 54%, 0 100%, 46% 100%);
+    background-image: linear-gradient(100deg, #98a0b8, #b7bed0);
+  }
+
+  .at-building .b-right {
+    clip-path: polygon(46% 0, 100% 56%, 100% 100%, 46% 100%);
+    background-image: linear-gradient(200deg, #e4e7ee, #b9bfcf);
+  }
+
+  /* les bandes de fenêtres : du verre sombre bleuté, qui suit la pente de chaque pan */
+  .at-building .b-win {
+    top: 69%;
+    height: 21%;
+    background: linear-gradient(180deg, #16245e, #3f66c4 70%, #7da0ee);
+  }
+
+  .at-building .b-win-l {
+    left: 5%;
+    width: 36%;
+    clip-path: polygon(0 20%, 100% 0, 100% 80%, 0 100%);
+  }
+
+  .at-building .b-win-r {
+    left: 52%;
+    width: 40%;
+    clip-path: polygon(0 0, 100% 20%, 100% 100%, 0 80%);
+  }
+
+  /* le disque orange : il chevauche le coin haut gauche de l'arche ; gros plan de béton */
+  .hero-zone--atelier .at-orb {
+    left: 57.2vw;
+    top: calc(8vw + var(--at-y));
+    width: 10vw;
+    aspect-ratio: 1;
+  }
+
+  /* la fenêtre d'interface : du papier clair, légèrement penchée en perspective, qui flotte sur le bas de l'arche. Pur décor (aria-hidden). */
+  .hero-zone--atelier .at-window {
+    left: 59.4vw;
+    top: calc(32.4vw + var(--at-y));
+    width: 27.5vw;
+    aspect-ratio: 1.62;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    padding: 0.9vw 1.1vw 1.1vw;
+    border-radius: 1.4vw;
+    background: linear-gradient(135deg, rgb(255 255 255 / 0.95), rgb(244 248 255 / 0.88));
+    box-shadow:
+      inset 0 1px 0 #fff,
+      inset 0 0 0 1px rgb(255 255 255 / 0.7),
+      0 40px 60px -28px rgb(8 20 90 / 0.5);
+    transform: perspective(1400px) rotateY(-9deg) rotateX(5deg) rotateZ(2.4deg);
+    transform-origin: 30% 60%;
+  }
+
+  .at-win-bar {
+    display: flex;
+    gap: 0.45vw;
+    flex: none;
+    padding-bottom: 0.7vw;
+  }
+
+  .at-win-bar i {
+    width: 0.72vw;
+    height: 0.72vw;
+    min-width: 8px;
+    min-height: 8px;
+    border-radius: 50%;
+    background: var(--at-orange);
+  }
+
+  .at-win-bar i:nth-child(2) {
+    background: #f2cf86;
+  }
+
+  .at-win-bar i:nth-child(3) {
+    background: #a6d4ca;
+  }
+
+  .at-win-body {
+    display: grid;
+    flex: 1;
+    min-height: 0;
+    grid-template-columns: 1.05fr 1fr;
+    gap: 1.2vw;
+  }
+
+  /* l'illustration : du papier, un quart de disque bleu et un disque orange (les formes du logo) */
+  .at-win-art {
+    position: relative;
+    overflow: hidden;
+    border-radius: 0.8vw;
+    background: linear-gradient(160deg, #f4ead9, #e9dcc6);
+    box-shadow: inset 0 0 0 1px rgb(120 90 40 / 0.1);
+  }
+
+  .at-win-art b {
+    position: absolute;
+    left: 8%;
+    bottom: 0;
+    width: 62%;
+    aspect-ratio: 1;
+    border-radius: 100% 0 0 0;
+    background: linear-gradient(150deg, #2c58e0, #13247c);
+  }
+
+  .at-win-art u {
+    position: absolute;
+    right: 12%;
+    top: 14%;
+    width: 22%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: var(--at-orange);
+  }
+
+  /* les lignes de texte (squelette) et le bouton, à l'ombre dure orange comme sur le site */
+  .at-win-lines {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.85vw;
+  }
+
+  .at-win-lines s {
+    display: block;
+    height: 0.62vw;
+    min-height: 6px;
+    border-radius: 999px;
+    background: rgb(70 100 190 / 0.3);
+  }
+
+  .at-win-lines s:nth-child(2) {
+    width: 92%;
+  }
+
+  .at-win-lines s:nth-child(3) {
+    width: 80%;
+  }
+
+  .at-win-lines s:nth-child(4) {
+    width: 54%;
+    opacity: 0.6;
+  }
+
+  .at-win-lines em {
+    display: block;
+    width: 38%;
+    height: 1.3vw;
+    min-height: 12px;
+    margin-top: 0.4vw;
+    border-radius: 999px;
+    background: linear-gradient(180deg, #3566ee, #1f45d6);
+    box-shadow: 0.22vw 0.22vw 0 var(--at-orange);
+  }
+
+  /* la sphère bleue : la matière des boutons à grande échelle, ombre dure orange (réduite), trame de points. Elle sort du cadre. */
+  .hero-zone--atelier .at-disc {
+    right: -2.4vw;
+    top: calc(35.3vw + var(--at-y));
+    width: 14vw;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background:
+      var(--flecks) 0 0 / 420px 420px repeat,
+      var(--flecks) 170px 120px / 310px 310px repeat,
+      radial-gradient(circle at 27% 21%, rgb(150 190 255 / 0.5), rgb(150 190 255 / 0) 34%),
+      linear-gradient(rgb(19 36 124 / 0.3), rgb(19 36 124 / 0.3)),
+      radial-gradient(circle at 30% 24%, #3a66ee 0%, #2147d4 34%, #162c9a 66%, #0e1c6c 100%);
+    box-shadow:
+      inset 3px 3px 0 -1px rgb(255 255 255 / 0.34),
+      inset 14px 16px 30px -10px rgb(150 190 255 / 0.3),
+      inset -18px -22px 38px -8px rgb(4 10 56 / 0.62),
+      var(--at-off) var(--at-off) 0 var(--at-orange);
+  }
+
+  /* l'anneau et son satellite : un filet marine, un point orange */
+  .hero-zone--atelier .at-ring {
+    right: calc(-2.4vw - 1.6vw);
+    top: calc(35.3vw - 1.6vw + var(--at-y));
+    width: calc(14vw + 3.2vw);
+    aspect-ratio: 1;
+    overflow: visible;
+    fill: none;
+    stroke: rgb(19 36 124 / 0.34);
+    stroke-width: 1.2;
+  }
+
+  .at-sat circle {
+    fill: var(--at-orange);
+    stroke: none;
+  }
+}
+
+/* =====================================================================================================================
+   MOUVEMENT AU DÉFILEMENT (ordinateur, mouvement autorisé)
+   Chaque forme monte un peu à son propre rythme quand on défile : --k est le nombre de pixels gagnés par pixel défilé (les formes du
+   fond bougent à peine, celles de devant un peu plus), sur les 700 premiers pixels de défilement. Rien ne suit le pointeur.
+   - Navigateurs qui savent piloter une animation par le défilement (Chrome, Edge, Safari 26) : une animation CSS liée au défilement de
+     la page, jouée par le processeur graphique, sans une seule ligne de script ni le moindre calcul de style à chaque image.
+   - Les autres (Firefox, Safari plus ancien) : le script de HeroAmbient.astro écrit --py (le défilement) et la même translation s'applique.
+   ===================================================================================================================== */
+@keyframes at-par {
+  to {
+    translate: 0 calc(var(--k, 0) * -700px);
+  }
+}
+
+@media (min-width: 901px) and (prefers-reduced-motion: no-preference) {
+  :is(.hero-zone--atelier, .hero-zone--page) .at-outline,
+  :is(.hero-zone--atelier, .hero-zone--page) .at-arch-pale,
+  :is(.hero-zone--atelier, .hero-zone--page) .at-arch-mint,
+  :is(.hero-zone--atelier, .hero-zone--page) .at-arch,
+  :is(.hero-zone--atelier, .hero-zone--page) .at-building,
+  :is(.hero-zone--atelier, .hero-zone--page) .at-orb,
+  :is(.hero-zone--atelier, .hero-zone--page) .at-window,
+  :is(.hero-zone--atelier, .hero-zone--page) .at-disc,
+  :is(.hero-zone--atelier, .hero-zone--page) .at-ring {
+    will-change: translate;
+  }
+
+  @supports (animation-timeline: scroll()) {
+    :is(.hero-zone--atelier, .hero-zone--page) .at-outline,
+    :is(.hero-zone--atelier, .hero-zone--page) .at-arch-pale,
+    :is(.hero-zone--atelier, .hero-zone--page) .at-arch-mint,
+    :is(.hero-zone--atelier, .hero-zone--page) .at-arch,
+    :is(.hero-zone--atelier, .hero-zone--page) .at-building,
+    :is(.hero-zone--atelier, .hero-zone--page) .at-orb,
+      :is(.hero-zone--atelier, .hero-zone--page) .at-window,
+    :is(.hero-zone--atelier, .hero-zone--page) .at-disc,
+    :is(.hero-zone--atelier, .hero-zone--page) .at-ring {
+      /* en propriétés séparées, et sans durée : le minificateur ne peut pas les fondre dans le raccourci « animation », dont la forme avec
+         la ligne du temps (scroll()) n'est pas comprise par les navigateurs un peu anciens */
+      animation-name: at-par;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-timeline: scroll(root block);
+      animation-range: 0 700px;
+    }
+  }
+
+  @supports not (animation-timeline: scroll()) {
+    :is(.hero-zone--atelier, .hero-zone--page) .at-outline,
+    :is(.hero-zone--atelier, .hero-zone--page) .at-arch-pale,
+    :is(.hero-zone--atelier, .hero-zone--page) .at-arch-mint,
+    :is(.hero-zone--atelier, .hero-zone--page) .at-arch,
+    :is(.hero-zone--atelier, .hero-zone--page) .at-building,
+    :is(.hero-zone--atelier, .hero-zone--page) .at-orb,
+      :is(.hero-zone--atelier, .hero-zone--page) .at-window,
+    :is(.hero-zone--atelier, .hero-zone--page) .at-disc,
+    :is(.hero-zone--atelier, .hero-zone--page) .at-ring {
+      translate: 0 calc(var(--py, 0) * var(--k, 0) * -1px);
+    }
+  }
+
+  :is(.hero-zone--atelier, .hero-zone--page) .at-outline {
+    --k: 0.03;
+  }
+
+  :is(.hero-zone--atelier, .hero-zone--page) .at-arch-pale {
+    --k: 0.075;
+  }
+
+  :is(.hero-zone--atelier, .hero-zone--page) .at-arch-mint {
+    --k: 0.09;
+  }
+
+  :is(.hero-zone--atelier, .hero-zone--page) .at-arch {
+    --k: 0.12;
+  }
+
+  /* le bâtiment est dans l'arche : presque le même rythme, l'écart de profondeur reste de quelques pixels */
+  :is(.hero-zone--atelier, .hero-zone--page) .at-building {
+    --k: 0.127;
+  }
+
+  :is(.hero-zone--atelier, .hero-zone--page) .at-orb {
+    --k: 0.15;
+  }
+
+  :is(.hero-zone--atelier, .hero-zone--page) .at-window {
+    --k: 0.13;
+  }
+
+  :is(.hero-zone--atelier, .hero-zone--page) .at-disc,
+  :is(.hero-zone--atelier, .hero-zone--page) .at-ring {
+    --k: 0.06;
+  }
+}
+/* =====================================================================================================================
+   HERO MOBILE (700 px et moins) : toute la Hero tient dans l'écran. Le texte (rôle, titre, description, boutons, réassurance) est en haut, à
+   gauche ; la composition de l'affiche (disque orange, arche bleue et son volume, arches pâles, fenêtre d'interface, sphère et anneau) est
+   reprise de l'ordinateur à 1,5 fois sa taille, ancrée au bas de la Hero : seules les arches dépassent, coupées par le bord de l'écran, et
+   la section suivante commence au pli. Les positions sont celles de l'ordinateur, recalées : x = (x - 49) * 1,5 + 12 vw, y = (y - 8) * 1,5 vw.
+   ===================================================================================================================== */
+@media (max-width: 700px) {
+  .hero-zone.hero-zone--atelier {
+    /* unité de la composition : 1 vw sur un écran haut, plus petite quand l'écran est court (iPhone avec ses barres Safari), pour que le texte garde sa place ;
+       --ox recentre la composition quand elle rétrécit, décalée vers la droite, d'autant plus que l'écran est court (elle peut dépasser un peu du bord) */
+    --u: min(1vw, 0.4svh);
+    --ox: calc(50vw - 43 * var(--u) + 62 * (1vw - var(--u)));
+    --hy: calc(100% - 49 * var(--u));
+    min-height: 100svh;
+    /* le texte se pose juste au-dessus de la composition (écran court : iPhone avec ses barres Safari, validé). Sur un écran plus haut que 664 px
+       (inspecteur à 844 px), il remonte de 0,47 px par pixel de hauteur en plus : l'air se répartit autour au lieu de s'accumuler en haut. */
+    justify-content: flex-end;
+    padding-top: var(--header-h);
+    /* la place de la composition sous le texte : la Hero grandit si l'écran est trop bas, la composition ne passe jamais sur le texte */
+    padding-bottom: calc(calc(49 * var(--u)) + clamp(4px, 0.8svh, 8px) + max(0px, (100svh - 664px) * 0.47));
+  }
+
+  /* le flou progressif du bas voilerait la composition */
+  .hero-zone--atelier > .pblur {
+    display: none;
+  }
+
+  /* le texte, à gauche, avec la barre orange devant la ligne de rôle (comme sur ordinateur) */
+  .hero-zone--atelier .hero {
+    align-items: flex-start;
+    text-align: left;
+    gap: clamp(12px, 1.8svh, 18px);
+  }
+
+  /* le titre peut déborder de 10 px dans la marge droite : il grandit sans passer sur 3 lignes */
+  .hero-zone--atelier .hero h1 {
+    margin-right: -10px;
+    letter-spacing: -0.035em;
+  }
+
+  .hero-zone--atelier .hero-role {
+    margin: 0 0 clamp(20px, 4svh, 38px);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-wrap: balance;
+  }
+
+  .hero-zone--atelier .hero-role::before {
+    content: '';
+    display: inline-block;
+    width: 32px;
+    height: 3px;
+    margin-right: 12px;
+    vertical-align: middle;
+    background: #ee8532;
+    translate: 0 -1px;
+  }
+
+  .hero-zone--atelier .hero-sub {
+    max-width: 30ch;
+    margin: -6px 0 0;
+    font-size: 1.05rem;
+    line-height: 1.45;
+    text-align: left;
+  }
+
+  .hero-zone--atelier .hero-actions {
+    align-self: stretch;
+    align-items: stretch;
+    width: 100%;
+    gap: 10px;
+    margin-top: clamp(14px, 3svh, 28px);
+  }
+
+  .hero-zone--atelier .hero-actions .hero-assure {
+    margin: 4px 0 0;
+    text-align: left;
+    font-size: 12.5px;
+  }
+
+  /* le point orange au-dessus de la barre */
+  .hero-zone--atelier .at-dot {
+    display: block;
+    left: 20px;
+    top: calc(var(--header-h) + 6px);
+    width: 11px;
+  }
+
+  .hero-zone--atelier .at-quarter {
+    display: none;
+  }
+
+  .hero-zone--atelier .at-lift {
+    background: radial-gradient(ellipse 90% 34% at 34% 34%, rgb(248 250 252 / 0.7), rgb(248 250 252 / 0) 100%);
+  }
+
+  /* ----- la composition ----- */
+  .hero-zone--atelier .at-arch-pale,
+  .hero-zone--atelier .at-arch-mint,
+  .hero-zone--atelier .at-arch,
+  .hero-zone--atelier .at-orb,
+  .hero-zone--atelier .at-window,
+  .hero-zone--atelier .at-outline,
+  .hero-zone--atelier .at-building,
+  .hero-zone--atelier .at-disc,
+  .hero-zone--atelier .at-ring {
+    display: block;
+    position: absolute;
+  }
+
+  .hero-zone--atelier .at-outline {
+    left: calc(var(--ox) + 60 * var(--u));
+    width: calc(28.5 * var(--u));
+    top: calc(var(--hy) - calc(1.8 * var(--u)));
+    height: calc(80 * var(--u));
+    rotate: 2deg;
+    transform-origin: 50% 100%;
+    overflow: visible;
+    fill: none;
+    stroke: rgb(31 69 214 / 0.55);
+    stroke-width: 1.4;
+  }
+
+  .hero-zone--atelier .at-outline path {
+    vector-effect: non-scaling-stroke;
+  }
+
+  .hero-zone--atelier .at-arch-pale {
+    left: calc(var(--ox) + 12 * var(--u));
+    width: calc(17.25 * var(--u));
+    top: calc(var(--hy) + calc(23 * var(--u)));
+    bottom: calc(-20 * var(--u));
+    rotate: -2deg;
+    transform-origin: 50% 100%;
+  }
+
+  .hero-zone--atelier .at-arch-mint {
+    left: calc(var(--ox) + 18 * var(--u));
+    width: calc(15.75 * var(--u));
+    top: calc(var(--hy) + calc(50.4 * var(--u)));
+    bottom: calc(-20 * var(--u));
+    rotate: 3deg;
+    transform-origin: 50% 100%;
+  }
+
+  .hero-zone--atelier .at-arch {
+    left: calc(var(--ox) + 33 * var(--u));
+    width: calc(36 * var(--u));
+    top: calc(var(--hy) + calc(10.2 * var(--u)));
+    bottom: calc(-20 * var(--u));
+  }
+
+  .hero-zone--atelier .at-building {
+    left: calc(var(--ox) + 35.7 * var(--u));
+    top: calc(var(--hy) + calc(19.2 * var(--u)));
+    width: calc(32.1 * var(--u));
+    aspect-ratio: 1.62;
+  }
+
+  .at-building i {
+    position: absolute;
+    display: block;
+  }
+
+  .at-building .b-left,
+  .at-building .b-right {
+    inset: 0;
+    isolation: isolate;
+  }
+
+  .at-building .b-left {
+    clip-path: polygon(46% 0, 0 54%, 0 100%, 46% 100%);
+    background-image: linear-gradient(100deg, #98a0b8, #b7bed0);
+  }
+
+  .at-building .b-right {
+    clip-path: polygon(46% 0, 100% 56%, 100% 100%, 46% 100%);
+    background-image: linear-gradient(200deg, #e4e7ee, #b9bfcf);
+  }
+
+  .at-building .b-win {
+    top: 69%;
+    height: 21%;
+    background: linear-gradient(180deg, #16245e, #3f66c4 70%, #7da0ee);
+  }
+
+  .at-building .b-win-l {
+    left: 5%;
+    width: 36%;
+    clip-path: polygon(0 20%, 100% 0, 100% 80%, 0 100%);
+  }
+
+  .at-building .b-win-r {
+    left: 52%;
+    width: 40%;
+    clip-path: polygon(0 0, 100% 20%, 100% 100%, 0 80%);
+  }
+
+  .hero-zone--atelier .at-orb {
+    left: calc(var(--ox) + 24.3 * var(--u));
+    top: var(--hy);
+    width: calc(15 * var(--u));
+    aspect-ratio: 1;
+  }
+
+  .hero-zone--atelier .at-window {
+    left: calc(var(--ox) + 27.6 * var(--u));
+    top: calc(var(--hy) + calc(31 * var(--u)));
+    width: calc(41.25 * var(--u));
+    aspect-ratio: 1.62;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    padding: calc(1.35 * var(--u)) calc(1.65 * var(--u)) calc(1.65 * var(--u));
+    border-radius: calc(2.1 * var(--u));
+    background: linear-gradient(135deg, rgb(255 255 255 / 0.95), rgb(244 248 255 / 0.88));
+    box-shadow:
+      inset 0 1px 0 #fff,
+      inset 0 0 0 1px rgb(255 255 255 / 0.7),
+      0 30px 46px -24px rgb(8 20 90 / 0.5);
+    transform: perspective(1400px) rotateY(-9deg) rotateX(5deg) rotateZ(2.4deg);
+    transform-origin: 30% 60%;
+  }
+
+  .at-win-bar {
+    display: flex;
+    gap: calc(0.68 * var(--u));
+    flex: none;
+    padding-bottom: calc(1.05 * var(--u));
+  }
+
+  .at-win-bar i {
+    width: calc(1.08 * var(--u));
+    height: calc(1.08 * var(--u));
+    min-width: 6px;
+    min-height: 6px;
+    border-radius: 50%;
+    background: var(--at-orange);
+  }
+
+  .at-win-bar i:nth-child(2) {
+    background: #f2cf86;
+  }
+
+  .at-win-bar i:nth-child(3) {
+    background: #a6d4ca;
+  }
+
+  .at-win-body {
+    display: grid;
+    flex: 1;
+    min-height: 0;
+    grid-template-columns: 1.05fr 1fr;
+    gap: calc(1.8 * var(--u));
+  }
+
+  .at-win-art {
+    position: relative;
+    overflow: hidden;
+    border-radius: calc(1.2 * var(--u));
+    background: linear-gradient(160deg, #f4ead9, #e9dcc6);
+    box-shadow: inset 0 0 0 1px rgb(120 90 40 / 0.1);
+  }
+
+  .at-win-art b {
+    position: absolute;
+    left: 8%;
+    bottom: 0;
+    width: 62%;
+    aspect-ratio: 1;
+    border-radius: 100% 0 0 0;
+    background: linear-gradient(150deg, #2c58e0, #13247c);
+  }
+
+  .at-win-art u {
+    position: absolute;
+    right: 12%;
+    top: 14%;
+    width: 22%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: var(--at-orange);
+  }
+
+  .at-win-lines {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: calc(1.28 * var(--u));
+  }
+
+  .at-win-lines s {
+    display: block;
+    height: calc(0.93 * var(--u));
+    min-height: 4px;
+    border-radius: 999px;
+    background: rgb(70 100 190 / 0.3);
+  }
+
+  .at-win-lines s:nth-child(2) {
+    width: 92%;
+  }
+
+  .at-win-lines s:nth-child(3) {
+    width: 80%;
+  }
+
+  .at-win-lines s:nth-child(4) {
+    width: 54%;
+    opacity: 0.6;
+  }
+
+  .at-win-lines em {
+    display: block;
+    width: 38%;
+    height: calc(1.95 * var(--u));
+    min-height: 8px;
+    margin-top: calc(0.6 * var(--u));
+    border-radius: 999px;
+    background: linear-gradient(180deg, #3566ee, #1f45d6);
+    box-shadow: calc(0.33 * var(--u)) calc(0.33 * var(--u)) 0 var(--at-orange);
+  }
+
+  .hero-zone--atelier .at-disc {
+    left: calc(var(--ox) + 71 * var(--u));
+    top: calc(var(--hy) + calc(35.5 * var(--u)));
+    width: calc(21 * var(--u));
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background:
+      var(--flecks) 0 0 / 420px 420px repeat,
+      var(--flecks) 170px 120px / 310px 310px repeat,
+      radial-gradient(circle at 27% 21%, rgb(150 190 255 / 0.5), rgb(150 190 255 / 0) 34%),
+      linear-gradient(rgb(19 36 124 / 0.3), rgb(19 36 124 / 0.3)),
+      radial-gradient(circle at 30% 24%, #3a66ee 0%, #2147d4 34%, #162c9a 66%, #0e1c6c 100%);
+    box-shadow:
+      inset 3px 3px 0 -1px rgb(255 255 255 / 0.34),
+      inset 14px 16px 30px -10px rgb(150 190 255 / 0.3),
+      inset -18px -22px 38px -8px rgb(4 10 56 / 0.62),
+      var(--at-off) var(--at-off) 0 var(--at-orange);
+  }
+
+  .hero-zone--atelier .at-disc::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    background: radial-gradient(circle, rgb(6 12 80 / 0.6) 0 30%, transparent 37%) 0 0 / 5px 5px;
+    -webkit-mask-image: linear-gradient(155deg, transparent 38%, #000 100%);
+    mask-image: linear-gradient(155deg, transparent 38%, #000 100%);
+  }
+
+  .hero-zone--atelier .at-ring {
+    left: calc(var(--ox) + 68.6 * var(--u));
+    top: calc(var(--hy) + calc(33 * var(--u)));
+    width: calc(25.8 * var(--u));
+    aspect-ratio: 1;
+    overflow: visible;
+    fill: none;
+    stroke: rgb(19 36 124 / 0.34);
+    stroke-width: 1.2;
+  }
+
+  .at-sat circle {
+    fill: var(--at-orange);
+    stroke: none;
+  }
+}

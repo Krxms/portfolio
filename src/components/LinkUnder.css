@@ -66,7 +66,7 @@
     min-height: 50px;
     padding: 0 22px;
     border: 1px solid var(--signal);
-    border-radius: 12px;
+    border-radius: var(--radius-btn);
     background: rgb(255 255 255 / 0.55);
     -webkit-backdrop-filter: blur(10px) saturate(140%);
     backdrop-filter: blur(10px) saturate(140%);
@@ -87,9 +87,27 @@
 /* Version « flèche » : le libellé suivi d'une flèche dans un rond, sans soulignement. Au survol (ou au clavier), le rond
    se remplit et la flèche avance de quelques pixels. */
 .link-under--arrow {
+  /* au survol, le rond se remplit d'orange par la gauche et le libellé prend la même couleur (celle de « Voir mon parcours » de l'accueil) ;
+     --lu-text : un orange foncé sur fond clair (lisible), le même orange doux que le rond sur fond sombre */
+  --lu-fill: #ee8532;
+  --lu-text: #b4520c;
   gap: 12px;
   padding-bottom: 0;
   background: none;
+}
+
+.link-under--arrow.link-under--light {
+  --lu-fill: #ffa65a;
+  --lu-text: #ffa65a;
+}
+
+.link-under--arrow .link-under-text {
+  transition: color 0.4s var(--ease-out);
+}
+
+.link-under--arrow:hover .link-under-text,
+.link-under--arrow:focus-visible .link-under-text {
+  color: var(--lu-text);
 }
 
 .link-under--arrow:hover,
@@ -107,13 +125,21 @@
   height: 36px;
   border-radius: 50%;
   border: 1px solid color-mix(in srgb, currentColor 45%, transparent);
-  transition: background-color 0.4s var(--ease-out), border-color 0.4s var(--ease-out), color 0.4s var(--ease-out), transform 0.5s var(--ease-out);
+  /* le rond se remplit progressivement, par la gauche */
+  background: linear-gradient(var(--lu-fill), var(--lu-fill)) 0 0 / 0% 100% no-repeat;
+  transition:
+    background-size 0.55s var(--ease-out),
+    border-color 0.4s var(--ease-out),
+    color 0.4s var(--ease-out),
+    box-shadow 0.5s var(--ease-out),
+    transform 0.5s var(--ease-out);
 }
 
 .link-under--arrow:hover .link-under-arrow,
 .link-under--arrow:focus-visible .link-under-arrow {
-  background: var(--lu-fill);
+  background-size: 100% 100%;
   border-color: var(--lu-fill);
+  box-shadow: 0 0 18px -4px rgb(255 150 60 / 0.5);
   color: #06133f;
   transform: translateX(4px);
 }

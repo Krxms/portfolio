@@ -6,6 +6,27 @@
   margin-top: 0;
 }
 
+/* Liens du pied de page : au survol et au clavier, le texte passe au bleu de la navigation (var(--signal)), sans soulignement. */
+.site-footer a:not(.btn):not(.logo) {
+  text-decoration: none;
+  transition: color 0.25s var(--ease-out), border-color 0.25s var(--ease-out);
+}
+
+.site-footer a:not(.btn):not(.logo):focus-visible {
+  color: var(--signal);
+}
+
+@media (hover: hover) {
+  .site-footer a:not(.btn):not(.logo):hover {
+    color: var(--signal);
+  }
+}
+
+.site-footer .footer-top:hover,
+.site-footer .footer-top:focus-visible {
+  border-color: #ee8532;
+}
+
 /* le même grain « grès » que les sections claires (voir Tile.css) */
 .site-footer::before {
   content: '';
@@ -19,7 +40,7 @@
 
 .footer-inner {
   display: grid;
-  grid-template-columns: 1.3fr 1fr 1fr 1.2fr auto;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.2fr) auto;
   gap: 32px;
   align-items: start;
   padding: 44px 0 32px;
@@ -39,18 +60,32 @@
   max-width: 32ch;
 }
 
+/* ordinateur : la baseline est centrée sous le nom de la marque, comme un seul bloc */
+@media (min-width: 561px) {
+  .footer-brand {
+    align-items: center;
+    width: fit-content;
+  }
+
+  /* la baseline reste dans sa colonne : sur une ligne quand la place suffit, sur deux sinon (elle ne passe plus sur les liens voisins) */
+  .footer-tagline {
+    max-width: 32ch;
+    text-align: center;
+    text-wrap: balance;
+  }
+}
+
 .footer-contact {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   text-align: left;
-  /*gap: 8px;*/
 }
 
 .footer-mail {
   display: inline-flex;
   align-items: center;
-  min-height: 44px;
+  min-height: 38px;
   font-family: var(--font-body);
   font-weight: 500;
   font-size: 14px;
@@ -70,13 +105,12 @@
   flex-direction: column;
   align-items: flex-start;
   text-align: left;
-  /*gap: 8px;*/
 }
 
 .footer-legal a {
   display: inline-flex;
   align-items: center;
-  min-height: 44px;
+  min-height: 38px;
   min-width: 44px;
   font-family: var(--font-body);
   font-weight: 500;
@@ -84,6 +118,14 @@
   text-decoration: none;
   color: var(--ink);
   width: fit-content;
+}
+
+/* écran tactile (tablette) : la zone de toucher reprend ses 44 px ; sur mobile, les règles plus bas fixent leurs propres hauteurs */
+@media (pointer: coarse) and (min-width: 561px) {
+  .footer-mail,
+  .footer-legal a {
+    min-height: 44px;
+  }
 }
 
 /* Titres de colonnes du footer ("Contact", "Conditions") : Be Vietnam Pro
@@ -185,7 +227,6 @@
     width: 100%;
     min-height: 54px;
     justify-content: center;
-    border-radius: 14px;
     font-size: 16px;
     letter-spacing: 0.005em;
   }
@@ -239,7 +280,7 @@
     --ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2314509a' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='5.5' width='18' height='13' rx='2'/%3E%3Cpath d='M4 7.5l8 6 8-6'/%3E%3C/svg%3E");
   }
 
-  /* « Yvelines » rejoint la baseline sous la marque, avec un point séparateur */
+  /* la zone (« Île-de-France ») rejoint la baseline sous la marque, avec un point séparateur */
   .footer-zone {
     display: inline;
   }
@@ -300,7 +341,7 @@
 
   /* mentions légales : une ligne discrète de petits liens, séparés par des points */
   .footer-legal:nth-of-type(2) a {
-    min-height: 40px;
+    min-height: 44px;
     min-width: 0;
     padding: 0;
     font-size: 12.5px;
@@ -319,8 +360,10 @@
     letter-spacing: 0.02em;
   }
 
+  /* le texte légal passe à la ligne si la largeur manque (écran de 320 px, texte agrandi ou espacé) au lieu d'élargir la page au-delà de l'écran ;
+     aux largeurs courantes il tient sur une ligne, comme avant */
   .footer-bottom > span {
-    white-space: nowrap;
+    min-width: 0;
     line-height: 1.5;
   }
 
@@ -355,4 +398,9 @@
     border-left: 1.4px solid currentColor;
     transform: rotate(45deg);
   }
+}
+
+/* même largeur que l'en-tête et les sections (jusqu'à 1360 px de contenu) : le sélecteur est plus précis que .wrap, qui la limite à --container */
+.site-footer .footer-inner {
+  max-width: calc(1360px + 2 * var(--edge));
 }

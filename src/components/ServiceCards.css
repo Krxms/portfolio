@@ -1,6 +1,6 @@
-/* Trois cartes, chacune cliquable en entier (le lien est le titre, étiré sur toute la carte). Seul mouvement : une parallaxe très légère au pointeur (voir le script).
-   Chaque carte : un verre clair, et en haut une petite affiche imprimée façon risographie, bâtie avec les formes du logo
-   (disque, arche, demi-disque) dans une palette qui vit : soleil, azur et menthe. */
+/* Les cartes des domaines (deux aujourd'hui : .cards--two), chacune avec ses liens en bas.
+   Chaque carte : un verre clair, et en haut une petite affiche bâtie avec les formes du logo (disque, arche, quart de disque) sur un
+   aplat de la palette du site (bleu klein, menthe, orange), avec la même fenêtre d'interface que la Hero. */
 .cards {
   list-style: none;
   margin: 0;
@@ -11,14 +11,13 @@
 }
 
 .card {
-  --rx: 0deg;
-  --ry: 0deg;
   position: relative;
   isolation: isolate;
   display: flex;
   flex-direction: column;
-  padding: 10px 10px clamp(26px, 3vw, 34px);
-  border-radius: 32px;
+  --card-pad: 10px;
+  padding: var(--card-pad) var(--card-pad) clamp(26px, 3vw, 34px);
+  border-radius: var(--radius-xl);
   background: rgb(255 255 255 / 0.84);
   color: var(--ink);
   /* verre épais : liseré clair, franges de dispersion (chaude à gauche, froide à droite), ombre portée */
@@ -29,13 +28,6 @@
     inset -14px 0 20px -16px rgb(90 190 255 / 0.4),
     0 0 0 1px rgb(18 32 43 / 0.07),
     0 26px 44px -30px rgb(18 32 43 / 0.5);
-  transform: perspective(1100px) rotateX(var(--rx)) rotateY(var(--ry));
-  transition: transform 0.9s var(--ease-out);
-  will-change: transform;
-}
-
-.card.is-tilting {
-  transition: transform 0.3s var(--ease-out);
 }
 
 .card > :not(.card-art) {
@@ -43,19 +35,25 @@
 }
 
 /* ---------- l'affiche ---------- */
+/* Les trois affiches parlent la même langue que le reste de l'accueil : un aplat de la palette (bleu klein, menthe, orange), du béton,
+   les formes du logo (arche, disque, quart de disque) derrière, et la même fenêtre d'interface (trois points, une vignette papier
+   avec un quart de disque bleu et un disque orange, des lignes, une pastille bleue à l'ombre orange) que dans la Hero, la vue éclatée
+   et le projet. Seule change l'histoire : un site qui se construit, un avant et un après, une loupe qui hiérarchise. Les mesures sont
+   en cqw (la largeur de l'affiche). */
 .card-art {
   container-type: inline-size;
   position: relative;
   isolation: isolate;
-  aspect-ratio: 16 / 10;
+  aspect-ratio: 333 / 233;
   margin-bottom: clamp(18px, 2vw, 26px);
-  border-radius: 24px;
+  /* emboîtement : rayon de la carte − padding de la carte */
+  border-radius: max(var(--radius-xs), calc(var(--radius-xl) - var(--card-pad, 10px)));
   overflow: hidden;
   background: var(--art-bg);
   box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.4), inset 0 1px 0 rgb(255 255 255 / 0.7);
 }
 
-/* manques d'encre (le papier qui perce) et grain de pellicule */
+/* le béton (même intensité que partout : --concrete) et un grain fin par-dessus */
 .card-art::before,
 .card-art::after {
   content: '';
@@ -65,142 +63,28 @@
 }
 
 .card-art::before {
-  z-index: 3;
-  background: url('../assets/riso/speck.png') 30px 70px / 256px 256px repeat;
-  opacity: 0.9;
+  z-index: 6;
+  background: url('../assets/riso/concrete-zoom.webp') 50% 50% / cover no-repeat;
+  mix-blend-mode: soft-light;
+  opacity: var(--concrete, 0.3);
 }
 
 .card-art::after {
-  z-index: 4;
+  z-index: 7;
   background: var(--grain-soft) 0 0 / 160px 160px repeat;
   mix-blend-mode: soft-light;
-  opacity: 0.8;
+  opacity: 0.55;
 }
 
-.card-art .s {
-  position: absolute;
-  display: block;
-}
-
-/* trame de points sur la forme principale (demi-ton) */
-.card-art .s1::after {
-  content: '';
+/* L'illustration est un SVG en quatre calques (fond, formes, fenêtre, avant-plan) : voir src/assets/cards. Les calques bougent
+   un peu différemment au défilement (scenes.css), d'où la profondeur. */
+.art-svg {
   position: absolute;
   inset: 0;
-  border-radius: inherit;
-  background: radial-gradient(circle, rgb(40 0 20 / 0.32) 0 32%, transparent 38%) 0 0 / 1.5cqw 1.5cqw;
-  -webkit-mask-image: linear-gradient(200deg, transparent 38%, #000 110%);
-  mask-image: linear-gradient(200deg, transparent 38%, #000 110%);
-}
-
-/* Création : un soleil (jaune, corail) */
-.card--warm {
-  --art-bg: radial-gradient(70% 90% at 15% 10%, #ffe27a, transparent 62%), radial-gradient(70% 90% at 90% 95%, #ff8a7a, transparent 64%), linear-gradient(150deg, #ffbf6e, #ff7a6b);
-}
-
-.card--warm .s1 {
-  left: 9cqw;
-  top: 11cqw;
-  width: 44cqw;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background: var(--color-corail-500);
-  box-shadow: 1.2cqw 1cqw 0 rgb(45 70 220 / 0.55);
-}
-
-.card--warm .s2 {
-  left: 34cqw;
-  top: 21cqw;
-  width: 29cqw;
-  height: 39cqw;
-  box-sizing: border-box;
-  border: 4.6cqw solid #1a2a8f;
-  border-bottom: 0;
-  border-radius: 999px 999px 0 0;
-  box-shadow: 1cqw 0.9cqw 0 rgb(255 255 255 / 0.4);
-}
-
-.card--warm .s3 {
-  right: 5cqw;
-  bottom: 7cqw;
-  width: 15cqw;
-  height: 30cqw;
-  border-radius: 100% 0 0 100% / 50% 0 0 50%;
-  background: #fff4c8;
-  box-shadow: 1cqw 0.9cqw 0 rgb(255 90 74 / 0.6);
-}
-
-/* Refonte : un azur lumineux qui vire au canard */
-.card--blue {
-  --art-bg: radial-gradient(70% 90% at 10% 0%, #8fb0ff, transparent 62%), radial-gradient(70% 90% at 95% 95%, #38d6c2, transparent 64%), linear-gradient(150deg, #4f78ff, #1fb7d4);
-}
-
-.card--blue .s1 {
-  right: 8cqw;
-  top: 10cqw;
-  width: 30cqw;
-  height: 60cqw;
-  border-radius: 100% 0 0 100% / 50% 0 0 50%;
-  background: #ffcf4a;
-  box-shadow: 1.2cqw 1cqw 0 rgb(255 90 90 / 0.55);
-}
-
-.card--blue .s2 {
-  left: 14cqw;
-  top: 17cqw;
-  width: 34cqw;
-  height: 46cqw;
-  box-sizing: border-box;
-  border: 4.6cqw solid #fff;
-  border-bottom: 0;
-  border-radius: 999px 999px 0 0;
-  box-shadow: 1cqw 0.9cqw 0 rgb(20 40 150 / 0.45);
-}
-
-.card--blue .s3 {
-  left: 9cqw;
-  bottom: 9cqw;
-  width: 12cqw;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background: var(--color-corail-500);
-  box-shadow: 0.9cqw 0.8cqw 0 rgb(255 255 255 / 0.45);
-}
-
-/* Audit : une menthe qui vire au citron */
-.card--mint {
-  --art-bg: radial-gradient(70% 90% at 10% 5%, #7ff0cf, transparent 62%), radial-gradient(70% 90% at 95% 95%, #e4f58a, transparent 66%), linear-gradient(150deg, #45d6b4, #b6ea8e);
-}
-
-.card--mint .s1 {
-  left: 10cqw;
-  top: 9cqw;
-  width: 46cqw;
-  aspect-ratio: 1;
-  box-sizing: border-box;
-  border: 5cqw solid #14509a;
-  border-radius: 50%;
-  box-shadow: 1.2cqw 1cqw 0 rgb(255 90 74 / 0.55);
-}
-
-.card--mint .s2 {
-  right: 11cqw;
-  bottom: 9cqw;
-  width: 20cqw;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background: var(--color-corail-500);
-  box-shadow: 1cqw 0.9cqw 0 rgb(20 80 154 / 0.5);
-}
-
-.card--mint .s3 {
-  right: 8cqw;
-  top: 12cqw;
-  width: 22cqw;
-  height: 4.2cqw;
-  border-radius: 2cqw;
-  background: #fff;
-  box-shadow: 0.9cqw 0.8cqw 0 rgb(20 80 154 / 0.4);
+  z-index: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 /* ---------- le texte ---------- */
@@ -221,89 +105,170 @@
 .card-text {
   margin-top: var(--space-4);
   font-size: 16.5px;
-  line-height: 1.58;
+  line-height: 1.75;
+  color: var(--ink-soft);
+  /* un \n dans le texte d'une carte (ServiceCards.astro) devient un retour à la ligne */
+  white-space: pre-line;
+}
+
+/* le public visé : une ligne discrète sous la description, uniquement quand elle aide à choisir */
+.card-who {
+  margin-top: var(--space-3);
+  font-size: 14.5px;
+  line-height: 1.55;
   color: var(--ink-soft);
 }
 
-/* toute la carte est cliquable : le lien du titre est étiré sur la carte */
-.card-hit {
-  color: inherit;
+/* le pied de carte : les pages où l'on va, une rangée par destination (lien de carte : libellé, flèche à droite). Le pied est poussé en bas, sous un
+   filet : les deux cartes ont leurs pieds à la même hauteur, quelle que soit la longueur du texte au-dessus. Chaque rangée est entièrement
+   cliquable (56 px de haut) ; aucun lien n'est imbriqué dans un autre. */
+.card-routes {
+  list-style: none;
+  margin: auto 0 0;
+  padding-top: var(--space-5);
+}
+
+.card-routes li {
+  border-top: 1px solid rgb(18 32 43 / 0.14);
+}
+
+.route {
+  --lu-fill: #ee8532;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 56px;
+  padding-block: 10px;
+  border-radius: var(--radius-xs);
+  font-size: 16.5px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--ink);
   text-decoration: none;
+  transition: color 0.3s var(--ease-out);
 }
 
-.card-hit::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: 5;
-  border-radius: inherit;
+.route-text {
+  min-width: 0;
+  text-wrap: balance;
 }
 
-.card-hit:focus-visible {
-  outline: none;
+/* la flèche : le rond des liens à flèche du site ; il se remplit d'orange par la gauche au survol et au clavier */
+.route .route-arrow {
+  background: linear-gradient(var(--lu-fill), var(--lu-fill)) 0 0 / 0% 100% no-repeat;
 }
 
-.card-hit:focus-visible::after {
-  outline: 3px solid var(--signal-deep);
-  outline-offset: 3px;
+/* le survol n'existe qu'avec une souris : sur écran tactile, « :hover » reste collé après un appui et laisse la rangée orange */
+.route:focus-visible {
+  color: #b4520c;
 }
 
-@media (hover: hover) {
-  .card:has(.card-hit) {
-    cursor: pointer;
+.route:focus-visible .route-arrow {
+  background-size: 100% 100%;
+  border-color: var(--lu-fill);
+  box-shadow: 0 0 18px -4px rgb(255 150 60 / 0.5);
+  color: #06133f;
+  transform: translateX(4px);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .route:hover {
+    color: #b4520c;
+  }
+
+  .route:hover .route-arrow {
+    background-size: 100% 100%;
+    border-color: var(--lu-fill);
+    box-shadow: 0 0 18px -4px rgb(255 150 60 / 0.5);
+    color: #06133f;
+    transform: translateX(4px);
   }
 }
 
-.cards-cta {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-3) var(--space-6);
-  margin-top: clamp(32px, 5vw, 56px);
+/* sur écran tactile : un simple retour à l'appui */
+@media (hover: none) {
+  .route {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .route:active .route-arrow {
+    background-size: 100% 100%;
+    border-color: var(--lu-fill);
+    color: #06133f;
+  }
+}
+
+.route:focus-visible {
+  outline: 3px solid var(--signal-deep);
+  outline-offset: -3px;
+}
+
+.route:active .route-arrow {
+  transform: translateX(2px) scale(0.96);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .route,
+  .route .route-arrow {
+    transition: none;
+  }
+
+  .route:hover .route-arrow,
+  .route:focus-visible .route-arrow {
+    transform: none;
+  }
+}
+
+/* deux domaines : deux colonnes plus étroites que la grille à trois, pour que l'affiche ne devienne pas démesurée */
+.cards--two {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  /* plus d'air entre les deux cartes que la gouttière commune (--gap) ; scenes.css lit la même variable pour les écarter du centre */
+  --gap: clamp(28px, 4.4vw, 64px);
+}
+
+@media (min-width: 901px) {
+  .cards.cards--two {
+    max-width: 1120px;
+    margin-inline: auto;
+  }
 }
 
 @media (max-width: 900px) {
-  .cards {
+  .cards,
+  .cards--two {
     grid-template-columns: 1fr;
   }
 }
 
-/* Mobile : un carrousel qui déborde, la carte suivante dépasse. Le pouce parcourt les trois offres sans longue page. */
+/* ordinateur : les trois cartes débordent un peu du texte de la section (jusqu'à 1240 px), centrées : des cartes plus larges, un contenu plus à l'aise */
+@media (min-width: 901px) {
+  .cards {
+    margin-inline: min(0px, calc((100% - min(100vw - 2 * var(--edge), 1240px)) / 2));
+  }
+}
+
+/* Mobile : les deux familles d'offres sont empilées, dans l'ordre (Sites web, puis Interfaces et logiciels), sans défilement horizontal : les
+   quatre destinations sont visibles et atteignables sans geste caché. Les illustrations sont basses pour garder la section compacte. */
 @media (max-width: 700px) {
   .cards {
-    display: flex;
-    gap: 14px;
-    margin-inline: calc(var(--edge) * -1);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+    margin-inline: 0;
     padding: 4px 0 18px;
-    overflow-x: auto;
-    overscroll-behavior-x: contain;
-    scroll-snap-type: x mandatory;
-    scrollbar-width: none;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .cards::-webkit-scrollbar {
-    display: none;
-  }
-
-  /* chaque carte s'arrête au centre de l'écran, y compris la première et la dernière : deux cales */
-  .cards::before,
-  .cards::after {
-    content: '';
-    flex: 0 0 max(0px, calc((100vw - min(82vw, 340px)) / 2 - 14px));
+    overflow: visible;
   }
 
   .card {
-    flex: 0 0 min(82vw, 340px);
-    scroll-snap-align: center;
-    border-radius: 28px;
+    border-radius: var(--radius-xl);
     transform: none;
   }
 
+  /* l'illustration est rognée (preserveAspectRatio « slice ») : un cadre bas, la carte reste courte */
   .card-art {
-    margin-bottom: 18px;
-    border-radius: 20px;
+    aspect-ratio: 333 / 118;
+    margin-bottom: 14px;
   }
 
   .card-title {
@@ -312,7 +277,16 @@
 
   .card-text {
     font-size: 15.5px;
-    line-height: 1.55;
+    line-height: 1.68;
+  }
+
+  /* le public visé est dit dans la Hero et sur la page de chaque offre : sur téléphone, la carte va à l'essentiel */
+  .card-who {
+    display: none;
+  }
+
+  .card-routes {
+    padding-top: var(--space-4);
   }
 }
 
@@ -323,12 +297,13 @@
 }
 
 /* ---------- Fond de la section ----------
-   Un blanc bleuté, frais, entre l'indigo de la section identité et la crème chaude de la méthode. */
+   Un blanc bleuté, frais, entre l'indigo de la section identité et la crème chaude de la méthode, qui la suit. */
 #services.tile--light {
-  /* le bas se fond dans la crème de la section suivante : aucune arête entre les deux */
+  /* le bas devient transparent : il laisse voir le papier crème qui est dessous, le même que sous la méthode (même couleur, même grain),
+     donc aucune arête entre les deux */
   background:
     radial-gradient(70% 38% at 50% 0%, rgb(110 150 255 / 0.16), transparent 72%),
-    linear-gradient(180deg, #eef3fb 0%, #e8eff9 52%, var(--paper-cool) 100%);
+    linear-gradient(180deg, #eef3fb 0%, #e8eff9 52%, rgb(245 243 234 / 0) 100%);
 }
 
 #methode.tile--light {
@@ -344,15 +319,43 @@
     margin-bottom: -22px;
   }
 
-  .cards-cta {
-    flex-direction: column;
-    align-items: center;
-    gap: var(--space-3);
-    margin-top: var(--space-4);
-  }
+}
 
-  /* le bouton principal reste accessible en permanence par la pastille flottante du bas de l'écran */
-  .cards-cta {
-    display: none;
+/* ---------- Variante « compact » : cartes de navigation contextuelle (bas des études de cas) ----------
+   Sans illustration : une catégorie, un titre court, une phrase, les pages où l'on va. Un petit repère de couleur (celui de l'affiche de
+   l'accueil) garde l'identité de chaque domaine. */
+.cards--compact .card {
+  padding-top: clamp(24px, 2.6vw, 32px);
+}
+
+.cards--compact .card-kicker {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cards--compact .card-kicker::before {
+  content: '';
+  width: 12px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #1f45d6;
+}
+
+.cards--compact .card--warm .card-kicker::before {
+  background: #ee8532;
+}
+
+.cards--compact .card-title {
+  font-size: clamp(1.45rem, 2.2vw, 1.8rem);
+}
+
+.cards--compact .card-text {
+  margin-top: var(--space-3);
+}
+
+@media (max-width: 700px) {
+  .cards--compact .card-title {
+    font-size: 1.35rem;
   }
 }

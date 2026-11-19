@@ -1,22 +1,102 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import '../components/FrostedCTA.css';
 import './contact.css';
+
+const site = 'https://antoinebruneau.fr';
+const schema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'ContactPage',
+      '@id': `${site}/contact/#page`,
+      url: `${site}/contact/`,
+      name: 'Contact',
+      inLanguage: 'fr-FR',
+      isPartOf: { '@id': `${site}/#website` },
+      about: { '@id': `${site}/#service` },
+      mainEntity: { '@id': `${site}/#service` },
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Accueil', item: `${site}/` },
+        { '@type': 'ListItem', position: 2, name: 'Contact', item: `${site}/contact/` },
+      ],
+    },
+  ],
+};
+
+// Ce que je promets, en trois lignes : les mêmes engagements que sur les pages de service.
+const promises = ['Premier échange gratuit et sans engagement', 'Devis gratuit et détaillé', 'Réponse généralement sous deux jours ouvrés'];
+// Où je travaille : les mêmes zones que « Qui suis-je » sur l'accueil.
+const zones = ['Île-de-France', 'À distance, partout en France'];
+// Un canevas par type de projet : quatre choses à dire pour ne pas rester devant la page blanche, et un début de message en phrases, à compléter, qu'on peut insérer d'un clic.
+// Les clés sont les libellés des options du type de projet ; le premier est affiché sans JavaScript.
+const guides = [
+  {
+    type: 'Création de site',
+    points: ['Votre activité, en une phrase', 'Ce que le site doit permettre', 'Un ou deux exemples qui vous plaisent', 'Votre échéance, même approximative'],
+    template: 'Bonjour,\n\nJe souhaite créer un site pour mon activité : … Il devrait surtout permettre de … Un site qui me plaît : … J’aimerais qu’il soit en ligne pour …\n\nMerci !',
+  },
+  {
+    type: 'Refonte de site',
+    points: ['L’adresse de votre site', 'Ce qui ne vous convient plus', 'Ce qui fonctionne et doit rester', 'Votre échéance, même approximative'],
+    template: 'Bonjour,\n\nMon site actuel : … Ce qui ne me convient plus : … Ce qui fonctionne et doit rester : … J’aimerais que la refonte soit terminée pour …\n\nMerci !',
+  },
+  {
+    type: 'Interface ou logiciel',
+    points: ['Le produit et ce qu’il permet de faire', 'Qui l’utilise', 'Ce que vous voulez concevoir ou améliorer', 'Votre équipe (design, développement)'],
+    template: 'Bonjour,\n\nJe travaille sur un produit : … Il est utilisé par … Je voudrais concevoir ou améliorer … Côté équipe, nous sommes …\n\nMerci !',
+  },
+  {
+    type: 'Audit UX/UI',
+    points: ['Ce qu’il faut examiner (adresse, accès de démonstration)', 'Ce qui vous inquiète : abandons, plaintes, accessibilité…', 'Qui l’utilise au quotidien', 'Pour quand vous voulez le retour'],
+    template: 'Bonjour,\n\nJe souhaite un audit de … Ce qui m’inquiète : … Il est utilisé par … J’aimerais recevoir le retour pour le …\n\nMerci !',
+  },
+  {
+    type: 'Renfort d’équipe',
+    points: ['Votre équipe et votre produit', 'Le besoin en conception UX/UI', 'La période envisagée, même approximative', 'Vos outils'],
+    template: 'Bonjour,\n\nNotre équipe et notre produit : … Nous avons besoin d’un renfort en conception UX/UI pour … Période envisagée : … Nos outils : …\n\nMerci !',
+  },
+  {
+    type: 'Autre',
+    points: ['Ce que vous cherchez à faire, en deux lignes', 'Le contexte : qui, pour qui, pourquoi maintenant', 'Ce qui existe déjà (site, logo, textes)', 'Votre échéance, même approximative'],
+    template: 'Bonjour,\n\nJe cherche à … Le contexte : … Ce qui existe déjà : … Mon échéance : …\n\nMerci !',
+  },
+];
+// Cloudflare Turnstile (anti-spam invisible), seulement si la clé publique est définie au build (voir README).
+const turnstileKey = import.meta.env.PUBLIC_TURNSTILE_SITEKEY;
 ---
 
 <BaseLayout
-  title="Contact, devis designer UX/UI freelance"
-  description="Parlez-moi de votre projet de site web, d'interface ou d'audit UX/UI. Designer freelance basé à Guitrancourt (78), réponse sous 24 h ouvrées."
+  title="Contact, projet de site ou d’interface"
+  description="Présentez votre projet de site web, d’interface de logiciel ou d’audit UX/UI. Premier échange gratuit, réponse généralement sous deux jours ouvrés."
+  schema={schema}
 >
-  <section class="section contact-page wrap">
-    <div class="page-head">
-      <span class="label">Contact</span>
-      <h1>Parlons de votre projet.</h1>
-      <p class="sub">Décrivez-moi votre besoin en quelques lignes — je reviens vers vous sous 24h ouvrées.</p>
-    </div>
+  {/* pas d'entête de page classique : un panneau bleu (les moyens de me joindre) et le formulaire, sur le papier froid de l'accueil qui glisse vers le crème */}
+  <div class="ct">
+    <div class="wrap wrap--wide ct-grid">
+      <div class="ct-panel panel-blue panel-blue--riso">
+        <h1>
+          <span class="ct-l1">Parlons de</span>{' '}
+          <span class="ct-l2">votre projet.</span>
+        </h1>
+        <p class="ct-lead">Quelques lignes suffisent.{'\n'}Je vous réponds généralement sous deux jours ouvrés.</p>
 
-    <div class="contact-grid">
-      <form id="contactForm" novalidate>
-        <p class="form-hint">Tous les champs sont obligatoires.</p>
+        <div class="ct-direct">
+          <a href="tel:+33609111838"><span>Téléphone</span><strong>06 09 11 18 38</strong></a>
+          <a href="mailto:contact@antoinebruneau.fr"><span>E-mail</span><strong>contact@antoinebruneau.fr</strong></a>
+        </div>
+
+        <ul class="ct-promises" role="list">{promises.map((p) => <li>{p}</li>)}</ul>
+        <ul class="ct-zones" role="list">{zones.map((z) => <li>{z}</li>)}</ul>
+        <a class="ct-skip" href="#contactForm">Accéder au formulaire<svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M8 2.5v9.5M4 8.5l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg></a>
+      </div>
+
+      <form id="contactForm" class="ct-form" novalidate>
+        <h2>Présenter mon projet</h2>
+        <p class="form-hint">Nom, e-mail et message sont obligatoires.</p>
         <input
           type="text"
           name="company"
@@ -28,56 +108,56 @@ import './contact.css';
         <div class="field-row">
           <div class="field">
             <label for="fName">Nom</label>
-            <input type="text" id="fName" name="name" placeholder="Votre nom" autocomplete="name" required aria-required="true" />
+            <input type="text" id="fName" name="name" placeholder="Votre nom" autocomplete="name" required aria-required="true" aria-describedby="fNameErr" />
+            <p class="field-error" id="fNameErr" hidden></p>
           </div>
           <div class="field">
-            <label for="fEmail">Email</label>
-            <input type="email" id="fEmail" name="email" placeholder="vous@exemple.fr" autocomplete="email" inputmode="email" autocapitalize="off" spellcheck="false" required aria-required="true" />
-          </div>
-        </div>
-        <div class="field-row">
-          <div class="field">
-            <label for="fType">Type de projet</label>
-            <select id="fType" name="type">
-              <option>Création de site web</option>
-              <option>Design UX/UI de produit</option>
-              <option>Audit UX/UI</option>
-              <option>Accompagnement mensuel</option>
-              <option>Identité de marque</option>
-              <option>Autre</option>
-            </select>
-          </div>
-          <div class="field">
-            <label for="fBudget">Budget</label>
-            <select id="fBudget" name="budget">
-              <option>À définir ensemble</option>
-              <option>Déjà fixé (je le précise dans le message)</option>
-            </select>
+            <label for="fEmail">E-mail</label>
+            <input type="email" id="fEmail" name="email" placeholder="vous@exemple.fr" autocomplete="email" inputmode="email" autocapitalize="off" spellcheck="false" required aria-required="true" aria-describedby="fEmailErr" />
+            <p class="field-error" id="fEmailErr" hidden></p>
           </div>
         </div>
         <div class="field">
-          <label for="fMessage">Message</label>
-          <p class="field-hint" id="fMessageHint">Quelques lignes suffisent : votre activité, ce que vous attendez, et une date si vous en avez une.</p>
-          <textarea id="fMessage" aria-describedby="fMessageHint" name="message" placeholder="Parlez-moi de votre projet, de vos objectifs, de vos délais..." required aria-required="true"></textarea>
+          <label for="fType">Type de projet</label>
+          <select id="fType" name="type" aria-controls="ctGuides">
+            {guides.map((g) => <option>{g.type}</option>)}
+          </select>
         </div>
-        <p class="form-promise">Je réponds sous 24 h ouvrées. Le premier échange est gratuit et sans engagement.</p>
-        <button type="submit" class="btn btn-primary">Envoyer <span class="btn-arrow">→</span></button>
+        {/* le canevas du type choisi : quatre points à dire, un bouton pour les insérer. Les autres sont cachés par JavaScript ; sans lui, le premier reste visible. */}
+        <div class="ct-guides" id="ctGuides" aria-live="polite">
+          {
+            guides.map((g, i) => (
+              <div class="ct-guide" data-type={g.type} data-template={g.template} hidden={i > 0 ? true : undefined}>
+                <p class="ct-guide-title">Pour bien démarrer, dites-moi :</p>
+                <ul role="list">{g.points.map((p) => <li>{p}</li>)}</ul>
+                <button type="button" class="ct-guide-use">Pré-remplir mon message</button>
+              </div>
+            ))
+          }
+        </div>
+        <div class="field">
+          <label for="fMessage">Votre besoin</label>
+          <p class="field-hint" id="fMessageHint">Votre activité, ce que vous attendez, et une date si vous en avez une.</p>
+          <textarea id="fMessage" aria-describedby="fMessageHint fMessageErr" name="message" placeholder="Parlez-moi de votre projet, de vos objectifs, de vos délais…" required aria-required="true"></textarea>
+          <p class="field-error" id="fMessageErr" hidden></p>
+        </div>
+        {turnstileKey && <div class="cf-turnstile" data-sitekey={turnstileKey} data-size="flexible" data-appearance="interaction-only"></div>}
+        {/* le bouton principal des entêtes : tache de matière au survol, libellé qui défile (data-ink, cta.css) ; l'avion de papier part à l'envoi (contact.css) */}
+        <div class="ct-actions">
+          <p class="ct-reassure"><span class="ct-reassure-delay">Réponse généralement sous deux jours ouvrés. </span>Vos informations ne servent qu’à vous répondre.</p>
+          <button type="submit" class="frosted-cta ct-submit" data-ink>
+            <span class="text"><span class="roll"><span class="roll-a">Envoyer</span><span class="roll-b" aria-hidden="true">Envoyer</span></span></span>
+            <svg class="ct-send" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M3 11.5 21 3l-8.5 18-2.2-7.3z" />
+              <path d="M10.3 13.7 21 3" />
+            </svg>
+          </button>
+        </div>
         <p class="form-status" id="formStatus" role="status" aria-live="polite" aria-atomic="true"></p>
       </form>
-
-      <div class="contact-side">
-        <div class="contact-direct">
-          <span class="label">Écrire directement</span>
-          <a href="mailto:contact@antoinebruneau.fr">contact@antoinebruneau.fr</a>
-          <a href="tel:+33609111838">06 09 11 18 38</a>
-        </div>
-        <p class="contact-note">
-          Que votre projet soit une identité complète, un site vitrine ou un produit digital plus complexe, le
-          premier échange ne coûte rien et ne vous engage à rien.
-        </p>
-      </div>
     </div>
-  </section>
+  </div>
 
+  {turnstileKey && <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>}
   <script src="../scripts/contactForm.js"></script>
 </BaseLayout>

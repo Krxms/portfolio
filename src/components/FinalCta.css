@@ -1,3 +1,62 @@
+/* ---------- le disque orange derrière le panneau ----------
+   Un disque entier, posé à l'angle haut gauche du panneau : environ un tiers de sa surface passe sous le verre. Sa matière : du béton
+   en couleur (la photo de béton, en niveaux de gris, incrustée sur un dégradé orange, plus les manques d'encre du grès). Une seule
+   source de lumière, en haut à gauche, comme dans la Hero. */
+.cta-stage {
+  --orb: clamp(130px, 17vw, 240px);
+  position: relative;
+  max-width: 900px;
+  margin-inline: auto;
+}
+
+.cta-orb {
+  position: absolute;
+  z-index: 0;
+  left: calc(var(--orb) * -0.42);
+  top: calc(var(--orb) * -0.42);
+  width: var(--orb);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 30% 24%, rgb(255 214 170 / 0.6), rgb(255 214 170 / 0) 42%),
+    linear-gradient(150deg, #ff9a58, #f2733c 58%, #e0602a);
+  box-shadow:
+    inset 2px 3px 0 -1px rgb(255 255 255 / 0.45),
+    inset -12px -14px 26px -8px rgb(150 50 10 / 0.4),
+    0 24px 40px -22px rgb(110 40 8 / 0.5);
+}
+
+/* la seconde forme, de l'autre côté : une arche bleue qui monte du bas du panneau, en partie sous le verre. Disque en haut à gauche, arche
+   en bas à droite : une diagonale, plutôt qu'un soleil posé. */
+.cta-shape {
+  position: absolute;
+  z-index: 0;
+  right: calc(var(--orb) * -0.2);
+  bottom: calc(var(--orb) * -0.46);
+  width: calc(var(--orb) * 0.64);
+  height: calc(var(--orb) * 1.12);
+  border-radius: 999px 999px 0 0;
+  pointer-events: none;
+  background: linear-gradient(172deg, #5b88f8 0%, #2147d4 46%, #13247c 100%);
+  box-shadow: inset 3px 3px 0 -1px rgb(255 255 255 / 0.3), inset -14px -16px 30px -10px rgb(4 10 56 / 0.4);
+}
+
+/* le panneau passe devant le disque (et porte le texte devant le reste) */
+.cta-stage > .cta-panel {
+  position: relative;
+  z-index: 1;
+}
+
+.cta-panel > * {
+  position: relative;
+  z-index: 1;
+}
+
+.cta-panel h2 {
+  text-shadow: 0 1px 14px rgb(2 12 40 / 0.35);
+}
+
 .cta-panel {
   display: flex;
   flex-direction: column;
@@ -6,15 +65,42 @@
   max-width: 900px;
   margin-inline: auto;
   padding: clamp(36px, 7vw, 88px) clamp(20px, 5vw, 64px);
-  border-radius: clamp(28px, 4vw, 44px);
+  border-radius: var(--radius-xl);
 }
 
-/* Le panneau laisse voir le grain du fond : presque plus de flou et un fond plus léger, pour que le grain passe à travers et
-   donne du relief au verre. */
+/* Le verre : presque transparent, avec un fond qui passe franchement dessous (le disque continue sous le panneau, flouté et plus
+   saturé, sans coupure). Le bord est un arête de lumière (reflet spéculaire, plus vif en haut à gauche et en bas à droite) ; sur
+   Chromium, un filtre de déplacement courbe en plus ce qu'on voit sous le bord, comme à travers une lentille (voir le script de
+   FinalCta.astro). Ailleurs, le flou et la saturation seuls. */
 .cta-panel.glass--dark {
-  background: linear-gradient(135deg, rgb(255 255 255 / 0.07), rgb(255 255 255 / 0.01) 55%, rgb(255 255 255 / 0.04)), rgb(2 12 20 / 0.06);
-  -webkit-backdrop-filter: blur(1px) saturate(150%);
-  backdrop-filter: blur(1px) saturate(150%);
+  background:
+    linear-gradient(145deg, rgb(255 255 255 / 0.16), rgb(255 255 255 / 0.03) 42%, rgb(255 255 255 / 0.08)),
+    rgb(8 22 80 / 0.1);
+  -webkit-backdrop-filter: blur(7px) saturate(175%) brightness(1.05);
+  backdrop-filter: blur(7px) saturate(175%) brightness(1.05);
+  box-shadow:
+    inset 0 0 36px rgb(255 255 255 / 0.1),
+    inset 0 -14px 24px -18px rgb(255 255 255 / 0.28),
+    0 34px 60px -30px rgb(0 0 0 / 0.6);
+}
+
+.cta-panel.glass--dark.lg-on {
+  -webkit-backdrop-filter: url(#lg-panel) blur(3px) saturate(175%) brightness(1.05);
+  backdrop-filter: url(#lg-panel) blur(3px) saturate(175%) brightness(1.05);
+}
+
+.cta-panel::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  box-sizing: border-box;
+  padding: 1.5px;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(140deg, rgb(255 255 255 / 0.95), rgb(255 255 255 / 0.14) 26%, rgb(255 255 255 / 0.05) 56%, rgb(255 255 255 / 0.55));
+  -webkit-mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
 }
 
 .cta-final h2 {
@@ -44,11 +130,21 @@
   font-size: 17px;
   color: #fff;
   text-decoration: none;
+  transition: color 0.25s var(--ease-out);
 }
 
-.cta-final-direct a:hover {
-  text-decoration: underline;
-  text-underline-offset: 4px;
+/* survol et clavier : le texte passe à l'orange, sans soulignement. #f29a52 fait 7,8:1 sur le fond marine (AAA) ; l'orange de
+   marque #ee8532 n'en fait que 6,6:1. */
+.cta-final-direct a:focus-visible,
+.cta-facts a:focus-visible {
+  color: #f29a52;
+}
+
+@media (hover: hover) {
+  .cta-final-direct a:hover,
+  .cta-facts a:hover {
+    color: #f29a52;
+  }
 }
 
 /* Variante du mesh de la tuile : cadrage décalé, pour ne pas répéter le manifeste */
@@ -72,8 +168,24 @@
 }
 
 .cta-facts a {
+  /* zone tactile de 44 px de haut sans bouger la ligne : le lien (dans une phrase) garde sa place, le rembourrage est compensé par la marge */
+  display: inline-block;
+  padding-block: 14px;
+  margin-block: -14px;
   color: #fff;
   text-underline-offset: 3px;
+  transition: color 0.25s var(--ease-out);
+}
+
+/* le lien reste souligné au repos (c'est lui qui le distingue du texte autour) ; au survol, il passe à l'orange sans soulignement */
+.cta-facts a:focus-visible {
+  text-decoration: none;
+}
+
+@media (hover: hover) {
+  .cta-facts a:hover {
+    text-decoration: none;
+  }
 }
 
 @media (max-width: 560px) {
@@ -102,5 +214,22 @@
     flex-direction: column;
     align-items: center;
     gap: var(--space-1);
+  }
+}
+
+/* téléphone : le disque reste entier dans l'écran (le panneau est à 20 px du bord) : plus petit, un peu moins décalé vers la gauche */
+@media (max-width: 700px) {
+  .cta-stage {
+    --orb: 112px;
+  }
+
+  .cta-orb {
+    left: calc(var(--orb) * -0.16);
+    top: calc(var(--orb) * -0.5);
+  }
+
+  .cta-shape {
+    right: calc(var(--orb) * -0.1);
+    bottom: calc(var(--orb) * -0.5);
   }
 }

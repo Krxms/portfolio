@@ -1,0 +1,48 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import R from './R.astro';
+import './ErrorPage.css';
+
+/* Une page d'erreur : le panneau bleu du site, le code en grand, une phrase qui dit quoi faire, puis les pages utiles. Jamais indexée.
+   Elle est servie par le Worker avec le bon statut HTTP (worker/index.js) : 404, 403, 405, 410, 429, 500, 503… */
+interface Props {
+  code: number;
+  title: string;
+  lead: string;
+}
+const { code, title, lead } = Astro.props;
+const links = [
+  { href: '/creation-site-web/', label: 'Création de site' },
+  { href: '/refonte-site-web/', label: 'Refonte de site' },
+  { href: '/audit-ux-ui/', label: 'Audit UX/UI' },
+  { href: '/projets/le-cuistologue/', label: 'Le Cuistologue, étude de cas' },
+  { href: '/a-propos/', label: 'À propos' },
+];
+---
+
+<BaseLayout noindex title={`Erreur ${code}, ${title}`} description={lead}>
+  <section class="er" aria-labelledby="er-title">
+    <div class="wrap wrap--wide er-wrap">
+      <div class="er-panel panel-blue panel-blue--riso">
+        <p class="er-code" aria-hidden="true">{code}</p>
+        <div class="er-copy">
+          <p class="er-eyebrow">Erreur {code}</p>
+          <h1 id="er-title"><R t={title} /></h1>
+          <p class="er-lead"><R t={lead} /></p>
+          <div class="er-actions">
+            <a class="btn btn-primary" href="/">Retour à l’accueil</a>
+            <a class="er-contact" href="/contact/">Me contacter</a>
+          </div>
+        </div>
+      </div>
+
+      <nav class="er-links" aria-label="Pages utiles">
+        <p class="er-links-title">Où aller ensuite</p>
+        <ul role="list">{links.map((l) => <li><a href={l.href}>{l.label}</a></li>)}</ul>
+        <p class="er-direct">
+          Ou écrivez-moi : <a href="mailto:contact@antoinebruneau.fr">contact@antoinebruneau.fr</a> · <a href="tel:+33609111838">06 09 11 18 38</a>
+        </p>
+      </nav>
+    </div>
+  </section>
+</BaseLayout>
