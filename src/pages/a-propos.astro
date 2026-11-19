@@ -15,7 +15,7 @@ const site = 'https://antoinebruneau.fr';
 const description =
   'Un parcours entre création et conception : son, spectacle vivant, création visuelle, code, puis UX/UI, dont environ deux ans sur un logiciel SaaS métier.';
 
-const schema = {
+const schema: { '@context': string; '@graph': any[] } = {
   '@context': 'https://schema.org',
   '@graph': [
     {

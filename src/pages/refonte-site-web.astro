@@ -20,7 +20,7 @@ const site = 'https://antoinebruneau.fr';
 const description =
   'Refonte de site web : lecture de l’existant, corrections ciblées, refonte partielle ou complète, plan de redirection pour limiter les risques SEO.';
 
-const schema = {
+const schema: { '@context': string; '@graph': Array<Record<string, unknown>> } = {
   '@context': 'https://schema.org',
   '@graph': [
     {
