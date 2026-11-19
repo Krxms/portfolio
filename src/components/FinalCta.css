@@ -99,8 +99,12 @@
   border-radius: inherit;
   pointer-events: none;
   background: linear-gradient(140deg, rgb(255 255 255 / 0.95), rgb(255 255 255 / 0.14) 26%, rgb(255 255 255 / 0.05) 56%, rgb(255 255 255 / 0.55));
-  -webkit-mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
-  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  /* liseré creux : Safari ne comprend pas « exclude » dans le raccourci -webkit-mask (le dégradé remplissait alors tout le panneau d'un voile
+     blanc) ; son équivalent préfixé est -webkit-mask-composite: xor */
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
 }
 
 .cta-final h2 {
