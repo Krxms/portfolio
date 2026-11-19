@@ -20,7 +20,7 @@
   color: var(--signal-ink);
   cursor: pointer;
   text-decoration: none;
-  transition: background-color 0.5s var(--ease-out), box-shadow 0.5s var(--ease-out), backdrop-filter 0.5s var(--ease-out);
+  transition: background-color 0.5s var(--ease-out), box-shadow 0.5s var(--ease-out);
 }
 
 .frosted-cta .text {
