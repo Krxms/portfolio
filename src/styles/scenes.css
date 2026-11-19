@@ -246,7 +246,30 @@
   /* le cadre découpe : l'image garde des coins droits (son rayon, mis à l'échelle par scale, ne coïncidait plus avec celui du liseré) */
   border-radius: 0 !important;
   scale: 1.14;
-  translate: 0 calc((var(--p, 0.5) - 0.5) * -9%);
+}
+
+/* Le portrait « respire » : l'image glisse de 4,5 % vers le haut pendant que la section traverse l'écran. Animation CSS liée au défilement (jouée par la
+   carte graphique) au lieu d'une variable --p réécrite par le script à chaque image ; sans cette fonction du navigateur, le portrait reste immobile. */
+@keyframes portrait-breathe {
+  from {
+    translate: 0 4.5%;
+  }
+
+  to {
+    translate: 0 -4.5%;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .has-scenes .portrait-frame img {
+      animation-name: portrait-breathe;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-timeline: view();
+      animation-range: cover 0% cover 100%;
+    }
+  }
 }
 
 /* ---------- Filet de progression de lecture sous l'en-tête ---------- */

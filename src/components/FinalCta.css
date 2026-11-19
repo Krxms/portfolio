@@ -18,13 +18,28 @@
   aspect-ratio: 1;
   border-radius: 50%;
   pointer-events: none;
-  background:
-    radial-gradient(circle at 30% 24%, rgb(255 214 170 / 0.6), rgb(255 214 170 / 0) 42%),
-    linear-gradient(150deg, #ff9a58, #f2733c 58%, #e0602a);
-  box-shadow:
-    inset 2px 3px 0 -1px rgb(255 255 255 / 0.45),
-    inset -12px -14px 26px -8px rgb(150 50 10 / 0.4),
-    0 24px 40px -22px rgb(110 40 8 / 0.5);
+}
+
+/* Le disque et l'arche sont des images (tools/bake-cta-shapes.mjs) : dégradés, ombres et béton cuits ensemble, au lieu d'un élément avec une couche
+   de béton en mix-blend-mode. L'image déborde de la boîte de la marge de l'ombre, mise à l'échelle de --orb comme la boîte elle-même. */
+.cta-orb::before,
+.cta-shape::before {
+  content: '';
+  position: absolute;
+  pointer-events: none;
+  background-position: center;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+
+.cta-orb::before {
+  inset: calc(var(--orb) * -0.3);
+  background-image: url('../assets/cta-orb.webp');
+}
+
+.cta-orb::after,
+.cta-shape::after {
+  content: none;
 }
 
 /* la seconde forme, de l'autre côté : une arche bleue qui monte du bas du panneau, en partie sous le verre. Disque en haut à gauche, arche
@@ -38,8 +53,11 @@
   height: calc(var(--orb) * 1.12);
   border-radius: 999px 999px 0 0;
   pointer-events: none;
-  background: linear-gradient(172deg, #5b88f8 0%, #2147d4 46%, #13247c 100%);
-  box-shadow: inset 3px 3px 0 -1px rgb(255 255 255 / 0.3), inset -14px -16px 30px -10px rgb(4 10 56 / 0.4);
+}
+
+.cta-shape::before {
+  inset: calc(var(--orb) * -0.1);
+  background-image: url('../assets/cta-arch.webp');
 }
 
 /* le panneau passe devant le disque (et porte le texte devant le reste) */

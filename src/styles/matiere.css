@@ -6,7 +6,7 @@
   /* intensité du béton sur toutes les formes du site (arches, disques, sphère, couches) */
   --concrete: 0.3;
   --hard-shadow: 6px 6px 0 rgb(238 133 50 / 0.9);
-  /* le fond du panneau bleu (.panel-blue) : réutilisable par une carte qui doit avoir le même (avec background-blend-mode: soft-light, normal, normal) */
+  /* le fond du panneau bleu (.panel-blue) : réutilisable par une carte qui doit avoir le même */
   --panel-blue-bg:
     var(--grain-soft) 0 0 / 160px 160px repeat,
     radial-gradient(60% 80% at 88% 100%, rgb(24 156 176 / 0.42), rgb(24 156 176 / 0) 64%),
@@ -78,8 +78,6 @@ html .portrait img {
   z-index: -1;
   pointer-events: none;
   background:
-    var(--grain-soft) 0 0 / 160px 160px repeat,
-    var(--speck) 30px 70px / 256px 256px repeat;
-  background-blend-mode: soft-light, normal;
-  opacity: 0.55;
+    url('../assets/riso/grain-flat-zone.webp') 0 0 / 160px 160px repeat,
+    url('../assets/riso/speck-zone.png') 30px 70px / 256px 256px repeat;
 }

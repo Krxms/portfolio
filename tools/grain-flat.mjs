@@ -25,3 +25,18 @@ for (let i = 0; i < data.length; i++) {
 }
 await sharp(out, { raw: { width: info.width, height: info.height, channels: 4 } }).webp({ lossless: true }).toFile('src/assets/riso/grain-flat.webp');
 console.log('grain-flat.webp écrit');
+
+// Variantes « zone sombre » : la zone (« Qui suis-je », FAQ, appel final) pose ce grain en UNE seule couche, sous-jacente à son voile. L'opacité de 0,55 que
+// chaque tuile appliquait à sa couche est donc cuite dans la transparence des deux images (grain pré-mélangé et mouchetures).
+const OPACITY = 0.55;
+const bake = async (srcRaw, info2, dest, webp) => {
+  const out = Buffer.from(srcRaw);
+  for (let i = 3; i < out.length; i += 4) out[i] = Math.round(out[i] * OPACITY);
+  const img = sharp(out, { raw: { width: info2.width, height: info2.height, channels: 4 } });
+  await (webp ? img.webp({ lossless: true, effort: 6 }) : img.png({ compressionLevel: 9 })).toFile(dest);
+};
+const grain = await sharp('src/assets/riso/grain-flat.webp').ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+await bake(grain.data, grain.info, 'src/assets/riso/grain-flat-zone.webp', true);
+const speck = await sharp('src/assets/riso/speck.png').ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+await bake(speck.data, speck.info, 'src/assets/riso/speck-zone.png', false);
+console.log('grain-flat-zone.webp et speck-zone.png écrits');

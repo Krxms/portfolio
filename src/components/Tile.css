@@ -83,7 +83,12 @@
   inset: 0;
   z-index: -1;
   pointer-events: none;
-  background: linear-gradient(180deg, rgb(2 12 20 / 0.22), rgb(2 12 20 / 0.16));
+  /* Le grain de risographie de toute la zone, en UNE couche (il y en avait une par tuile, trois en tout, chacune plusieurs milliers de pixels de haut) :
+     le grain pré-mélangé (grain-flat) et les mouchetures (speck), à 55 % d'opacité cuite dans les images (tools/grain-flat.mjs), sous le voile sombre. */
+  background:
+    url('../assets/riso/grain-flat-zone.webp') 0 0 / 160px 160px repeat,
+    url('../assets/riso/speck-zone.png') 30px 70px / 256px 256px repeat,
+    linear-gradient(180deg, rgb(2 12 20 / 0.22), rgb(2 12 20 / 0.16));
   box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.3), inset 0 -1px 0 rgb(255 255 255 / 0.1);
 }
 
@@ -100,20 +105,9 @@
   content: none;
 }
 
-/* Grain de risographie de toute la zone : le même que sur les affiches, avec les manques d'encre (le papier qui perce) et le grain de
-   pellicule. Il est identique d'une tuile à l'autre, donc sans arête entre elles. Il vit ici, et non dans scenes.css, parce que la
-   page Création partage cette zone sans charger les scènes de l'accueil. */
+/* Le grain de la zone vit désormais sur .dark-zone::after (une seule couche pour toute la zone) : les tuiles n'ont plus de couche de grain propre. */
 .dark-zone > .tile.tile--dark::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  background:
-    url('../assets/riso/grain-flat.webp') 0 0 / 160px 160px repeat,
-    var(--speck) 30px 70px / 256px 256px repeat;
-  opacity: 0.55;
-  box-shadow: none;
+  content: none;
 }
 
 .tile--mesh-a::before {

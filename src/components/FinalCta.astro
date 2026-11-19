@@ -17,8 +17,8 @@ const { title, text, label, href = '/contact/' } = Astro.props;
   <div class="wrap tile-inner">
     {/* Le disque orange est derrière le panneau, entier : la part qui passe dessous est vue à travers le verre (voir FinalCta.css). */}
     <div class="cta-stage">
-      <div class="cta-orb concrete" aria-hidden="true"></div>
-      <div class="cta-shape concrete" aria-hidden="true"></div>
+      <div class="cta-orb" aria-hidden="true"></div>
+      <div class="cta-shape" aria-hidden="true"></div>
       <div class="cta-panel glass glass--dark">
       <h2><R t={title} /></h2>
       <p class="tile-sub"><R t={text} /></p>

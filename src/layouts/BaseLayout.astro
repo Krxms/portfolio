@@ -197,18 +197,6 @@ if (!schema) {
     <div id="nav-progress" aria-hidden="true"></div>
     {isHome && <Loader />}
     <a class="skip-link" href="#main">Aller au contenu</a>
-    <svg class="glass-defs" width="0" height="0" aria-hidden="true" focusable="false">
-      {/* Bords légèrement rongés pour les tracés faits main (voir Mark.astro) */}
-      <filter id="ink" x="-10%" y="-30%" width="120%" height="160%" color-interpolation-filters="sRGB">
-        <feTurbulence type="fractalNoise" baseFrequency="0.035 0.06" numOctaves="2" seed="3" result="grit" />
-        <feDisplacementMap in="SourceGraphic" in2="grit" scale="3.2" xChannelSelector="R" yChannelSelector="G" />
-      </filter>
-      {/* Légère irrégularité du geste : le trait se courbe très doucement, comme une main qui n'est jamais tout à fait droite */}
-      <filter id="wobble" x="-2%" y="-80%" width="104%" height="260%" color-interpolation-filters="sRGB">
-        <feTurbulence type="fractalNoise" baseFrequency="0.0045 0.012" numOctaves="2" seed="7" result="bend" />
-        <feDisplacementMap in="SourceGraphic" in2="bend" scale="9" xChannelSelector="R" yChannelSelector="G" />
-      </filter>
-    </svg>
     <Header />
     <main id="main" tabindex="-1">
       <slot />
