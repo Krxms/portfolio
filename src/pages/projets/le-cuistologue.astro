@@ -40,23 +40,24 @@ const heroLaptop = await responsive(siteHeroPortable, [400, 640, 900, 1200], '(m
 const heroPhone = await responsive(mobileTop, [200, 320, 480, 780], '(max-width: 700px) 22vw, 12vw');
 
 // Deux palettes, présentées en bento. ink : la couleur du texte posé sur l'aplat.
+// Chaque teinte : son nom et sa valeur HEX, rien d'autre.
 // 1. Logo et imprimés : les cinq carrés du fichier de travail Figma (page « Charte graphique », nœud 2113:523). Les calques n'y sont pas nommés (« Rectangle 1 »…) :
 //    les noms ci-dessous sont descriptifs. Rose, Vert d'eau, Sauge et Orange doré sont les teintes des feuilles du logo, reprises par les cartes de visite ;
 //    le mauve n'a pas d'usage documenté dans la charte.
 const printPalette = [
-  { id: 'rose', name: 'Rose', hex: '#FF9797', ink: '#2C2C28', use: 'Une feuille du logo, la carte de visite rose.' },
-  { id: 'eau', name: 'Vert d’eau', hex: '#7FA8A2', ink: '#2C2C28', use: 'Une feuille du logo.' },
-  { id: 'sauge', name: 'Sauge', hex: '#8BA47E', ink: '#2C2C28', use: 'Une feuille du logo, la carte de visite sauge.' },
-  { id: 'mauve', name: 'Mauve', hex: '#AA8DA7', ink: '#2C2C28', use: 'Teinte d’illustration (usage à confirmer).' },
-  { id: 'orange', name: 'Orange doré', hex: '#F1BE7C', ink: '#2C2C28', use: 'Une feuille du logo, la carte de visite orange.' },
+  { id: 'rose', name: 'Rose', hex: '#FF9797', ink: '#2C2C28' },
+  { id: 'eau', name: 'Vert d’eau', hex: '#7FA8A2', ink: '#2C2C28' },
+  { id: 'sauge', name: 'Sauge', hex: '#8BA47E', ink: '#2C2C28' },
+  { id: 'mauve', name: 'Mauve', hex: '#AA8DA7', ink: '#2C2C28' },
+  { id: 'orange', name: 'Orange doré', hex: '#F1BE7C', ink: '#2C2C28' },
 ];
 // 2. Le site lecuistologue.fr : cinq teintes, valeurs actuelles du site, en trois usages.
 const webPalette = [
-  { id: 'creme', name: 'Blanc cassé rosé', hex: '#FBF8F7', ink: '#2C2C2C', use: 'Fond principal et sections claires.' },
-  { id: 'peche', name: 'Pêche pâle', hex: '#F8E0CF', ink: '#2C2C2C', use: 'Fond d’ambiance et pied de page.' },
-  { id: 'ocre', name: 'Ocre doré', hex: '#DAA35B', ink: '#2C2C2C', use: 'Mots mis en valeur dans les titres.' },
-  { id: 'anthracite', name: 'Anthracite', hex: '#2C2C2C', ink: '#FBF8F7', use: 'Titres, texte courant et navigation.' },
-  { id: 'ardoise', name: 'Bleu ardoise', hex: '#253D4A', ink: '#FBF8F7', use: 'Boutons pleins et certains textes.' },
+  { id: 'creme', name: 'Blanc cassé rosé', hex: '#FBF8F7', ink: '#2C2C2C' },
+  { id: 'peche', name: 'Pêche pâle', hex: '#F8E0CF', ink: '#2C2C2C' },
+  { id: 'ocre', name: 'Ocre doré', hex: '#DAA35B', ink: '#2C2C2C' },
+  { id: 'anthracite', name: 'Anthracite', hex: '#2C2C2C', ink: '#FBF8F7' },
+  { id: 'ardoise', name: 'Bleu ardoise', hex: '#253D4A', ink: '#FBF8F7' },
 ];
 
 // Les pièces imprimées, dans l'ordre de la scène : trois affiches A3 (un même service, trois situations), puis les cartes de visite et le flyer.
@@ -392,8 +393,7 @@ const schema = {
                 <div class={`pj-tile pj-tile--${c.id}`} style={`--c:${c.hex};--t:${c.ink}`}>
                   <span class="pj-tile-name">{c.name}</span>
                   <span class="pj-tile-hex">{c.hex}</span>
-                  <span class="pj-tile-use">{c.use}</span>
-                </div>
+                  </div>
               ))
             }
           </div>
@@ -405,8 +405,7 @@ const schema = {
                 <div class={`pj-tile pj-tile--${c.id}`} style={`--c:${c.hex};--t:${c.ink}`}>
                   <span class="pj-tile-name">{c.name}</span>
                   <span class="pj-tile-hex">{c.hex}</span>
-                  <span class="pj-tile-use">{c.use}</span>
-                </div>
+                  </div>
               ))
             }
           </div>
