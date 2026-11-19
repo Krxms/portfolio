@@ -1,0 +1,30 @@
+/* Mode économe (html[data-perf="low"]) : posé par un script du <head> sur les machines modestes (peu de coeurs ou de mémoire, économiseur de données)
+   ou par la mesure de fluidité de site.js si les images tombent sous ~30 par seconde. Le contenu et la mise en page ne changent pas : seuls les
+   effets coûteux sont retirés (flous d'arrière-plan, béton incrusté, défilement à inertie). Les fonds translucides passent presque opaques pour
+   garder le contraste et la lisibilité sans le flou. */
+html[data-perf='low'] * {
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+
+html[data-perf='low'] .pblur,
+html[data-perf='low'] .concrete::after {
+  display: none;
+}
+
+html[data-perf='low'] .glass {
+  background: linear-gradient(135deg, rgb(255 255 255 / 0.9), rgb(255 255 255 / 0.78));
+}
+
+html[data-perf='low'] .glass--dark {
+  background: linear-gradient(135deg, rgb(255 255 255 / 0.1), rgb(255 255 255 / 0.04)), rgb(14 24 70 / 0.82);
+}
+
+html[data-perf='low'] .header-nav,
+html[data-perf='low'] .backdrop {
+  background: var(--nav-bg);
+}
+
+html[data-perf='low'] .has-scenes .card:nth-child(2) {
+  background: rgb(255 255 255 / 0.95);
+}
