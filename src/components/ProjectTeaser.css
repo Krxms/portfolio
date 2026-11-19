@@ -808,13 +808,25 @@
   pointer-events: none;
 }
 
-.sc-art-shapes {
+.sc-art-img {
   display: none;
 }
 
 @media (min-width: 701px) {
-  .sc-art-shapes {
+  /* image des formes : le cadre (1000 x 460) plus 120 unités de marge, pour que le disque qui dépasse ne soit pas coupé ; hauteur automatique */
+  .sc-art-img {
+    position: absolute;
+    z-index: -1;
     display: block;
+    left: -12%;
+    width: 124%;
+    max-width: none;
+    top: 0;
+    bottom: 0;
+    height: auto;
+    margin-block: auto;
+    pointer-events: none;
+    --a: 0.35;
   }
 
   .sc-stage > .sc-shape {
@@ -824,15 +836,12 @@
 
 @media (prefers-reduced-motion: no-preference) {
   @supports (animation-timeline: view()) {
-    .sc-art-quarter,
-    .sc-art-disc,
-    .sc-art-arch {
+    .sc-art-img {
       animation-name: sc-drift;
       animation-timing-function: linear;
       animation-fill-mode: both;
       animation-timeline: --sc;
       animation-range: cover 0% cover 100%;
-      --a: 0.35;
     }
   }
 }

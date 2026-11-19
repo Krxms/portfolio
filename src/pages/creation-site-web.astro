@@ -1,8 +1,7 @@
 ---
-import sceneBack from '../assets/scenes/creation-back.svg?raw';
 import R from '../components/R.astro';
+import SceneArt from '../components/SceneArt.astro';
 import { plain } from '../lib/fmt';
-import sceneFront from '../assets/scenes/creation-front.svg?raw';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Tile from '../components/Tile.astro';
 import PageHero from '../components/PageHero.astro';
@@ -133,8 +132,7 @@ schema['@graph'].push({
 
       <!-- La scène montre un site fini ; chaque repère orange renvoie au livrable du même numéro, dans la liste dessous. -->
       <div class="cs-stage" aria-hidden="true">
-        <Fragment set:html={sceneBack} />
-        <Fragment set:html={sceneFront} />
+        <SceneArt scene="creation" />
         <span class="cs-shape cs-disc concrete"></span>
         <span class="cs-shape cs-arch concrete"></span>
         <span class="cs-shape cs-quarter concrete"></span>

@@ -1644,17 +1644,13 @@
 
 @media (min-width: 701px) and (prefers-reduced-motion: no-preference) {
   @supports (animation-timeline: view()) {
-    .cs-art-shapes,
+    .cs-art-img,
     .sc-l {
       animation-name: cs-drift;
       animation-timing-function: linear;
       animation-fill-mode: both;
       animation-timeline: --cs;
       animation-range: cover 0% cover 100%;
-    }
-
-    .cs-art-shapes {
-      --a: 0.35;
     }
   }
 }

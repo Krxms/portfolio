@@ -130,8 +130,8 @@
     /* Rayon fixe, posé sur la carte elle-même : un calque enfant ne voyait pas les cartes voisines (la carte est composée à
        part par ses transformations 3D), et faire varier le rayon à chaque image faisait saccader l'arrivée. Une fois les
        cartes écartées, il n'y a plus rien derrière : le flou ne se voit plus. */
-    -webkit-backdrop-filter: blur(16px) saturate(1.4);
-    backdrop-filter: blur(16px) saturate(1.4);
+    -webkit-backdrop-filter: blur(22px) saturate(1.45);
+    backdrop-filter: blur(22px) saturate(1.45);
   }
 
   /* au défilement, l'affiche respire : les formes du fond bougent un peu plus que les fenêtres, qui bougent un peu plus que la carte */

@@ -1,8 +1,7 @@
 ---
-import sceneBack from '../assets/scenes/audit-back.svg?raw';
 import R from '../components/R.astro';
+import SceneArt from '../components/SceneArt.astro';
 import { plain } from '../lib/fmt';
-import sceneFront from '../assets/scenes/audit-front.svg?raw';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Tile from '../components/Tile.astro';
 import PageHero from '../components/PageHero.astro';
@@ -141,8 +140,7 @@ schema['@graph'].push({
 
       <!-- La scène montre une page en cours d'examen ; chaque repère orange désigne un point examiné, détaillé dans la liste dessous sous le même numéro. -->
       <div class="cs-stage cs-stage--audit" aria-hidden="true">
-        <Fragment set:html={sceneBack} />
-        <Fragment set:html={sceneFront} />
+        <SceneArt scene="audit" />
         <span class="cs-shape cs-disc concrete"></span>
         <span class="cs-shape cs-arch concrete"></span>
         <span class="cs-shape cs-quarter concrete"></span>

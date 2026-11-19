@@ -110,9 +110,8 @@
   z-index: -1;
   pointer-events: none;
   background:
-    var(--grain-soft) 0 0 / 160px 160px repeat,
+    url('../assets/riso/grain-flat.webp') 0 0 / 160px 160px repeat,
     var(--speck) 30px 70px / 256px 256px repeat;
-  background-blend-mode: soft-light, normal;
   opacity: 0.55;
   box-shadow: none;
 }

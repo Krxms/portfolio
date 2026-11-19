@@ -1,0 +1,50 @@
+---
+// Illustration large des pages de service (au-dessus de 700 px), sous l'en-tête « Ce que vous recevez » : un fond en SVG (trois tracés) puis cinq
+// plans en WebP à fond transparent, produits par tools/render-scenes.mjs à partir des exports Figma (src/assets/scenes/source). Chaque plan
+// glisse à son rythme au défilement (animation CSS, creation-site-web.css). Sur mobile, ces éléments sont masqués (display: none) et, grâce à
+// loading="lazy", les images ne sont pas téléchargées.
+interface Props {
+  scene: 'creation' | 'refonte' | 'audit';
+}
+const { scene } = Astro.props;
+
+const images = import.meta.glob('../assets/scenes/*.webp', { eager: true, import: 'default' }) as Record<string, ImageMetadata>;
+const backs = import.meta.glob('../assets/scenes/*-bg.svg', { eager: true, query: '?raw', import: 'default' }) as Record<string, string>;
+const bg = backs[`../assets/scenes/${scene}-bg.svg`];
+
+// les images couvrent le cadre (1297 x 571) plus une marge de 140 unités de chaque côté (formes et ombres qui dépassent)
+const W = 1297;
+const H = 571;
+const PAD = 140;
+// largeur fixée au cadre + marges ; hauteur automatique (proportions de l’image) et centrée verticalement, comme le fait un SVG « meet » quand le cadre est plus haut que large
+const box = `left:${((-PAD / W) * 100).toFixed(3)}%;width:${(((W + PAD * 2) / W) * 100).toFixed(3)}%;max-width:none;top:0;bottom:0;height:auto;margin-block:auto`;
+
+// plan, amplitude de la parallaxe (--a), calque
+const planes = [
+  { name: 'shapes', a: 0.35, back: true },
+  { name: 'site', a: 0.6, back: false },
+  { name: 'card', a: 1.1, back: false },
+  { name: 'phone', a: 1.5, back: false },
+  { name: 'side', a: 1.1, back: false },
+];
+---
+
+<Fragment set:html={bg} />
+{
+  planes.map((p) => {
+    const img = images[`../assets/scenes/${scene}-${p.name}.webp`];
+    return (
+      <img
+        class={`cs-art cs-art-img ${p.back ? 'cs-art--back' : 'cs-art--front'}`}
+        src={img.src}
+        width={img.width}
+        height={img.height}
+        alt=""
+        aria-hidden="true"
+        loading="lazy"
+        decoding="async"
+        style={`--a:${p.a};${box}`}
+      />
+    );
+  })
+}

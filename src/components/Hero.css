@@ -143,7 +143,17 @@
 /* Flou progressif en bas de la Hero : le fond se fond dans la section suivante */
 .hero-zone > .pblur {
   z-index: -1;
-  --pb-h: 240px;
+  --pb-h: 150px;
+}
+
+/* un flou plus doux : le coût d'un flou d'arrière-plan croît avec sa surface et son rayon ; moins haut (150 px au lieu de 240) et au plus 8 px
+   au lieu de 14 px (!important : la valeur de chaque couche est posée en ligne par ProgressiveBlur.astro) */
+.hero-zone > .pblur i:nth-child(3) {
+  --b: 4px !important;
+}
+
+.hero-zone > .pblur i:nth-child(4) {
+  --b: 8px !important;
 }
 
 /* CTA : deux boutons de même gabarit (hauteur 54 px, coins 12 px). Le principal est en verre bleu translucide, sans

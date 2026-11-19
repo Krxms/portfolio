@@ -6,7 +6,8 @@ import siteShot from '../assets/projets/cuistologue/site-hero.webp';
 import phoneShot from '../assets/projets/cuistologue/mobile-top.webp';
 import cardRose from '../assets/projets/cuistologue/carte-rose-recto.webp';
 import cardOrange from '../assets/projets/cuistologue/carte-orange-recto.webp';
-import fondArt from '../assets/scenes/cuistologue-fond.svg?raw';
+import fondArt from '../assets/scenes/cuistologue-bg.svg?raw';
+import fondShapes from '../assets/scenes/cuistologue-shapes.webp';
 import cardVert from '../assets/projets/cuistologue/carte-vert-recto.webp';
 import { responsive } from '../lib/responsive';
 
@@ -97,6 +98,8 @@ const cardsR = await Promise.all([cardVert, cardOrange, cardRose].map((c) => res
       {/* La scène entière est le lien vers la page projet : ni bouton ni flèche. Au défilement, les plans glissent à peine (parallaxe très légère). */}
       <a class="sc-stage" href={href} aria-label="Voir l’étude de cas : le projet Le Cuistologue">
         <Fragment set:html={fondArt} />
+        {/* les formes du fond (quart de disque, disque, arche), aplaties en image par tools/render-scenes.mjs ; masquée sur mobile, où les formes en CSS restent */}
+        <img class="sc-art-img" src={fondShapes.src} width={fondShapes.width} height={fondShapes.height} alt="" aria-hidden="true" loading="lazy" decoding="async" />
         <i class="sc-shape sc-disc concrete"></i>
         <i class="sc-shape sc-arch concrete"></i>
         <i class="sc-shape sc-quarter concrete"></i>

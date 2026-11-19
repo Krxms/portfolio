@@ -22,7 +22,7 @@
   position: absolute;
   inset: 0;
   background: color-mix(in srgb, var(--nav-bg) 45%, transparent);
-  backdrop-filter: blur(10px) saturate(160%);
+  backdrop-filter: blur(11px) saturate(210%);
   pointer-events: none;
 }
 
@@ -33,11 +33,12 @@
   inset: 0;
   background: linear-gradient(
     115deg,
-    color-mix(in srgb, white 20%, transparent) 0%,
+    color-mix(in srgb, white 45%, transparent) 0%,
     transparent 22%,
     transparent 78%,
-    color-mix(in srgb, white 12%, transparent) 100%
+    color-mix(in srgb, white 30%, transparent) 100%
   );
+  mix-blend-mode: overlay;
   pointer-events: none;
 }
 

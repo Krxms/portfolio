@@ -36,41 +36,6 @@ if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
 // elle. Les scènes de scenes.js lisent déjà la position à chaque image : elles suivent sans rien changer.
 const isLow = () => document.documentElement.getAttribute('data-perf') === 'low';
 
-// Mesure de fluidité : pendant les premières secondes de défilement, si les images durent en moyenne plus de 34 ms (moins de ~30 i/s), la machine
-// est jugée lente : le mode économe (perf.css) s'active tout de suite et est mémorisé pour les visites suivantes. Le défilement à inertie s'arrête.
-(() => {
-  if (isLow()) return;
-  let last = 0;
-  let sy = scrollY;
-  let sum = 0;
-  let n = 0;
-  const start = performance.now();
-  const tick = (now) => {
-    if (now - start > 6000) return;
-    if (last && scrollY !== sy) {
-      sum += now - last;
-      n++;
-      if (n >= 40) {
-        if (sum / n > 34) {
-          document.documentElement.setAttribute('data-perf', 'low');
-          try {
-            localStorage.setItem('perf', 'low');
-          } catch (e) {}
-          window.__lenis?.destroy();
-          window.__lenis = undefined;
-          return;
-        }
-        sum = 0;
-        n = 0;
-      }
-    }
-    sy = scrollY;
-    last = now;
-    requestAnimationFrame(tick);
-  };
-  requestAnimationFrame(tick);
-})();
-
 if (!isLow() && !window.matchMedia('(prefers-reduced-motion: reduce)').matches && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
   import('lenis').then(({ default: Lenis }) => {
     const root = document.documentElement;

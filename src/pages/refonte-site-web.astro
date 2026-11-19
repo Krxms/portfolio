@@ -1,8 +1,7 @@
 ---
-import sceneBack from '../assets/scenes/refonte-back.svg?raw';
 import R from '../components/R.astro';
+import SceneArt from '../components/SceneArt.astro';
 import { plain } from '../lib/fmt';
-import sceneFront from '../assets/scenes/refonte-front.svg?raw';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Tile from '../components/Tile.astro';
 import PageHero from '../components/PageHero.astro';
@@ -131,8 +130,7 @@ schema['@graph'].push({
 
       <!-- La scène montre l'ancien site, terne et daté ; chaque repère orange désigne un défaut, détaillé dans la liste dessous sous le même numéro. -->
       <div class="cs-stage cs-stage--old" aria-hidden="true">
-        <Fragment set:html={sceneBack} />
-        <Fragment set:html={sceneFront} />
+        <SceneArt scene="refonte" />
         <span class="cs-shape cs-disc concrete"></span>
         <span class="cs-shape cs-arch concrete"></span>
         <span class="cs-shape cs-quarter concrete"></span>
