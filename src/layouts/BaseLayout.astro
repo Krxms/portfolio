@@ -185,7 +185,7 @@ if (!schema) {
         préchargée : le CSS les demande quand il en a besoin, et la bande passante du premier écran va au texte et aux polices. */}
     {lateTextures.map((href) => <link rel="preload" href={href} as="image" type="image/webp" fetchpriority="low" media="(min-width: 701px)" />)}
     {/* Mode économe : machine modeste (≤ 4 coeurs, ≤ 4 Go, économiseur de données) ou jugée lente lors d'une visite précédente (site.js). */}
-    <script is:inline set:html={"(function(){try{var n=navigator,c=n.connection;if(localStorage.getItem('perf')==='low'||(n.hardwareConcurrency&&n.hardwareConcurrency<=4)||(n.deviceMemory&&n.deviceMemory<=4)||(c&&c.saveData))document.documentElement.setAttribute('data-perf','low')}catch(e){}})()"} />
+    <script is:inline set:html={"(function(){try{var n=navigator,c=n.connection;if(/Safari/.test(n.userAgent)&&!/Chrome|Chromium|CriOS|Android|Edg/.test(n.userAgent))document.documentElement.setAttribute('data-safari','');if(localStorage.getItem('perf')==='low'||(n.hardwareConcurrency&&n.hardwareConcurrency<=4)||(n.deviceMemory&&n.deviceMemory<=4)||(c&&c.saveData))document.documentElement.setAttribute('data-perf','low')}catch(e){}})()"} />
     <script is:inline set:html={textureGate} />
     {/* Serveur de développement seulement : sur une adresse partagée (tunnel ngrok, réseau local), la barre d'outils Astro est masquée ; en local
         (localhost, 127.0.0.1), elle reste disponible. N'existe pas dans la version construite. */}

@@ -28,3 +28,9 @@ html[data-perf='low'] .backdrop {
 html[data-perf='low'] .has-scenes .card:nth-child(2) {
   background: rgb(255 255 255 / 0.95);
 }
+
+/* Safari (WebKit) : les flous d'arrière-plan et les mélanges y sont repeints à chaque image de défilement, bien plus cher qu'ailleurs. On garde
+   le verre, mais le flou progressif perd sa couche la plus fine (trois couches au lieu de quatre : la transition reste continue). */
+html[data-safari] .pblur i:first-child {
+  display: none;
+}

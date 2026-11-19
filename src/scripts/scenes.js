@@ -60,7 +60,7 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
     // page Création, « Un cadre clair » : même mécanique, les engagements suivent l'introduction dont les mots s'allument
     { sel: '.cs-follow', ref: '#cadre .tile-sub', start: 0.88, end: 0.38 },
     // page Création : le panneau « Vous gardez la main » donne sa progression à ses trois jauges (voir creation-site-web.css)
-    { sel: '.cs-lv-panel', start: 0.92, end: 0.4, stagger: true, in: '.cs-lv-list', damp: 2.4 },
+    { sel: '.cs-lv-panel', start: 0.92, end: 0.4, stagger: true, in: '.cs-lv-list', damp: 5 },
     // scores du projet : le compteur se déclenche à l'arrivée de la réglette dans l'écran (un tiers de l'écran passé), puis se joue seul, en 2,6 s
     // (voir ProjectTeaser.css) : il ne dépend plus de la vitesse du défilement
     { sel: '.sc-scores', timed: true, trigger: 0.82, dur: 2600 },
@@ -148,8 +148,8 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
     ticking = false;
     const dt = Math.min(0.05, Math.max(0.001, (now - last) / 1000));
     last = now;
-    const k = 1 - Math.exp(-dt * 11); // vitesse de rattrapage : le défilement est déjà lissé par Lenis, un second lissage lent ajoutait du retard
-    const kh = 1 - Math.exp(-dt * 16);
+    const k = 1 - Math.exp(-dt * 20); // vitesse de rattrapage : le défilement est déjà lissé par Lenis, un second lissage lent ajoutait du retard
+    const kh = 1 - Math.exp(-dt * 26);
     const vh = innerHeight;
     const y = scrollY;
     let moving = false;
