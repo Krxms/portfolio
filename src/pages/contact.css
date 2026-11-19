@@ -18,7 +18,7 @@
   z-index: -1;
   pointer-events: none;
   background:
-    url('../assets/riso/stoneware.webp') 0 0 / 512px 512px repeat,
+    var(--tx-stoneware) 0 0 / 512px 512px repeat,
     radial-gradient(ellipse 72% 40% at 50% -6%, #ffffff 0%, rgb(255 255 255 / 0) 100%),
     linear-gradient(180deg, #f3f6fa 0%, #eef2f7 30%, #f1f2ee 68%, #f5f3ea 100%);
   /* fondu : le bas du papier s'estompe sur le fond de la page, comme sous les en-têtes bleus de « À propos » et « Le Cuistologue » (AboutHero.css) */
@@ -55,8 +55,9 @@
 .ct-eyebrow::before {
   content: '';
   flex: none;
-  width: 44px;
-  height: 4px;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
   background: #ee8532;
 }
 

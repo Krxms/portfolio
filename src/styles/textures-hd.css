@@ -1,0 +1,19 @@
+/* Tuiles de texture à deux résolutions (les variables --grain-soft, --speck et --flecks, elles, sont dans textures.css, généré par tools/inline-textures.mjs).
+   Sur un écran dense (téléphones, Retina), la tuile à double résolution remplace la tuile d'origine : le grain et les mouchetures restent nets
+   au lieu d'être agrandis puis adoucis par le navigateur. Les tailles d'affichage (background-size) ne changent pas.
+   Fichiers @2x générés par :  node tools/grain-tile.mjs · S=2 node tools/stoneware-tile.mjs · node tools/grain-flat.mjs · SUF=@2x node tools/grain-flat.mjs */
+:root {
+  --tx-stoneware: url('../assets/riso/stoneware.webp');
+  --tx-grain-flat: url('../assets/riso/grain-flat.webp');
+  --tx-grain-flat-zone: url('../assets/riso/grain-flat-zone.webp');
+  --tx-speck-zone: url('../assets/riso/speck-zone.png');
+}
+
+@media (min-resolution: 1.5dppx) {
+  :root {
+    --tx-stoneware: url('../assets/riso/stoneware@2x.webp');
+    --tx-grain-flat: url('../assets/riso/grain-flat@2x.webp');
+    --tx-grain-flat-zone: url('../assets/riso/grain-flat-zone@2x.webp');
+    --tx-speck-zone: url('../assets/riso/speck-zone@2x.png');
+  }
+}

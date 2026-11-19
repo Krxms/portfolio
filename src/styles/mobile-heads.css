@@ -37,9 +37,10 @@
   html .ph-kicker::before,
   html .ct-eyebrow::before {
     display: block;
-    width: 28px;
-    height: 3px;
-    margin: 0 auto 14px;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    margin: 0 auto 12px;
   }
 
   /* ---------- titres, chapôs : centrés et équilibrés ---------- */
@@ -125,9 +126,10 @@
 
   html .hero-zone--page .ph-kicker::before {
     display: inline-block;
-    width: 32px;
-    height: 3px;
-    margin: 0 12px 0 0;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    margin: 0 10px 0 0;
     vertical-align: middle;
     translate: 0 -1px;
   }
@@ -151,7 +153,7 @@
     margin-top: 6px;
   }
 
-  /* la note : mentions en ligne, à gauche, qui passent à la ligne selon la place. Chacune porte sa pastille orange : aucun séparateur ne reste
+  /* la note : mentions en ligne, à gauche, qui passent à la ligne selon la place. Chacune porte sa pastille bleue : aucun séparateur ne reste
      seul en bout de ligne. */
   html .ph-note {
     flex-direction: row;
@@ -176,7 +178,7 @@
     height: 5px;
     margin-right: 7px;
     border-radius: 50%;
-    background: #ee8532;
+    background: var(--signal, #1f45d6);
     vertical-align: middle;
     translate: 0 -1px;
   }

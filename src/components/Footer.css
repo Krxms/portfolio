@@ -34,7 +34,7 @@
   inset: 0;
   z-index: -1;
   pointer-events: none;
-  background: url('../assets/riso/stoneware.webp') 0 0 / 512px 512px repeat;
+  background: var(--tx-stoneware) 0 0 / 512px 512px repeat;
   opacity: 0.55;
 }
 

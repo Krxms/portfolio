@@ -94,8 +94,8 @@
 .cta-panel.glass--dark {
   background:
     var(--grain-soft) 0 0 / 160px 160px repeat,
-    linear-gradient(145deg, rgb(255 255 255 / 0.17), rgb(255 255 255 / 0.03) 42%, rgb(255 255 255 / 0.09)),
-    rgb(18 34 118 / 0.86);
+    linear-gradient(145deg, rgb(255 255 255 / 0.22), rgb(255 255 255 / 0.05) 42%, rgb(255 255 255 / 0.12)),
+    rgb(28 54 160 / 0.74);
   background-blend-mode: soft-light, normal, normal;
   -webkit-backdrop-filter: none;
   backdrop-filter: none;

@@ -5,9 +5,12 @@
 //   node tools/grain-flat.mjs   → src/assets/riso/grain-flat.webp (160 x 160, à répéter comme grain-soft.webp)
 import sharp from 'sharp';
 
+// SUF=@2x node tools/grain-flat.mjs : variantes pour écrans denses (tuiles de 320 px, nées de grain-soft@2x et speck@2x)
+const SUF = process.env.SUF || '';
+
 const B = 0.14; // luminosité moyenne du fond marine sous le grain (0 à 1)
 const D = ((16 * B - 12) * B + 4) * B; // courbe « soft-light » (W3C) pour un fond sombre
-const { data, info } = await sharp('src/assets/riso/grain-soft.webp').greyscale().raw().toBuffer({ resolveWithObject: true });
+const { data, info } = await sharp(`src/assets/riso/grain-soft${SUF}.webp`).greyscale().raw().toBuffer({ resolveWithObject: true });
 const out = Buffer.alloc(info.width * info.height * 4);
 for (let i = 0; i < data.length; i++) {
   const g = data[i] / 255;
@@ -23,7 +26,7 @@ for (let i = 0; i < data.length; i++) {
   out[i * 4] = out[i * 4 + 1] = out[i * 4 + 2] = rgb;
   out[i * 4 + 3] = Math.round(Math.min(1, a * 0.85) * 255); // 0,85 : réglé à l’œil sur le rendu soft-light d’origine
 }
-await sharp(out, { raw: { width: info.width, height: info.height, channels: 4 } }).webp({ lossless: true }).toFile('src/assets/riso/grain-flat.webp');
+await sharp(out, { raw: { width: info.width, height: info.height, channels: 4 } }).webp({ lossless: true }).toFile(`src/assets/riso/grain-flat${SUF}.webp`);
 console.log('grain-flat.webp écrit');
 
 // Variantes « zone sombre » : la zone (« Qui suis-je », FAQ, appel final) pose ce grain en UNE seule couche, sous-jacente à son voile. L'opacité de 0,55 que
@@ -35,8 +38,8 @@ const bake = async (srcRaw, info2, dest, webp) => {
   const img = sharp(out, { raw: { width: info2.width, height: info2.height, channels: 4 } });
   await (webp ? img.webp({ lossless: true, effort: 6 }) : img.png({ compressionLevel: 9 })).toFile(dest);
 };
-const grain = await sharp('src/assets/riso/grain-flat.webp').ensureAlpha().raw().toBuffer({ resolveWithObject: true });
-await bake(grain.data, grain.info, 'src/assets/riso/grain-flat-zone.webp', true);
-const speck = await sharp('src/assets/riso/speck.png').ensureAlpha().raw().toBuffer({ resolveWithObject: true });
-await bake(speck.data, speck.info, 'src/assets/riso/speck-zone.png', false);
+const grain = await sharp(`src/assets/riso/grain-flat${SUF}.webp`).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+await bake(grain.data, grain.info, `src/assets/riso/grain-flat-zone${SUF}.webp`, true);
+const speck = await sharp(`src/assets/riso/speck${SUF}.png`).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+await bake(speck.data, speck.info, `src/assets/riso/speck-zone${SUF}.png`, false);
 console.log('grain-flat-zone.webp et speck-zone.png écrits');

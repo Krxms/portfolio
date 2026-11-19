@@ -341,6 +341,17 @@ html:not(.is-loading) #nav-progress {
     background-size: 128px 128px;
   }
 
+  /* Une fois la page chargée (classe tx-in, posée après le premier affichage), la vraie texture prend la place de la petite tuile : le grès à sa
+     finesse d'origine (tuile à double résolution sur les écrans denses, voir textures-hd.css). La petite tuile ne sert qu'au tout premier affichage. */
+  html.tx-in .tile--light::before {
+    background-image: var(--tx-stoneware);
+    background-size: 512px 512px;
+  }
+
+  html.tx-in .amb-atelier .at-paper::before {
+    background: var(--tx-stoneware) 0 0 / 512px 512px repeat;
+  }
+
   /* Le béton des scènes (51 Ko) arrive après le chargement, en fondu (0,6 s). */
   html:not(.tx-in) :is(.sc-stage, .cs-stage, .il-stage, .pj-visit-stage)::before {
     background-image: none;

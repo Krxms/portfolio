@@ -29,7 +29,7 @@
   inset: 0;
   /* le grain de grès (mouchetures à transparence) sur un papier qui se creuse un peu vers le bas */
   background:
-    url('../assets/riso/stoneware.webp') 0 0 / 512px 512px repeat,
+    var(--tx-stoneware) 0 0 / 512px 512px repeat,
     radial-gradient(ellipse 72% 40% at 50% -6%, #ffffff 0%, rgb(255 255 255 / 0) 100%),
     linear-gradient(180deg, #f6f8fb 0%, #edf1f6 60%, #e4ebf3 100%);
 }
@@ -102,21 +102,27 @@
   display: none;
 }
 
+/* hero-live : classe posée seulement par tools/bake-hero.mjs pour rendre les formes en CSS (c'est ce rendu qui est enregistré en image) */
 @media (min-width: 901px) {
-  .hero-zone--atelier .at-comp {
+  html:not(.hero-live) .hero-zone--atelier .at-comp {
     display: block;
     position: absolute;
-    left: 47.2222vw;
+    left: 60.2235vw;
     top: calc(var(--at-y) + 7.9861vw);
-    width: 52.7778vw;
+    width: 43.0556vw;
     max-width: none;
     height: auto;
     pointer-events: none;
   }
 
-  .hero-zone--atelier :is(.at-arch-pale, .at-arch-mint, .at-arch, .at-building, .at-orb, .at-window, .at-disc, .at-ring) {
+  html:not(.hero-live) .hero-zone--atelier :is(.at-arch-pale, .at-arch-mint, .at-arch, .at-building, .at-orb, .at-window, .at-disc, .at-ring) {
     display: none;
   }
+}
+
+/* retirés de l'affiche, à toutes les largeurs : le volume de béton sur l'arche bleue, la sphère bleue et son anneau au point orange */
+.hero-zone--atelier :is(.at-building, .at-disc, .at-ring) {
+  display: none !important;
 }
 
 /* ---------- l'apparence des grandes formes ----------
@@ -179,17 +185,6 @@
 }
 
 /* ---------- les petites formes du bas (tablette et mobile) ---------- */
-/* une pastille orange : le point sur le « i » */
-.at-dot {
-  position: absolute;
-  left: clamp(18px, 4.5vw, 84px);
-  top: calc(var(--header-h, 72px) + 8vmin);
-  width: clamp(10px, 1.1vmax, 16px);
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background: var(--at-orange);
-}
-
 /* le quart de cercle : le lagon du site (le bleu tiré vers le vert), très pâle, en relief doux comme le papier. Des courbes de niveau
    marine très fines, le grain du béton. */
 .at-quarter {
@@ -227,10 +222,6 @@
     width: 130px;
   }
 
-  /* le point orange du haut n'a pas sa place sur mobile */
-  .at-dot {
-    display: none;
-  }
 }
 
 /* =====================================================================================================================
@@ -294,12 +285,13 @@
   .hero-zone--atelier .hero-role::before {
     content: '';
     display: inline-block;
-    width: 44px;
-    height: 4px;
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
     background: #ee8532;
-    margin-right: 16px;
+    margin-right: 14px;
     vertical-align: middle;
-    translate: 0 -2px;
+    translate: 0 -1px;
   }
 
   /* le voile de lisibilité et l'estompe du quadrillage se centrent sur le texte */
@@ -450,7 +442,7 @@
     box-sizing: border-box;
     padding: 0.9vw 1.1vw 1.1vw;
     border-radius: 1.4vw;
-    background: linear-gradient(135deg, rgb(255 255 255 / 0.95), rgb(244 248 255 / 0.88));
+    background: linear-gradient(135deg, #ffffff, #f4f8ff);
     box-shadow:
       inset 0 1px 0 #fff,
       inset 0 0 0 1px rgb(255 255 255 / 0.7),
@@ -747,9 +739,10 @@
   .hero-zone--atelier .hero-role::before {
     content: '';
     display: inline-block;
-    width: 32px;
-    height: 3px;
-    margin-right: 12px;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    margin-right: 10px;
     vertical-align: middle;
     background: #ee8532;
     translate: 0 -1px;
@@ -777,13 +770,6 @@
     font-size: 12.5px;
   }
 
-  /* le point orange au-dessus de la barre */
-  .hero-zone--atelier .at-dot {
-    display: block;
-    left: 20px;
-    top: calc(var(--header-h) + 6px);
-    width: 11px;
-  }
 
   .hero-zone--atelier .at-quarter {
     display: none;
@@ -912,7 +898,7 @@
     box-sizing: border-box;
     padding: calc(1.35 * var(--u)) calc(1.65 * var(--u)) calc(1.65 * var(--u));
     border-radius: calc(2.1 * var(--u));
-    background: linear-gradient(135deg, rgb(255 255 255 / 0.95), rgb(244 248 255 / 0.88));
+    background: linear-gradient(135deg, #ffffff, #f4f8ff);
     box-shadow:
       inset 0 1px 0 #fff,
       inset 0 0 0 1px rgb(255 255 255 / 0.7),

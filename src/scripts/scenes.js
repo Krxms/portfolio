@@ -72,6 +72,14 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
     { sel: '.cta-panel', start: 0.95, end: 0.45 },
   ];
 
+  // Téléphone : les apparitions de texte (titres de section, mots qui s'allument, suites de paragraphe) ne suivent plus le doigt image par image. Le script
+  // écrivait leur progression à chaque image de défilement, ce qui forçait un recalcul de style sur chaque mot et saccadait le défilement. Elles se jouent
+  // maintenant UNE fois, quand l'élément entre dans l'écran (classe .is-in, transition CSS sur opacity et translate, jouées par la carte graphique).
+  const reveal = matchMedia('(max-width: 700px)').matches;
+  const REVEAL_SEL = new Set(['.tile-head', '.manifesto-quote, .about-lead, #cadre .tile-sub', '.manifesto-lead', '.about-follow', '.cs-follow']);
+  const revealEls = [];
+  if (reveal) root.classList.add('has-reveal');
+
   const scenes = [];
   CONFIG.forEach((c) => {
     document.querySelectorAll(c.sel).forEach((el) => {
@@ -84,6 +92,10 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
             ch.style.setProperty('--n', a.length);
           });
         }
+      }
+      if (reveal && REVEAL_SEL.has(c.sel)) {
+        revealEls.push(el);
+        return;
       }
       scenes.push({ el, ref: c.ref ? document.querySelector(c.ref) : null, start: c.start, end: c.end, only: c.only, damp: c.damp, timed: c.timed, trigger: c.trigger, dur: c.dur, t0: null, vis: true, e: null, p: 0 });
     });
@@ -99,6 +111,20 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
     { rootMargin: '25% 0px 25% 0px' },
   );
   scenes.forEach((s) => io.observe(s.el));
+
+  if (revealEls.length) {
+    const rio = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((en) => {
+          if (!en.isIntersecting) return;
+          en.target.classList.add('is-in');
+          rio.unobserve(en.target);
+        });
+      },
+      { rootMargin: '0px 0px -12% 0px', threshold: 0.12 },
+    );
+    revealEls.forEach((el) => rio.observe(el));
+  }
 
   // ---- 3. Carrousels (mobile) : chaque carte sait à quelle distance du centre elle se trouve
   const flows = [...document.querySelectorAll('.cards, .cs-lv-list')];

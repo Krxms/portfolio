@@ -7,7 +7,11 @@
 // Usage : node tools/stoneware-tile.mjs   →   src/assets/riso/stoneware.webp, src/assets/riso/flecks.webp
 import sharp from 'sharp';
 
-const N = 512;
+// S : facteur de résolution (1 = tuile de 512 px, 2 = tuile de 1024 px pour les écrans denses : mêmes mouchetures, deux fois plus fines).
+//   S=2 node tools/stoneware-tile.mjs   →   stoneware@2x.webp, flecks@2x.webp
+const S = Number(process.env.S || 1);
+const SUF = S > 1 ? `@${S}x` : '';
+const N = 512 * S;
 const hash = (x, y, s) => {
   let h = ((((x % N) + N) % N) * 374761393 + (((y % N) + N) % N) * 668265263 + s * 2147483647) | 0;
   h = Math.imul(h ^ (h >>> 13), 1274126177);
@@ -90,7 +94,7 @@ const makeLayer = () => {
       out[i * 4 + 2] = a > 0 ? Math.min(255, Math.round(B[i] / a)) : 0;
       out[i * 4 + 3] = Math.min(255, Math.round(a * 255));
     }
-    await sharp(out, { raw: { width: N, height: N, channels: 4 } }).webp({ quality: 85, alphaQuality: 85 }).toFile(file);
+    await sharp(out, { raw: { width: N, height: N, channels: 4 } }).webp({ quality: S > 1 ? 55 : 85, alphaQuality: S > 1 ? 50 : 85, effort: 5 }).toFile(file);
   };
   return { over, specks, save };
 };
@@ -98,22 +102,23 @@ const makeLayer = () => {
 // ---------- sections claires ----------
 {
   const L = makeLayer();
-  const n1 = valueNoise(32, 11), n2 = valueNoise(64, 12), n3 = valueNoise(128, 13);
+  const n1 = valueNoise(32 * S, 11), n2 = valueNoise(64 * S, 12), n3 = valueNoise(128 * S, 13);
   const h = new Float32Array(N * N);
   for (let i = 0; i < h.length; i++) h[i] = n1[i] * 0.5 + n2[i] * 0.32 + n3[i] * 0.18;
   const at = (x, y) => h[(((y % N) + N) % N) * N + (((x % N) + N) % N)];
   for (let y = 0; y < N; y++) {
     for (let x = 0; x < N; x++) {
-      const e = (at(x - 1, y - 1) - at(x + 1, y + 1)) * 2.4; // éclairé depuis le haut à gauche
+      const e0 = (at(x - 1, y - 1) - at(x + 1, y + 1)) * 2.4 * S;
+      const e = S > 1 ? 0 : e0; // @2x : sans le relief (alpha 7 % au plus, imperceptible) : il pesait 360 Ko sur 435
       if (e > 0) L.over(y * N + x, 255, 252, 244, Math.min(0.07, e * 0.07));
       else L.over(y * N + x, 96, 78, 66, Math.min(0.035, -e * 0.035));
     }
   }
   L.specks({
-    count: 1500,
+    count: 1500 * S * S,
     seed: 0x9e3779b9,
-    rScale: 0.5,
-    rMax: 1.15,
+    rScale: 0.5 * S,
+    rMax: 1.15 * S,
     alpha: [0.25, 0.62],
     inks: [
       [0.58, [150, 92, 66]], // rouille
@@ -122,17 +127,17 @@ const makeLayer = () => {
       [0.08, [206, 112, 86]], // corail
     ],
   });
-  await L.save('src/assets/riso/stoneware.webp');
+  await L.save(`src/assets/riso/stoneware${SUF}.webp`);
 }
 
 // ---------- aplats de couleur (boutons) : des mouchetures claires, bien visibles sur un bleu profond ----------
 {
   const L = makeLayer();
   L.specks({
-    count: 650,
+    count: 650 * S * S,
     seed: 0x51ed270b,
-    rScale: 0.9,
-    rMax: 1.8,
+    rScale: 0.9 * S,
+    rMax: 1.8 * S,
     alpha: [0.3, 0.75],
     inks: [
       [0.55, [255, 238, 200]], // crème
@@ -140,6 +145,6 @@ const makeLayer = () => {
       [0.15, [255, 190, 150]], // pêche
     ],
   });
-  await L.save('src/assets/riso/flecks.webp');
+  await L.save(`src/assets/riso/flecks${SUF}.webp`);
 }
 console.log('ok');

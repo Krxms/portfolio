@@ -19,5 +19,9 @@ for (const [name, file, type] of textures) {
   css += `  ${name}: url('data:${type};base64,${b64}');\n`;
 }
 css += '}\n';
+// écrans denses (téléphones, Retina) : les mêmes tuiles à double résolution (fichiers @2x, chargés seulement là) ; les variables gardent leur nom
+css += '@media (min-resolution: 1.5dppx) {\n  :root {\n';
+for (const [name, file] of textures) css += `    ${name}: url('${file.replace(/(\.[a-z]+)$/, '@2x$1').replace('src/assets', '../assets')}');\n`;
+css += '  }\n}\n';
 await writeFile('src/styles/textures.css', css);
 console.log(`src/styles/textures.css : ${textures.length} textures, ${(total / 1024).toFixed(1)} Ko`);

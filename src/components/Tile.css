@@ -20,7 +20,7 @@
   inset: 0;
   z-index: -1;
   pointer-events: none;
-  background: url('../assets/riso/stoneware.webp') 0 0 / 512px 512px repeat;
+  background: var(--tx-stoneware) 0 0 / 512px 512px repeat;
   opacity: 0.55;
 }
 
@@ -86,8 +86,8 @@
   /* Le grain de risographie de toute la zone, en UNE couche (il y en avait une par tuile, trois en tout, chacune plusieurs milliers de pixels de haut) :
      le grain pré-mélangé (grain-flat) et les mouchetures (speck), à 55 % d'opacité cuite dans les images (tools/grain-flat.mjs), sous le voile sombre. */
   background:
-    url('../assets/riso/grain-flat-zone.webp') 0 0 / 160px 160px repeat,
-    url('../assets/riso/speck-zone.png') 30px 70px / 256px 256px repeat,
+    var(--tx-grain-flat-zone) 0 0 / 160px 160px repeat,
+    var(--tx-speck-zone) 30px 70px / 256px 256px repeat,
     linear-gradient(180deg, rgb(2 12 20 / 0.22), rgb(2 12 20 / 0.16));
   box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.3), inset 0 -1px 0 rgb(255 255 255 / 0.1);
 }

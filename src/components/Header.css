@@ -346,8 +346,8 @@
     z-index: -1;
     pointer-events: none;
     background:
-      url('../assets/riso/grain-flat-zone.webp') 0 0 / 160px 160px repeat,
-      url('../assets/riso/speck-zone.png') 30px 70px / 256px 256px repeat;
+      var(--tx-grain-flat-zone) 0 0 / 160px 160px repeat,
+      var(--tx-speck-zone) 30px 70px / 256px 256px repeat;
   }
 
   .nav-links {

@@ -33,13 +33,14 @@ await send('Page.navigate', { url: 'http://localhost:4399/' });
 await sleep(4500);
 await evalJs(`(async()=>{
   document.documentElement.classList.remove('has-loader');
+  document.documentElement.classList.add('hero-live');
   const s=document.createElement('style');
   s.textContent='html,body{background:transparent!important}.site-header,.hero-zone .hero,.hero-zone ~ *,.at-paper,.at-grid,.at-lift,.at-film,.at-dot{display:none!important}.hero-zone::before,.hero-zone::after,.amb::before,.amb::after,.amb-atelier::before,.amb-atelier::after,.curtain::before,.curtain::after,.pblur,.veil{display:none!important}.hero-zone,.curtain,main,.hero-zone--atelier{background:none!important}';
   document.head.appendChild(s);
   window.scrollTo(0,0);
   await new Promise(r=>setTimeout(r,1500));
 })()`);
-const r = JSON.parse(await evalJs(`JSON.stringify((()=>{const a=document.querySelector('.amb-atelier').getBoundingClientRect();const z=document.querySelector('.hero-zone').getBoundingClientRect();return {amb:[a.left,a.top,a.width,a.height],zone:[z.left,z.top,z.width,z.height],atY:getComputedStyle(document.querySelector('.amb-atelier')).getPropertyValue('--at-y')}})())`));
+const r = JSON.parse(await evalJs(`JSON.stringify((()=>{const ar=document.querySelector('.at-arch').getBoundingClientRect();const a=document.querySelector('.amb-atelier').getBoundingClientRect();const z=document.querySelector('.hero-zone').getBoundingClientRect();return {archRight:ar.right,amb:[a.left,a.top,a.width,a.height],zone:[z.left,z.top,z.width,z.height],atY:getComputedStyle(document.querySelector('.amb-atelier')).getPropertyValue('--at-y')}})())`));
 const shot = await send('Page.captureScreenshot', { format: 'png', clip: { x: r.amb[0], y: r.amb[1], width: r.amb[2], height: r.amb[3], scale: 1 }, captureBeyondViewport: false });
 chrome.kill();
 const png = Buffer.from(shot.result.data, 'base64');
@@ -50,7 +51,9 @@ const w = x1 - x0 + 1; const h = y1 - y0 + 1;
 await sharp(png).extract({ left: x0, top: y0, width: w, height: h }).webp({ quality: 86, alphaQuality: 92, effort: 6 }).toFile('src/assets/hero-composition.webp');
 // position en vw, relative à .amb-atelier (à 1440 px, --at-y vaut 0 : voir HeroAtelier.css)
 const f = (v) => +(v / SCALE / VW * 100).toFixed(4);
-const meta = { left: f(x0), top: f(y0), width: f(w), aspect: +(w / h).toFixed(5), atY: r.atY, pxW: w, pxH: h };
+// décalage vers la droite : le bord droit de l'arche bleue se pose au bord droit de l'écran (l'ombre de l'arche est rognée par le bord)
+const shift = +((VW - r.archRight) / VW * 100).toFixed(4);
+const meta = { shift, left: +(f(x0) + shift).toFixed(4), top: f(y0), width: f(w), aspect: +(w / h).toFixed(5), atY: r.atY, pxW: w, pxH: h };
 writeFileSync('src/assets/hero-composition.json', JSON.stringify(meta, null, 2));
 console.log(JSON.stringify(meta), JSON.stringify(r.amb));
 process.exit(0);

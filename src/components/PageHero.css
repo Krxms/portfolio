@@ -94,8 +94,9 @@
 .ph-kicker::before {
   content: '';
   flex: none;
-  width: 44px;
-  height: 4px;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
   background: #ee8532;
 }
 

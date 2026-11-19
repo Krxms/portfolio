@@ -35,7 +35,7 @@ html .ah + .tile {
    l'entête a exactement la couleur des sections qui suivent : plus d'arête entre les deux. */
 .ah .at-paper {
   background:
-    url('../assets/riso/stoneware.webp') 0 0 / 512px 512px repeat,
+    var(--tx-stoneware) 0 0 / 512px 512px repeat,
     radial-gradient(ellipse 72% 40% at 50% -6%, #ffffff 0%, rgb(255 255 255 / 0) 100%),
     linear-gradient(180deg, #f3f6fa 0%, #eef2f7 30%, #f1f2ee 68%, #f5f3ea 100%);
   /* fondu : le bas du papier s'estompe sur le fond de la page (le crème et le grès des sections qui suivent) au lieu de s'arrêter net. Même effet sur
@@ -53,6 +53,14 @@ html .ah + .tile {
       url('../assets/riso/grain-soft-mini.webp') 0 0 / 48px 48px repeat,
       url('../assets/riso/speck-mini.png') 30px 70px / 128px 128px repeat;
     background-blend-mode: soft-light, normal;
+  }
+
+  /* après le premier affichage (classe tx-in), le vrai grain pré-mélangé et les vraies mouchetures, comme sur ordinateur (matiere.css) */
+  html.tx-in .ah .ah-panel.panel-blue--riso::after {
+    background:
+      var(--tx-grain-flat-zone) 0 0 / 160px 160px repeat,
+      var(--tx-speck-zone) 30px 70px / 256px 256px repeat;
+    background-blend-mode: normal;
   }
 
   /* le béton de l'arche du portrait est entièrement recouvert par la photo : inutile de le télécharger sur téléphone */
@@ -101,10 +109,11 @@ html .ah + .tile {
 .ah-kicker::before {
   content: '';
   flex: none;
-  width: 44px;
-  height: 4px;
-  /* alignée sur la première ligne quand l'intitulé passe sur plusieurs lignes */
-  margin-top: 0.6em;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  /* centrée sur la première ligne quand l'intitulé passe sur plusieurs lignes */
+  margin-top: calc(0.65em - 5.5px);
   background: #ee8532;
 }
 
