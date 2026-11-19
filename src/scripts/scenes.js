@@ -148,8 +148,8 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
     ticking = false;
     const dt = Math.min(0.05, Math.max(0.001, (now - last) / 1000));
     last = now;
-    const k = 1 - Math.exp(-dt * 6.5); // vitesse de rattrapage : souple, sans traîner
-    const kh = 1 - Math.exp(-dt * 9);
+    const k = 1 - Math.exp(-dt * 11); // vitesse de rattrapage : le défilement est déjà lissé par Lenis, un second lissage lent ajoutait du retard
+    const kh = 1 - Math.exp(-dt * 16);
     const vh = innerHeight;
     const y = scrollY;
     let moving = false;

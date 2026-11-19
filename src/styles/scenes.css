@@ -238,9 +238,15 @@
   position: relative;
   overflow: hidden;
   border-radius: inherit;
+  /* Safari ignore parfois le rayon d'un overflow:hidden quand l'enfant est transformé : un clip-path et une couche isolée forcent le découpage */
+  clip-path: inset(0 round 999px 999px var(--radius-xl) var(--radius-xl));
+  isolation: isolate;
+  transform: translateZ(0);
 }
 
 .has-scenes .portrait-frame img {
+  /* le cadre découpe : l'image garde des coins droits (son rayon, mis à l'échelle par scale, ne coïncidait plus avec celui du liseré) */
+  border-radius: 0 !important;
   scale: 1.14;
   translate: 0 calc((var(--p, 0.5) - 0.5) * -9%);
 }

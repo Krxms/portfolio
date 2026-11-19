@@ -38,8 +38,8 @@ if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches && window.mat
   import('lenis').then(({ default: Lenis }) => {
     const root = document.documentElement;
     const lenis = new Lenis({
-      lerp: 0.09, // plus petit : plus de glisse
-      wheelMultiplier: 0.95,
+      lerp: 0.15, // plus petit : plus de glisse, mais aussi plus de retard ; les scènes ont déjà leur propre lissage
+      wheelMultiplier: 1.1,
       smoothWheel: true,
       anchors: { offset: -96 }, // les liens vers une ancre (#qui-suis-je) glissent aussi, sous l'en-tête
     });
