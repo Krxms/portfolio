@@ -42,6 +42,10 @@ const { title, text, label, href = '/contact/' } = Astro.props;
   </div>
 </section>
 
+{/* VERRE LIQUIDE D'ORIGINE (archivé, désactivé). Ce script posait la classe .lg-on sur le panneau et lui donnait une lentille SVG (Chromium
+   seulement) ; la règle .cta-panel.glass--dark.lg-on est archivée, elle aussi, dans FinalCta.css. Pour le réactiver, voir le commentaire
+   « VERRE LIQUIDE D'ORIGINE » de FinalCta.css, puis remplacer ce commentaire par le script :
+
 <script>
   // Liquid glass (Chromium seulement) : sous le bord du panneau, le fond est courbé comme à travers une lentille. Deux cartes de
   // déplacement (une horizontale dans le canal rouge, une verticale dans le vert) tirent les pixels du bord vers l'intérieur ; elles sont
@@ -97,3 +101,4 @@ const { title, text, label, href = '/contact/' } = Astro.props;
     build();
   }
 </script>
+*/}
