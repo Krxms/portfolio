@@ -413,7 +413,7 @@
 /* Sous la bande bleue, « Un parcours créatif, devenu technique. » arrive plus près : moins de vide entre l'ouverture et le récit (ordinateur) */
 @media (min-width: 901px) {
   #parcours.tile {
-    padding-top: clamp(56px, 6vw, 88px);
+    padding-top: var(--rhythm-link);
   }
 
   #parcours .tile-head {

@@ -251,17 +251,27 @@
   white-space: nowrap;
 }
 
-/* Mobile et tablette : le libellé « Voir mon parcours » reste visible avec sa flèche (une flèche seule n'a pas de nom lisible par l'oeil).
-   La rangée peut passer à la ligne : les zones d'abord, puis le lien. */
+/* Mobile et tablette : la rangée reste sur une seule ligne, les zones à gauche et le lien réduit à son rond fléché, à droite (le libellé « Voir mon
+   parcours » reste dans le lien, masqué à l'œil mais lu par les lecteurs d'écran). */
 @media (max-width: 860px) {
   .about-zones-row {
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    row-gap: 6px;
+    flex-wrap: nowrap;
+    justify-content: space-between;
   }
 
   .about-zones-row .link-under {
-    min-height: 48px;
+    min-width: 44px;
+    min-height: 44px;
+    justify-content: center;
+  }
+
+  .about-zones-row .link-under-text {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
   }
 }
 

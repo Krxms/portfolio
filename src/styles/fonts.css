@@ -1,33 +1,40 @@
 /* Polices auto-hébergées (sous-ensemble latin, licence OFL) : aucun appel à Google Fonts. Les fichiers vivent dans public/fonts/ pour
-   avoir des URL stables, préchargées dans BaseLayout. Avec le préchargement et font-display: swap, la police de secours est remplacée
-   avant le premier rendu utile, ce qui évite le décalage de mise en page (CLS). */
+   avoir des URL stables, préchargées dans BaseLayout. font-display: block : le texte attend la vraie police (quelques dizaines de millisecondes,
+   les fichiers sont préchargés) au lieu de s'afficher d'abord dans une police de secours un peu plus petite, puis de grandir à l'échange. */
 @font-face {
   font-family: 'Be Vietnam Pro';
   font-style: normal;
   font-weight: 400;
-  font-display: swap;
+  font-display: block;
   src: url('/fonts/be-vietnam-pro-400.woff2') format('woff2');
 }
 @font-face {
   font-family: 'Be Vietnam Pro';
   font-style: normal;
   font-weight: 500;
-  font-display: swap;
+  font-display: block;
   src: url('/fonts/be-vietnam-pro-500.woff2') format('woff2');
 }
 @font-face {
   font-family: 'Be Vietnam Pro';
   font-style: normal;
   font-weight: 600;
-  font-display: swap;
+  font-display: block;
   src: url('/fonts/be-vietnam-pro-600.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Be Vietnam Pro';
+  font-style: normal;
+  font-weight: 700;
+  font-display: block;
+  src: url('/fonts/be-vietnam-pro-700.woff2') format('woff2');
 }
 
 @font-face {
   font-family: 'Bricolage Grotesque';
   font-style: normal;
   font-weight: 200 800;
-  font-display: swap;
+  font-display: block;
   src: url('/fonts/bricolage-grotesque-200-800.woff2') format('woff2');
 }
 

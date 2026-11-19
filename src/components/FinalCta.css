@@ -87,6 +87,18 @@
     0 34px 60px -30px rgb(0 0 0 / 0.6);
 }
 
+/* Téléphone : le verre d'origine (flou d'arrière-plan réel, sans la lentille SVG) : sur mobile, il ne pèse pas assez pour justifier le verre sablé, et il
+   garde le disque et l'arche floutés sous le panneau. */
+@media (max-width: 700px) {
+  .cta-panel.glass--dark {
+    background:
+      linear-gradient(145deg, rgb(255 255 255 / 0.16), rgb(255 255 255 / 0.03) 42%, rgb(255 255 255 / 0.08)),
+      rgb(8 22 80 / 0.1);
+    -webkit-backdrop-filter: blur(7px) saturate(175%) brightness(1.05);
+    backdrop-filter: blur(7px) saturate(175%) brightness(1.05);
+  }
+}
+
 /* ======================================================================================================================================
    VERRE LIQUIDE D'ORIGINE (archivé, désactivé) : un vrai backdrop-filter (flou 7 px, saturation 175 %, luminosité 1,05) qui floute et sature
    le disque orange et l'arche bleue passant sous le panneau, avec, sur Chromium, une lentille SVG qui courbe ce qu'on voit sous le bord
