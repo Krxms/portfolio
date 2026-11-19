@@ -1,0 +1,37 @@
+---
+import './Reviews.css';
+import R from './R.astro';
+import { reviews, googleReviewsUrl, googleWriteReviewUrl } from '../data/reviews';
+import LinkUnder from './LinkUnder.astro';
+
+/* Le bloc d'avis : rien n'est affiché tant que la liste d'avis est vide (voir src/data/reviews.ts). */
+const stars = (n: number) => '★'.repeat(n) + '☆'.repeat(5 - n);
+---
+
+{
+  reviews.length > 0 && (
+    <section class="tile tile--light" id="avis" aria-labelledby="avis-title">
+      <div class="wrap tile-inner">
+        <header class="tile-head">
+          <h2 id="avis-title">Ils en parlent</h2>
+          <p class="tile-sub">Les mots de mes clients, tels qu’ils les ont écrits.</p>
+        </header>
+        <ul class="rv" role="list">
+          {reviews.map((r) => (
+            <li class="rv-card">
+              <p class="rv-stars" role="img" aria-label={`${r.rating} sur 5`}>{stars(r.rating)}</p>
+              <blockquote>« <R t={r.text} /> »</blockquote>
+              <p class="rv-who"><b>{r.author}</b> · {r.date} · {r.source}</p>
+            </li>
+          ))}
+        </ul>
+        {(googleReviewsUrl || googleWriteReviewUrl) && (
+          <p class="rv-links">
+            {googleReviewsUrl && <LinkUnder href={googleReviewsUrl} label="Voir tous les avis sur Google" external />}
+            {googleWriteReviewUrl && <LinkUnder href={googleWriteReviewUrl} label="Laisser un avis" external />}
+          </p>
+        )}
+      </div>
+    </section>
+  )
+}

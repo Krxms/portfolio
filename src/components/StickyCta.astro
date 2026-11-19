@@ -1,0 +1,59 @@
+---
+import './StickyCta.css';
+import R from './R.astro';
+
+interface Props {
+  href?: string;
+  /** libellé du bouton, adapté à la page (Création : « Parlons de votre site », Refonte : « Faire évoluer mon site »…) */
+  label?: string;
+}
+const { href = '/contact/', label = 'Parlons de votre projet' } = Astro.props;
+---
+
+<div class="sticky-cta" data-sticky-cta>
+  <a class="btn btn-primary" href={href}><R t={label} /></a>
+</div>
+
+<script>
+  // Visible tant qu'aucune zone marquée data-sticky-watch (hero, CTA final) n'est à l'écran.
+  const bar = document.querySelector<HTMLElement>('[data-sticky-cta]');
+  const watched = document.querySelectorAll('[data-sticky-watch]:not(.hero), .site-footer');
+  if (bar && 'IntersectionObserver' in window && watched.length) {
+    const inView = new Set<Element>();
+    // La Hero reste épinglée derrière les sections (effet rideau) : elle est « à l'écran » tant qu'on n'a pas défilé d'un
+    // demi-écran, pas tant qu'elle intersecte la fenêtre.
+    let heroShown = scrollY < innerHeight * 0.5;
+    const update = () => bar.classList.toggle('is-visible', !heroShown && inView.size === 0);
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => (e.isIntersecting ? inView.add(e.target) : inView.delete(e.target)));
+        update();
+      },
+      { rootMargin: '0px 0px 96px 0px' },
+    );
+    watched.forEach((el) => io.observe(el));
+    addEventListener(
+      'scroll',
+      () => {
+        const shown = scrollY < innerHeight * 0.5;
+        if (shown !== heroShown) {
+          heroShown = shown;
+          update();
+        }
+      },
+      { passive: true },
+    );
+    update();
+    // accueil : le grain du bouton de l'en-tête apparaît avec le défilement (voir Header.css)
+    const hdr = document.querySelector<HTMLElement>('[data-header]');
+    if (hdr && document.querySelector('.hero')) {
+      let queued = false;
+      const paint = () => {
+        queued = false;
+        hdr.style.setProperty('--cta-p', Math.min(1, scrollY / (innerHeight * 0.7)).toFixed(3));
+      };
+      addEventListener('scroll', () => { if (!queued) { queued = true; requestAnimationFrame(paint); } }, { passive: true });
+      paint();
+    }
+  }
+</script>

@@ -1,0 +1,304 @@
+/* Tuiles pleine largeur : un titre court centré, une ligne de sous-titre, des actions, puis le contenu. Les tuiles claires laissent voir
+   le papier crème de la page ; les tuiles sombres portent leur propre dégradé (la couleur que le verre réfracte), plus du grain. */
+.tile {
+  position: relative;
+  isolation: isolate;
+  padding-block: clamp(72px, 11vw, 148px);
+  scroll-margin-top: 100px;
+}
+
+/* Tuile claire : la crème de la page, rien d'autre */
+.tile--light {
+  background: transparent;
+}
+
+/* Effet « grès » : le grain d'une céramique émaillée, mouchetée de fer, avec un très léger relief (tools/stoneware-tile.mjs). Il
+   uniformise les sections claires (le pied de page porte le même, voir Footer.css) ; la tuile est raccordable, l'intensité se règle avec l'opacité. */
+.tile--light::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: url('../assets/riso/stoneware.webp') 0 0 / 512px 512px repeat;
+  opacity: 0.55;
+}
+
+/* Performance : le verre dépoli des grandes zones sombres n'utilise PAS backdrop-filter. Flouter un dégradé déjà
+   parfaitement lisse ne change rien à l'œil, mais recalculer ce flou sur plusieurs milliers de pixels à chaque
+   image de défilement rendait le scroll lourd. Le rendu laiteux vient du voile, du grain et de l'arête lumineuse.
+
+   Tuile sombre : bords nets. Dessous, un dégradé très fluide (::before) ; dessus, un verre dépoli (::after)
+   = voile laiteux, flou, grain et arête lumineuse. */
+.tile--dark {
+  color: #fff;
+}
+
+.tile--dark::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  background: var(--tile-mesh) center / cover no-repeat, #06151c;
+}
+
+.tile--dark::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    var(--grain-soft) 0 0 / 160px 160px repeat,
+    linear-gradient(180deg, rgb(2 12 20 / 0.34), rgb(2 12 20 / 0.26));
+  background-blend-mode: soft-light, normal;
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.4), inset 0 -1px 0 rgb(255 255 255 / 0.14);
+}
+
+/* Zone sombre commune : deux tuiles sombres qui se suivent partagent UN seul fond (dégradé fluide + verre
+   dépoli), donc aucune séparation entre elles. Les tuiles à l'intérieur n'ont plus de fond propre. */
+.dark-zone {
+  position: relative;
+  isolation: isolate;
+  color: #fff;
+}
+
+.dark-zone::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  /* même matière que la section identité : un dégradé marine vers bleu klein, fixe et sans texture */
+  background:
+    radial-gradient(60% 34% at 82% 10%, rgb(46 98 230 / 0.34), transparent 72%),
+    radial-gradient(52% 30% at 8% 58%, rgb(16 130 180 / 0.26), transparent 72%),
+    linear-gradient(180deg, #081742 0%, #0b2170 52%, #0a1a58 100%);
+}
+
+.dark-zone::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgb(2 12 20 / 0.22), rgb(2 12 20 / 0.16));
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.3), inset 0 -1px 0 rgb(255 255 255 / 0.1);
+}
+
+/* Dans la zone commune, l'appel final remonte vers « Qui suis-je » : moins de vide entre les deux */
+.dark-zone > .tile:not(:last-child) {
+  padding-bottom: clamp(24px, 4vw, 56px);
+}
+
+.dark-zone > .tile + .tile {
+  padding-top: clamp(8px, 2vw, 24px);
+}
+
+.dark-zone > .tile.tile--dark::before {
+  content: none;
+}
+
+/* Grain de risographie de toute la zone : le même que sur les affiches, avec les manques d'encre (le papier qui perce) et le grain de
+   pellicule. Il est identique d'une tuile à l'autre, donc sans arête entre elles. Il vit ici, et non dans scenes.css, parce que la
+   page Création partage cette zone sans charger les scènes de l'accueil. */
+.dark-zone > .tile.tile--dark::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    var(--grain-soft) 0 0 / 160px 160px repeat,
+    var(--speck) 30px 70px / 256px 256px repeat;
+  background-blend-mode: soft-light, normal;
+  opacity: 0.55;
+  box-shadow: none;
+}
+
+.tile--mesh-a::before {
+  --tile-mesh: url('../assets/mesh/dark-a.webp');
+}
+
+.tile--mesh-b::before {
+  --tile-mesh: url('../assets/mesh/dark-b.webp');
+}
+
+.tile-inner {
+  position: relative;
+  z-index: 1;
+}
+
+.tile-head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: clamp(40px, 6vw, 80px);
+}
+
+.tile-label {
+  margin-bottom: var(--space-3);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--signal-deep);
+}
+
+.tile--dark .tile-label {
+  color: var(--cream);
+}
+
+.tile h2 {
+  max-width: 18ch;
+  font-size: clamp(2.2rem, 5.6vw, 4.4rem);
+  font-weight: 600;
+  line-height: 1.04;
+  letter-spacing: -0.024em;
+  text-wrap: balance;
+}
+
+.tile-sub {
+  max-width: 44ch;
+  /* un retour à la ligne dans le sous-titre est respecté (deux lignes voulues) */
+  white-space: pre-line;
+  margin-top: var(--space-4);
+  font-size: clamp(1.1rem, 2vw, 1.4rem);
+  line-height: 1.45;
+  color: var(--ink-soft);
+}
+
+.tile--dark .tile-sub {
+  color: rgb(255 255 255 / 0.94);
+}
+
+.tile-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-2) var(--space-6);
+  margin-top: var(--space-5);
+}
+
+.tile-actions:empty {
+  display: none;
+}
+
+/* Lien de fin de tuile, façon "En savoir plus ›" */
+.more {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  font-size: clamp(1rem, 1.6vw, 1.15rem);
+  font-weight: 500;
+  color: var(--signal-deep);
+  text-decoration: none;
+}
+
+.more::after {
+  content: '›';
+  font-size: 1.3em;
+  line-height: 1;
+  transition: transform 0.35s var(--spring);
+}
+
+.more:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.more:hover::after {
+  transform: translateX(3px);
+}
+
+.tile--dark .more {
+  color: var(--cream);
+}
+
+@media (max-width: 560px) {
+  .tile {
+    padding-block: 56px;
+  }
+
+  .tile-head {
+    margin-bottom: 28px;
+  }
+
+  .tile h2 {
+    font-size: clamp(1.9rem, 8.6vw, 2.4rem);
+  }
+
+  .tile-sub {
+    margin-top: var(--space-3);
+    font-size: 1.04rem;
+  }
+
+  .tile-actions {
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-3);
+    margin-top: var(--space-4);
+  }
+
+  .tile-actions > * {
+    width: min(100%, 300px);
+    justify-content: center;
+  }
+}
+
+/* ---------- Rythme vertical commun à toutes les pages ----------
+   Les mêmes blocs ont les mêmes respirations partout (accueil, pages de service, À propos) : un seul endroit pour les régler.
+   - deux sections claires qui se suivent : un écart court (le rythme des pages de service) au lieu de deux marges pleines qui s'additionnent ;
+   - la dernière tuile avant l'appel final (FAQ…) finit sur la même marge ;
+   - l'appel final : de l'air au-dessus (le disque orange de l'encart dépasse par le haut) et en dessous (avant le pied de page). */
+:root {
+  --rhythm-link: clamp(40px, 5vw, 72px);
+  --rhythm-before-cta: clamp(56px, 7vw, 96px);
+  --rhythm-cta-top: clamp(96px, 11vw, 160px);
+  --rhythm-cta-bottom: clamp(96px, 11vw, 160px);
+}
+
+.tile--light + .tile--light {
+  padding-top: var(--rhythm-link);
+}
+
+.tile--light:has(+ .tile--light) {
+  padding-bottom: var(--rhythm-link);
+}
+
+.dark-zone > .tile:has(+ .cta-final) {
+  padding-bottom: var(--rhythm-before-cta);
+}
+
+.dark-zone > .tile.tile--dark.cta-final {
+  padding-top: var(--rhythm-cta-top);
+  padding-bottom: var(--rhythm-cta-bottom);
+}
+
+/* Accueil, sur téléphone : les titres des offres et de la FAQ sont ferrés à gauche, sur l'axe des cartes et des questions qu'ils annoncent
+   (le titre de la méthode suit la même règle, voir ExplodedProcess.css). Les autres têtes de section restent centrées. */
+@media (max-width: 700px) {
+  #services .tile-head,
+  #faq .tile-head {
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  #services .tile-head h2,
+  #faq .tile-head h2,
+  #services .tile-sub,
+  #faq .tile-sub {
+    max-width: none;
+    margin-inline: 0;
+  }
+}
+
+/* Accueil, ordinateur : « Un site pour votre activité. / Des interfaces pour vos métiers. » tient sur deux lignes (une phrase par ligne), sans « métiers. » seul */
+@media (min-width: 901px) {
+  #services .tile-head h2 {
+    max-width: none;
+  }
+}

@@ -1,0 +1,47 @@
+.rv {
+  list-style: none;
+  margin: 0 auto;
+  padding: 0;
+  max-width: 1080px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+  gap: clamp(20px, 3vw, 36px);
+}
+
+.rv-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: clamp(22px, 3vw, 32px);
+  border-radius: var(--radius-xl);
+  background: rgb(255 255 255 / 0.86);
+  box-shadow: inset 0 1px 0 #fff, 0 0 0 1px rgb(18 32 43 / 0.07), 6px 6px 0 rgb(238 133 50 / 0.9), 0 34px 44px -30px rgb(18 32 43 / 0.45);
+}
+
+.rv-stars {
+  margin: 0;
+  font-size: 18px;
+  letter-spacing: 0.12em;
+  color: #c9650f;
+}
+
+.rv-card blockquote {
+  margin: 0;
+  font-size: 1.1rem;
+  line-height: 1.55;
+  color: var(--ink);
+}
+
+.rv-who {
+  margin: auto 0 0;
+  font-size: 14px;
+  color: var(--ink-soft);
+}
+
+.rv-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-5);
+  margin: var(--space-6) 0 0;
+}

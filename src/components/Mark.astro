@@ -1,0 +1,89 @@
+---
+import './Mark.css';
+import underlineArrowRaw from '../assets/marks/underline-arrow.svg?raw';
+import timelineArrowRaw from '../assets/marks/timeline-arrow.svg?raw';
+import receiveArrowRaw from '../assets/marks/receive-arrow.svg?raw';
+import circleRaw from '../assets/marks/circle.svg?raw';
+
+/* Tracés faits main.
+   - « Propres » (OWN) : dessinés par Antoine, SVG repris tels quels depuis src/assets/marks/ et simplement
+     recolorés (fill: currentColor). À remplacer en déposant un nouveau fichier du même nom.
+   - Autres : tracés provisoires générés en code (bords légèrement rongés par le filtre #ink de BaseLayout),
+     à remplacer au fur et à mesure par ses dessins. */
+interface Props {
+  kind:
+    | 'underline-arrow'
+    | 'timeline'
+    | 'receive'
+    | 'underline'
+    | 'circle'
+    | 'arrow'
+    | 'flow'
+    | 'rule'
+    | 'sparkle'
+    | 'loop'
+    | 'lens';
+  /** Se dessine une fois au chargement (révélation de gauche à droite) */
+  draw?: boolean;
+  class?: string;
+}
+
+const { kind, draw = false, class: cls } = Astro.props;
+
+const OWN: Record<string, string> = {
+  'underline-arrow': underlineArrowRaw,
+  timeline: timelineArrowRaw,
+  receive: receiveArrowRaw,
+  circle: circleRaw,
+};
+
+// Tracés propres qu'on étire à la largeur voulue sans garder le ratio du dessin (le CSS donne la hauteur)
+const STRETCH = new Set(['underline-arrow', 'circle']);
+
+const shapes: Record<string, { box: string; stretch?: boolean; d: string[] }> = {
+  underline: {
+    box: '0 0 320 22',
+    stretch: true,
+    d: ['M4 14 C 58 5, 118 18, 178 9 S 284 8, 316 12', 'M12 19 C 96 12, 204 20, 300 15'],
+  },
+  flow: { box: '0 0 300 28', d: ['M3 15 C 60 9, 122 19, 184 12 S 258 14, 289 14', 'M266 3 L290 14 L268 25'] },
+  rule: { box: '0 0 300 10', stretch: true, d: ['M3 6 C 52 2, 92 9, 142 5 S 232 3, 297 6'] },
+  circle: {
+    box: '0 0 220 96',
+    stretch: true,
+    d: ['M52 16 C 108 -2, 198 10, 210 46 C 220 84, 128 94, 74 86 C 20 78, 2 46, 34 24 C 60 8, 118 4, 170 14'],
+  },
+  arrow: { box: '0 0 150 96', d: ['M6 78 C 26 28, 74 12, 128 36', 'M104 22 L129 37 L108 60'] },
+  sparkle: { box: '0 0 64 64', d: ['M32 5 C 33 20, 38 28, 58 32 C 40 36, 34 44, 32 59 C 30 44, 24 36, 6 32 C 26 28, 31 20, 32 5'] },
+  loop: { box: '0 0 64 64', d: ['M52 22 C 44 8, 22 7, 13 23 C 5 38, 14 54, 31 56 C 44 58, 54 49, 56 38', 'M47 42 L56 38 L59 29'] },
+  lens: { box: '0 0 64 64', d: ['M29 9 C 42 7, 54 18, 51 31 C 48 43, 36 51, 24 47 C 11 43, 7 28, 14 18 C 18 12, 24 10, 31 10', 'M43 43 L58 58'] },
+};
+
+const own = OWN[kind];
+const classes = ['mark', own && 'mark--own', `mark--${kind}`, draw && 'mark--draw', cls].filter(Boolean).join(' ');
+// SVG propre : on retire width/height pour que le CSS pilote la taille, et on ajoute classes et accessibilité
+const ownMarkup = own
+  ? own
+      .trim()
+      .replace(/<svg\s/, `<svg class="${classes}" aria-hidden="true" focusable="false" ${STRETCH.has(kind) ? 'preserveAspectRatio="none" ' : ''}`)
+      .replace(/\s(width|height)="[\d.]+"/g, (m, attr, offset) => (offset < 120 ? '' : m))
+  : '';
+const s = own ? null : shapes[kind];
+---
+
+{
+  own ? (
+    <Fragment set:html={ownMarkup} />
+  ) : (
+    <svg
+      class={classes}
+      viewBox={s!.box}
+      preserveAspectRatio={s!.stretch ? 'none' : 'xMidYMid meet'}
+      fill="none"
+      aria-hidden="true"
+      focusable="false"
+    >
+      {s!.d.map((d) => <path d={d} />)}
+    </svg>
+  )
+}

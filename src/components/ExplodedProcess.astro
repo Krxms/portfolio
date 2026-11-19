@@ -1,0 +1,278 @@
+---
+import './ExplodedProcess.css';
+import R from './R.astro';
+import { rich, plain as plainText } from '../lib/fmt';
+
+interface Props {
+  title: string;
+  sub: string;
+  steps: { title: string; text: string; gets?: string }[];
+  after?: string;
+  /** une précision affichée sous les étapes, avant `after` (sur l'accueil : comment la démarche s'adapte aux interfaces de logiciels) */
+  note?: string;
+  /** « à plat » : les étapes seules, sans la vue éclatée ni la section collée à l'écran (pages de service) */
+  plain?: boolean;
+}
+const { title, sub, steps, after, note, plain = false } = Astro.props;
+
+/* Une couleur par étape, dans la palette de la Hero : marine, bleu klein, bleu ciel, orange (et un vert lagon entre les deux quand il y a cinq étapes). */
+const colors = steps.length === 5 ? ['#13247c', '#1f45d6', '#3f78e0', '#1f8f7a', '#d4620e'] : ['#13247c', '#1f45d6', '#3f78e0', '#d4620e'];
+// les puces de la vue éclatée reprennent les titres des étapes, pour que la scène et la liste disent la même chose
+const names = steps.map((s) => plainText(s.title));
+---
+
+{/* Vue éclatée : une interface en quatre couches qui se désolidarisent au défilement, une couche par étape. La section est haute (la
+    scène reste collée à l'écran pendant qu'on défile) ; un script ne fait qu'écrire la progression (--p) et l'étape active. Sans
+    script, avec « réduire les animations » ou sur petit écran : la vue éclatée est montrée à plat, les quatre étapes sont lisibles
+    toutes ensemble. Tout le texte est dans le HTML. */}
+<section class:list={['xp', plain && 'xp--plain']} id="methode" aria-labelledby="methode-title">
+  <div class="xp-sticky">
+    <div class="wrap xp-inner">
+      <div class="xp-copy">
+        <div class="xp-head">
+          <h2 id="methode-title"><R t={title} /></h2>
+          <p class="xp-sub"><R t={sub} /></p>
+        </div>
+        <ol class="xp-steps" role="list">
+          {
+            steps.map((s, i) => (
+              <li class="xp-step" style={`--num-c:${colors[i]}`} data-i={i}>
+                <span class="xp-num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+                <div class="xp-step-main">
+                  <h3><R t={s.title} /></h3>
+                  <div class="xp-step-body">
+                    <div class="xp-step-in">
+                      <p><R t={s.text} /></p>
+                      {s.gets && (
+                        <p class="xp-gets">
+                          <span>Vous recevez&nbsp;:</span> <R t={s.gets} />
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+
+      {!plain && (
+      <div class="xp-visual" aria-hidden="true">
+        <div class="xp-scene">
+          <div class="xp-stack">
+            {/* 1. Échange : une conversation */}
+            <div class="xp-layer xp-l1" style="--i:0">
+              <i class="xp-fill"></i>
+              <span class="xp-chip" style={`--c:${colors[0]}`}>01 · {names[0]}</span>
+              <div class="l1-bub l1-a"></div>
+              <div class="l1-bub l1-b"></div>
+              <div class="l1-bub l1-c"></div>
+              <i class="l1-dot l1-d1"></i><i class="l1-dot l1-d2"></i>
+            </div>
+            {/* 2. Cadrer : le plan et une note */}
+            <div class="xp-layer xp-l2" style="--i:1">
+              <i class="xp-fill"></i>
+              <span class="xp-chip" style={`--c:${colors[1]}`}>02 · {names[1]}</span>
+              <div class="l2-root"></div>
+              <div class="l2-link"></div>
+              <div class="l2-kids"><i></i><i></i><i></i></div>
+              <div class="l2-score"><b></b></div>
+              <div class="l2-bars"><s></s><s></s><s></s></div>
+            </div>
+            {/* 3. Conception : la matière, la couleur, les formes */}
+            <div class="xp-layer xp-l3" style="--i:2">
+              <i class="xp-fill"></i>
+              <span class="xp-chip" style={`--c:${colors[2]}`}>03 · {names[2]}</span>
+              <div class="l3-aa">Aa</div>
+              <div class="l3-pal"><i></i><i></i><i></i><i></i></div>
+              <div class="l3-shapes"><b></b><u></u></div>
+            </div>
+            {/* 4. Réalisation : le site, en ligne */}
+            <div class="xp-layer xp-l4" style="--i:3">
+              <i class="xp-fill"></i>
+              <span class="xp-chip" style={`--c:${colors[3]}`}>04 · {names[3]}</span>
+              <div class="l4-bar"><i></i><i></i><i></i></div>
+              <div class="l4-art"><b></b><u></u></div>
+              <div class="l4-lines"><s></s><s></s><s></s><em></em></div>
+              <div class="l4-live"><i></i>En ligne</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      )}
+    </div>
+  </div>
+</section>
+
+{note && <p class="proc-after xp-after xp-note" set:html={rich(note)} />}
+{after && (
+  <p class="proc-after xp-after" set:html={rich(after)} />
+)}
+
+<script>
+  // Progression de la vue éclatée : p va de 0 (couches empilées) à 1 (fin de la section). Les 8 premiers pour cent déploient les couches,
+  // puis chaque étape occupe 23 % du défilement. Un seul calcul par image, seulement pendant qu'on défile ; tout le dessin est en CSS.
+  const xp = document.querySelector<HTMLElement>('.xp:not(.xp--plain)');
+  if (xp) {
+    const live = matchMedia('(min-width: 901px) and (prefers-reduced-motion: no-preference)');
+    // petit écran : la vue s'ouvre pendant qu'on défile jusqu'aux étapes, et se referme si l'on remonte (pas de section collée).
+    // Tout est pensé pour la fluidité sur téléphone : positions mesurées une fois (puis à chaque redimensionnement), aucune lecture de la
+    // mise en page pendant le défilement, et la transformation de chaque couche écrite directement (aucune variable CSS héritée, donc
+    // aucun recalcul de style sur les enfants), seulement quand la valeur a vraiment changé, et seulement près de l'écran.
+    const small = matchMedia('(max-width: 900px) and (prefers-reduced-motion: no-preference)');
+    const scene = xp.querySelector<HTMLElement>('.xp-scene');
+    const list = xp.querySelector<HTMLElement>('.xp-steps');
+    const stack = xp.querySelector<HTMLElement>('.xp-stack');
+    const fills = [...xp.querySelectorAll<HTMLElement>('.xp-fill')];
+    let sceneDoc = 0; // position de la scène dans le document
+    let gapDoc = 0; // distance entre la scène et la liste des étapes
+    let layerGap = 0; // écart de profondeur entre deux couches une fois éclatées
+    let near = false;
+    let lastS = -1;
+    // si le navigateur sait piloter une animation par le défilement (voir ExplodedProcess.css), le script n'a rien à faire sur petit écran
+    const cssDriven = typeof CSS !== 'undefined' && CSS.supports('animation-timeline: view()');
+
+    // ordinateur : hauteur à réserver pour le texte de l'étape ouverte (la plus longue des quatre). Le bloc a ainsi la même hauteur à
+    // chaque étape : rien ne bouge quand une étape s'ouvre. À remesurer quand la largeur change ou que les polices arrivent.
+    const measureBody = () => {
+      if (!live.matches) return;
+      let tallest = 0;
+      xp.querySelectorAll<HTMLElement>('.xp-step-in').forEach((el) => {
+        tallest = Math.max(tallest, el.scrollHeight);
+      });
+      xp.style.setProperty('--xp-body', Math.ceil(tallest + 12) + 'px');
+    };
+
+    const measureSmall = () => {
+      // rien à mesurer sur ordinateur, ni quand le navigateur pilote la vue par le défilement en CSS : on évite un calcul de mise en page au chargement
+      if (!scene || !list || !stack || !small.matches || cssDriven) return;
+      sceneDoc = scene.getBoundingClientRect().top + scrollY;
+      gapDoc = list.getBoundingClientRect().top - scene.getBoundingClientRect().top;
+      layerGap = stack.offsetWidth * 0.3;
+      lastS = -1;
+    };
+
+    const applyS = (s: number) => {
+      if (!stack) return;
+      stack.style.transform = 'translateY(' + (s * 70).toFixed(2) + '%) rotateX(58deg) rotateZ(' + (-30 - s * 12).toFixed(2) + 'deg)';
+      layers.forEach((el, i) => {
+        el.style.transform = 'translateZ(' + (s * i * layerGap + i).toFixed(1) + 'px)';
+      });
+      fills.forEach((el) => (el.style.opacity = (1 - s).toFixed(3)));
+    };
+
+    const clearInline = () => {
+      lastS = -1;
+      stack?.style.removeProperty('transform');
+      layers.forEach((el) => el.style.removeProperty('transform'));
+      fills.forEach((el) => el.style.removeProperty('opacity'));
+    };
+    const steps = [...xp.querySelectorAll<HTMLElement>('.xp-step')];
+    const layers = [...xp.querySelectorAll<HTMLElement>('.xp-layer')];
+    let raf = 0;
+    let lastStep = '';
+
+    const setStep = (s: number) => {
+      const v = String(s);
+      if (v === lastStep) return;
+      lastStep = v;
+      xp.dataset.step = v;
+      steps.forEach((el, i) => el.classList.toggle('is-on', i === s));
+      layers.forEach((el, i) => {
+        el.classList.toggle('is-on', i === s);
+        el.classList.toggle('is-done', i < s);
+      });
+      steps.forEach((el, i) => el.classList.toggle('is-done', i < s));
+    };
+
+    const update = () => {
+      raf = 0;
+      if (!live.matches) {
+        xp.removeAttribute('data-live');
+        xp.style.removeProperty('--p');
+        setStep(-1);
+        if (small.matches && cssDriven) {
+          if (lastS !== -2) {
+            clearInline();
+            lastS = -2;
+          }
+          return;
+        }
+        if (small.matches && scene && list) {
+          if (!near) return;
+          // 0 quand la scène entre dans l'écran, 1 quand les étapes arrivent à 75 % de la hauteur : la vue est alors tout à fait éclatée
+          const sceneTop = sceneDoc - scrollY;
+          const from = innerHeight * 0.95;
+          const t = (from - sceneTop) / (from - (innerHeight * 0.75 - gapDoc));
+          const s = Math.min(1, Math.max(0, t));
+          if (Math.abs(s - lastS) >= 0.003 || s === 0 || s === 1) {
+            if (s !== lastS) applyS(s);
+            lastS = s;
+          }
+        } else {
+          clearInline();
+        }
+        return;
+      }
+      clearInline();
+      xp.setAttribute('data-live', '');
+      const r = xp.getBoundingClientRect();
+      const total = r.height - innerHeight;
+      const p = total > 0 ? Math.min(1, Math.max(0, -r.top / total)) : 0;
+      xp.style.setProperty('--p', p.toFixed(4));
+      setStep(p < 0.08 ? -1 : Math.min(3, Math.floor((p - 0.08) / 0.23)));
+    };
+
+    const request = () => {
+      if (!raf) raf = requestAnimationFrame(update);
+    };
+    // un clic sur une étape y mène directement (la souris évite de tourner la molette de cran en cran)
+    steps.forEach((el, i) => {
+      el.addEventListener('click', () => {
+        if (!xp.hasAttribute('data-live')) return;
+        const top = xp.getBoundingClientRect().top + scrollY;
+        const total = xp.offsetHeight - innerHeight;
+        scrollTo({ top: top + total * (0.08 + 0.23 * (i + 0.5)), behavior: 'smooth' });
+      });
+    });
+    addEventListener('scroll', request, { passive: true });
+    addEventListener('resize', () => {
+      measureBody();
+      measureSmall();
+      request();
+    });
+    addEventListener('load', () => {
+      measureBody();
+      measureSmall();
+      request();
+    });
+    live.addEventListener('change', () => {
+      measureBody();
+      request();
+    });
+    small.addEventListener('change', () => {
+      measureSmall();
+      request();
+    });
+    // la vue ne calcule rien tant que la section est loin de l'écran ; en s'en approchant, on mesure une dernière fois
+    new IntersectionObserver(
+      ([en]) => {
+        near = en.isIntersecting;
+        if (near) {
+          measureSmall();
+          request();
+        }
+      },
+      { rootMargin: '60% 0px 60% 0px' },
+    ).observe(xp);
+    document.fonts?.ready.then(() => {
+      measureBody();
+      measureSmall();
+      request();
+    });
+    measureBody();
+    measureSmall();
+    update();
+  }
+</script>

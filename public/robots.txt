@@ -1,4 +1,29 @@
+# Le site est public et fait pour être lu, y compris par les moteurs de réponse et les assistants IA : tout est autorisé.
+# Les robots d'IA sont nommés pour que cette autorisation soit explicite (recherche, citation et entraînement).
+# Seule exception : l'API du formulaire de contact, qui n'a rien à indexer.
+
 User-agent: *
+# OpenAI
+User-agent: GPTBot
+User-agent: OAI-SearchBot
+User-agent: ChatGPT-User
+# Anthropic
+User-agent: ClaudeBot
+User-agent: Claude-SearchBot
+User-agent: Claude-User
+# Perplexity
+User-agent: PerplexityBot
+User-agent: Perplexity-User
+# Google (Gemini et recherche IA) et Apple
+User-agent: Google-Extended
+User-agent: Applebot
+User-agent: Applebot-Extended
+# Autres : Mistral (Le Chat), Microsoft/Bing, DuckDuckGo
+User-agent: MistralAI-User
+User-agent: bingbot
+User-agent: DuckAssistBot
 Allow: /
+Disallow: /api/
+Disallow: /erreurs/
 
 Sitemap: https://antoinebruneau.fr/sitemap-index.xml

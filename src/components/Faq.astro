@@ -1,0 +1,83 @@
+---
+import './Faq.css';
+import R from './R.astro';
+
+interface Props {
+  items: { q: string; a: string }[];
+}
+const { items } = Astro.props;
+---
+
+<div class="faq">
+  {
+    items.map((item) => (
+      <details name="faq">
+        <summary>
+          <span class="faq-q"><R t={item.q} /></span>
+          <span class="faq-icon" aria-hidden="true"><i></i></span>
+        </summary>
+        <p><R t={item.a} /></p>
+      </details>
+    ))
+  }
+</div>
+
+<script>
+  // Une seule question reste ouverte à la fois (le comportement natif de l'attribut « name », repris ici pour contrôler le défilement).
+  //
+  // Pas d'animation de hauteur : elle force le navigateur à recalculer la mise en page de toute la page et à repeindre les grands fonds
+  // de la zone sombre à chaque image, ce qui faisait trembler le texte et le bouton sur téléphone. La mise en page change donc d'un
+  // coup ; seuls le fondu du texte et la rotation du « + » sont animés, car ils ne déclenchent aucun recalcul. Sans JavaScript ou avec
+  // « réduire les animations », les questions s'ouvrent et se ferment instantanément.
+  const items = [...document.querySelectorAll<HTMLDetailsElement>('.faq details')];
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Quand une question située au-dessus de celle qu'on touche se referme, tout ce qui est dessous remonte. Le défilement est corrigé une
+  // seule fois, dans la même image : la question touchée reste exactement sous le doigt.
+  const keepStill = (anchor: HTMLElement, top0: number) => {
+    const dy = anchor.getBoundingClientRect().top - top0;
+    if (Math.abs(dy) < 0.5) return;
+    const lenis = (window as unknown as { __lenis?: { scrollTo: (y: number, o: { immediate: boolean }) => void } }).__lenis;
+    if (lenis) lenis.scrollTo(scrollY + dy, { immediate: true });
+    else scrollBy({ top: dy, behavior: 'instant' });
+  };
+
+  if (items.length && !reduce) {
+    items.forEach((d) => {
+      d.removeAttribute('name');
+      const summary = d.querySelector('summary') as HTMLElement;
+      const text = d.querySelector(':scope > p') as HTMLElement | null;
+      let fade: Animation | null = null;
+
+      // fermeture immédiate (aussi utilisée pour les autres questions quand on en ouvre une)
+      const shut = () => {
+        fade?.cancel();
+        fade = null;
+        d.open = false;
+        d.dataset.open = 'false';
+      };
+
+      const show = () => {
+        fade?.cancel();
+        d.open = true;
+        d.dataset.open = 'true';
+        // le texte apparaît en fondu, sans se déplacer
+        fade = text ? text.animate({ opacity: [0, 1] }, { duration: 380, delay: 60, easing: 'ease-out', fill: 'backwards' }) : null;
+      };
+
+      summary.addEventListener('click', (e) => {
+        e.preventDefault();
+        // fermeture : tout de suite, sans attendre la fin d'un fondu (le bouton « + » revient en même temps)
+        if (d.open) {
+          shut();
+          return;
+        }
+        const top0 = summary.getBoundingClientRect().top;
+        items.forEach((o) => o !== d && o.dispatchEvent(new CustomEvent('faq:shut')));
+        show();
+        keepStill(summary, top0);
+      });
+      d.addEventListener('faq:shut', shut);
+    });
+  }
+</script>

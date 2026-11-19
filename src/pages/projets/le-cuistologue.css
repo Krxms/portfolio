@@ -1,0 +1,1435 @@
+/* Page projet « Le Cuistologue ».
+   La palette du Cuistologue (rose, orange, sauge, crème, mauve, vert profond, terracotta) n'apparaît que dans
+   les pièces présentées (logo, spécimen, palette, affiches, cartes, flyer). L'interface — navigation, boutons, fonds de
+   section — reste celle du portfolio. */
+
+/* ---------- Entête : les écrans du projet dans le panneau bleu de « À propos » ----------
+   Le texte (surtitre, titre, chapô, pastilles) reprend les règles .ah-* de AboutHero.css ; ici, seulement les écrans et le lien vers le site. */
+.pj-live {
+  margin: 6px 0 0;
+}
+
+.pj-stage {
+  position: relative;
+  padding-block: 4px clamp(40px, 7vw, 64px);
+}
+
+/* l'écran d'ordinateur de l'entête : une capture au format d'un portable (16 / 10), de largeur mesurée ; le téléphone garde la hauteur d'un téléphone */
+.pj-stage .laptop {
+  max-width: 540px;
+  margin-inline: auto;
+}
+
+.pj-stage .phone--float {
+  right: 2%;
+  width: clamp(84px, 19%, 132px);
+}
+
+@media (min-width: 901px) {
+  /* plus de place pour les écrans, un titre un peu plus petit : « identité, site et print. » tient sur une ligne */
+  .pj-panel {
+    grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+  }
+
+  .pj-panel .pj-stage {
+    align-self: center;
+    padding-block: clamp(36px, 4vw, 56px);
+    padding-right: clamp(0px, 2vw, 24px);
+  }
+}
+
+/* Écran d'ordinateur : cadre sobre, simple liseré sombre */
+.laptop {
+  --pad: clamp(6px, 1vw, 12px);
+  padding: var(--pad) var(--pad) 0;
+  border-radius: var(--radius-md) var(--radius-md) var(--radius-xs) var(--radius-xs);
+  background: #0e1a22;
+  box-shadow: 0 40px 70px -36px rgb(2 8 40 / 0.7);
+}
+
+.laptop img {
+  width: 100%;
+  height: auto;
+  /* emboîtement : rayon du cadre − son padding */
+  border-radius: max(var(--radius-xs), calc(var(--radius-md) - var(--pad))) max(var(--radius-xs), calc(var(--radius-md) - var(--pad))) 0 0;
+}
+
+.laptop::after {
+  content: '';
+  display: block;
+  height: clamp(8px, 1.2vw, 14px);
+  margin: 0 -4%;
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
+  background: linear-gradient(#cfd5d8, #9aa3a8);
+}
+
+.phone {
+  --pad: clamp(5px, 0.7vw, 8px);
+  margin: 0;
+  padding: var(--pad);
+  border-radius: var(--radius-lg);
+  background: #0e1a22;
+  box-shadow: 0 30px 50px -28px rgb(8 20 30 / 0.6);
+}
+
+.phone img {
+  width: 100%;
+  height: auto;
+  /* emboîtement : rayon du cadre − son padding */
+  border-radius: calc(var(--radius-lg) - var(--pad));
+}
+
+/* le téléphone passe devant l'ordinateur : l'ombre dure orange du site */
+.phone--float {
+  position: absolute;
+  right: -1%;
+  bottom: clamp(20px, 4vw, 36px);
+  width: clamp(88px, 22%, 170px);
+  transform: rotate(3deg);
+  box-shadow: 4px 4px 0 #ee8532, 0 30px 50px -28px rgb(2 8 40 / 0.7);
+}
+
+/* ---------- Les mesures : le panneau bleu du site, les chiffres en grand ---------- */
+.pj-results {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: clamp(24px, 3.4vw, 48px);
+}
+
+.pj-results h3 {
+  margin: 0 0 var(--space-5);
+  font-size: clamp(1.2rem, 1.8vw, 1.45rem);
+  letter-spacing: -0.02em;
+  color: #fff;
+}
+
+.pj-metrics {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: var(--space-5) var(--space-4);
+}
+
+.pj-metric-value {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 3.8vw, 3.2rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.021em;
+  color: #ffc79b;
+  font-variant-numeric: tabular-nums;
+}
+
+.pj-metric-value small {
+  margin-left: 4px;
+  font-family: var(--font-body);
+  font-size: 0.42em;
+  font-weight: 500;
+  letter-spacing: 0;
+  color: rgb(255 255 255 / 0.75);
+}
+
+.pj-metric-label {
+  margin: var(--space-3) 0 0;
+  font-size: 14.5px;
+  font-weight: 600;
+  line-height: 1.35;
+  color: #fff;
+}
+
+.pj-metric-note {
+  margin: 2px 0 0;
+  font-size: 13px;
+  color: rgb(255 255 255 / 0.78);
+}
+
+.pj-results-foot {
+  margin: var(--space-5) 0 0;
+  max-width: 78ch;
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: rgb(255 255 255 / 0.8);
+}
+
+
+/* ---------- Mesures et pistes de lecture : petits écrans ---------- */
+@media (max-width: 1000px) {
+  .pj-metrics {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .pj-results {
+    padding: 22px 18px;
+  }
+
+  .pj-metric-value {
+    font-size: 2.2rem;
+  }
+
+  .pj-brief .pj-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .pj-brief .pj-metrics li:nth-child(n) {
+    grid-column: auto;
+  }
+}
+
+
+/* ---------- Le projet : une phrase et la fiche à gauche, les mesures à droite ----------
+   Même grille que la vitrine de l'accueil. La fiche donne les faits, un par ligne, sous des filets fins, comme les listes des pages de service. */
+.pj-brief-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(36px, 4.4vw, 72px);
+  align-items: start;
+}
+
+.pj-brief-copy .tile-label {
+  margin: 0 0 var(--space-3);
+}
+
+.pj-brief-copy h2 {
+  max-width: 15ch;
+  margin: 0;
+  font-size: clamp(2.1rem, 3.8vw, 3.3rem);
+  line-height: 1.04;
+  letter-spacing: -0.021em;
+  text-wrap: balance;
+}
+
+.pj-brief-lead {
+  max-width: 44ch;
+  margin: clamp(22px, 2.6vw, 32px) 0 0;
+  font-size: clamp(1.15rem, 1.6vw, 1.35rem);
+  font-weight: 500;
+  line-height: 1.5;
+  color: var(--ink);
+  text-wrap: pretty;
+}
+
+.pj-facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: var(--space-5);
+  margin: clamp(28px, 3.4vw, 44px) 0 0;
+}
+
+.pj-facts > div {
+  padding-block: 14px;
+  border-top: 1px solid rgb(18 32 43 / 0.16);
+}
+
+.pj-facts dt {
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--signal-deep);
+}
+
+.pj-facts dd {
+  margin: 4px 0 0;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.45;
+  color: var(--ink);
+}
+
+/* les choix : trois lignes, un titre en gras et une phrase, sous des filets fins comme la fiche */
+.pj-choices {
+  list-style: none;
+  margin: clamp(22px, 2.6vw, 32px) 0 0;
+  padding: 0;
+  max-width: 52ch;
+}
+
+.pj-choices li {
+  padding-block: 10px;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--ink-soft);
+}
+
+.pj-choices strong {
+  color: var(--ink);
+}
+
+/* ce qui a été livré : un bloc replié, ouvert au clic ou au clavier */
+.pj-delivered {
+  margin-top: var(--space-4);
+  border-top: 1px solid rgb(18 32 43 / 0.16);
+}
+
+.pj-delivered summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 48px;
+  padding-block: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ink);
+  cursor: pointer;
+  list-style: none;
+}
+
+.pj-delivered summary::-webkit-details-marker {
+  display: none;
+}
+
+.pj-delivered summary::after {
+  content: '+';
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 1;
+  transition: transform 0.2s ease;
+}
+
+.pj-delivered[open] summary::after {
+  transform: rotate(45deg);
+}
+
+.pj-delivered summary:focus-visible {
+  outline: 2px solid var(--signal-deep);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+.pj-delivered ul {
+  margin: 0 0 var(--space-3);
+  padding-left: 1.1em;
+}
+
+.pj-delivered li {
+  padding-block: 4px;
+  font-size: 15.5px;
+  line-height: 1.5;
+  color: var(--ink-soft);
+}
+
+.pj-brief .pj-results {
+  max-width: none;
+  margin: 0;
+}
+
+.pj-brief .pj-metrics {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+.pj-brief .pj-metrics li:nth-child(-n + 3) {
+  grid-column: span 2;
+}
+
+.pj-brief .pj-metrics li:nth-child(n + 4) {
+  grid-column: span 3;
+}
+
+@media (min-width: 901px) {
+  .pj-brief-grid {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    align-items: start;
+  }
+
+  /* la colonne de gauche est plus haute (chapô, choix, fiche, livrables) : les mesures restent à l'écran pendant qu'on la lit */
+  .pj-brief .pj-results {
+    position: sticky;
+    top: 120px;
+  }
+}
+
+/* ---------- En-têtes des sections de fin (identité, imprimés) : alignés à gauche, un surtitre et un titre ---------- */
+.pj-sec-head {
+  margin: 0 0 clamp(28px, 4vw, 56px);
+}
+
+.pj-sec-head .tile-label {
+  margin: 0 0 var(--space-2);
+}
+
+.pj-sec-head h2 {
+  margin: 0;
+  font-size: clamp(2rem, 3.6vw, 3.1rem);
+  line-height: 1.05;
+  letter-spacing: -0.021em;
+}
+
+/* ---------- Les imprimés : une bande qui défile de côté ----------
+   Ordinateur : la bande est épinglée et avance de côté pendant qu'on descend. Téléphone : on la fait glisser, la pièce suivante dépasse.
+   Les pièces sont posées sur le papier de la page, avec une ombre de pose ; une ligne de légende sous chacune, rien de plus. */
+.pj-print {
+  overflow: clip;
+}
+
+.pj-strip-track {
+  position: relative;
+}
+
+.pj-strip-track.is-pinned .pj-strip-stage {
+  position: sticky;
+  top: var(--header-h);
+  height: calc(100svh - var(--header-h));
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: clamp(8px, 2vh, 24px);
+}
+
+.pj-strip-track.is-pinned .pj-sec-head {
+  margin-bottom: 0;
+}
+
+.pj-strip {
+  overflow-x: auto;
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+}
+
+.pj-strip::-webkit-scrollbar {
+  display: none;
+}
+
+.pj-strip:focus-visible {
+  outline: 3px solid var(--signal-deep);
+  outline-offset: -3px;
+}
+
+.pj-strip-track.is-pinned .pj-strip {
+  overflow: visible;
+  scroll-snap-type: none;
+}
+
+.pj-strip-row {
+  --piece-h: min(52svh, 520px);
+  list-style: none;
+  margin: 0;
+  padding: 12px max(var(--edge), calc((100vw - 1360px) / 2)) 24px;
+  display: flex;
+  align-items: flex-end;
+  gap: clamp(28px, 4vw, 64px);
+  width: max-content;
+}
+
+.pj-strip-track.is-pinned .pj-strip-row {
+  will-change: transform;
+}
+
+.pj-print-item {
+  flex: none;
+  scroll-snap-align: center;
+}
+
+.pj-print-item--poster img {
+  width: auto;
+  height: var(--piece-h);
+}
+
+.pj-zoom-btn.pj-flyer {
+  display: flex;
+  gap: 14px;
+}
+
+.pj-flyer img {
+  width: auto;
+  height: var(--piece-h);
+}
+
+/* les trois cartes côte à côte, recto au-dessus et verso dessous : chaque colonne s'agrandit d'un clic */
+.pj-cards {
+  display: flex;
+  gap: clamp(14px, 1.6vw, 22px);
+}
+
+.pj-zoom-btn.pj-card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.pj-card img {
+  width: auto;
+  height: calc((var(--piece-h) - 14px) / 2);
+}
+
+.pj-piece img {
+  display: block;
+  border-radius: var(--radius-xs);
+  box-shadow:
+    0 1px 2px rgb(18 32 43 / 0.12),
+    0 24px 40px -22px rgb(18 32 43 / 0.5);
+}
+
+
+.pj-print-cap {
+  margin: 16px 0 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+
+/* le bouton qui agrandit : une loupe au survol ou au focus */
+.pj-zoom-btn {
+  position: relative;
+  display: block;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: zoom-in;
+}
+
+.pj-zoom-btn::after {
+  content: '';
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='10.5' cy='10.5' r='6'/%3E%3Cpath d='M15 15l4.5 4.5M10.5 8v5M8 10.5h5'/%3E%3C/svg%3E") center / 20px no-repeat,
+    rgb(14 26 34 / 0.82);
+  opacity: 0;
+  scale: 0.85;
+  transition:
+    opacity 0.3s var(--ease-out),
+    scale 0.3s var(--ease-out);
+}
+
+.pj-zoom-btn:hover::after,
+.pj-zoom-btn:focus-visible::after {
+  opacity: 1;
+  scale: 1;
+}
+
+.pj-zoom-btn:focus-visible {
+  outline: 3px solid var(--signal-deep);
+  outline-offset: 4px;
+}
+
+
+/* ---------- Le site, de haut en bas ----------
+   La scène bleue de la vitrine de l'accueil (même fond, mêmes formes en béton), une fenêtre de navigateur et un téléphone. Épinglée pendant
+   environ trois hauteurs d'écran : les deux écrans font défiler les captures pleine page du site. Les captures gardent leur largeur exacte
+   dans la fenêtre : rien n'est recadré ni déformé. Les pastilles, au-dessus, reprennent celles du périmètre de la vitrine. */
+.pj-visit-tile {
+  overflow: clip;
+}
+
+.pj-visit-track {
+  position: relative;
+}
+
+.pj-visit-track.is-pinned {
+  height: 380svh;
+}
+
+.pj-visit-pin {
+  padding-block: clamp(40px, 6vw, 88px);
+}
+
+.pj-visit-track.is-pinned .pj-visit-pin {
+  position: sticky;
+  top: var(--header-h);
+  height: calc(100svh - var(--header-h));
+  padding-block: clamp(12px, 3vh, 32px);
+}
+
+.pj-visit {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(14px, 2.6vh, 28px);
+  height: 100%;
+}
+
+.pj-visit-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px 32px;
+  flex-wrap: wrap;
+}
+
+.pj-visit-head .tile-label {
+  margin: 0 0 var(--space-2);
+}
+
+.pj-visit-head h2 {
+  margin: 0;
+  font-size: clamp(2rem, 3.6vw, 3.1rem);
+  line-height: 1.05;
+  letter-spacing: -0.021em;
+}
+
+.pj-visit-steps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0 0 4px;
+  list-style: none;
+}
+
+.pj-visit-steps button {
+  min-height: 40px;
+  padding: 6px 16px;
+  border: 1px solid rgb(26 60 191 / 0.4);
+  border-radius: 999px;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  color: var(--signal-deep);
+  background: rgb(255 255 255 / 0.55);
+  cursor: pointer;
+  transition:
+    background-color 0.35s var(--ease-out),
+    color 0.35s var(--ease-out),
+    border-color 0.35s var(--ease-out);
+}
+
+.pj-visit-steps button:hover {
+  background: #fff;
+}
+
+.pj-visit-steps button[aria-pressed='true'] {
+  border-color: #14205f;
+  color: #fff;
+  background: #14205f;
+}
+
+.pj-visit-steps button:focus-visible {
+  outline: 3px solid var(--signal-deep);
+  outline-offset: 2px;
+}
+
+.pj-visit-stage {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  isolation: isolate;
+  container-type: size;
+  border-radius: var(--radius-xl);
+  background:
+    var(--grain-soft) 0 0 / 160px 160px repeat,
+    radial-gradient(60% 80% at 88% 100%, rgb(24 156 176 / 0.42), rgb(24 156 176 / 0) 64%),
+    radial-gradient(55% 80% at 14% 0%, rgb(86 92 214 / 0.4), rgb(86 92 214 / 0) 62%),
+    linear-gradient(160deg, #1a2a78 0%, #14205f 46%, #0b1a4a 100%);
+  background-blend-mode: soft-light, normal, normal;
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.12), 0 30px 60px -36px rgb(11 26 74 / 0.55);
+}
+
+.pj-visit-track:not(.is-pinned) .pj-visit-stage {
+  flex: none;
+  height: min(78svh, 760px);
+}
+
+.pj-visit-stage::before,
+.pj-visit-stage::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  mix-blend-mode: soft-light;
+}
+
+.pj-visit-stage::before {
+  background: url('../../assets/riso/concrete-tile.webp') 0 0 / 256px 256px repeat;
+  opacity: 0.4;
+}
+
+.pj-visit-stage::after {
+  background: var(--grain-soft) 0 0 / 160px 160px repeat;
+  opacity: 0.22;
+}
+
+.pj-visit-stage .concrete {
+  --concrete: 0.18;
+}
+
+.pj-shape {
+  position: absolute !important;
+  z-index: 0;
+  display: block;
+}
+
+.pj-shape--disc {
+  right: -5cqw;
+  top: -14cqh;
+  width: 30cqw;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 24%, rgb(255 214 170 / 0.55), rgb(255 214 170 / 0) 42%), linear-gradient(150deg, #ff9a58, #f2733c 60%, #e0602a);
+}
+
+.pj-shape--arch {
+  left: 3cqw;
+  bottom: 0;
+  width: 15cqw;
+  height: 52cqh;
+  border-radius: 999px 999px 0 0;
+  background: linear-gradient(172deg, #d8f3ec 0%, #a6d4ca 55%, #82bdb0 100%);
+}
+
+.pj-shape--quarter {
+  left: 0;
+  top: 0;
+  width: 13cqw;
+  aspect-ratio: 1;
+  border-radius: 0 0 100% 0;
+  background: linear-gradient(150deg, #e3edff, #b4cdfa);
+}
+
+/* la fenêtre de navigateur */
+.pj-browser {
+  position: absolute;
+  z-index: 1;
+  left: 9cqw;
+  top: 8cqh;
+  bottom: 8cqh;
+  width: 63cqw;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 0 0 1px rgb(255 255 255 / 0.2), 0 40px 70px -30px rgb(4 10 56 / 0.7);
+}
+
+.pj-bar {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  height: 36px;
+  padding-inline: 14px;
+  background: #eef1f7;
+  box-shadow: inset 0 -1px 0 rgb(18 32 43 / 0.08);
+}
+
+.pj-bar i {
+  width: 9px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #c3cada;
+}
+
+.pj-bar span {
+  margin-inline: auto;
+  padding: 3px 18px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink-soft);
+  background: #fff;
+}
+
+.pj-view {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  background: #fbf8f7;
+}
+
+.pj-view:focus {
+  outline: none;
+}
+
+.pj-view img {
+  display: block;
+  width: 100%;
+  height: auto;
+  will-change: transform;
+}
+
+/* le téléphone : coque de 7 px, écran arrondi d'autant de moins que la coque */
+.pj-phone {
+  position: absolute;
+  z-index: 2;
+  right: 8cqw;
+  top: 12cqh;
+  height: 80cqh;
+  aspect-ratio: 9 / 19.5;
+  margin: 0;
+  display: flex;
+  padding: 7px;
+  border-radius: 34px;
+  background: #0b1250;
+  box-shadow: 0 0 0 1px rgb(255 255 255 / 0.18), 0 40px 70px -30px rgb(4 10 56 / 0.8);
+}
+
+.pj-phone .pj-view {
+  border-radius: 27px;
+}
+
+/* sans animation : chaque écran se fait défiler lui-même */
+.pj-visit-track:not(.is-pinned) .pj-view {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+}
+
+/* ---------- L'identité, en bento ----------
+   Deux tuiles côte à côte (le logo sur le papier crème des imprimés, la police sur leur vert profond), puis la palette en une rangée d'aplats,
+   chacun avec son nom et sa valeur. Mêmes rayons et mêmes écarts que les autres planches du site. */
+.pj-id {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(12px, 1.6vw, 20px);
+}
+
+.pj-id-logo,
+.pj-spec {
+  margin: 0;
+  min-height: clamp(320px, 34vw, 480px);
+  border-radius: var(--radius-lg);
+}
+
+.pj-id-logo {
+  display: grid;
+  place-items: center;
+  padding: clamp(24px, 4vw, 56px);
+  background: #fbf9f7;
+  box-shadow: inset 0 0 0 1px rgb(18 32 43 / 0.06), 0 30px 50px -40px rgb(18 32 43 / 0.45);
+}
+
+.pj-id-logo img {
+  width: min(100%, 520px);
+  height: auto;
+  mix-blend-mode: darken;
+}
+
+.pj-spec {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--space-5);
+  padding: clamp(24px, 3.4vw, 48px);
+  color: #fbf8f7;
+  background: #253d4a;
+}
+
+.pj-spec-big {
+  margin: 0;
+  font-family: 'Poppins', var(--font-body);
+  font-weight: 800;
+  font-size: clamp(2.4rem, 5.4vw, 5.4rem);
+  line-height: 0.98;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+
+.pj-spec-big span {
+  color: #f1b76b;
+}
+
+.pj-spec-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0;
+  font-family: 'Inter', var(--font-body);
+  font-size: 14px;
+  opacity: 0.85;
+}
+
+/* Les deux palettes, en bento (grille de 12 colonnes). Logo et imprimés : grandes tuiles, la première sur deux rangées. Site web : tuiles plus basses,
+   avec l'usage en étiquette. Mêmes rayons que les tuiles du logo et des polices. */
+.pj-pals {
+  grid-column: 1 / -1;
+  display: grid;
+  gap: clamp(22px, 3vw, 40px);
+  /* les deux palettes dans un seul encart */
+  padding: clamp(14px, 2vw, 28px);
+  border-radius: var(--radius-xl, 28px);
+  background: rgb(255 255 255 / 0.82);
+  /* la carte du site : papier clair, filet, ombre dure orange */
+  box-shadow: inset 0 0 0 1px rgb(18 32 43 / 0.06), 4px 4px 0 #ee8532, 0 30px 50px -38px rgb(18 32 43 / 0.45);
+}
+
+.pj-bento {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  grid-template-rows: auto;
+  gap: clamp(10px, 1.4vw, 18px);
+}
+
+.pj-bento--print {
+  grid-auto-rows: minmax(clamp(130px, 13vw, 190px), auto);
+}
+
+.pj-bento--web {
+  grid-auto-rows: minmax(clamp(104px, 9vw, 130px), auto);
+}
+
+.pj-bento-title {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+/* la barre orange du site devant le titre */
+.pj-bento-title::before {
+  content: '';
+  flex: none;
+  width: 28px;
+  height: 3px;
+  background: #ee8532;
+}
+
+.pj-tile {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 3px;
+  padding: clamp(16px, 2vw, 28px);
+  border-radius: var(--radius-lg);
+  color: var(--t);
+  background: var(--c);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.4), inset 0 0 0 1px rgb(18 32 43 / 0.08);
+}
+
+/* le grain du site, très léger, sur chaque aplat */
+.pj-tile::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  pointer-events: none;
+  background: var(--grain-soft) 0 0 / 160px 160px repeat;
+  mix-blend-mode: soft-light;
+  opacity: 0.55;
+}
+
+.pj-tile-name {
+  font-family: var(--font-display);
+  font-size: clamp(1.05rem, 1.6vw, 1.45rem);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.pj-tile-hex {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  font-variant-numeric: tabular-nums;
+}
+
+.pj-tile-use {
+  max-width: 36ch;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+/* logo et imprimés : le rose, la teinte la plus vive, occupe deux rangées */
+.pj-tile--rose {
+  grid-column: span 5;
+  grid-row: span 2;
+}
+
+.pj-tile--rose .pj-tile-name {
+  font-size: clamp(1.5rem, 2.8vw, 2.4rem);
+  letter-spacing: -0.02em;
+}
+
+.pj-tile--eau {
+  grid-column: span 4;
+}
+
+.pj-tile--sauge {
+  grid-column: span 3;
+}
+
+.pj-tile--mauve {
+  grid-column: span 4;
+}
+
+.pj-tile--orange {
+  grid-column: span 3;
+}
+
+/* site web : trois tuiles puis deux */
+.pj-tile--creme,
+.pj-tile--peche,
+.pj-tile--ocre {
+  grid-column: span 4;
+}
+
+.pj-tile--anthracite,
+.pj-tile--ardoise {
+  grid-column: span 6;
+}
+
+/* ---------- L'agrandissement ----------
+   Plein écran, sur le papier du site flouté (pas de voile sombre) ; la pièce au centre avec son ombre de pose ; en bas, une barre de verre
+   en pastille : légende, recto et verso, précédente et suivante, fermer. Pastilles dans une pastille : tous les rayons sont pleins. */
+.pj-lb {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  color: var(--ink);
+  background: transparent;
+}
+
+.pj-lb:focus {
+  outline: none;
+}
+
+.pj-lb[open] {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  animation: pj-lb-in 0.3s var(--ease-out);
+}
+
+.pj-lb::backdrop {
+  background: rgb(245 243 234 / 0.8);
+  -webkit-backdrop-filter: blur(22px) saturate(120%);
+  backdrop-filter: blur(22px) saturate(120%);
+}
+
+.pj-lb[open]::backdrop {
+  animation: pj-lb-in 0.3s var(--ease-out);
+}
+
+@keyframes pj-lb-in {
+  from {
+    opacity: 0;
+  }
+}
+
+.pj-lb-stage {
+  display: grid;
+  place-items: center;
+  min-height: 0;
+  padding: clamp(16px, 5vh, 56px) clamp(16px, 5vw, 72px) 0;
+}
+
+.pj-lb-stage img {
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: calc(100dvh - clamp(16px, 5vh, 56px) - 104px);
+  border-radius: var(--radius-xs);
+  box-shadow:
+    0 2px 4px rgb(18 32 43 / 0.12),
+    0 50px 90px -40px rgb(18 32 43 / 0.55);
+}
+
+.pj-lb-bar {
+  justify-self: center;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 20px 16px calc(20px + env(safe-area-inset-bottom));
+  padding: 6px;
+  border-radius: 999px;
+}
+
+.pj-lb-cap {
+  margin: 0 8px 0 16px;
+  font-size: 14.5px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.pj-lb-faces {
+  display: flex;
+  padding: 3px;
+  border-radius: 999px;
+  background: rgb(18 32 43 / 0.07);
+}
+
+.pj-lb-faces[hidden] {
+  display: none;
+}
+
+.pj-lb-faces button {
+  min-height: 38px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 999px;
+  font: inherit;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--ink-soft);
+  background: transparent;
+  cursor: pointer;
+  transition:
+    background-color 0.25s var(--ease-out),
+    color 0.25s var(--ease-out);
+}
+
+.pj-lb-faces button[aria-pressed='true'] {
+  color: var(--ink);
+  background: #fff;
+  box-shadow: 0 2px 6px -2px rgb(18 32 43 / 0.25);
+}
+
+.pj-lb-nav {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.pj-lb-count {
+  min-width: 3.4em;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+  color: var(--ink-soft);
+}
+
+.pj-lb-ico {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgb(255 255 255 / 0.75);
+  cursor: pointer;
+  transition: background-color 0.25s var(--ease-out);
+}
+
+.pj-lb-ico:hover {
+  background: #fff;
+}
+
+.pj-lb-ico svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.pj-lb-close {
+  background: var(--ink);
+}
+
+.pj-lb-close:hover {
+  background: #26394a;
+}
+
+.pj-lb-close svg {
+  stroke: #fff;
+}
+
+.pj-lb button:focus-visible {
+  outline: 3px solid var(--signal-deep);
+  outline-offset: 2px;
+}
+
+/* ---------- Tablette et téléphone ---------- */
+@media (max-width: 900px) {
+  .pj-id {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .pj-id-logo,
+  .pj-spec {
+    min-height: 260px;
+  }
+
+  /* bento en deux colonnes : la première tuile pleine largeur, les autres deux par deux */
+  .pj-bento {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .pj-tile--rose,
+  .pj-tile--eau,
+  .pj-tile--sauge,
+  .pj-tile--mauve,
+  .pj-tile--orange,
+  .pj-tile--creme,
+  .pj-tile--peche,
+  .pj-tile--anthracite,
+  .pj-tile--ardoise {
+    grid-column: span 1;
+    grid-row: auto;
+  }
+
+  .pj-tile--rose,
+  .pj-tile--ocre {
+    grid-column: 1 / -1;
+  }
+
+  .pj-tile--rose {
+    min-height: 170px;
+  }
+
+  .pj-strip-row {
+    --piece-h: min(56svh, 420px);
+    padding-inline: var(--edge);
+  }
+
+  .pj-zoom-btn::after {
+    opacity: 1;
+    scale: 0.8;
+    right: 6px;
+    bottom: 6px;
+  }
+}
+
+@media (max-width: 700px) {
+  .pj-facts {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* sur téléphone, le téléphone seul, au centre de la scène */
+  .pj-browser {
+    display: none;
+  }
+
+  .pj-phone {
+    right: auto;
+    left: 50%;
+    top: 7cqh;
+    height: 93cqh;
+    translate: -50% 0;
+    border-radius: 30px;
+  }
+
+  .pj-phone .pj-view {
+    border-radius: 23px;
+  }
+
+  .pj-shape--disc {
+    width: 70cqw;
+    right: -30cqw;
+  }
+
+  .pj-shape--arch {
+    width: 34cqw;
+    height: 40cqh;
+  }
+
+  .pj-shape--quarter {
+    width: 30cqw;
+  }
+
+  .pj-visit-steps {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    width: calc(100% + var(--edge));
+    margin-right: calc(var(--edge) * -1);
+    scrollbar-width: none;
+  }
+
+  .pj-visit-steps button {
+    min-height: 44px;
+    padding: 6px 14px;
+    font-size: 13.5px;
+  }
+
+  .pj-lb-bar {
+    flex-wrap: wrap;
+    justify-content: center;
+    border-radius: 28px;
+  }
+
+  .pj-lb-cap {
+    flex-basis: 100%;
+    margin: 6px 0 2px;
+    text-align: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pj-visit-steps button,
+  .pj-zoom-btn::after,
+  .pj-lb-faces button,
+  .pj-lb-ico {
+    transition: none;
+  }
+
+  .pj-lb[open],
+  .pj-lb[open]::backdrop {
+    animation: none;
+  }
+}
+
+/* rendu différé de l'identité (polices du client, Poppins et Inter, chargées à l'approche) */
+.pj-identity {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 700px;
+}
+
+/* le « et » du titre reprend le blanc de la première ligne */
+.pj-et {
+  color: #fff;
+}
+
+/* ---------- Dans Figma ----------
+   Même scène que « Le site » (mêmes en-tête et fond), sans épinglage : la fenêtre du fichier est seule au centre et joue une vidéo de 12 s
+   (quatre plans de 3 s, en boucle). La fenêtre garde le rapport de la vidéo (16/9) ; la légende de verre et le bouton pause/lecture
+   sont dessous. */
+.pj-reel-stage {
+  container-type: inline-size;
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(14px, 2.4cqw, 22px);
+  height: auto;
+  padding: clamp(20px, 4cqw, 52px) clamp(12px, 3cqw, 44px);
+}
+
+.pj-visit-track:not(.is-pinned) .pj-reel-stage {
+  height: auto;
+}
+
+.pj-reel-stage .pj-fig {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 1040px);
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 14px;
+  background: #f2f2f4;
+  box-shadow: 0 0 0 1px rgb(255 255 255 / 0.2), 0 40px 70px -30px rgb(4 10 56 / 0.7);
+}
+
+.pj-fig-bar {
+  flex: none;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 12px;
+  height: 38px;
+  padding-inline: 16px;
+  font-size: 12.5px;
+  color: #d9dbe3;
+  background: #26293a;
+}
+
+.pj-fig-file {
+  font-weight: 600;
+  color: #fff;
+}
+
+.pj-fig-crumb {
+  padding: 3px 14px;
+  border-radius: 999px;
+  white-space: nowrap;
+  background: rgb(255 255 255 / 0.08);
+}
+
+/* le canevas : gris clair et quadrillage de points, comme le fond d'un fichier de maquettes (visible le temps que la vidéo charge) */
+.pj-fig-view {
+  position: relative;
+  flex: none;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: radial-gradient(circle, rgb(255 255 255 / 0.1) 1px, transparent 1.4px) 0 0 / 22px 22px, #1f1f1f;
+}
+
+.pj-fig-view video {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pj-reel-toggle {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 1px solid rgb(255 255 255 / 0.35);
+  border-radius: 50%;
+  color: rgb(255 255 255 / 0.9);
+  background: rgb(20 24 44 / 0.4);
+  opacity: 0.75;
+  cursor: pointer;
+  transition:
+    opacity 0.3s var(--ease-out),
+    background-color 0.3s var(--ease-out);
+}
+
+.pj-reel-toggle:focus-visible {
+  opacity: 1;
+}
+
+.pj-reel-toggle .ico-play,
+.pj-reel-toggle.is-paused .ico-pause {
+  display: none;
+}
+
+.pj-reel-toggle.is-paused .ico-play {
+  display: block;
+}
+
+.pj-reel-toggle:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 2px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .pj-reel-toggle:hover {
+    opacity: 1;
+    background: rgb(20 24 44 / 0.7);
+  }
+}
+
+@media (max-width: 700px) {
+  .pj-fig-bar {
+    grid-template-columns: auto 1fr;
+    height: 34px;
+    padding-inline: 12px;
+  }
+
+  .pj-fig-crumb {
+    justify-self: end;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 11.5px;
+  }
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pj-reel-toggle {
+    transition: none;
+  }
+}

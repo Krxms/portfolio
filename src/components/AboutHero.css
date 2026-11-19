@@ -1,0 +1,271 @@
+/* Entête de « À propos » : un panneau bleu et un portrait qui en dépasse. La structure vient de Hero.css, le papier et le grain de HeroAtelier.css, le panneau
+   de matiere.css (.panel-blue, .panel-blue--riso : le même que les scènes des pages de service).
+
+   Conçu d'abord pour le mobile : le portrait en haut du panneau (son arche dépasse du bord supérieur), posé sur un filet, le texte dessous. Au-dessus
+   de 900 px : le texte à gauche, le portrait à droite, l'arche posée sur le bord bas du panneau. Toutes les mesures de la scène sont en cqw (largeur
+   de la scène) : elle se met à l'échelle sans jamais se déformer. */
+.ah {
+  min-height: 0;
+  justify-content: flex-start;
+  /* du papier autour du panneau */
+  padding-top: calc(var(--header-h) + 28px);
+  /* la même marge sous l'entête que les pages de service (PageHero.css) */
+  padding-bottom: clamp(48px, 6vw, 88px);
+}
+
+/* le panneau découpe ce qui dépasse : l'ombre dure de l'arche s'arrête à son bord bas */
+.ah-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  padding-inline: 20px;
+}
+
+/* Le fond : le papier froid et gris de la Hero de l'accueil dès l'en-tête, qui glisse doucement vers le crème chaud du reste de la page. Le bas de
+   l'entête a exactement la couleur des sections qui suivent : plus d'arête entre les deux. */
+.ah .at-paper {
+  background:
+    url('../assets/riso/stoneware.webp') 0 0 / 512px 512px repeat,
+    radial-gradient(ellipse 72% 40% at 50% -6%, #ffffff 0%, rgb(255 255 255 / 0) 100%),
+    linear-gradient(180deg, #f3f6fa 0%, #eef2f7 30%, #f1f2ee 68%, #f5f3ea 100%);
+}
+
+/* Téléphone : le grès du papier et le grain du panneau bleu passent en petites tuiles (moins de 2 Ko chacune, voir global.css en fin de
+   fichier). Le panneau couvre tout le premier écran : avec ses textures d'origine (24 Ko), le navigateur le prenait pour le contenu
+   principal de la page, et mesurait l'affichage à l'arrivée de ces images plutôt qu'à celle du texte. */
+@media (max-width: 700px) {
+  .ah .ah-panel.panel-blue--riso::after {
+    background:
+      url('../assets/riso/grain-soft-mini.webp') 0 0 / 48px 48px repeat,
+      url('../assets/riso/speck-mini.png') 30px 70px / 128px 128px repeat;
+    background-blend-mode: soft-light, normal;
+  }
+
+  /* le béton de l'arche du portrait est entièrement recouvert par la photo : inutile de le télécharger sur téléphone */
+  .ah .ah-photo::before {
+    content: none;
+  }
+
+  .ah .at-paper {
+    background-image:
+      radial-gradient(ellipse 72% 40% at 50% -6%, #ffffff 0%, rgb(255 255 255 / 0) 100%),
+      linear-gradient(180deg, #f3f6fa 0%, #eef2f7 30%, #f1f2ee 68%, #f5f3ea 100%);
+  }
+}
+
+/* ---------- le texte ---------- */
+.ah-copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  padding-block: 26px 32px;
+  text-align: left;
+}
+
+.ah-copy h1 {
+  font-family: var(--font-title);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.021em;
+}
+
+/* le nom, en surtitre du titre : précédé de la barre orange de la ligne de rôle de l'accueil */
+.ah-kicker {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 12px;
+  font-family: var(--font-body);
+  font-size: clamp(1rem, 1.6vw, 1.2rem);
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: -0.005em;
+  color: rgb(255 255 255 / 0.94);
+}
+
+.ah-kicker::before {
+  content: '';
+  flex: none;
+  width: 44px;
+  height: 4px;
+  /* alignée sur la première ligne quand l'intitulé passe sur plusieurs lignes */
+  margin-top: 0.6em;
+  background: #ee8532;
+}
+
+.ah-l1,
+.ah-l2 {
+  display: block;
+  font-size: var(--h1-size);
+}
+
+.ah-l1 {
+  color: #fff;
+}
+
+/* l'orange clair de la phrase d'accroche des pages de service (lisible sur le bleu) */
+.ah-l2 {
+  color: #ffc79b;
+}
+
+/* un « \n » du chapô devient un retour à la ligne : chaque phrase commence sur sa propre ligne (même règle que .ph-lead) */
+.ah-lead {
+  font-size: 1.02rem;
+  line-height: 1.5;
+  white-space: pre-line;
+  color: rgb(255 255 255 / 0.94);
+}
+
+/* où je travaille : des pastilles, comme les zones de « Qui suis-je » sur l'accueil */
+.ah-zones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 6px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ah-zones li {
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #fff;
+  background: rgb(255 255 255 / 0.12);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.3),
+    inset 0 0 0 1px rgb(255 255 255 / 0.14);
+}
+
+/* ---------- la scène (mobile : pleine largeur du panneau, en haut) ---------- */
+.ah-stage {
+  order: -1;
+  position: relative;
+  container-type: inline-size;
+  aspect-ratio: 100 / 62;
+  margin: 28px -20px 0;
+  /* le bas de la scène coupe net : l'ombre dure de l'arche ne déborde pas sous le sol */
+  clip-path: inset(-40px -40px 0 -40px);
+}
+
+/* le sol : l'arche est posée sur un filet qui traverse le panneau */
+.ah-stage::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 0;
+  height: 1px;
+  background: rgb(255 255 255 / 0.22);
+}
+
+.ah .ah-photo,
+.ah .ah-mint {
+  position: absolute;
+  display: block;
+  margin: 0;
+}
+
+/* le portrait : une arche (le béton et la trame riso de .at-arch passent par-dessus la photo) et l'ombre dure orange du site */
+.ah .ah-photo {
+  left: 18cqw;
+  bottom: 0;
+  width: 64cqw;
+  /* cadrage serré : la photo s'arrête juste sous les épaules */
+  aspect-ratio: 10 / 9;
+  --concrete: 0.22;
+  background: #1c2230;
+  box-shadow:
+    1cqw 1cqw 0 #ee8532,
+    0 44px 60px -40px rgb(2 8 40 / 0.6);
+}
+
+.ah .ah-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 4%;
+  border-radius: inherit;
+}
+
+/* pas de trame de points sur le portrait : la photo reste nette */
+.ah .ah-photo::after {
+  display: none;
+}
+
+.ah .ah-mint {
+  left: 6cqw;
+  bottom: 0;
+  width: 20cqw;
+  height: 30cqw;
+}
+
+/* L'arche et son tracé reposent sur le bord du panneau : ils ne suivent pas la dérive du fond au défilement (sinon un vide s'ouvrirait sous
+   l'arche dès les premiers pixels défilés).  */
+.ah .ah-photo.at-arch,
+.ah .ah-mint.at-arch-mint {
+  animation: none;
+  translate: none;
+  will-change: auto;
+}
+
+/* ---------- ordinateur : le texte à gauche, le portrait à droite, l'arche posée sur le bord bas du panneau ---------- */
+@media (min-width: 901px) {
+  .ah {
+    padding-top: calc(var(--header-h) + 36px);
+  }
+
+  .ah-panel {
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+    column-gap: clamp(32px, 4vw, 64px);
+    align-items: end;
+    padding-inline: clamp(36px, 5vw, 72px) clamp(24px, 3vw, 48px);
+  }
+
+  .ah-copy {
+    align-self: center;
+    gap: 22px;
+    padding-block: clamp(40px, 4vw, 56px);
+  }
+
+  .ah-kicker {
+    margin-bottom: 18px;
+  }
+
+  .ah-lead {
+    max-width: 60ch;
+    font-size: clamp(1.05rem, 1.45vw, 1.2rem);
+    line-height: 1.55;
+  }
+
+  .ah-zones {
+    margin-top: 10px;
+  }
+
+  /* la scène : l'arche touche le bas du panneau et dépasse de son bord haut ; plus de sol dessiné */
+  .ah-stage {
+    order: 0;
+    align-self: end;
+    aspect-ratio: 100 / 84;
+    margin: 0;
+  }
+
+  .ah-stage::after {
+    display: none;
+  }
+
+  .ah .ah-photo {
+    left: 6cqw;
+    width: 88cqw;
+    box-shadow:
+      1.1cqw 1.1cqw 0 #ee8532,
+      0 50px 70px -40px rgb(2 8 40 / 0.6);
+  }
+
+  .ah .ah-mint {
+    left: -2cqw;
+    width: 24cqw;
+    height: 40cqw;
+  }
+
+}

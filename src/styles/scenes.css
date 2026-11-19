@@ -1,0 +1,280 @@
+/* Scènes de défilement : le dessin. Tout part des variables écrites par src/scripts/scenes.js (--e, --ee, --p, --hp,
+   --d…). Tout est sous .has-scenes : sans JavaScript, ou avec « réduire les animations », la page reste statique.
+   Les propriétés individuelles (translate, rotate, scale) sont utilisées pour ne pas écraser les transform déjà posés
+   (les cartes, le portrait, etc.).
+
+   Les scènes :
+   1. Le rideau : la Hero reste en place et recule, les sections montent par-dessus.
+   2. Les mots du manifeste s'allument un à un.
+   3. Les offres sont empilées en paquet de cartes, puis se déploient en éventail 3D.
+   4. Les deux maquettes du comparatif arrivent chacune de son côté.
+   5. Les étapes de la méthode se dressent comme des panneaux.
+   6. Le portrait respire.
+   Le grain de risographie de la zone sombre vit dans Tile.css. La page Création réutilise ce moteur : sous-titre de « Un cadre clair »
+   (mots allumés) et fondu de ses engagements, jauges d'autonomie (voir creation-site-web.css). */
+
+/* ---------- 1. Le rideau ---------- */
+.has-scenes .curtain {
+  position: relative;
+}
+
+.has-scenes .curtain > .hero-zone {
+  position: sticky;
+  top: 0;
+  z-index: 0;
+}
+
+.has-scenes .curtain > .manifesto {
+  z-index: 2;
+}
+
+/* un bouton de la Hero que le manifeste recouvre (même en partie) s'efface et n'est plus une cible : le clic ne tombe jamais sur le manifeste
+   à la place d'un bouton encore présenté comme utilisable (voir scenes.js) */
+.has-scenes .hero .is-behind {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.18s ease, visibility 0s linear 0.18s;
+}
+
+/* une fois la Hero entièrement passée, plus rien d'elle n'est dessiné (ni peint ni composé) pendant le reste du défilement */
+.has-scenes .hero-zone.is-covered {
+  visibility: hidden;
+}
+
+/* Le recul de la Hero est appliqué à chaque bloc, pas au conteneur : un conteneur qui porte une transformation ou un filtre
+   isole ses enfants, et le titre ne pourrait plus se mélanger à ce qui passe derrière lui (voir le négatif du titre). */
+.has-scenes .hero > * {
+  transform-origin: 50% 50%;
+  scale: calc(1 - var(--hp, 0) * 0.1);
+  translate: 0 calc(var(--hp, 0) * 9svh);
+  opacity: calc(1 - var(--hp, 0) * 0.6);
+  /* aucun flou sur mobile : le recul se fait par la taille, la position et la transparence, seules propriétés rendues par la carte graphique */
+  will-change: transform, opacity;
+}
+
+/* Négatif de « au travail. » (au-dessus de 560 px) : le h1 ne porte pas le recul, sinon il devient un contexte d'empilement et sa
+   seconde ligne ne verrait plus ce qui passe derrière lui (elle afficherait la teinte complémentaire brute). Le recul passe donc sur
+   chacune de ses lignes, et celle qui se mélange reste libre de le faire. */
+@media (min-width: 561px) {
+  .has-scenes .hero > h1 {
+    scale: none;
+    translate: none;
+    opacity: 1;
+    filter: none;
+    will-change: auto;
+  }
+
+  .has-scenes .hero h1 > * {
+    transform-origin: 50% 50%;
+    scale: calc(1 - var(--hp, 0) * 0.1);
+    translate: 0 calc(var(--hp, 0) * 9svh);
+    opacity: calc(1 - var(--hp, 0) * 0.6);
+    /* flou très léger (1,5 px au plus) : un flou plus fort serait repeint à chaque image et coûterait cher */
+    filter: blur(calc(var(--hp, 0) * 1.5px));
+    will-change: transform, opacity;
+  }
+}
+
+/* ---------- titres de section : un à un ---------- */
+.has-scenes .tile-head > * {
+  --t: clamp(0, calc(var(--e, 0) * 2.2 - var(--i, 0) * 0.35), 1);
+  opacity: var(--t);
+  translate: 0 calc((1 - var(--t)) * 34px);
+}
+
+/* le texte qui suit le titre du manifeste : d'un seul bloc, en fondu, quand le titre (dont les mots s'allument) arrive vers la fin.
+   --e est celui du titre (voir scenes.js, option ref) : le fondu commence aux 60 % de son parcours et s'achève avec lui. */
+.has-scenes .manifesto-lead,
+.has-scenes .about-follow,
+.has-scenes .cs-follow {
+  --t: clamp(0, calc((var(--e, 0) - 0.6) * 2.5), 1);
+  opacity: var(--t);
+  translate: 0 calc((1 - var(--t)) * 22px);
+}
+
+/* « Un cadre clair » (page Création) : le sous-titre est une scène à part (ses mots s'allument, voir plus bas), il ne suit donc pas le
+   fondu du reste de l'en-tête */
+.has-scenes #cadre .tile-sub {
+  opacity: 1;
+  translate: none;
+}
+
+/* ---------- 2. Les mots s'allument ---------- */
+.has-scenes .w {
+  display: inline-block;
+  opacity: clamp(0.14, calc(var(--e, 0) * (var(--n, 1) + 5) - var(--i, 0)), 1);
+}
+
+/* ---------- 3. Les offres : un paquet de cartes qui se déploie ---------- */
+@media (min-width: 701px) {
+  .has-scenes .cards {
+    perspective: 1700px;
+  }
+
+  .has-scenes .card {
+    /* les trois cartes partagent la même progression, sans décalage : les deux latérales sont rigoureusement symétriques */
+    --t0: clamp(0, calc(var(--e, 0) * 1.25), 1);
+    --t: calc(var(--t0) * var(--t0) * (3 - 2 * var(--t0)));
+    --u: calc(1 - var(--t));
+    translate:
+      calc(var(--u) * (1 - var(--i, 0)) * (100% + var(--gap)))
+      calc(var(--u) * 50px)
+      calc(var(--u) * -90px * (var(--i, 0) - 1) * (var(--i, 0) - 1));
+    rotate: y calc(var(--u) * (var(--i, 0) - 1) * 26deg);
+  }
+
+  /* la carte du centre est un verre dépoli : tant que les cartes sont empilées, son fond floute ce qui passe dessous (les
+     cartes latérales restent nettes, c'est le verre qui les brouille), puis le flou se retire en s'écartant */
+  .has-scenes .card:nth-child(2) {
+    z-index: 3;
+    background: rgb(255 255 255 / calc(0.84 - var(--u) * 0.14));
+    /* Rayon fixe, posé sur la carte elle-même : un calque enfant ne voyait pas les cartes voisines (la carte est composée à
+       part par ses transformations 3D), et faire varier le rayon à chaque image faisait saccader l'arrivée. Une fois les
+       cartes écartées, il n'y a plus rien derrière : le flou ne se voit plus. */
+    -webkit-backdrop-filter: blur(22px) saturate(1.45);
+    backdrop-filter: blur(22px) saturate(1.45);
+  }
+
+  /* au défilement, l'affiche respire : les formes du fond bougent un peu plus que les fenêtres, qui bougent un peu plus que la carte */
+  .has-scenes .card-art .l-shape {
+    translate: 0 calc((var(--p, 0.5) - 0.5) * -26px);
+  }
+
+  .has-scenes .card-art .l-win {
+    translate: 0 calc((var(--p, 0.5) - 0.5) * 12px);
+  }
+
+  .has-scenes .card-art .l-fore {
+    translate: 0 calc((var(--p, 0.5) - 0.5) * 22px);
+  }
+}
+
+
+@media (max-width: 700px) {
+  .has-scenes .cards,
+  .has-scenes .cs-lv-list {
+    perspective: 900px;
+  }
+}
+
+
+@media (max-width: 700px) {
+  .has-scenes .cards > *,
+  .has-scenes .cs-lv-list > * {
+    rotate: y calc(var(--d, 0) * -16deg);
+    scale: calc(1 - var(--ad, 0) * 0.07);
+    opacity: calc(1 - var(--ad, 0) * 0.35);
+  }
+}
+
+/* Deux cartes (.cards--two) : elles partent toutes les deux du centre, l'une sur l'autre, à plat, puis s'écartent
+   chacune de son côté jusqu'à leur place. Même progression (--u) que ci-dessus ; --gap est l'écart entre les deux cartes (ServiceCards.css).
+   De 701 à 900 px les cartes sont l'une sous l'autre : elles montent simplement, sans se rejoindre au centre. */
+@media (min-width: 901px) {
+  .has-scenes .cards--two .card {
+    /* départ à plat : les deux cartes sont exactement superposées, sans rotation ni recul, puis s'écartent au défilement */
+    translate:
+      calc(var(--u) * (0.5 - var(--i, 0)) * (100% + var(--gap)))
+      calc(var(--u) * 50px);
+    rotate: none;
+  }
+}
+
+@media (min-width: 701px) and (max-width: 900px) {
+  .has-scenes .cards--two .card {
+    translate: 0 calc(var(--u) * 50px);
+    rotate: none;
+  }
+}
+
+/* ---------- 4. Les trois preuves : elles montent l'une après l'autre ----------
+   Chaque colonne part un peu plus bas et un peu plus claire, puis se pose ; le décalage suit leur rang (--i). */
+@media (min-width: 761px) {
+  .has-scenes .proof {
+    --k0: clamp(0, calc((var(--e, 0) - var(--i, 0) * 0.12) * 1.8), 1);
+    --k: calc(var(--k0) * var(--k0) * (3 - 2 * var(--k0)));
+    opacity: var(--k);
+    translate: 0 calc((1 - var(--k)) * 36px);
+  }
+}
+
+/* ---------- 5. La méthode : des panneaux qui se dressent ---------- */
+.has-scenes .proc {
+  perspective: 1300px;
+}
+
+.has-scenes .proc-step {
+  --t: clamp(0, calc(var(--e, 0) * 1.7 - var(--i, 0) * 0.24), 1);
+  transform-origin: 50% 100%;
+  rotate: x calc((1 - var(--t)) * 42deg);
+  translate: 0 calc((1 - var(--t)) * 36px);
+  opacity: var(--t);
+}
+
+/* La flèche chronologique avance au rythme des tuiles : sa pointe atteint une tuile quand celle-ci est à moitié dressée,
+   jamais avant (les tuiles se dressent avec --e * 1.7, décalées de 0,24 chacune) */
+.has-scenes .proc-timeline {
+  --f: clamp(0, calc(var(--e, 0) * 1.786 - 0.42), 1);
+  clip-path: inset(-20% calc((1 - var(--f)) * 100%) -20% 0);
+}
+
+/* la ligne « après la livraison » est sa propre scène (elle est à côté de la méthode, pas dedans) */
+.has-scenes .proc-after {
+  opacity: var(--e, 0);
+  translate: 0 calc((1 - var(--e, 0)) * 16px);
+}
+
+/* ---------- 6. Qui suis-je : le portrait respire ---------- */
+.has-scenes .about {
+  overflow-x: clip;
+}
+
+.portrait {
+  position: relative;
+}
+
+.portrait-frame {
+  position: relative;
+  overflow: hidden;
+  border-radius: inherit;
+}
+
+.has-scenes .portrait-frame img {
+  scale: 1.14;
+  translate: 0 calc((var(--p, 0.5) - 0.5) * -9%);
+}
+
+/* ---------- Filet de progression de lecture sous l'en-tête ---------- */
+/* La barre n'existe que sur mobile (sous 700 px), en bleu klein uni. Sur ordinateur, elle est retirée. */
+.has-scenes .site-header::after {
+  display: none;
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  height: 2px;
+  transform-origin: 0 50%;
+  transform: scaleX(var(--page-p, 0));
+  background: #1f45d6;
+  pointer-events: none;
+}
+
+@media (max-width: 700px) {
+  .has-scenes .site-header::after {
+    display: block;
+  }
+}
+
+/* Le haut de la section identité couvre la Hero : presque opaque, pour que son titre ne transparaisse pas en fantôme */
+.has-scenes .manifesto.tile--dark::before {
+  -webkit-mask-image: linear-gradient(180deg, rgb(0 0 0 / 0.9), #000 180px);
+  mask-image: linear-gradient(180deg, rgb(0 0 0 / 0.9), #000 180px);
+}
+
+/* Les formes en vol (portrait, appel final) ne doivent jamais élargir la page */
+.has-scenes .tile {
+  overflow-x: clip;
+}

@@ -1,46 +1,129 @@
+/* ============================================================
+   Palette : primitives (teintes brutes), puis rôles. On écrit un rôle, jamais une teinte.
+   Source : fichier Figma « Portfolio AB — UX/UI Design » et design-system/tokens.json.
+   ============================================================ */
 :root {
-  /* Base neutrals — warm ivory paper / deep plum-black ink (not pure white/black) */
-  --paper: #f5f0e6;
-  --paper-soft: #efe8da;
-  --ink: #281c33;
-  --ink-soft: #4a4166;
-  --muted: #5e5673;
+  /* Primitives */
+  --color-ink-50: #f4f6f8; --color-ink-100: #e8ebef; --color-ink-200: #d5dae0; --color-ink-300: #b4bcc5; --color-ink-400: #8b96a2;
+  --color-ink-500: #6b7885; --color-ink-600: #4a5864; --color-ink-700: #3a4955; --color-ink-800: #25323e; --color-ink-900: #12202b;
+  --color-paper-white: #ffffff; --color-paper-card: #fffefa; --color-paper-base: #f5f3ea; --color-paper-soft: #ecebdf; --color-paper-cool: #f2f4f7; --color-paper-mist: #eef3fb;
+  --color-klein-50: #eef2fe; --color-klein-100: #dce5fd; --color-klein-200: #b8cbfb; --color-klein-300: #8ca8f6; --color-klein-400: #5f83ee; --color-klein-500: #386beb;
+  --color-klein-600: #1f45d6; --color-klein-700: #1a37a8; --color-klein-800: #13247c; --color-klein-900: #0b2170; --color-klein-950: #081742;
+  --color-cerulean-50: #eef5fb; --color-cerulean-100: #d4e5f6; --color-cerulean-200: #a9ccec; --color-cerulean-300: #7fb0e0; --color-cerulean-400: #4f8ccb;
+  --color-cerulean-500: #2b6fb5; --color-cerulean-600: #14509a; --color-cerulean-700: #0f4280; --color-cerulean-800: #0c3a73; --color-cerulean-900: #0a2d59;
+  --color-lagoon-500: #1f94bf; --color-lagoon-400: #3daac9; --color-lagoon-300: #6cc4dc;
+  --color-mint-100: #d6f1e8; --color-mint-300: #86e6d8; --color-mint-500: #27b3a3;
+  --color-violet-400: #836ce8; --color-violet-500: #6b4de0; --color-violet-800: #2a1c70; --color-orchid-300: #cda3ee; --color-orchid-500: #9e5cdb;
+  --color-cream-100: #fff6cf; --color-cream-200: #fff0b3; --color-cream-300: #ffe48a; --color-cream-400: #f1c14f; --color-cream-500: #f5a02a;
+  --color-corail-200: #ffd9c4; --color-corail-300: #ffb48a; --color-corail-500: #f16141; --color-corail-600: #b83f25;
+  --color-status-danger: #9b1c1c; --color-status-ok: #3d6a4b;
+
+  /* Rôles (mode clair) */
+  --color-surface-page: var(--color-paper-base);
+  --color-surface-card: var(--color-paper-card);
+  --color-text-primary: var(--color-ink-900);
+  --color-text-secondary: var(--color-ink-700);
+  --color-text-muted: var(--color-ink-600);
+  --color-text-accent: var(--color-cerulean-600);
+  --color-action-primary: var(--color-cerulean-600);
+  --color-focus-ring: var(--color-cerulean-800);
+  --color-brand-mark: var(--color-corail-500);
+
+  /* Base neutrals — crème légèrement verte / encre bleu-nuit (ni blanc ni noir purs) */
+  --paper: #f5f3ea;
+  --paper-soft: #ecebdf;
+  --paper-cool: #f2f4f7;
+  --ink: #12202b;
+  --ink-soft: #3a4955;
+  --muted: #4a5864;
   --line: rgba(40, 28, 51, 0.13);
   --line-strong: rgba(40, 28, 51, 0.26);
 
-  /* Signature accent — mauve/lavender (exact maquette values) */
-  --signal: #735f84;
-  --signal-deep: #5a4a68;
-  --signal-ink: #fbfaff;
+  /* Accent signature — bleu klein tiré vers le vert */
+  --signal: var(--color-cerulean-600);
+  --signal-deep: var(--color-cerulean-800);
+  --signal-ink: #f7fbff;
 
-  /* Logo navy — used sparingly for continuity with the mark */
-  --brand-navy: #202559;
+  /* Accent clair, pour les touches d'accentuation sur fond sombre (mot-clé du manifeste, nom, zones, survol des CTA) */
+  --cream: var(--color-cream-200);
 
-  /* Slate — Hello */
+  /* Bleu marine du logo : à employer avec parcimonie, pour la continuité avec la marque */
+  --brand-navy: var(--color-klein-800);
+
+  /* Gris-bleu, pour les textes secondaires sur fond clair */
   --slate: #506180;
 
-  /* Navbar */
-  --nav-bg: #ece5dc;
+  /* Fond de la barre de navigation */
+  --nav-bg: #eceee4;
 
-  /* Mesh-gradient hues — background only */
-  --mesh-orange: #ff9a68;
-  --mesh-purple: #a594d1;
-  --mesh-green: #92c197;
+  /* Tracés faits main (une seule famille) : abricot sur clair, plus clair sur sombre */
+  --mark: var(--color-corail-500);
+  --mark-on-dark: var(--color-corail-300);
 
-  --radius-sm: 10px;
-  --radius-md: 18px;
-  --radius-lg: 32px;
-  --radius-btn: 16px;
+  /* Grain : bruit fin, posé sur le fond et sur les tuiles sombres */
+  /* grains fins : des tuiles WebP préchargées (tools/grain-tile.mjs), plus un filtre SVG que le navigateur calculait après le reste */
+  --grain: url('../assets/riso/grain.webp');
+
+  /* Rayons : une échelle unique. Les coins lisses (superellipse 1,5 : entre l'arrondi simple et le squircle d'Apple) s'appliquent aux
+     composants dans global.css. */
+  /* Échelle d'arrondis : 4, 8, 12, 16, 24, 32. Chaque marche est la précédente plus un padding courant, pour que l'emboîtement soit juste.
+     RÈGLE D'EMBOÎTEMENT : le rayon d'un contenant = le rayon de ce qu'il contient + le padding qui les sépare (ou, à l'inverse, rayon intérieur =
+     rayon extérieur − padding, jamais moins de 0). Un contenant avec 10 px de padding autour d'une image de 22 px de rayon est donc à 32 px.
+       xs  4 : repères, barres, graduations                          sm  8 : pastilles carrées, puces, éléments des maquettes
+       btn 12 : boutons et champs                                    md 16 : cartes simples, fenêtres, maquettes
+       lg  24 : grands blocs, légendes                               xl 32 : cartes à verre épais, panneaux bleus, scènes
+     Les formes du logo (50 %, 999 px, quarts de disque, arches) restent à part : ce sont des formes, pas des coins arrondis. */
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-btn: 12px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-xl: 32px;
+  --corner: superellipse(1.5);
 
   /* Signature display face — titre du hero uniquement */
-  --font-display: 'Bricolage Grotesque', 'Be Vietnam Pro', sans-serif;
+  --font-display: 'Bricolage Grotesque', 'Bricolage Fallback', 'Be Vietnam Pro', sans-serif;
+  /* Titres h1 à h3 : Bricolage Grotesque (Funnel Display a été testée puis retirée). */
+  /* Taille des titres h1 de la Hero et des en-têtes de page : une seule valeur pour tous (téléphone ici, ordinateur plus bas). */
+  --h1-size: clamp(1.9rem, 9.4vw, 3.4rem);
+  --font-title: 'Bricolage Grotesque', 'Bricolage Fallback', 'Be Vietnam Pro', sans-serif;
   /* Be Vietnam Pro — tout le reste du site */
-  --font-body: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: 'Be Vietnam Pro', 'BVP Fallback', -apple-system, BlinkMacSystemFont, sans-serif;
   /* Labels, eyebrows, status */
-  --font-mono: 'Space Mono', 'SFMono-Regular', Consolas, monospace;
+  --font-mono: 'Be Vietnam Pro', 'BVP Fallback', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  --card: #fffefa;
+  --danger: #9b1c1c;
+  --ok: #3d6a4b;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --section-y: clamp(72px, 10vw, 136px);
+  --gap: clamp(16px, 2.5vw, 32px);
+  --measure: 62ch;
+  --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
 
   --container: 1180px;
+  --header-h: 100px;
   --edge: clamp(20px, 5vw, 64px);
 
   color-scheme: light;
+}
+
+@media (max-width: 560px) {
+  :root {
+    --header-h: 64px;
+  }
+}
+
+@media (min-width: 901px) {
+  :root {
+    --h1-size: clamp(2.5rem, 4.8vw, 4.5rem);
+  }
 }

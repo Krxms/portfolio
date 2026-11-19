@@ -1,0 +1,147 @@
+---
+import './Tile.css';
+import R from './R.astro';
+import './ProjectTeaser.css';
+import siteShot from '../assets/projets/cuistologue/site-hero.webp';
+import phoneShot from '../assets/projets/cuistologue/mobile-top.webp';
+import cardRose from '../assets/projets/cuistologue/carte-rose-recto.webp';
+import cardOrange from '../assets/projets/cuistologue/carte-orange-recto.webp';
+import fondArt from '../assets/scenes/cuistologue-fond.svg?raw';
+import cardVert from '../assets/projets/cuistologue/carte-vert-recto.webp';
+import { responsive } from '../lib/responsive';
+
+interface Props {
+  href?: string;
+  label?: string;
+  /** accueil seulement : une ligne vers l'expérience en entreprise (page Interfaces et logiciels) */
+  progress?: boolean;
+  /** présentation en étude de cas : le besoin, ce que j'ai fait, les chiffres (essai sur la page Création) */
+  caseStudy?: boolean;
+}
+const { href = '/projets/le-cuistologue/', label = 'Réalisations', progress = false, caseStudy = false } = Astro.props;
+const img = (m: { src: string; width: number; height: number }) => ({ src: m.src, width: m.width, height: m.height });
+// la scène fait toute la largeur du bloc : le site y occupe environ 90 % (téléphone) ou 58 % (ordinateur), le téléphone 32 % ou 18 %,
+// chaque carte 28 % ou 16 %
+const site = await responsive(siteShot, [480, 720, 1000, 1400], '(max-width: 700px) 90vw, 50vw');
+const phone = await responsive(phoneShot, [200, 320, 480, 780], '(max-width: 700px) 30vw, 16vw');
+const cardsR = await Promise.all([cardVert, cardOrange, cardRose].map((c) => responsive(c, [200, 320, 480], '(max-width: 700px) 28vw, 14vw')));
+---
+
+{/* Une vitrine : le titre et le texte au-dessus, puis une scène bleue où le projet est montré tel qu'il a été livré (le site sur ordinateur
+    et mobile, les cartes de visite), devant des formes en béton coloré qui font partie de la composition. Sur l'accueil, une liste sobre
+    des projets à venir ferme la section ; leur détail vit sur la page À propos. Pas d'ombre dure orange : le papier, un filet, un aplat. */}
+<section class="tile tile--light project-tile" id="projet" aria-labelledby="projet-title">
+  <div class="wrap tile-inner">
+    <div class="showcase">
+      <header class="sc-head">
+        <div class="sc-title">
+          <p class="tile-label"><R t={label} /></p>
+          <h2 id="projet-title">Le Cuistologue</h2>
+          {
+            caseStudy ? (
+              <dl class="sc-case">
+                <div>
+                  <dt>Le besoin</dt>
+                  <dd>Présenter clairement une offre de cuisine à domicile et ses prestations.</dd>
+                </div>
+                <div>
+                  <dt>Ce que j’ai fait</dt>
+                  <dd>L’identité visuelle, les supports imprimés, la conception et le développement du site, jusqu’à sa mise en ligne.</dd>
+                </div>
+              </dl>
+            ) : (
+              <p class="sc-text">
+                Cuisinier à domicile, spécialiste de la cuisine du quotidien.<br  /><br  /> L’identité visuelle, les supports imprimés, la conception et le développement du site, jusqu’à sa mise en ligne.
+              </p>
+            )
+          }
+          {caseStudy && <p class="sc-case-label">En chiffres</p>}
+          {/* Les scores mesurés avec Lighthouse (l'outil d'audit de Google), en jauges : le même langage visuel que le rapport d'origine. */}
+          <figure class="sc-scores">
+            <ul role="list" aria-label="Scores Lighthouse du site, sur 100">
+              {
+                [
+                  { n: 100, label: 'SEO · Lighthouse' },
+                  { n: 100, label: 'Bonnes pratiques' },
+                  { n: 91, label: 'Accessibilité' },
+                ].map((s, i) => (
+                  <li style={`--v:${s.n};--rs:${String(s.n).length};--o:${[0, 0.18, 0.34][i]};--w:${[0.58, 0.52, 0.66][i]}`}>
+                    <span class="sc-score-label" aria-hidden="true">{s.label}</span>
+                    {/* un rouleau par chiffre, comme une machine à sous : la note est dessinée en CSS (voir .sc-reel-strip), le texte lu est plus bas */}
+                    <b class="sc-score-n" aria-hidden="true">
+                      <span class="sc-reels">
+                        {[...String(s.n)].map((d, r) => (
+                          <span class="sc-reel" style={`--r:${r};--idx:${10 + Number(d)}`}>
+                            <span class="sc-reel-strip" />
+                          </span>
+                        ))}
+                      </span>
+                      <small>/100</small>
+                    </b>
+                    <i class="sc-meter" aria-hidden="true"><i /></i>
+                    <span class="visually-hidden">{s.label} : {s.n} sur 100</span>
+                  </li>
+                ))
+              }
+            </ul>
+            <figcaption>Mesuré avec Lighthouse : un contrôle automatisé de bonnes pratiques, pas une mesure de positionnement ni un audit SEO complet.</figcaption>
+          </figure>
+        </div>
+        <ul class="sc-scope" role="list" aria-label="Ce que j’ai réalisé">
+          <li>Identité visuelle</li>
+          <li>Site web</li>
+          <li>Imprimés</li>
+        </ul>
+      </header>
+
+      {/* La scène entière est le lien vers la page projet : ni bouton ni flèche. Au défilement, les plans glissent à peine (parallaxe très légère). */}
+      <a class="sc-stage" href={href} aria-label="Voir l’étude de cas : le projet Le Cuistologue">
+        <Fragment set:html={fondArt} />
+        <i class="sc-shape sc-disc concrete"></i>
+        <i class="sc-shape sc-arch concrete"></i>
+        <i class="sc-shape sc-quarter concrete"></i>
+
+        <figure class="sc-browser">
+          <div class="sc-bar"><i></i><i></i><i></i></div>
+          <img {...site} alt="Page d’accueil du site Le Cuistologue, cuisinier à domicile, sur ordinateur" loading="lazy" decoding="async" />
+        </figure>
+
+        <div class="sc-cards">
+          <img class="sc-card sc-card--1" {...cardsR[0]} alt="" loading="lazy" decoding="async" />
+          <img class="sc-card sc-card--2" {...cardsR[1]} alt="" loading="lazy" decoding="async" />
+          <img class="sc-card sc-card--3" {...cardsR[2]} alt="" loading="lazy" decoding="async" />
+        </div>
+
+        <figure class="sc-phone">
+          <img {...phone} alt="Le site Le Cuistologue sur téléphone" loading="lazy" decoding="async" />
+        </figure>
+
+        {/* libellé visible du lien (un seul lien : la scène entière) ; son nom accessible le contient */}
+        <span class="sc-cta" aria-hidden="true">
+          Voir l’étude de cas
+          <svg viewBox="0 0 16 16" width="14" height="14"><path d="M3 8h9.5M8.5 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg>
+        </span>
+      </a>
+
+      {
+        progress && (
+          <div class="sc-next">
+            <p class="sc-next-label">Expérience</p>
+            <ul role="list">
+              <li>
+                <a class="sc-row" href="/interfaces-logiciels/#experience">
+                  <i class="sc-glyph sc-glyph--disc concrete" aria-hidden="true" />
+                  <span class="sc-row-main">
+                    <strong>Logiciel SaaS de gestion de maintenance · Conception UX/UI</strong>
+                  </span>
+                  <span class="sc-state">Environ 2 ans, en entreprise</span>
+                  <span class="sc-go" aria-hidden="true" />
+                </a>
+              </li>
+            </ul>
+          </div>
+        )
+      }
+    </div>
+  </div>
+</section>

@@ -1,11 +1,92 @@
 ---
 import './Header.css';
 import Logo from './Logo.astro';
+
+// Le logo mène à l'accueil ; la FAQ est dans le pied de page.
+const links = [
+  { href: '/creation-site-web/', label: 'Création de site', cls: '' },
+  { href: '/refonte-site-web/', label: 'Refonte de site', cls: '' },
+  { href: '/interfaces-logiciels/', label: 'Interfaces et logiciels', cls: '' },
+  { href: '/audit-ux-ui/', label: 'Audit UX/UI', cls: '' },
+  /* « Réalisations » mène à l'étude de cas existante, faute d'une page liste (une seule étude de cas publiée pour l'instant). */
+  { href: '/projets/le-cuistologue/', label: 'Réalisations', cls: '' },
+  { href: '/a-propos/', label: 'À propos', cls: '' },
+];
+const path = Astro.url.pathname;
+const isCurrent = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
 ---
 
-<header class="site-header">
+<header class="site-header" data-header>
   <div class="backdrop"></div>
   <div class="wrap header-inner">
     <Logo />
+    <button class="menu-btn" type="button" aria-expanded="false" aria-controls="site-nav" data-menu-btn>
+      <span class="visually-hidden" data-menu-label>Ouvrir le menu</span>
+      <span class="menu-btn-bars" aria-hidden="true"><i></i><i></i></span>
+    </button>
+    <nav class="header-nav" id="site-nav" aria-label="Navigation principale" data-lenis-prevent>
+      <div class="nav-links">
+        {
+          links.map((l, i) => (
+            <a href={l.href} data-text={l.label} class={l.cls} style={`--i:${i}`} aria-current={isCurrent(l.href) ? 'page' : undefined}>
+              <span class="nl"><span class="nl-a">{l.label}</span><span class="nl-b" aria-hidden="true">{l.label}</span></span>
+            </a>
+          ))
+        }
+      </div>
+      <a class="btn btn-primary" href="/contact/" style="--i:7">Parlons de votre projet</a>
+      <p class="nav-direct" style="--i:8">
+        <a href="tel:+33609111838">Appeler directement</a>
+      </p>
+    </nav>
   </div>
 </header>
+
+<script>
+  const header = document.querySelector<HTMLElement>('[data-header]');
+  const btn = document.querySelector<HTMLButtonElement>('[data-menu-btn]');
+  if (header && btn) {
+    const label = header.querySelector<HTMLElement>('[data-menu-label]');
+    const set = (open: boolean) => {
+      header.toggleAttribute('data-open', open);
+      document.documentElement.toggleAttribute('data-nav-open', open);
+      btn.setAttribute('aria-expanded', String(open));
+      if (label) label.textContent = open ? 'Fermer le menu' : 'Ouvrir le menu';
+    };
+    btn.addEventListener('click', () => set(!header.hasAttribute('data-open')));
+    // un toucher sur le voile (hors feuille) ferme le menu
+    header.querySelector('.header-inner')?.addEventListener('click', (e) => {
+      if (e.target === e.currentTarget && header.hasAttribute('data-open')) set(false);
+    });
+    matchMedia('(min-width: 1201px)').addEventListener('change', (e) => e.matches && set(false));
+    // le focus quitte le menu ouvert (Tab après le dernier lien, Maj+Tab avant le bouton) : il se referme, le focus ne se perd pas derrière le voile
+    header.addEventListener('focusout', (e) => {
+      const next = e.relatedTarget as Node | null;
+      if (header.hasAttribute('data-open') && next && !header.contains(next)) set(false);
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && header.hasAttribute('data-open')) {
+        set(false);
+        btn.focus();
+      }
+    });
+    // Un lien vers une autre page ne referme pas le menu : sa fermeture s'animerait pendant que le navigateur attend la page suivante, et
+    // la transition de page figerait le menu à mi-course. Il reste tel quel et s'efface avec le fondu de page ; le lien est aussi la seule
+    // chose qui bouge (pas de double animation). Seuls les liens de la page courante (ancres, appel) referment le menu.
+    header.querySelectorAll('.header-nav a').forEach((a) =>
+      a.addEventListener('click', (e) => {
+        const link = a as HTMLAnchorElement;
+        const samePage = link.origin === location.origin && link.pathname === location.pathname;
+        const external = link.protocol === 'tel:' || link.protocol === 'mailto:';
+        if (samePage || external) set(false);
+        else if ((e as MouseEvent).button === 0 && !(e.metaKey || e.ctrlKey || e.shiftKey || e.altKey)) header.setAttribute('data-leaving', '');
+      }),
+    );
+    // retour arrière : la page revient du cache avec le menu tel qu'on l'a quitté, on le referme sans animation
+    addEventListener('pageshow', (e) => {
+      if (!e.persisted) return;
+      header.removeAttribute('data-leaving');
+      set(false);
+    });
+  }
+</script>

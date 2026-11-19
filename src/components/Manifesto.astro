@@ -1,0 +1,51 @@
+---
+import './Tile.css';
+import R from './R.astro';
+import './Manifesto.css';
+import ProgressiveBlur from './ProgressiveBlur.astro';
+
+const proofs = [
+  {
+    t: 'Une structure qui suit les parcours',
+    d: 'Les pages, les parcours et les contenus sont organisés autour de ce que vos visiteurs ou vos utilisateurs viennent faire.',
+  },
+  {
+    t: 'Des écrans pensés pour ceux qui s’en servent',
+    d: 'Lisibles, cohérents entre eux, utilisables au clavier et adaptés aux différents écrans.',
+  },
+  {
+    t: 'Une qualité vérifiée avant la mise en ligne',
+    d: 'Performance, accessibilité et bases du référencement sont prises en compte dès la conception, puis vérifiées lors de la réalisation.',
+  },
+];
+---
+
+<section class="tile tile--dark manifesto" id="manifeste" aria-labelledby="manifeste-title">
+  <ProgressiveBlur toward="top" />
+  <div class="grain-layer" aria-hidden="true"></div>
+  <div class="wrap tile-inner">
+    <h2 id="manifeste-title" class="manifesto-quote">
+      Avant les écrans, il y a vos <em class="manifesto-word">besoins</em>.
+    </h2>
+    <p class="manifesto-lead">
+      Je commence par comprendre votre activité, vos utilisateurs et ce que le projet doit permettre.
+    </p>
+
+    <ol class="proofs" role="list">
+      {
+        proofs.map((p, i) => (
+          <li class={`proof proof--${i + 1}`}>
+            <div class="proof-art" aria-hidden="true">
+              <i class="proof-shape" />
+              <span class="proof-n">{String(i + 1).padStart(2, '0')}</span>
+            </div>
+            <div class="proof-body">
+              <h3><R t={p.t} /></h3>
+              <p><R t={p.d} /></p>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>

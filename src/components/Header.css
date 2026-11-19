@@ -1,10 +1,7 @@
-/* Verre dépoli simple et net : un seul calque flouté (.backdrop), clippé au
-   header via overflow:hidden — plus de masques en pourcentages ni de
-   translateY à recalculer à chaque changement de hauteur (source des bugs
-   précédents), donc bord bas toujours parfaitement net (border-bottom réel).
-   filter: contrast()/brightness() sur .backdrop uniquement (jamais sur le
-   logo, qui est un sibling à part) simule un léger effet de réfraction de
-   la lumière dans le verre, sans distordre le contenu. */
+/* En-tête en verre dépoli : un seul calque flouté (.backdrop), clippé au header par overflow: hidden. Pas de masque en pourcentage ni de
+   translateY à recalculer quand la hauteur change, donc le bord bas reste net (c'est une vraie border-bottom).
+   contrast() et brightness() s'appliquent au seul .backdrop (jamais au logo, qui est un élément voisin) : ils simulent la réfraction
+   de la lumière dans le verre sans déformer le contenu. */
 .site-header {
   height: 100px;
   position: sticky;
@@ -17,7 +14,7 @@
 
 @media (max-width: 560px) {
   .site-header {
-    height: 78px;
+    height: 64px;
   }
 }
 
@@ -26,7 +23,6 @@
   inset: 0;
   background: color-mix(in srgb, var(--nav-bg) 45%, transparent);
   backdrop-filter: blur(11px) saturate(210%);
-  filter: contrast(1.15) brightness(1.03);
   pointer-events: none;
 }
 
@@ -46,13 +42,37 @@
   pointer-events: none;
 }
 
-.header-inner {
+.site-header .header-inner {
+  max-width: 1560px;
   position: relative;
   z-index: 1;
   height: 100%;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: space-between;
+}
+
+/* Bureau : logo à gauche, liens centrés sur la barre, bouton à droite (trois colonnes, celle du milieu centrée). */
+@media (min-width: 1201px) {
+  .site-header .header-inner {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+  }
+
+  .site-header .header-nav {
+    display: contents;
+  }
+
+  .site-header .header-nav .btn {
+    justify-self: end;
+    margin-left: 0;
+  }
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 2px;
 }
 
 @media (prefers-reduced-transparency: reduce) {
@@ -66,5 +86,507 @@
   }
   .backdrop::after {
     display: none;
+  }
+}
+
+.header-nav .btn {
+  margin-left: var(--space-3);
+}
+
+.header-nav {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+/* Liens de navigation : au survol le lien se colore ; le lien actif est en gras avec un soulignement coloré.
+   Une copie invisible en gras réserve la largeur (data-text) : passer en gras ne décale rien. */
+.header-nav a:not(.btn) {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding-inline: 14px;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.header-nav a:not(.btn)::after {
+  content: attr(data-text);
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
+  font-weight: 700;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Survol : le libellé monte et s'efface, sa copie en gras arrive du bas (0,16 s). Le lien actif est en bleu, en gras, avec un trait
+   coloré dessous. */
+.nl {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  padding: 0 4px 6px;
+  margin-inline: -4px;
+}
+
+.nl-a,
+.nl-b {
+  display: inline-block;
+  white-space: nowrap;
+  transition: transform 0.16s ease-out, opacity 0.16s ease-out;
+}
+
+.nl-b {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translate(-50%, 140%);
+  font-weight: 700;
+  color: var(--signal);
+}
+
+.header-nav a:not(.btn):hover .nl-a,
+.header-nav a:not(.btn):focus-visible .nl-a {
+  opacity: 0;
+  transform: translateY(-100%);
+}
+
+.header-nav a:not(.btn):hover .nl-b,
+.header-nav a:not(.btn):focus-visible .nl-b {
+  transform: translate(-50%, 0);
+}
+
+.header-nav a:not(.btn)[aria-current] {
+  color: var(--signal);
+}
+
+.header-nav a:not(.btn)[aria-current] .nl-a {
+  font-weight: 700;
+}
+
+.header-nav a:not(.btn)[aria-current] .nl::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--signal);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nl-a,
+  .nl-b {
+    transition: none;
+  }
+}
+
+.menu-btn,
+.nav-direct {
+  display: none;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ---------- Menu mobile et tablette (sous 1200 px) ----------
+   Fermé : une pastille de verre, deux traits de longueurs différentes, le libellé qui change.
+   Ouvert : une feuille d'indigo qui se déroule sous l'en-tête (même matière que « Qui suis-je » : indigo, grain de
+   risographie, formes du logo), les liens ferrés à droite en grand, numérotés, qui arrivent un à un. */
+@media (max-width: 1200px) {
+  .menu-btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 48px;
+    min-height: 48px;
+    margin-right: -10px;
+    padding: 0 10px;
+    border: 0;
+    background: none;
+    font: inherit;
+    font-family: var(--font-display);
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    cursor: pointer;
+    transition: opacity 0.3s var(--ease-out);
+  }
+
+  .menu-btn:active {
+    opacity: 0.55;
+  }
+
+  .menu-btn:focus-visible {
+    outline: 3px solid var(--signal-deep);
+    outline-offset: 3px;
+  }
+
+  /* deux traits décalés (le haut plus long) qui se croisent en croix */
+  .menu-btn-bars {
+    display: grid;
+    justify-items: end;
+    gap: 6px;
+    width: 22px;
+  }
+
+  .menu-btn-bars i {
+    display: block;
+    height: 2px;
+    border-radius: 2px;
+    background: currentColor;
+    transition: transform 0.45s var(--ease-out), width 0.35s var(--ease-out);
+  }
+
+  .menu-btn-bars i:first-child {
+    width: 22px;
+  }
+
+  .menu-btn-bars i:last-child {
+    width: 13px;
+  }
+
+  [data-open] .menu-btn-bars i {
+    width: 22px;
+  }
+
+  [data-open] .menu-btn-bars i:first-child {
+    transform: translateY(4px) rotate(45deg);
+  }
+
+  [data-open] .menu-btn-bars i:last-child {
+    transform: translateY(-4px) rotate(-45deg);
+  }
+
+  /* voile : le reste de la page s'assombrit et se floute sous la feuille */
+  .site-header .header-inner::before {
+    content: '';
+    position: fixed;
+    inset: var(--header-h) 0 0 0;
+    z-index: -1;
+    background: rgb(5 12 46 / 0.5);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s var(--ease-out), visibility 0s linear 0.4s;
+  }
+
+  [data-open] .header-inner::before {
+    opacity: 1;
+    visibility: visible;
+    transition-delay: 0s;
+  }
+
+  html[data-nav-open] {
+    overflow: hidden;
+  }
+
+  /* Sous 1200 px, l'en-tête ne rogne plus ses enfants : la feuille du menu est en position fixe, et certains navigateurs mobiles
+     (WebKit) la coupent à la hauteur de la barre quand un de ses ancêtres a overflow: hidden. Rien ne déborde de la barre de toute façon
+     (le calque de verre et ses reflets remplissent exactement son cadre). */
+  .site-header {
+    overflow: visible;
+  }
+
+  /* la feuille : se déroule du haut vers le bas, coins arrondis en bas */
+  .header-nav {
+    position: fixed;
+    top: var(--header-h);
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    max-height: calc(100svh - var(--header-h));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    /* espaces proportionnels à la hauteur de l'écran (svh) : sur un iPhone avec la barre Safari (≈ 645 px visibles), tout le menu tient sans défiler */
+    padding: clamp(10px, 2.4svh, 32px) var(--edge) calc(clamp(14px, 2.6svh, 48px) + env(safe-area-inset-bottom));
+    border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+    background:
+      radial-gradient(70% 40% at 90% 0%, rgb(46 98 230 / 0.4), transparent 72%),
+      radial-gradient(60% 40% at 0% 100%, rgb(16 130 180 / 0.28), transparent 72%),
+      linear-gradient(180deg, #0b1a58 0%, #131f76 55%, #1b1b6e 100%);
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.16), 0 40px 70px -30px rgb(2 6 40 / 0.8);
+    color: #fff;
+    isolation: isolate;
+    -webkit-clip-path: inset(0 0 100% 0 round 0 0 28px 28px);
+    clip-path: inset(0 0 100% 0 round 0 0 28px 28px);
+    visibility: hidden;
+    transition: clip-path 0.6s cubic-bezier(0.22, 0.8, 0.28, 1), visibility 0s linear 0.6s;
+  }
+
+  [data-open] .header-nav {
+    -webkit-clip-path: inset(0 0 0 0 round 0 0 28px 28px);
+    clip-path: inset(0 0 0 0 round 0 0 28px 28px);
+    visibility: visible;
+    transition-delay: 0s;
+  }
+
+  /* le grain de risographie de « Qui suis-je » */
+  .header-nav::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+      var(--grain-soft) 0 0 / 160px 160px repeat,
+      var(--speck) 30px 70px / 256px 256px repeat;
+    background-blend-mode: soft-light, normal;
+    opacity: 0.5;
+  }
+
+  .nav-links {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    counter-reset: nav;
+  }
+
+  /* liens : ferrés à droite, en grand, numéro discret à gauche, filet fin entre chaque */
+  .header-nav .nav-links a {
+    position: relative;
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: flex-end;
+    gap: 14px;
+    min-height: clamp(42px, 7svh, 56px);
+    padding: clamp(5px, 1.4svh, 14px) 2px;
+    border-top: 1px solid rgb(255 255 255 / 0.13);
+    font-family: var(--font-display);
+    font-size: clamp(1.4rem, min(8.4vw, 4.4svh), 2.3rem);
+    font-weight: 600;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    color: #fff;
+    text-align: right;
+  }
+
+  .nav-links a:first-child {
+    border-top: 0;
+  }
+
+  .header-nav .nav-links a::before {
+    counter-increment: nav;
+    content: counter(nav, decimal-leading-zero);
+    margin-right: auto;
+    align-self: center;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    color: rgb(255 255 255 / 0.42);
+  }
+
+  .header-nav .nav-links a::after {
+    display: none;
+  }
+
+  /* pas de bascule de libellé au toucher */
+  .header-nav .nav-links a:hover .nl-a,
+  .header-nav .nav-links a:focus-visible .nl-a {
+    opacity: 1;
+    transform: none;
+  }
+
+  .nl {
+    overflow: visible;
+    padding: 0;
+    margin: 0;
+  }
+
+  .nl-b {
+    display: none;
+  }
+
+  /* le lien de la page en cours : menthe, avec une pastille corail comme dans le logo */
+  .header-nav .nav-links a[aria-current] {
+    color: var(--cream);
+  }
+
+  .header-nav .nav-links a[aria-current] .nl-a {
+    font-weight: 600;
+  }
+
+  .header-nav .nav-links a[aria-current] .nl::after {
+    inset: 50% auto auto -20px;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--color-corail-500);
+    box-shadow: 0.18rem 0.15rem 0 rgb(45 70 220 / 0.6);
+    transform: translateY(-50%);
+  }
+
+  .header-nav .nav-links a:active {
+    background: rgb(255 255 255 / 0.06);
+  }
+
+  /* bouton principal : le verre clair des panneaux sombres, ferré à droite */
+  .header-nav .btn {
+    align-self: flex-end;
+    justify-content: center;
+    box-sizing: border-box;
+    width: min(100%, 380px);
+    min-height: 56px;
+    margin: clamp(14px, 3.2svh, 48px) 0 0;
+    padding: 0 24px;
+    border-radius: var(--radius-btn);
+    background: linear-gradient(180deg, #fff, rgb(226 236 252 / 0.96));
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    box-shadow: inset 0 1px 0 #fff, inset 0 0 0 1px rgb(255 255 255 / 0.7), 0 16px 34px -16px rgb(2 6 40 / 0.85), 0 0 44px -12px rgb(134 230 216 / 0.38);
+    font-size: 17px;
+    color: var(--ink);
+  }
+
+  /* deux actions du même gabarit : « Me contacter » (plein) et « Appeler » (au trait), pleine largeur de la colonne, 56 px, mêmes coins */
+  /* le bouton principal reçoit une icône de courrier, comme « Appeler » a son téléphone : même pratique pour les deux actions */
+  .header-nav .btn {
+    flex-direction: row;
+    gap: 12px;
+  }
+
+  .header-nav .btn::before {
+    content: '';
+    flex: none;
+    width: 18px;
+    height: 18px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2312202b' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='5.5' width='18' height='13' rx='2'/%3E%3Cpath d='M4 7.5l8 6 8-6'/%3E%3C/svg%3E") center / contain no-repeat;
+  }
+
+  .nav-direct {
+    display: flex;
+    width: min(100%, 380px);
+    align-self: flex-end;
+    margin: clamp(8px, 1.4svh, 12px) 0 0;
+  }
+
+  .header-nav .nav-direct a:not(.btn) {
+    display: inline-flex;
+    flex-direction: row;
+    box-sizing: border-box;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    height: 56px;
+    min-height: 56px;
+    padding: 0 24px;
+    border: 1px solid rgb(255 255 255 / 0.34);
+    border-radius: var(--radius-btn);
+    background: rgb(255 255 255 / 0.05);
+    font-family: var(--font-body);
+    font-size: 17px;
+    font-weight: 600;
+    color: #fff;
+    text-decoration: none;
+    transition: background-color 0.3s var(--ease-out), border-color 0.3s var(--ease-out);
+  }
+
+  .header-nav .nav-direct a:not(.btn)::before {
+    content: '';
+    flex: none;
+    width: 18px;
+    height: 18px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 4h3.2l1.6 4.2-2 1.3a11 11 0 0 0 5.7 5.7l1.3-2 4.2 1.6V19a1 1 0 0 1-1 1A15 15 0 0 1 4 5a1 1 0 0 1 1-1z'/%3E%3C/svg%3E") center / contain no-repeat;
+  }
+
+  .header-nav .nav-direct a:not(.btn):hover,
+  .header-nav .nav-direct a:not(.btn):focus-visible,
+  .header-nav .nav-direct a:not(.btn):active {
+    border-color: rgb(255 255 255 / 0.6);
+    background: rgb(255 255 255 / 0.1);
+    color: #fff;
+  }
+
+  /* la pastille flottante du bas de page s'efface derrière le menu */
+  html[data-nav-open] .sticky-cta {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  /* entrée : chaque ligne arrive du bas, l'une après l'autre ; à la fermeture tout part d'un coup */
+  .nav-links a,
+  .header-nav .btn,
+  .nav-direct {
+    opacity: 0;
+    translate: 0 22px;
+    transition: opacity 0.25s var(--ease-out), translate 0.25s var(--ease-out);
+  }
+
+  [data-open] .nav-links a,
+  [data-open] .header-nav .btn,
+  [data-open] .nav-direct {
+    opacity: 1;
+    translate: 0 0;
+    transition: opacity 0.5s var(--ease-out), translate 0.7s var(--ease-out);
+    transition-delay: calc(0.18s + var(--i, 7) * 0.055s);
+  }
+}
+
+@media (max-width: 560px) {
+  .menu-btn {
+    min-height: 48px;
+    padding: 0 8px 0 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .header-nav,
+  .nav-links a,
+  .header-nav .btn,
+  .nav-direct,
+  .menu-btn-bars i {
+    transition: none !important;
+  }
+}
+
+/* Navigation en cours : le menu reste ouvert, figé, jusqu'au fondu de page ; un second toucher ne relance rien */
+[data-leaving] .header-nav {
+  pointer-events: none;
+}
+
+/* Accueil, ordinateur : le bouton de l'en-tête est d'abord un bleu uni ; son grain apparaît au défilement, progressivement, en partant du centre
+   (--cta-p, de 0 à 1, écrit par StickyCta.astro). Les deux boutons « Parlons de votre projet » coexistent sans délai ni bascule. */
+@media (min-width: 1201px) {
+  html body:has(.hero) .site-header .header-nav .btn-primary {
+    position: relative;
+    isolation: isolate;
+    background:
+      linear-gradient(180deg, rgb(255 255 255 / 0.12), rgb(255 255 255 / 0) 55%),
+      var(--cta-blue);
+  }
+
+  html body:has(.hero) .site-header .header-nav .btn-primary::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    pointer-events: none;
+    background:
+      linear-gradient(rgb(19 36 124 / 0.58), rgb(19 36 124 / 0.58)),
+      var(--flecks) 0 0 / 512px 512px repeat,
+      var(--flecks) 210px 150px / 380px 380px repeat;
+    opacity: min(1, calc(var(--cta-p, 0) * 6));
+    -webkit-mask-image: radial-gradient(circle at 50% 50%, #000 calc(var(--cta-p, 0) * 75%), transparent calc(var(--cta-p, 0) * 75% + 30%));
+    mask-image: radial-gradient(circle at 50% 50%, #000 calc(var(--cta-p, 0) * 75%), transparent calc(var(--cta-p, 0) * 75% + 30%));
   }
 }

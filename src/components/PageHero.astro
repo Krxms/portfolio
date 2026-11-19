@@ -1,0 +1,77 @@
+---
+import './Hero.css';
+import R from './R.astro';
+import './HeroAmbient.css';
+import './HeroAtelier.css';
+import './PageHero.css';
+import FrostedCTA from './FrostedCTA.astro';
+import LinkUnder from './LinkUnder.astro';
+
+/* Hero des pages de service : le langage de l'accueil (papier grené, béton, boutons « Bauhaus + grès »), mais une autre illustration : une
+   gélule bleue penchée et son tracé en pointillés (le site en construction), un disque menthe et un quart de disque orange, aux formes
+   du logo. Le texte est aligné à gauche. Les formes sont décoratives (aria-hidden). */
+interface Props {
+  crumb: string;
+  kicker: string;
+  line1: string;
+  line2: string;
+  lead: string;
+  ctaHref: string;
+  ctaLabel: string;
+  linkHref?: string;
+  linkLabel?: string;
+  note?: string;
+  /** chapô plus large (limité à la colonne) et réparti sur des lignes équilibrées : pour un chapô de deux phrases dont la fin se retrouverait seule sur une ligne */
+  wideLead?: boolean;
+}
+const hasVisual = Astro.slots.has("default");
+const { crumb, kicker, line1, line2, lead, ctaHref, ctaLabel, linkHref, linkLabel, note, wideLead } = Astro.props;
+---
+
+<div class="hero-zone hero-zone--page" data-sticky-watch>
+  <div class="amb" aria-hidden="true">
+    <div class="amb-atelier">
+      <div class="at-paper"></div>
+      <div class="ph-dash"></div>
+      <div class="at-arch ph-pill"></div>
+      <div class="at-arch-mint ph-disc"></div>
+      <div class="at-orb ph-quarter"></div>
+      <div class="at-quarter"></div>
+      <div class="at-lift"></div>
+      <div class="at-film"></div>
+    </div>
+  </div>
+  <div class={`wrap ph-grid${hasVisual ? "" : " ph-grid--solo"}`}>
+    <div class="ph-copy">
+      <nav class="ph-crumbs" aria-label="Fil d’Ariane">
+        <a href="/">Accueil</a><span aria-hidden="true">/</span><span aria-current="page">{crumb}</span>
+      </nav>
+      <h1>
+        <span class="ph-kicker"><R t={kicker} /></span><span class="visually-hidden">. </span>{' '}
+        <span class="ph-l1"><R t={line1} /></span>{' '}
+        <span class="ph-l2"><R t={line2} /></span>
+      </h1>
+      <p class:list={['ph-lead', wideLead && 'ph-lead--wide']}><R t={lead} /></p>
+      <div class="ph-actions hero-actions">
+        <FrostedCTA href={ctaHref} ink>{ctaLabel}</FrostedCTA>
+        {linkHref && linkLabel && <LinkUnder href={linkHref} label={linkLabel} glow />}
+      </div>
+      {/* la note est découpée à chaque « · » : sur ordinateur, ses éléments se répartissent sur toute la largeur du chapô */}
+      {note && (
+        <p class="ph-note">
+          {note.split(' · ').map((part, i) => (
+            <>
+              {i > 0 && <span class="ph-sep" aria-hidden="true">·</span>}
+              <span><R t={part} /></span>
+            </>
+          ))}
+        </p>
+      )}
+    </div>
+    {hasVisual && (
+      <div class="ph-visual">
+        <slot />
+      </div>
+    )}
+  </div>
+</div>

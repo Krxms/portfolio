@@ -1,0 +1,872 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import R from '../../components/R.astro';
+import Tile from '../../components/Tile.astro';
+import FinalCta from '../../components/FinalCta.astro';
+import StickyCta from '../../components/StickyCta.astro';
+import LinkUnder from '../../components/LinkUnder.astro';
+import ServiceCards from '../../components/ServiceCards.astro';
+import '../../components/Tile.css';
+import '../../components/Hero.css';
+import '../../components/HeroAmbient.css';
+import '../../components/HeroAtelier.css';
+// l'entête (panneau bleu, surtitre, titre, chapô, pastilles) est celui de « À propos » : ses règles .ah-* sont réutilisées
+import '../../components/AboutHero.css';
+import './le-cuistologue.css';
+// la section « Pour votre projet » reprend les deux cartes de l'accueil : mêmes effets au défilement (cartes qui s'écartent du centre sur
+// ordinateur, carrousel qui pivote sur téléphone)
+import '../../styles/scenes.css';
+
+import { responsive } from '../../lib/responsive';
+import siteHeroPortable from '../../assets/projets/cuistologue/site-hero-portable.webp';
+import mobileTop from '../../assets/projets/cuistologue/mobile-top.webp';
+import visiteBureau from '../../assets/projets/cuistologue/visite-bureau.webp';
+import visiteMobile from '../../assets/projets/cuistologue/visite-mobile.webp';
+import logo from '../../assets/projets/cuistologue/logo.webp';
+import carteRoseA from '../../assets/projets/cuistologue/carte-rose-recto.webp';
+import carteRoseB from '../../assets/projets/cuistologue/carte-rose-verso.webp';
+import carteOrangeA from '../../assets/projets/cuistologue/carte-orange-recto.webp';
+import carteOrangeB from '../../assets/projets/cuistologue/carte-orange-verso.webp';
+import carteVertA from '../../assets/projets/cuistologue/carte-vert-recto.webp';
+import carteVertB from '../../assets/projets/cuistologue/carte-vert-verso.webp';
+import flyerA from '../../assets/projets/cuistologue/flyer-recto.webp';
+import flyerB from '../../assets/projets/cuistologue/flyer-verso.webp';
+import afficheGP from '../../assets/projets/cuistologue/affiche-grands-parents.webp';
+import afficheParents from '../../assets/projets/cuistologue/affiche-parents.webp';
+import afficheTele from '../../assets/projets/cuistologue/affiche-teletravail.webp';
+
+// les deux captures de l'en-tête, aux tailles réellement affichées (téléphone : environ 320 px et 80 px de large)
+const heroLaptop = await responsive(siteHeroPortable, [400, 640, 900, 1200], '(max-width: 700px) 80vw, 44vw');
+const heroPhone = await responsive(mobileTop, [200, 320, 480, 780], '(max-width: 700px) 22vw, 12vw');
+
+// Deux palettes, présentées en bento. ink : la couleur du texte posé sur l'aplat.
+// 1. Logo et imprimés : les cinq carrés du fichier de travail Figma (page « Charte graphique », nœud 2113:523). Les calques n'y sont pas nommés (« Rectangle 1 »…) :
+//    les noms ci-dessous sont descriptifs. Rose, Vert d'eau, Sauge et Orange doré sont les teintes des feuilles du logo, reprises par les cartes de visite ;
+//    le mauve n'a pas d'usage documenté dans la charte.
+const printPalette = [
+  { id: 'rose', name: 'Rose', hex: '#FF9797', ink: '#2C2C28', use: 'Une feuille du logo, la carte de visite rose.' },
+  { id: 'eau', name: 'Vert d’eau', hex: '#7FA8A2', ink: '#2C2C28', use: 'Une feuille du logo.' },
+  { id: 'sauge', name: 'Sauge', hex: '#8BA47E', ink: '#2C2C28', use: 'Une feuille du logo, la carte de visite sauge.' },
+  { id: 'mauve', name: 'Mauve', hex: '#AA8DA7', ink: '#2C2C28', use: 'Teinte d’illustration (usage à confirmer).' },
+  { id: 'orange', name: 'Orange doré', hex: '#F1BE7C', ink: '#2C2C28', use: 'Une feuille du logo, la carte de visite orange.' },
+];
+// 2. Le site lecuistologue.fr : cinq teintes, valeurs actuelles du site, en trois usages.
+const webPalette = [
+  { id: 'creme', name: 'Blanc cassé rosé', hex: '#FBF8F7', ink: '#2C2C2C', use: 'Fond principal et sections claires.' },
+  { id: 'peche', name: 'Pêche pâle', hex: '#F8E0CF', ink: '#2C2C2C', use: 'Fond d’ambiance et pied de page.' },
+  { id: 'ocre', name: 'Ocre doré', hex: '#DAA35B', ink: '#2C2C2C', use: 'Mots mis en valeur dans les titres.' },
+  { id: 'anthracite', name: 'Anthracite', hex: '#2C2C2C', ink: '#FBF8F7', use: 'Titres, texte courant et navigation.' },
+  { id: 'ardoise', name: 'Bleu ardoise', hex: '#253D4A', ink: '#FBF8F7', use: 'Boutons pleins et certains textes.' },
+];
+
+// Les pièces imprimées, dans l'ordre de la scène : trois affiches A3 (un même service, trois situations), puis les cartes de visite et le flyer.
+// Les textes viennent des pièces elles-mêmes ; les formats, des noms des sections du fichier de travail (affiche A3, cartes 88 × 58 mm, flyer 151 × 213 mm).
+const posters = [
+  {
+    kind: 'poster',
+    index: 'Grands-parents',
+    kicker: 'Affiche A3 · Les grands-parents',
+    tagline: 'Prendre de leurs nouvelles, c’est bien. Mais prendre soin d’eux, c’est encore mieux.',
+    note: 'Pour ceux qui veillent sur un parent âgé.',
+    bg: '#8ba47e',
+    img: afficheGP,
+    alt: 'Affiche A3 « Prendre de leurs nouvelles, c’est bien. Mais prendre soin d’eux, c’est encore mieux. » : le cuisinier des grands-parents',
+  },
+  {
+    kind: 'poster',
+    index: 'Parents débordés',
+    kicker: 'Affiche A3 · Les parents débordés',
+    tagline: '18 h 52, les devoirs ne sont pas terminés : pas de panique, le repas est déjà prêt.',
+    note: 'Pour les soirées où tout arrive en même temps.',
+    bg: '#e3a1a5',
+    img: afficheParents,
+    alt: 'Affiche A3 « 18 h 52, pas de panique, le repas est déjà prêt » : le cuisinier des parents débordés',
+  },
+  {
+    kind: 'poster',
+    index: 'Télétravailleurs',
+    kicker: 'Affiche A3 · Les télétravailleurs',
+    tagline: 'Entre deux visios, offrez-vous le temps de bien manger.',
+    note: 'Pour ceux qui travaillent à la maison.',
+    bg: '#e2b97d',
+    img: afficheTele,
+    alt: 'Affiche A3 « Entre deux visios, offrez-vous le temps de bien manger » : le cuisinier des télétravailleurs débordés',
+  },
+];
+
+const cards = [
+  { label: 'Rose', a: carteRoseA, b: carteRoseB },
+  { label: 'Orange', a: carteOrangeA, b: carteOrangeB },
+  { label: 'Sauge', a: carteVertA, b: carteVertB },
+];
+
+// Les imprimés défilent sur une bande de hauteur fixe (environ 56 % de l'écran) : affiches et faces du flyer y font ~ 380 px de large,
+// une carte ~ 420 px. La version agrandie, au clic, reste l'image d'origine (data-src).
+const posterThumbs = await Promise.all(posters.map((p) => responsive(p.img, [360, 560, 800], '(max-width: 700px) 66vw, 30vw')));
+// les cartes : recto au-dessus, verso dessous, chacune sur un peu moins de la moitié de la hauteur de la bande (~ 350 px de large)
+const cardThumbs = await Promise.all(
+  cards.map(async (c) => ({
+    a: await responsive(c.a, [360, 540, 720], '(max-width: 900px) 46vw, 26vw'),
+    b: await responsive(c.b, [360, 540, 720], '(max-width: 900px) 46vw, 26vw'),
+  })),
+);
+const flyerThumbs = { a: await responsive(flyerA, [360, 560, 856], '(max-width: 700px) 66vw, 28vw'), b: await responsive(flyerB, [360, 560, 857], '(max-width: 700px) 66vw, 28vw') };
+const logoThumb = await responsive(logo, [480, 800, 1200], '(max-width: 900px) 86vw, 46vw');
+
+// Le site, de haut en bas : les deux captures pleine page (ordinateur 1200 px de large, téléphone 390 px affichés en 600 px), relevées le 13 novembre 2026, aux tailles affichées.
+const visitDesk = await responsive(visiteBureau, [800, 1200], '(max-width: 700px) 1px, (max-width: 900px) 60vw, 52vw');
+const visitMob = await responsive(visiteMobile, [320, 480, 600], '(max-width: 700px) 60vw, 16vw');
+// Dans Figma : une courte vidéo (public/videos/cuistologue-figma.mp4, 15 s, en boucle) qui navigue dans le fichier de travail comme le ferait
+// quelqu'un à la souris : vue d'ensemble des neuf pages, zoom sur l'accueil, puis sur la page Formules, retour à la vue d'ensemble. Les images sont les maquettes du fichier (page « Site — Visuels des pages »), sans fondu ni montage. Le fil d'Ariane et la légende
+// de la fenêtre suivent la lecture (voir le script plus bas) ; la liste ci-dessous reste la description textuelle des étapes.
+const reel = [
+  { t: 'Premier écran', d: 'Le service expliqué dès le premier écran, et deux chemins : découvrir les formules ou demander un devis.' },
+  { t: 'Formules', d: 'La présentation des prix et du contenu d’une intervention.' },
+  { t: 'Les pages', d: 'Les pages du site, côte à côte dans le même fichier.' },
+];
+
+const visitSteps = [{ t: 'La promesse' }, { t: 'Le cuisinier' }, { t: 'La méthode' }, { t: 'Le prix' }, { t: 'La zone' }];
+
+// La fiche du projet : les faits, en une ligne chacun.
+const facts = [
+  { t: 'Client', d: 'Le Cuistologue, cuisinier à domicile' },
+  { t: 'Territoire', d: 'Oise, Val-d’Oise, Yvelines, Eure' },
+  { t: 'Livrables', d: 'Identité visuelle, imprimés, site web' },
+  { t: 'Démarrage', d: 'Avril 2026' },
+];
+
+// Les choix de conception, en une ligne chacun (version courte de la section « Les choix » du dossier).
+const choices = [
+  { t: 'Un parcours progressif.', d: 'Le service d’abord, puis le cuisinier, avec un texte et sa photo, avant le fonctionnement et les prestations.' },
+  { t: 'Des prix lisibles, définis par le client.', d: 'Un prix d’appel visible, le contenu d’une intervention détaillé, les formules accessibles depuis l’accueil.' },
+  { t: 'Deux chemins vers le contact.', d: 'Un contact direct, ou une demande à partir d’une formule choisie, qui arrive avec son contexte.' },
+];
+
+// Ce qui a été livré. La prise en main de l'administration et la maintenance n'y figurent pas tant qu'elles ne sont pas confirmées
+// (point C3 du dossier : l'intégration des champs personnalisés ACF est à venir).
+const delivered = [
+  'Logo, identité visuelle, palette, typographies et éléments graphiques',
+  'Trois affiches A3, des cartes de visite en trois versions, un flyer recto verso',
+  'Architecture, UX/UI et maquettes Figma du site',
+  'Développement et intégration du site, sur ordinateur et sur mobile',
+  'Architecture WordPress headless : WordPress est installé ; l’intégration des champs personnalisés (ACF), qui complétera l’administration des contenus, est à venir',
+  'Hébergement, configuration et mise en ligne',
+  'Optimisations techniques de performance, d’accessibilité et de référencement',
+  'Fichiers finaux et sources convenues',
+];
+
+// Mesures relevées sur le site en ligne (lecuistologue.fr, page d'accueil), le 6 novembre 2026, en laboratoire.
+const metrics = [
+  { value: '100', unit: '/100', label: 'SEO · Lighthouse', note: 'Lighthouse mobile, contrôle automatisé de bonnes pratiques' },
+  { value: '91', unit: '/100', label: 'Accessibilité', note: 'Lighthouse mobile (95 sur ordinateur)' },
+  { value: '100', unit: '/100', label: 'Bonnes pratiques', note: 'Lighthouse mobile' },
+  { value: '264', unit: 'ms', label: 'Affichage du contenu principal', note: 'LCP, Chrome sans bridage' },
+  { value: '0', unit: '', label: 'Décalage de mise en page', note: 'CLS, Chrome sans bridage' },
+];
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'CreativeWork',
+      name: 'Le Cuistologue : identité visuelle, site web et imprimés',
+      creator: { '@type': 'Person', name: 'Antoine Bruneau', url: 'https://antoinebruneau.fr' },
+      about: 'Cuisinier à domicile (Oise, Val-d’Oise, Yvelines, Eure)',
+      url: 'https://antoinebruneau.fr/projets/le-cuistologue/',
+      sameAs: 'https://lecuistologue.fr',
+      inLanguage: 'fr-FR',
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Accueil', item: 'https://antoinebruneau.fr/' },
+        { '@type': 'ListItem', position: 2, name: 'Le Cuistologue', item: 'https://antoinebruneau.fr/projets/le-cuistologue/' },
+      ],
+    },
+  ],
+};
+
+---
+
+<BaseLayout
+  title="Le Cuistologue : identité, site, imprimés"
+  description="Étude de cas : identité visuelle, imprimés et site web d’un cuisinier à domicile. Rendre un service lisible et humain avant le premier appel."
+  schema={schema}
+>
+  {/* ===== Entête : le même panneau bleu que « À propos » ; les écrans du projet à la place du portrait ===== */}
+  <div class="hero-zone hero-zone--page ah" data-sticky-watch>
+    <div class="amb" aria-hidden="true">
+      <div class="amb-atelier">
+        <div class="at-paper"></div>
+        <div class="at-film"></div>
+      </div>
+    </div>
+
+    <div class="wrap wrap--wide">
+      <div class="ah-panel pj-panel panel-blue panel-blue--riso">
+        <div class="ah-copy">
+          <h1>
+            <span class="ah-kicker">Projet client, avril 2026</span><span class="visually-hidden">. </span>{' '}
+            <span class="ah-l1">Le Cuistologue,</span>{' '}
+            <span class="ah-l2">identité, site <span class="pj-et">et</span> print.</span>
+          </h1>
+          <p class="ah-lead">Un visage, un site et des supports imprimés pour un cuisinier à domicile, qui prépare chez ses clients les repas de la semaine.</p>
+          <ul class="ah-zones" role="list"><li>Identité visuelle</li><li>Site web</li><li>Imprimés</li></ul>
+          <p class="pj-live"><LinkUnder href="https://lecuistologue.fr" label="Voir le site en ligne" external tone="light" /></p>
+        </div>
+
+        <div class="pj-stage">
+          <div class="laptop">
+            <img {...heroLaptop} alt="Page d’accueil du site lecuistologue.fr sur ordinateur : « Une façon simple de bien manger »" fetchpriority="high" decoding="async" />
+          </div>
+          <div class="phone phone--float">
+            <img {...heroPhone} alt="Le même site sur mobile" decoding="async" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {/* ===== Le projet : une phrase, la fiche ; à droite, le site en ligne mesuré ===== */}
+  <section class="tile tile--light pj-brief" id="projet" aria-labelledby="projet-title">
+    <div class="wrap wrap--wide tile-inner">
+      <div class="pj-brief-grid">
+        <div class="pj-brief-copy">
+          <p class="tile-label">Le projet</p>
+          <h2 id="projet-title">Faire confiance avant d’ouvrir sa porte.</h2>
+          <p class="pj-brief-lead">Un cuisinier vient travailler dans votre cuisine. Avant même d’appeler, on veut savoir qui il est, ce qu’il prépare et comment se passe une intervention. Le client avait déjà défini ses prestations et ses tarifs : mon travail a porté sur leur présentation, l’identité, les supports et le site.</p>
+          <ol class="pj-choices" role="list" aria-label="Les choix">
+            {choices.map((c) => <li><strong><R t={c.t} /></strong> <R t={c.d} /></li>)}
+          </ol>
+          <dl class="pj-facts">
+            {facts.map((f) => <div><dt><R t={f.t} /></dt><dd><R t={f.d} /></dd></div>)}
+          </dl>
+          {/* la liste des livrables, repliée : on l'ouvre si on la cherche */}
+          <details class="pj-delivered">
+            <summary>Ce qui a été livré</summary>
+            <ul role="list">{delivered.map((d) => <li>{d}</li>)}</ul>
+          </details>
+        </div>
+
+        <div class="pj-results panel-blue panel-blue--riso">
+          <h3>Le site en ligne, mesuré</h3>
+          <ul class="pj-metrics" role="list">
+            {
+              metrics.map((m) => (
+                <li>
+                  <p class="pj-metric-value">{m.value}<small>{m.unit}</small></p>
+                  <p class="pj-metric-label"><R t={m.label} /></p>
+                  <p class="pj-metric-note"><R t={m.note} /></p>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* ===== Dans Figma : la fenêtre du fichier, qui présente en une courte vidéo les quatre plans (fil de fer, premier écran, formules, les neuf pages).
+         Lecture automatique, muette et en boucle quand la section est visible ; aucune dépendance au défilement. Bouton pause/lecture ; avec
+         « Réduire les animations », la vidéo ne démarre pas (image fixe, lecture à la demande). ===== */}
+  <section class="tile tile--light pj-visit-tile" id="figma" aria-labelledby="figma-title">
+    <div class="pj-visit-track" data-reel>
+      <div class="pj-visit-pin">
+        <div class="wrap wrap--wide pj-visit">
+          <header class="pj-visit-head">
+            <div>
+              <p class="tile-label">Dans Figma</p>
+              <h2 id="figma-title">Du premier plan aux écrans.</h2>
+            </div>
+          </header>
+
+          <div class="pj-visit-stage pj-reel-stage">
+            <figure class="pj-fig">
+              <div class="pj-fig-bar" aria-hidden="true">
+                <span class="pj-fig-file">Le Cuistologue</span>
+                <span class="pj-fig-crumb" data-reel-crumb>Site — Visuels des pages</span>
+              </div>
+              <div class="pj-fig-view">
+                <video
+                  data-reel-video
+                  data-src="/videos/cuistologue-figma.mp4"
+                  data-src-mobile="/videos/cuistologue-figma-mobile.mp4"
+                  width="1440"
+                  height="810"
+                  muted
+                  loop
+                  playsinline
+                  preload="none"
+                  poster="/videos/cuistologue-figma-poster.webp"
+                  aria-label="Navigation dans le fichier Figma du Cuistologue : vue d’ensemble des neuf pages, accueil, page Formules, retour à la vue d’ensemble"
+                >
+                </video>
+                <button type="button" class="pj-reel-toggle" data-reel-toggle aria-label="Mettre en pause la vidéo">
+                  <svg class="ico-pause" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1" fill="currentColor" /><rect x="14" y="5" width="4" height="14" rx="1" fill="currentColor" /></svg>
+                  <svg class="ico-play" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.9l10.5-6.5a1 1 0 0 0 0-1.8L9.5 4.6A1 1 0 0 0 8 5.5Z" fill="currentColor" /></svg>
+                </button>
+              </div>
+            </figure>
+          </div>
+          <ol class="visually-hidden" aria-label="Les étapes de la vidéo, dans l’ordre">
+            {reel.map((r) => <li>{r.t} : {r.d}</li>)}
+          </ol>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* ===== Le site, de haut en bas : une scène bleue (celle de la vitrine de l'accueil), une fenêtre de navigateur et un téléphone. Pendant
+         qu'on descend, la scène reste en place et les deux écrans font défiler le vrai site, ensemble : le téléphone montre toujours la même
+         partie que l'ordinateur. Les pastilles disent où l'on est, et y mènent. « Réduire les animations » : rien n'est épinglé, chaque écran
+         se fait défiler lui-même. 
+  <section class="tile tile--light pj-visit-tile" id="site" aria-labelledby="site-title">
+    <div class="pj-visit-track" data-visit>
+      <div class="pj-visit-pin">
+        <div class="wrap wrap--wide pj-visit">
+          <header class="pj-visit-head">
+            <div>
+              <p class="tile-label">Le site</p>
+              <h2 id="site-title">De la promesse au prix, en une page.</h2>
+            </div>
+            <ol class="pj-visit-steps" role="list" aria-label="Parties du site">
+              {
+                visitSteps.map((s, i) => (
+                  <li>
+                    <button type="button" data-visit-step={i} aria-pressed={i === 0 ? 'true' : 'false'}>
+                      <R t={s.t} />
+                    </button>
+                  </li>
+                ))
+              }
+            </ol>
+          </header>
+
+          <div class="pj-visit-stage">
+            <i class="pj-shape pj-shape--disc concrete" aria-hidden="true"></i>
+            <i class="pj-shape pj-shape--arch concrete" aria-hidden="true"></i>
+            <i class="pj-shape pj-shape--quarter concrete" aria-hidden="true"></i>
+
+            <figure class="pj-browser">
+              <div class="pj-bar" aria-hidden="true"><i></i><i></i><i></i><span>lecuistologue.fr</span></div>
+              <div class="pj-view" data-visit-view="desk" tabindex="-1">
+                <img {...visitDesk} alt="La page d’accueil de lecuistologue.fr, en entier, sur ordinateur" data-visit-img loading="lazy" decoding="async" />
+              </div>
+            </figure>
+
+            <figure class="pj-phone">
+              <div class="pj-view" data-visit-view="mob" tabindex="-1">
+                <img {...visitMob} alt="La même page sur téléphone" data-visit-img loading="lazy" decoding="async" />
+              </div>
+            </figure>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>===== */}
+
+  {/* ===== L'identité, en bento : le logo à gauche, la police à droite (la phrase des imprimés, en Poppins, sur le vert profond des
+         imprimés) ; dessous, la palette des imprimés, en aplats. Rien n'est cliquable : c'est une planche, pas un outil. ===== */}
+  <section class="tile tile--light pj-identity" id="identite" aria-labelledby="id-title">
+    <div class="wrap wrap--wide tile-inner">
+      <header class="pj-sec-head">
+        <p class="tile-label">L’identité</p>
+        <h2 id="id-title">Un logo, deux polices, une palette.</h2>
+      </header>
+
+      <div class="pj-id">
+        <figure class="pj-id-logo">
+          <img {...logoThumb} alt="Logo du Cuistologue : une assiette, des feuilles, la fourchette et le couteau" loading="lazy" decoding="async" />
+        </figure>
+
+        <figure class="pj-spec">
+          <p class="pj-spec-big" aria-hidden="true">On mange<br /><span>quoi</span> ce&nbsp;soir&nbsp;?</p>
+          <figcaption class="pj-spec-meta"><span>Poppins pour les titres</span><span>Inter pour le texte</span></figcaption>
+        </figure>
+
+        <div class="pj-pals">
+          <div class="pj-bento pj-bento--print" role="group" aria-labelledby="pal-print">
+            <h3 class="pj-bento-title" id="pal-print">Logo et imprimés</h3>
+            {
+              printPalette.map((c) => (
+                <div class={`pj-tile pj-tile--${c.id}`} style={`--c:${c.hex};--t:${c.ink}`}>
+                  <span class="pj-tile-name">{c.name}</span>
+                  <span class="pj-tile-hex">{c.hex}</span>
+                  <span class="pj-tile-use">{c.use}</span>
+                </div>
+              ))
+            }
+          </div>
+
+          <div class="pj-bento pj-bento--web" role="group" aria-labelledby="pal-web">
+            <h3 class="pj-bento-title" id="pal-web">Site web</h3>
+            {
+              webPalette.map((c) => (
+                <div class={`pj-tile pj-tile--${c.id}`} style={`--c:${c.hex};--t:${c.ink}`}>
+                  <span class="pj-tile-name">{c.name}</span>
+                  <span class="pj-tile-hex">{c.hex}</span>
+                  <span class="pj-tile-use">{c.use}</span>
+                </div>
+              ))
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* ===== Les imprimés : une bande qui défile de côté pendant qu'on descend (ordinateur), qu'on fait glisser au doigt (téléphone).
+         Chaque pièce s'agrandit au clic. ===== */}
+  <section class="tile tile--light pj-print" id="imprimes" aria-labelledby="print-title">
+    <div class="pj-strip-track" data-strip>
+      <div class="pj-strip-stage">
+        <header class="pj-sec-head wrap wrap--wide">
+          <p class="tile-label">Les imprimés</p>
+          <h2 id="print-title">Une offre, trois quotidiens.</h2>
+        </header>
+
+        <div class="pj-strip" data-strip-scroll tabindex="0" role="region" aria-label="Les imprimés : faites glisser pour parcourir">
+          <ul class="pj-strip-row" role="list" data-strip-row>
+            {
+              posters.map((p, pi) => (
+                <li class="pj-print-item pj-print-item--poster">
+                  <button type="button" class="pj-zoom-btn pj-piece" data-zoom data-src={p.img.src} data-w={p.img.width} data-h={p.img.height} data-alt={p.alt} data-cap={`Affiche A3 · ${p.index}`}>
+                    <img {...posterThumbs[pi]} alt={p.alt} loading="lazy" decoding="async" draggable="false" />
+                  </button>
+                  <p class="pj-print-cap">Affiche A3 · {p.index}</p>
+                </li>
+              ))
+            }
+            <li class="pj-print-item pj-print-item--cards">
+              <div class="pj-cards">
+                {
+                  cards.map((c, ci) => (
+                    <button type="button" class="pj-zoom-btn pj-piece pj-card" data-zoom data-src={c.a.src} data-w={c.a.width} data-h={c.a.height} data-src2={c.b.src} data-w2={c.b.width} data-h2={c.b.height} data-alt={`Carte de visite ${c.label.toLowerCase()}, recto`} data-alt2={`Carte de visite ${c.label.toLowerCase()}, verso`} data-cap={`Carte de visite · ${c.label}`}>
+                      <img {...cardThumbs[ci].a} alt={`Carte de visite ${c.label.toLowerCase()}, recto`} loading="lazy" decoding="async" draggable="false" />
+                      <img {...cardThumbs[ci].b} alt={`Carte de visite ${c.label.toLowerCase()}, verso`} loading="lazy" decoding="async" draggable="false" />
+                    </button>
+                  ))
+                }
+              </div>
+              <p class="pj-print-cap">Cartes de visite, recto et verso · 88 × 58 mm</p>
+            </li>
+            <li class="pj-print-item pj-print-item--flyer">
+              <button type="button" class="pj-zoom-btn pj-piece pj-flyer" data-zoom data-src={flyerA.src} data-w={flyerA.width} data-h={flyerA.height} data-src2={flyerB.src} data-w2={flyerB.width} data-h2={flyerB.height} data-alt="Flyer, recto" data-alt2="Flyer, verso" data-cap="Flyer · 151 × 213 mm">
+                <img {...flyerThumbs.a} alt="Flyer, recto : « On mange quoi ce soir ? »" loading="lazy" decoding="async" draggable="false" />
+                <img {...flyerThumbs.b} alt="Flyer, verso : « Comment ça marche ? », trois étapes, le cuisinier et la formule" loading="lazy" decoding="async" draggable="false" />
+              </button>
+              <p class="pj-print-cap">Flyer · 151 × 213 mm</p>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* L'agrandissement : la pièce seule sur le papier du site, flouté ; en bas, une barre de verre (légende, recto et verso, pièce précédente
+      et suivante, fermer). Flèches du clavier pour passer d'une pièce à l'autre, Échap pour fermer. */}
+  <dialog class="pj-lb" id="pj-lb" aria-label="Livrable agrandi" tabindex="-1">
+    <div class="pj-lb-stage" data-lb-stage></div>
+    <div class="pj-lb-bar glass">
+      <p class="pj-lb-cap" data-lb-cap aria-live="polite"></p>
+      <div class="pj-lb-faces" data-lb-faces role="group" aria-label="Face affichée">
+        <button type="button" data-lb-face="0" aria-pressed="true">Recto</button>
+        <button type="button" data-lb-face="1" aria-pressed="false">Verso</button>
+      </div>
+      <div class="pj-lb-nav">
+        <button type="button" class="pj-lb-ico" data-lb-prev aria-label="Pièce précédente">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 6l-6 6 6 6" /></svg>
+        </button>
+        <span class="pj-lb-count" data-lb-count></span>
+        <button type="button" class="pj-lb-ico" data-lb-next aria-label="Pièce suivante">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 6l6 6-6 6" /></svg>
+        </button>
+      </div>
+      <button type="button" class="pj-lb-ico pj-lb-close" data-lb-close aria-label="Fermer">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11" /></svg>
+      </button>
+    </div>
+  </dialog>
+
+  {/* Pour votre projet : les deux cartes de domaine de l'accueil, telles quelles */}
+  <Tile id="suite" title="Pour votre projet." sub="On commence là où vous en êtes.">
+    <ServiceCards compact />
+  </Tile>
+
+  <div class="dark-zone">
+    <FinalCta
+      title="Un projet qui a besoin de caractère ?"
+      text="Écrivez-moi quelques lignes sur votre projet."
+      label="Présenter mon projet"
+    />
+  </div>
+
+  <StickyCta />
+</BaseLayout>
+
+<script>
+  import '../../scripts/scenes.js';
+
+  // ---------- Commun ----------
+  const wide = matchMedia('(min-width: 901px)');
+  const still = matchMedia('(prefers-reduced-motion: reduce)');
+  const pinned = () => wide.matches && !still.matches;
+  const lenisTo = (top: number) => {
+    const lenis = (window as unknown as { __lenis?: { scrollTo: (y: number, o?: object) => void } }).__lenis;
+    if (lenis) lenis.scrollTo(top, { duration: 1.1 });
+    else scrollTo({ top, behavior: still.matches ? 'auto' : 'smooth' });
+  };
+  const onScroll = (fn: () => void) => {
+    let ticking = false;
+    addEventListener(
+      'scroll',
+      () => {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(() => {
+          ticking = false;
+          fn();
+        });
+      },
+      { passive: true },
+    );
+  };
+
+  // ---------- Dans Figma ----------
+  // La vidéo (15 s) démarre quand la fenêtre est à l'écran et s'arrête quand elle n'y est plus. Le fil d'Ariane et la légende
+  // suivent le plan en cours. « Réduire les animations » : pas de lecture automatique (l'image fixe reste), le bouton lance la vidéo à la demande.
+  const reelEl = document.querySelector<HTMLElement>('[data-reel]');
+  const reelVideo = reelEl?.querySelector<HTMLVideoElement>('[data-reel-video]');
+  if (reelEl && reelVideo) {
+    const crumb = reelEl.querySelector<HTMLElement>('[data-reel-crumb]')!;
+    const toggle = reelEl.querySelector<HTMLButtonElement>('[data-reel-toggle]')!;
+    // [début en secondes, fil d'Ariane] : la vidéo (15 s) zoome sur l'accueil à 0,4 s, passe à la page Formules à 6,4 s, revient à la vue d'ensemble à 11,9 s
+    const texts: [number, string][] = [
+      [0, 'Site — Visuels des pages'],
+      [0.4, 'Site — Visuels des pages · Accueil'],
+      [6.4, 'Site — Visuels des pages · Formules'],
+      [11.9, 'Site — Visuels des pages'],
+    ];
+    let shown = -1;
+    let userPaused = false;
+    let visible = false;
+    const sync = () => {
+      const t = reelVideo.currentTime % 15;
+      let k = 0;
+      texts.forEach((x, i) => {
+        if (t >= x[0]) k = i;
+      });
+      if (k === shown) return;
+      shown = k;
+      crumb.textContent = texts[k][1];
+    };
+    const label = () => {
+      const playing = !reelVideo.paused;
+      toggle.setAttribute('aria-label', playing ? 'Mettre en pause la vidéo' : 'Lire la vidéo');
+      toggle.classList.toggle('is-paused', !playing);
+    };
+    // Aucun octet de vidéo n'est demandé avant la première lecture. Sur téléphone (écran étroit ou économiseur de données), c'est la version
+    // légère (720 px, 24 i/s, environ 0,7 Mo au lieu de 4,4 Mo) ; avec l'économiseur de données ou une connexion lente, rien ne démarre seul.
+    const conn = (navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } }).connection;
+    const lean = matchMedia('(max-width: 700px)').matches || !!conn?.saveData;
+    const slow = !!conn && (!!conn.saveData || /(^|-)2g$|3g/.test(conn.effectiveType || ''));
+    const load = () => {
+      if (reelVideo.getAttribute('src')) return;
+      reelVideo.src = (lean && reelVideo.dataset.srcMobile) || reelVideo.dataset.src || '';
+    };
+    const play = () => {
+      load();
+      return reelVideo.play().catch(() => {});
+    };
+    reelVideo.addEventListener('timeupdate', sync);
+    reelVideo.addEventListener('play', label);
+    reelVideo.addEventListener('pause', label);
+    toggle.addEventListener('click', () => {
+      if (reelVideo.paused) {
+        userPaused = false;
+        play();
+      } else {
+        userPaused = true;
+        reelVideo.pause();
+      }
+    });
+    new IntersectionObserver(
+      (entries) => {
+        visible = entries[entries.length - 1].isIntersecting;
+        if (visible && !userPaused && !still.matches && !slow) play();
+        if (!visible) reelVideo.pause();
+      },
+      { threshold: 0.35 },
+    ).observe(reelVideo);
+    label();
+  }
+
+  // ---------- Le site, de haut en bas ----------
+  // Les repères sont des hauteurs dans les captures d'origine (1200 px de large pour l'ordinateur, 600 px pour le téléphone) : le haut de
+  // chaque partie de la page. Entre deux repères, la position du téléphone est interpolée depuis celle de l'écran principal, pour que les
+  // deux montrent toujours la même partie. L'écran principal est l'ordinateur, ou le téléphone quand l'ordinateur est masqué (petits écrans).
+  const visit = document.querySelector<HTMLElement>('[data-visit]');
+  if (visit) {
+    const pin = visit.firstElementChild as HTMLElement;
+    const steps = [...visit.querySelectorAll<HTMLButtonElement>('[data-visit-step]')];
+    const layers = [
+      { view: visit.querySelector<HTMLElement>('[data-visit-view="desk"]')!, natW: 1200, natH: 5951, keys: [0, 820, 1860, 2700, 4900] },
+      { view: visit.querySelector<HTMLElement>('[data-visit-view="mob"]')!, natW: 600, natH: 12095, keys: [0, 1670, 4400, 6640, 9875] },
+    ].map((l) => ({ ...l, img: l.view.querySelector<HTMLImageElement>('img')! }));
+
+    // pour un calque : facteur d'échelle (px affichés par px d'origine) et course maximale, en px d'origine
+    const geo = (l: (typeof layers)[number]) => {
+      const k = l.view.clientWidth / l.natW;
+      return { k, max: k > 0 ? Math.max(0, l.natH - l.view.clientHeight / k) : 0 };
+    };
+    // interpolation par morceaux entre deux suites de repères (fermées par la course maximale de chacun)
+    const mapY = (y: number, from: number[], to: number[]) => {
+      for (let i = 1; i < from.length; i++) {
+        if (y <= from[i]) {
+          const t = (y - from[i - 1]) / Math.max(1, from[i] - from[i - 1]);
+          return to[i - 1] + t * (to[i] - to[i - 1]);
+        }
+      }
+      return to[to.length - 1];
+    };
+
+    let cur = -1;
+    const mark = (k: number) => {
+      if (k === cur) return;
+      cur = k;
+      steps.forEach((b, i) => b.setAttribute('aria-pressed', String(i === k)));
+    };
+
+    // place les deux écrans pour une position y (px d'origine) de l'écran principal
+    const place = (y: number) => {
+      const g = layers.map(geo);
+      const main = g[0].k > 0 ? 0 : 1;
+      const ends = layers.map((l, i) => [...l.keys.filter((v) => v < g[i].max), g[i].max]);
+      layers.forEach((l, i) => {
+        if (g[i].k === 0) return;
+        let yi = y;
+        if (i !== main) {
+          // les repères communs aux deux suites (même nombre de points des deux côtés)
+          const n = Math.min(ends[main].length, ends[i].length);
+          const a = [...ends[main].slice(0, n - 1), g[main].max];
+          const b = [...ends[i].slice(0, n - 1), g[i].max];
+          yi = mapY(y, a, b);
+        }
+        l.img.style.transform = `translate3d(0, ${(-yi * g[i].k).toFixed(1)}px, 0)`;
+      });
+      const keys = layers[main].keys;
+      let k = 0;
+      keys.forEach((v, i) => {
+        if (y >= Math.min(v, g[main].max) - 24) k = i;
+      });
+      mark(k);
+    };
+
+    const run = () => visit.offsetHeight - pin.offsetHeight;
+    const progress = () => {
+      const r = run();
+      return r > 0 ? Math.min(1, Math.max(0, -visit.getBoundingClientRect().top / r)) : 0;
+    };
+    const mainGeo = () => {
+      const g = layers.map(geo);
+      return g[0].k > 0 ? { i: 0, ...g[0] } : { i: 1, ...g[1] };
+    };
+    const update = () => {
+      if (still.matches) return;
+      place(progress() * mainGeo().max);
+    };
+
+    steps.forEach((b, i) => {
+      b.addEventListener('click', () => {
+        const m = mainGeo();
+        const y = Math.min(layers[m.i].keys[i], m.max);
+        if (still.matches) {
+          // sans animation : chaque écran défile lui-même jusqu'à la partie choisie
+          layers.forEach((l, j) => {
+            const g = geo(l);
+            if (g.k > 0) l.view.scrollTop = Math.min(l.keys[i], g.max) * g.k;
+          });
+          return mark(i);
+        }
+        const p = m.max > 0 ? y / m.max : 0;
+        lenisTo(visit.getBoundingClientRect().top + scrollY + p * run());
+      });
+    });
+
+    const mode = () => {
+      visit.classList.toggle('is-pinned', !still.matches);
+      layers.forEach((l) => (l.img.style.transform = ''));
+      update();
+    };
+    onScroll(update);
+    addEventListener('resize', update);
+    layers.forEach((l) => l.img.addEventListener('load', update, { once: true }));
+    still.addEventListener('change', mode);
+    mode();
+  }
+
+  // ---------- Les imprimés : la bande avance de côté pendant qu'on descend (ordinateur) ----------
+  // La hauteur du rail vaut la longueur à parcourir ; la bande est décalée d'autant que la page a défilé dans le rail. Ailleurs : défilement natif,
+  // au doigt ou à la souris (saisir et tirer).
+  const strip = document.querySelector<HTMLElement>('[data-strip]');
+  const stripScroll = strip?.querySelector<HTMLElement>('[data-strip-scroll]');
+  const stripRow = strip?.querySelector<HTMLElement>('[data-strip-row]');
+  let dragged = false;
+  if (strip && stripScroll && stripRow) {
+    let dist = 0;
+    const stage = strip.firstElementChild as HTMLElement;
+    const update = () => {
+      if (!pinned()) return;
+      const r = strip.offsetHeight - stage.offsetHeight;
+      const p = r > 0 ? Math.min(1, Math.max(0, -strip.getBoundingClientRect().top / r)) : 0;
+      stripRow.style.transform = `translate3d(${(-p * dist).toFixed(1)}px, 0, 0)`;
+    };
+    const measure = () => {
+      if (!pinned()) {
+        strip.style.height = '';
+        stripRow.style.transform = '';
+        strip.classList.remove('is-pinned');
+        return;
+      }
+      strip.classList.add('is-pinned');
+      dist = Math.max(0, stripRow.scrollWidth - stripScroll.clientWidth);
+      strip.style.height = `${stage.offsetHeight + dist}px`;
+      update();
+    };
+    onScroll(update);
+    addEventListener('resize', measure);
+    wide.addEventListener('change', measure);
+    still.addEventListener('change', measure);
+    stripRow.querySelectorAll('img').forEach((im) => im.addEventListener('load', measure, { once: true }));
+    new ResizeObserver(measure).observe(stripRow);
+    measure();
+
+    // saisir et tirer à la souris (hors épinglage) ; un glissement n'ouvre pas l'agrandissement
+    let down = false;
+    let startX = 0;
+    let startLeft = 0;
+    stripScroll.addEventListener('pointerdown', (e) => {
+      if (pinned() || e.pointerType !== 'mouse' || e.button !== 0) return;
+      down = true;
+      dragged = false;
+      startX = e.clientX;
+      startLeft = stripScroll.scrollLeft;
+    });
+    addEventListener('pointermove', (e) => {
+      if (!down) return;
+      const dx = e.clientX - startX;
+      if (Math.abs(dx) > 5) dragged = true;
+      if (dragged) stripScroll.scrollLeft = startLeft - dx;
+    });
+    addEventListener('pointerup', () => {
+      down = false;
+    });
+  }
+
+  // ---------- L'agrandissement ----------
+  // La pièce s'ouvre depuis sa vignette (elle grandit jusqu'à sa place), sur le papier du site flouté. Recto et verso pour les pièces
+  // doubles ; précédente et suivante pour parcourir tous les livrables sans refermer.
+  const lb = document.querySelector<HTMLDialogElement>('#pj-lb');
+  const lbStage = lb?.querySelector<HTMLElement>('[data-lb-stage]');
+  const lbCap = lb?.querySelector<HTMLElement>('[data-lb-cap]');
+  const lbFaces = lb?.querySelector<HTMLElement>('[data-lb-faces]');
+  const lbCount = lb?.querySelector<HTMLElement>('[data-lb-count]');
+  if (lb && lbStage && lbCap && lbFaces && lbCount) {
+    const items = [...document.querySelectorAll<HTMLButtonElement>('[data-zoom]')];
+    const faceBtns = [...lbFaces.querySelectorAll<HTMLButtonElement>('[data-lb-face]')];
+    let idx = 0;
+    let face = 0;
+
+    const faceData = (btn: HTMLButtonElement, f: number) =>
+      f === 1 && btn.dataset.src2
+        ? { src: btn.dataset.src2, alt: btn.dataset.alt2 ?? '', w: btn.dataset.w2, h: btn.dataset.h2 }
+        : { src: btn.dataset.src ?? '', alt: btn.dataset.alt ?? '', w: btn.dataset.w, h: btn.dataset.h };
+
+    const render = (from?: DOMRect) => {
+      const btn = items[idx];
+      const d = faceData(btn, face);
+      const im = document.createElement('img');
+      im.alt = d.alt;
+      if (d.w && d.h) {
+        im.width = Number(d.w);
+        im.height = Number(d.h);
+      }
+      // la vignette déjà chargée sert d'aperçu immédiat, l'image d'origine la remplace dès qu'elle arrive
+      const thumb = btn.querySelectorAll('img')[face];
+      im.src = thumb?.currentSrc || d.src;
+      const full = new Image();
+      full.onload = () => (im.src = d.src);
+      full.src = d.src;
+      lbStage.replaceChildren(im);
+
+      lbCap.textContent = btn.dataset.cap ?? '';
+      lbCount.textContent = `${idx + 1} / ${items.length}`;
+      lbFaces.hidden = !btn.dataset.src2;
+      faceBtns.forEach((b, i) => b.setAttribute('aria-pressed', String(i === face)));
+
+      if (still.matches) return;
+      if (from) {
+        // de la vignette à sa place : on mesure l'arrivée, puis on part de la vignette
+        const to = im.getBoundingClientRect();
+        if (to.width > 0) {
+          im.style.transformOrigin = '0 0';
+          im.animate(
+            [
+              { transform: `translate(${from.left - to.left}px, ${from.top - to.top}px) scale(${from.width / to.width}, ${from.height / to.height})` },
+              { transform: 'none' },
+            ],
+            { duration: 520, easing: 'cubic-bezier(0.2, 0.7, 0.2, 1)' },
+          );
+        }
+      } else {
+        im.animate([{ opacity: 0, transform: 'scale(0.97)' }, { opacity: 1, transform: 'none' }], { duration: 320, easing: 'cubic-bezier(0.2, 0.7, 0.2, 1)' });
+      }
+    };
+
+    const open = (i: number, from?: DOMRect) => {
+      idx = i;
+      face = 0;
+      lb.showModal();
+      // le focus va à la boîte elle-même (pas au premier bouton) : flèches et Échap fonctionnent tout de suite
+      lb.focus();
+      render(from);
+    };
+    const go = (step: number) => {
+      idx = (idx + step + items.length) % items.length;
+      face = 0;
+      render();
+    };
+
+    items.forEach((btn, i) => {
+      btn.setAttribute('aria-label', `Agrandir : ${btn.dataset.cap ?? ''}`);
+      btn.setAttribute('aria-haspopup', 'dialog');
+      btn.addEventListener('click', (e) => {
+        if (dragged) {
+          e.preventDefault();
+          dragged = false;
+          return;
+        }
+        const img = btn.querySelector('img');
+        open(i, img?.getBoundingClientRect());
+      });
+    });
+    faceBtns.forEach((b, i) =>
+      b.addEventListener('click', () => {
+        if (face === i) return;
+        face = i;
+        render();
+      }),
+    );
+    lb.querySelector('[data-lb-prev]')?.addEventListener('click', () => go(-1));
+    lb.querySelector('[data-lb-next]')?.addEventListener('click', () => go(1));
+    lb.querySelector('[data-lb-close]')?.addEventListener('click', () => lb.close());
+    lb.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') go(1);
+      if (e.key === 'ArrowLeft') go(-1);
+    });
+    // un clic sur le papier, à côté de la pièce, ferme
+    lb.addEventListener('click', (e) => {
+      if (e.target === lb || e.target === lbStage) lb.close();
+    });
+  }
+</script>

@@ -1,0 +1,422 @@
+/* Page « À propos » : l'entête affiche (AboutHero), le parcours en frise, les domaines, les principes. Même matière que le reste du site
+   (grain, béton, ombre dure orange) et mêmes repères que les pages de service : filet épais sous les colonnes, barre orange des engagements. */
+
+/* ---------- Ce que mon parcours change pour vous : une affirmation, le fait qui la prouve ----------
+   Trois lignes éditoriales sous un filet épais (le même que la liste des livrables des pages de service) : le fait en petit à gauche, l'affirmation
+   en grand au centre, le détail à droite. Sur mobile, les trois s'empilent. */
+.ap-proofs {
+  list-style: none;
+  margin: 0 auto;
+  padding: 0;
+  max-width: 1180px;
+}
+
+.ap-proof {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-3);
+  padding-block: clamp(24px, 3vw, 40px);
+  border-top: 2px solid var(--ink);
+}
+
+.ap-proof:last-child {
+  border-bottom: 1px solid rgb(18 32 43 / 0.16);
+}
+
+/* le fait : la barre orange des engagements, puis le libellé en petites capitales bleues */
+.ap-tag {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--signal-deep);
+}
+
+.ap-tag::before {
+  content: '';
+  display: block;
+  width: 44px;
+  height: 4px;
+  margin-bottom: var(--space-3);
+  background: #ee8532;
+}
+
+/* la liste des principes : pas de barre orange, un grand chiffre à gauche */
+.ap-proof .ap-tag {
+  font-family: 'Inter', var(--font-body);
+  font-size: clamp(2.6rem, 4.6vw, 4rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.021em;
+  text-transform: none;
+}
+
+.ap-proof .ap-tag::before {
+  content: none;
+}
+
+.ap-proof h3 {
+  margin: 0;
+  font-size: clamp(1.6rem, 2.7vw, 2.3rem);
+  line-height: 1.12;
+  letter-spacing: -0.021em;
+  text-wrap: balance;
+}
+
+.ap-text p {
+  margin: 0;
+  max-width: 52ch;
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--ink-soft);
+}
+
+.ap-text .ap-link {
+  margin-top: var(--space-3);
+}
+
+@media (min-width: 901px) {
+  .ap-proof {
+    grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.2fr) minmax(0, 1.1fr);
+    column-gap: clamp(28px, 4vw, 64px);
+    align-items: start;
+  }
+
+  .ap-tag {
+    padding-top: 6px;
+  }
+
+  .ap-proof .ap-tag {
+    padding-top: 0;
+  }
+}
+
+/* le laïus : un libellé à gauche, le texte en grand à droite, dans la même grille que les lignes dessous */
+.ap-story {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-3);
+  max-width: 1180px;
+  margin: 0 auto;
+  padding-bottom: clamp(36px, 5vw, 64px);
+}
+
+.ap-story-text {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.ap-story-text p {
+  margin: 0;
+  max-width: 66ch;
+  font-family: 'Inter', var(--font-body);
+  font-size: clamp(1.15rem, 1.7vw, 1.4rem);
+  font-weight: 600;
+  line-height: 1.45;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+/* le sous-titre « Ma façon de concevoir » ouvre la liste des principes */
+.ap-sub {
+  max-width: 1180px;
+  margin: 0 auto var(--space-5);
+  font-size: clamp(1.1rem, 1.6vw, 1.3rem);
+  letter-spacing: -0.01em;
+  color: var(--signal-deep);
+}
+
+@media (min-width: 901px) {
+  .ap-story {
+    /* mêmes colonnes que les lignes des principes : le texte commence sur la colonne de l'affirmation */
+    grid-template-columns: minmax(0, 0.5fr) minmax(0, 2.3fr);
+    column-gap: clamp(28px, 4vw, 64px);
+    align-items: start;
+  }
+
+  .ap-story-text {
+    grid-column: 2 / -1;
+  }
+
+  .ap-story .ap-tag {
+    padding-top: 8px;
+  }
+}
+
+/* ---------- Ce que je conçois : un pictogramme, un titre, une phrase ---------- */
+.ap-domains {
+  list-style: none;
+  margin: 0 auto;
+  padding: 0;
+  max-width: 1080px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(20px, 3vw, 44px);
+}
+
+.ap-domains li {
+  padding-top: var(--space-5);
+  border-top: 2px solid var(--ink);
+}
+
+/* le pictogramme : la matière des boutons (bleu klein) et leur ombre dure orange */
+.ap-glyph {
+  display: grid;
+  place-items: center;
+  width: 60px;
+  aspect-ratio: 1;
+  margin-bottom: var(--space-4);
+  border-radius: var(--radius-md);
+  background:
+    radial-gradient(circle at 26% 20%, rgb(255 255 255 / 0.2), rgb(255 255 255 / 0) 46%),
+    linear-gradient(150deg, #3b62f0, #1f45d6 52%, #13247c);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.35),
+    3px 3px 0 rgb(238 133 50 / 0.9);
+}
+
+.ap-glyph svg {
+  width: 44px;
+  height: 44px;
+}
+
+.ap-domains h3 {
+  margin: 0 0 var(--space-2);
+  font-size: clamp(1.3rem, 2vw, 1.6rem);
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.ap-domains p {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--ink-soft);
+}
+
+.ap-note {
+  max-width: 62ch;
+  margin: var(--space-7) auto 0;
+  font-size: 16px;
+  line-height: 1.6;
+  text-align: center;
+  color: var(--ink-soft);
+}
+
+@media (max-width: 900px) {
+  .ap-domains {
+    grid-template-columns: 1fr;
+    gap: 0;
+    max-width: 560px;
+  }
+
+  /* une ligne par domaine : le pictogramme à gauche, le texte à droite */
+  .ap-domains li {
+    display: grid;
+    grid-template-columns: 48px minmax(0, 1fr);
+    column-gap: var(--space-4);
+    padding-block: var(--space-5);
+    border-top: 1px solid rgb(18 32 43 / 0.16);
+  }
+
+  .ap-domains li:last-child {
+    border-bottom: 1px solid rgb(18 32 43 / 0.16);
+  }
+
+  .ap-glyph {
+    width: 48px;
+    margin-bottom: 0;
+  }
+
+  .ap-glyph svg {
+    width: 36px;
+    height: 36px;
+  }
+
+  .ap-note {
+    margin-top: var(--space-6);
+    text-align: left;
+  }
+}
+
+/* ---------- Ce que je conçois, deux domaines : deux colonnes plus larges ---------- */
+.ap-domains--two {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  max-width: 960px;
+}
+
+.ap-link {
+  margin-top: auto !important;
+  padding-top: var(--space-4);
+}
+
+@media (min-width: 901px) {
+  .ap-domains--two li {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .ap-domains--two li > div {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+  }
+}
+
+/* ---------- Ce que je sais faire : un panneau bleu (celui de « Vous gardez la main » et de « Deux façons de travailler »), trois groupes ----------
+   Sur ordinateur, les quatre lignes de chaque groupe (titre, rangée 1, rangée 2, précision) s'alignent d'un groupe à l'autre. */
+.ap-panel {
+  max-width: 1280px;
+  margin-inline: auto;
+  padding: clamp(28px, 4vw, 56px);
+  border-radius: var(--radius-xl);
+}
+
+.ap-skills {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0;
+}
+
+.ap-skill {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding-block: clamp(22px, 3vw, 32px);
+  border-top: 1px solid rgb(255 255 255 / 0.22);
+}
+
+.ap-skill:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.ap-skill:last-child {
+  padding-bottom: 0;
+}
+
+.ap-skill h3 {
+  margin: 0;
+  font-size: clamp(1.35rem, 2.2vw, 1.8rem);
+  line-height: 1.12;
+  letter-spacing: -0.025em;
+  color: #fff;
+}
+
+.ap-row {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ap-row-label {
+  margin: 0;
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgb(255 255 255 / 0.72);
+}
+
+.ap-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  align-content: flex-start;
+}
+
+/* l'étiquette : la pastille de verre de l'entête pour un savoir-faire, une pastille crème pleine pour un outil */
+.ap-chip {
+  padding: 7px 14px;
+  border-radius: 999px;
+  font-size: 14.5px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.ap-chip--skill {
+  color: #fff;
+  background: rgb(255 255 255 / 0.12);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.3),
+    inset 0 0 0 1px rgb(255 255 255 / 0.18);
+}
+
+.ap-chip--tool {
+  color: var(--ink);
+  background: #f5f3ea;
+  box-shadow: 2px 2px 0 rgb(238 133 50 / 0.9);
+}
+
+.ap-skill-more {
+  margin: 0;
+  max-width: 44ch;
+  font-size: 15px;
+  line-height: 1.6;
+  color: rgb(255 255 255 / 0.86);
+}
+
+@media (min-width: 901px) {
+  .ap-skills {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-rows: auto auto auto auto;
+    column-gap: clamp(28px, 4vw, 64px);
+  }
+
+  .ap-skill,
+  .ap-skill:first-child,
+  .ap-skill:last-child {
+    display: grid;
+    grid-row: span 4;
+    grid-template-rows: subgrid;
+    row-gap: var(--space-4);
+    padding: 0;
+    border-top: 0;
+  }
+
+  .ap-skill + .ap-skill {
+    padding-left: clamp(28px, 4vw, 64px);
+    margin-left: calc(clamp(28px, 4vw, 64px) * -1);
+    border-left: 1px solid rgb(255 255 255 / 0.22);
+  }
+
+  .ap-g-title { grid-row: 1; }
+  .ap-row--1 { grid-row: 2; }
+  .ap-row--2 { grid-row: 3; }
+  /* la précision d'un groupe sans seconde rangée remonte à la hauteur de la rangée « Outils » du premier groupe */
+  .ap-skill-more { grid-row: 4; }
+  .ap-row--1 + .ap-skill-more { grid-row: 3; }
+}
+
+@media (max-width: 900px) {
+  .ap-domains--two {
+    grid-template-columns: 1fr;
+  }
+
+
+}
+
+/* le lien « Toutes les questions » sous la FAQ */
+.ap-more {
+  margin-top: var(--space-5);
+  text-align: center;
+}
+
+/* Sous la bande bleue, « Un parcours créatif, devenu technique. » arrive plus près : moins de vide entre l'ouverture et le récit (ordinateur) */
+@media (min-width: 901px) {
+  #parcours.tile {
+    padding-top: clamp(56px, 6vw, 88px);
+  }
+
+  #parcours .tile-head {
+    margin-bottom: clamp(32px, 4vw, 56px);
+  }
+}

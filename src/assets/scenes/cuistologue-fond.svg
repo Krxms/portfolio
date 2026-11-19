@@ -1,0 +1,24 @@
+<svg class="sc-art" viewBox="0 0 1000 460" preserveAspectRatio="xMidYMid slice" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+<g class="sc-art-bg">
+<rect width="1000" height="460" fill="url(#scf0)"/>
+<rect width="1000" height="460" fill="url(#scf1)"/>
+<rect width="1000" height="460" fill="url(#scf2)"/>
+</g>
+<g class="sc-art-shapes">
+<path class="sc-art-quarter" d="M0 0H150C150 39.7825 134.196 77.9356 106.066 106.066C77.9356 134.196 39.7825 150 0 150L0 0Z" fill="url(#scf3)"/>
+<g class="sc-art-disc">
+<path d="M915 260C1000.6 260 1070 190.604 1070 105C1070 19.3959 1000.6-50 915-50C829.396-50 760 19.3959 760 105C760 190.604 829.396 260 915 260Z" fill="url(#scf4)"/>
+<path d="M915 260C1000.6 260 1070 190.604 1070 105C1070 19.3959 1000.6-50 915-50C829.396-50 760 19.3959 760 105C760 190.604 829.396 260 915 260Z" fill="url(#scf5)"/>
+</g>
+<path class="sc-art-arch" d="M75 297.943C75 250.478 113.478 212 160.943 212C208.408 212 246.886 250.478 246.886 297.943V460H75V297.943Z" fill="url(#scf6)"/>
+</g>
+<defs>
+<linearGradient id="scf0" x1="0" y1="0" x2="450" y2="460" gradientUnits="userSpaceOnUse"><stop stop-color="#1A2A78"/><stop offset=".46" stop-color="#14205F"/><stop offset="1" stop-color="#0B1A4A"/></linearGradient>
+<radialGradient id="scf1" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(880 460) rotate(180) scale(600 370)"><stop stop-color="#189CB0" stop-opacity=".42"/><stop offset="1" stop-color="#189CB0" stop-opacity="0"/></radialGradient>
+<radialGradient id="scf2" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(140) scale(550 370)"><stop stop-color="#565CD6" stop-opacity=".4"/><stop offset="1" stop-color="#565CD6" stop-opacity="0"/></radialGradient>
+<linearGradient id="scf3" x1="0" y1="0" x2="150" y2="150" gradientUnits="userSpaceOnUse"><stop stop-color="#E3EDFF"/><stop offset="1" stop-color="#B4CDFA"/></linearGradient>
+<linearGradient id="scf4" x1="820" y1="-50" x2="1010" y2="260" gradientUnits="userSpaceOnUse"><stop stop-color="#FF9A58"/><stop offset=".6" stop-color="#F2733C"/><stop offset="1" stop-color="#E0602A"/></linearGradient>
+<radialGradient id="scf5" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(870 30) scale(130)"><stop stop-color="#FFD6AA" stop-opacity=".55"/><stop offset="1" stop-color="#FFD6AA" stop-opacity="0"/></radialGradient>
+<linearGradient id="scf6" x1="160.943" y1="212" x2="160.943" y2="460" gradientUnits="userSpaceOnUse"><stop stop-color="#D8F3EC"/><stop offset="1" stop-color="#82BDB0"/></linearGradient>
+</defs>
+</svg>

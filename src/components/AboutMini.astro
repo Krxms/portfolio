@@ -1,0 +1,56 @@
+---
+import './Tile.css';
+import './AboutMini.css';
+import Mark from './Mark.astro';
+import LinkUnder from './LinkUnder.astro';
+import portrait from '../assets/portrait-cine.webp';
+
+const zones = ['Île-de-France', 'À distance'];
+---
+
+<section class="tile tile--dark tile--mesh-b about" id="qui-suis-je" aria-labelledby="about-title">
+  <div class="wrap tile-inner about-grid">
+    <figure class="portrait">
+      <div class="portrait-frame">
+        <img
+          src={portrait.src}
+          width={portrait.width}
+          height={portrait.height}
+          alt="Portrait d’Antoine Bruneau, concepteur numérique"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+    </figure>
+
+    <div class="about-copy">
+      <p class="tile-label">Qui suis-je ? Antoine Bruneau</p>
+      <h2 id="about-title">Je conçois. Je réalise. Vous savez à qui vous parlez.</h2>
+      <p class="about-lead">
+        De la création sonore à l’UX/UI, en passant par la création numérique et le développement : un parcours qui réunit création,
+        conception et compréhension technique.
+      </p>
+
+      {/* tout ce qui suit le texte d'introduction apparaît d'un seul bloc, en fondu, quand les mots de l'introduction arrivent vers la fin (scenes.js) */}
+      <div class="about-follow">
+      <div class="about-values">
+        <p class="about-values-label">Ma façon de travailler</p>
+        <h3>Vous choisissez jusqu’où je vais.</h3>
+        <p>
+          Je dessine les écrans, puis je les construis, ou je les transmets à votre équipe avec ce qu’il faut pour les développer.
+        </p>
+        {/* la phrase clé, mise en exergue (voir .about-key dans AboutMini.css) */}
+        <p class="about-key">Je vous explique chaque choix simplement, de la première conversation à la mise en ligne.</p>
+      </div>
+
+      <p class="about-zone">
+        Je travaille en Île-de-France et à distance, partout en France.
+      </p>
+      <div class="about-zones-row">
+        <ul class="about-zones" role="list">{zones.map((z) => <li>{z}</li>)}</ul>
+        <LinkUnder href="/a-propos/" label="Voir mon parcours" tone="light" arrow />
+      </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,1067 @@
+/* Vue éclatée de la méthode.
+   Une interface en quatre couches de verre, vues en perspective isométrique. Au repos elles sont empilées ; au défilement elles se
+   désolidarisent (translateZ), puis chaque étape met en avant sa couche (elle monte d'un cran, reçoit l'ombre dure orange) pendant que
+   les autres s'estompent. La section est haute et la scène reste collée à l'écran (position: sticky). Tout le mouvement vient de deux
+   variables, --p (la progression) et data-step (l'étape), écrites par le script du composant ; le dessin est en CSS pur.
+   Sans script, avec « réduire les animations », ou sous 901 px : la vue est montrée déjà éclatée, à plat dans la page, et les quatre
+   étapes sont lisibles ensemble. Sous 901 px avec mouvement autorisé, le script écrit --s (0 à 1) selon la position de la scène : la vue
+   s'ouvre en défilant jusqu'aux étapes et se referme en remontant. */
+.xp {
+  --p: 0.7;
+  /* l'écartement des couches : 0 (empilées) à 1 (éclatées) sur les 12 premiers pour cent */
+  --s: clamp(0, calc(var(--p) * 12.5), 1);
+  position: relative;
+  isolation: isolate;
+  scroll-margin-top: 0;
+}
+
+/* même fond que les sections claires : le grain de grès */
+.xp::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: url('../assets/riso/stoneware.webp') 0 0 / 512px 512px repeat;
+  opacity: 0.55;
+}
+
+.xp-inner {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  align-items: center;
+  gap: clamp(24px, 5vw, 80px);
+}
+
+.xp-copy h2 {
+  max-width: 16ch;
+  font-size: clamp(2.1rem, 4.2vw, 3.6rem);
+  font-weight: 600;
+  line-height: 1.04;
+  letter-spacing: -0.024em;
+  text-wrap: balance;
+}
+
+.xp-sub {
+  max-width: 40ch;
+  margin-top: var(--space-3);
+  font-size: clamp(1rem, 1.5vw, 1.15rem);
+  line-height: 1.55;
+  color: var(--ink-soft);
+}
+
+/* ---------- les quatre étapes ---------- */
+.xp-steps {
+  list-style: none;
+  margin: clamp(20px, 3.4vh, 40px) 0 0;
+  padding: 0;
+}
+
+.xp-step {
+  cursor: default;
+  position: relative;
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr);
+  column-gap: 16px;
+  padding-block: var(--pad, 14px);
+  min-height: var(--row, 0px);
+  border-top: 1px solid var(--line-strong);
+  transition: opacity 0.5s var(--ease-out);
+}
+
+.xp-steps .xp-step:last-child {
+  border-bottom: 1px solid var(--line-strong);
+}
+
+/* le trait d'étape : une barre orange qui se déploie à gauche de l'étape active */
+.xp-step::before {
+  content: '';
+  position: absolute;
+  left: -14px;
+  top: var(--pad, 14px);
+  bottom: var(--pad, 14px);
+  width: 4px;
+  border-radius: 2px;
+  background: #ee8532;
+  transform: scaleY(0);
+  transform-origin: 50% 0;
+  transition: transform 0.55s var(--ease-out);
+}
+
+.xp-num {
+  font-size: var(--num, clamp(1.9rem, 3vw, 2.5rem));
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+  color: var(--num-c);
+}
+
+.xp-step h3 {
+  font-size: clamp(1.15rem, 1.6vw, 1.4rem);
+  line-height: 1.2;
+}
+
+.xp-step-body p {
+  margin-top: 8px;
+  max-width: 44ch;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--ink-soft);
+}
+
+/* un \n dans le texte d'une étape (tableau steps de index.astro) devient un retour à la ligne ; la ligne « Vous recevez » en est exclue :
+   son balisage contient des sauts de ligne de mise en forme qui deviendraient de vrais retours */
+.xp-step-body p:not(.xp-gets) {
+  white-space: pre-line;
+}
+
+/* ---------- la scène (le côté droit) ---------- */
+.xp-visual {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 340px;
+  padding-bottom: 64px;
+}
+
+/* ce que vous recevez à cette étape : une ligne sous la description, avec son libellé */
+.xp-step-body .xp-gets {
+  margin-top: 10px;
+  max-width: 48ch;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.45;
+  color: var(--ink);
+}
+
+.xp-gets span {
+  margin-right: 4px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #7a3500;
+}
+
+.xp-scene {
+  position: relative;
+  width: 100%;
+  height: clamp(340px, 62vh, 560px);
+  display: grid;
+  place-items: center;
+  perspective: 1900px;
+}
+
+.xp-stack {
+  --w: min(420px, 28vw);
+  position: relative;
+  width: var(--w);
+  aspect-ratio: 1.55;
+  transform-style: preserve-3d;
+  /* l'isométrique : la pile se couche (rotateX) et pivote (rotateZ) ; elle tourne un peu plus à mesure qu'on avance */
+  transform: translateY(calc(var(--s) * 50%)) rotateX(54deg) rotateZ(calc(-30deg - var(--p) * 8deg));
+}
+
+.xp-layer {
+  --gap: calc(var(--w) * 0.3);
+  /* le focus : la couche active monte d'un cran, et celles qui sont au-dessus d'elle d'un cran de plus : l'espace s'agrandit autour d'elle */
+  --f: calc(var(--w) * 0.04);
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  /* le fond est translucide ; c'est .xp-fill, un aplat plein dont seule l'opacité change (1 pile refermée, 0 pile ouverte), qui le rend
+     opaque quand les couches sont empilées : rien ne transparaît d'une couche à l'autre, puis elles deviennent de plus en plus
+     translucides en s'écartant. Seule l'opacité bouge : aucun repeint à chaque image. */
+  background: linear-gradient(150deg, rgb(255 255 255 / 0.78), rgb(231 239 255 / 0.74));
+  box-shadow: inset 0 1px 0 #fff, 0 0 0 1px rgb(26 60 191 / 0.14), 0 12px 20px -16px rgb(8 20 90 / 0.16);
+  transform: translateZ(calc(var(--s) * var(--i) * var(--gap) + var(--i) * 1px));
+  translate: 0 0 0;
+  transition: opacity 0.55s var(--ease-out), translate 0.7s cubic-bezier(0.22, 0.8, 0.2, 1), box-shadow 0.6s var(--ease-out), filter 0.55s var(--ease-out);
+}
+
+.xp-fill {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(150deg, #fff, #e7efff);
+  opacity: calc(1 - var(--s));
+}
+
+/* le grain du béton sur chaque couche, très léger */
+.xp-layer::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: url('../assets/riso/concrete-zoom.webp') 50% 50% / cover no-repeat;
+  mix-blend-mode: soft-light;
+  opacity: var(--concrete, 0.3);
+}
+
+/* étape active : la couche monte d'un cran et reçoit l'ombre dure orange ; les autres s'estompent */
+/* la progression se lit sur les couches : les étapes faites sont pleines et cochées, l'étape en cours est relevée, les suivantes sont
+   des fantômes au trait pointillé */
+.xp:not([data-step='-1'])[data-step] .xp-layer:not(.is-on):not(.is-done) {
+  opacity: 0.34;
+  filter: saturate(0.3);
+  outline: 2px dashed rgb(26 60 191 / 0.4);
+  outline-offset: -8px;
+}
+
+.xp[data-step='-1'] .xp-layer,
+.xp[data-step] .xp-layer.is-done,
+.xp .xp-layer.is-on {
+  opacity: 1;
+  filter: none;
+  outline: 0;
+}
+
+.xp .xp-layer.is-done .xp-chip::before {
+  content: '✓ ';
+}
+
+.xp .xp-layer.is-on {
+  translate: 0 0 var(--f);
+  box-shadow: inset 0 1px 0 #fff, 0 0 0 1px rgb(26 60 191 / 0.22), 0 14px 24px -16px rgb(8 20 90 / 0.22);
+}
+
+.xp-chip {
+  position: absolute;
+  left: 5%;
+  bottom: 6%;
+  z-index: 2;
+  font-size: max(11px, calc(var(--w) * 0.036));
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--c);
+}
+
+/* ---------- couche 1 : la conversation ---------- */
+.l1-bub {
+  position: absolute;
+  height: 13%;
+  border-radius: 999px 999px 999px 8px;
+  background: rgb(31 69 214 / 0.14);
+}
+
+.l1-a {
+  left: 12%;
+  top: 24%;
+  width: 56%;
+}
+
+.l1-b {
+  right: 8%;
+  top: 44%;
+  width: 46%;
+  border-radius: 999px 999px 8px 999px;
+  background: linear-gradient(180deg, #3566ee, #1f45d6);
+}
+
+.l1-c {
+  left: 12%;
+  top: 64%;
+  width: 34%;
+}
+
+.l1-dot {
+  position: absolute;
+  width: 6%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #13247c;
+}
+
+.l1-d1 {
+  left: 5%;
+  top: 25.5%;
+  width: 5%;
+  background: #ee8532;
+}
+
+.l1-d2 {
+  right: 2.5%;
+  top: 45.5%;
+  width: 4%;
+}
+
+/* ---------- couche 2 : le plan du site et la note d'audit ---------- */
+.l2-root {
+  position: absolute;
+  left: 14%;
+  top: 22%;
+  width: 26%;
+  height: 14%;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(180deg, #3566ee, #1f45d6);
+}
+
+.l2-link {
+  position: absolute;
+  left: 26.5%;
+  top: 36%;
+  width: 22%;
+  height: 12%;
+  border: 2px solid rgb(31 69 214 / 0.4);
+  border-bottom: 0;
+  border-right: 0;
+  border-radius: var(--radius-sm) 0 0 0;
+  clip-path: inset(0 0 0 0);
+}
+
+.l2-kids {
+  position: absolute;
+  left: 8%;
+  top: 52%;
+  width: 56%;
+  display: flex;
+  gap: 5%;
+}
+
+.l2-kids i {
+  flex: 1;
+  height: 17%;
+  min-height: 26px;
+  aspect-ratio: 1.4;
+  border-radius: var(--radius-sm);
+  background: rgb(31 69 214 / 0.14);
+  box-shadow: inset 0 0 0 1.5px rgb(31 69 214 / 0.35);
+}
+
+.l2-score {
+  position: absolute;
+  right: 8%;
+  top: 24%;
+  width: 24%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: conic-gradient(#ee8532 0 74%, rgb(31 69 214 / 0.14) 0);
+  -webkit-mask: radial-gradient(circle, transparent 54%, #000 55%);
+  mask: radial-gradient(circle, transparent 54%, #000 55%);
+}
+
+.l2-bars {
+  position: absolute;
+  right: 8%;
+  bottom: 12%;
+  width: 36%;
+  display: grid;
+  gap: 9px;
+}
+
+.l2-bars s {
+  display: block;
+  height: 8px;
+  border-radius: 999px;
+  background: rgb(70 100 190 / 0.28);
+}
+
+.l2-bars s:nth-child(2) {
+  width: 78%;
+}
+
+.l2-bars s:nth-child(3) {
+  width: 52%;
+}
+
+/* ---------- couche 3 : la conception ---------- */
+.l3-aa {
+  position: absolute;
+  left: 9%;
+  top: 22%;
+  font-size: calc(var(--w) * 0.2);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: #13247c;
+}
+
+.l3-pal {
+  position: absolute;
+  left: 9%;
+  bottom: 21%;
+  display: flex;
+  gap: 8px;
+}
+
+.l3-pal i {
+  display: block;
+  width: calc(var(--w) * 0.08);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.5);
+}
+
+.l3-pal i:nth-child(1) {
+  background: #13247c;
+}
+
+.l3-pal i:nth-child(2) {
+  background: #1f45d6;
+}
+
+.l3-pal i:nth-child(3) {
+  background: #ee8532;
+}
+
+.l3-pal i:nth-child(4) {
+  background: #a6d4ca;
+}
+
+.l3-shapes b,
+.l3-shapes u {
+  position: absolute;
+  display: block;
+}
+
+.l3-shapes b {
+  right: 12%;
+  bottom: 12%;
+  width: 28%;
+  height: 44%;
+  border-radius: 999px 999px 0 0;
+  background: linear-gradient(170deg, #5b88f8, #1a2f9e);
+}
+
+.l3-shapes u {
+  right: 32%;
+  top: 22%;
+  width: 17%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #ee8532;
+}
+
+/* ---------- couche 4 : le site en ligne ---------- */
+.l4-bar {
+  position: absolute;
+  left: 5%;
+  top: 15%;
+  display: flex;
+  gap: 5px;
+}
+
+.l4-bar i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #ee8532;
+}
+
+.l4-bar i:nth-child(2) {
+  background: #f2cf86;
+}
+
+.l4-bar i:nth-child(3) {
+  background: #a6d4ca;
+}
+
+.l4-art {
+  position: absolute;
+  left: 5%;
+  top: 27%;
+  width: 42%;
+  height: 56%;
+  overflow: hidden;
+  border-radius: var(--radius-btn);
+  background: linear-gradient(160deg, #f4ead9, #e9dcc6);
+}
+
+.l4-art b {
+  position: absolute;
+  left: 8%;
+  bottom: 0;
+  width: 62%;
+  aspect-ratio: 1;
+  border-radius: 100% 0 0 0;
+  background: linear-gradient(150deg, #2c58e0, #13247c);
+}
+
+.l4-art u {
+  position: absolute;
+  right: 12%;
+  top: 14%;
+  width: 22%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #ee8532;
+}
+
+.l4-lines {
+  position: absolute;
+  right: 6%;
+  top: 31%;
+  width: 40%;
+  display: grid;
+  gap: 9px;
+}
+
+.l4-lines s {
+  display: block;
+  height: 7px;
+  border-radius: 999px;
+  background: rgb(70 100 190 / 0.3);
+}
+
+.l4-lines s:nth-child(2) {
+  width: 88%;
+}
+
+.l4-lines s:nth-child(3) {
+  width: 60%;
+}
+
+.l4-lines em {
+  display: block;
+  width: 44%;
+  height: 16px;
+  margin-top: 6px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #3566ee, #1f45d6);
+  box-shadow: 2px 2px 0 rgb(238 133 50 / 0.9);
+}
+
+.l4-live {
+  position: absolute;
+  right: 5%;
+  top: 6%;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: calc(var(--w) * 0.028);
+  font-weight: 700;
+  color: #0e5f4e;
+  background: #c9ece2;
+}
+
+.l4-live i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #1e9d8e;
+}
+
+/* ordinateur : le titre, les étapes et la vue tiennent ensemble dans la hauteur de l'écran. Tout se dimensionne sur la hauteur (vh) :
+   la taille du titre, la hauteur d'une ligne d'étape (--row, de la même formule que la ligne elle-même), la taille de la vue.
+   À gauche, l'en-tête puis les quatre étapes ; à droite, la vue, qui occupe exactement la hauteur de l'en-tête et des étapes fermées :
+   le bord haut de la couche la plus haute est celui du titre, le bord bas de la couche la plus basse est celui de la dernière étape
+   (fermée). La vue est un « conteneur » : sa taille se lit en cqh (voir .xp-stack), jamais agrandie par son propre contenu. */
+@media (min-width: 901px) {
+  .xp {
+    --num: clamp(1.5rem, 4.2vh, 2.3rem);
+    --pad: clamp(8px, 1.5vh, 13px);
+    --row: calc(var(--num) + 2 * var(--pad) + 1px);
+    /* hauteur réservée au texte de l'étape ouverte : mesurée par le script (le texte change de longueur selon la largeur) */
+    --xp-body: 150px;
+  }
+
+  /* même largeur que la section du dessus (le projet) : jusqu'à 1360 px, à 24 px des bords de l'écran */
+  .xp .xp-inner {
+    width: min(1360px, calc(100vw - 2 * var(--edge, 24px)));
+    max-width: none;
+    margin-inline: auto;
+    padding-inline: 0;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    grid-template-rows: auto auto;
+    align-items: start;
+    column-gap: clamp(24px, 3.4vw, 64px);
+    row-gap: 0;
+  }
+
+  .xp-copy {
+    display: contents;
+  }
+
+  .xp-head {
+    grid-column: 1;
+    grid-row: 1;
+    margin-bottom: clamp(14px, 3vh, 34px);
+  }
+
+  /* plus de largeur pour le titre : deux lignes au lieu de trois */
+  .xp-copy h2 {
+    max-width: none;
+    font-size: clamp(2rem, min(3.5vw, 5.9vh), 3.4rem);
+  }
+
+  .xp-sub {
+    max-width: 52ch;
+    margin-top: clamp(8px, 1.4vh, 14px);
+    font-size: clamp(0.95rem, min(1.4vw, 2.3vh), 1.15rem);
+  }
+
+  .xp-steps {
+    grid-column: 1;
+    grid-row: 2;
+    margin: 0;
+  }
+
+  .xp-step-body p {
+    max-width: 52ch;
+    font-size: clamp(14.5px, 2.15vh, 16px);
+    line-height: 1.55;
+  }
+
+  .xp-step-body .xp-gets {
+    margin-top: clamp(6px, 1.2vh, 10px);
+    font-size: clamp(14px, 2.05vh, 15px);
+  }
+
+  .xp-visual {
+    grid-column: 2;
+    grid-row: 1 / 3;
+    align-self: stretch;
+    min-height: 0;
+    padding-bottom: 0;
+    container-type: size;
+  }
+
+  .xp-scene {
+    position: absolute;
+    inset: 0;
+    height: auto;
+  }
+
+  /* la pile se couche et pivote (angle fixe : sinon ses bords haut et bas, alignés sur le titre et sur la dernière étape, glisseraient pendant qu'elle tourne) : une fois éclatée, elle occupe 1,435 fois sa largeur en hauteur. On la dimensionne 6 % plus grande que la hauteur de la vue (1,435 / 1,06 = 1,354), son bord
+     bas restant sur la dernière étape fermée (la pile dépasse un peu vers le haut). */
+  .xp-stack {
+    --w: min(calc(100cqh / 1.354), calc(100cqw * 0.88));
+    transform: translateY(calc(var(--s) * (50% - var(--w) * 0.0156))) rotateX(54deg) rotateZ(-34deg);
+  }
+
+  /* focus : les couches au-dessus de la couche active s'écartent d'un cran de plus (le haut de la pile monte, le bas ne bouge pas) */
+  .xp[data-step='0'] :is(.xp-l2, .xp-l3, .xp-l4),
+  .xp[data-step='1'] :is(.xp-l3, .xp-l4),
+  .xp[data-step='2'] .xp-l4 {
+    translate: 0 0 calc(var(--f) * 2);
+  }
+}
+
+/* ====================================================================================================================
+   MODE VIVANT (ordinateur, mouvement autorisé) : la section est haute, la scène reste collée à l'écran
+   ==================================================================================================================== */
+/* 210 vh : l'écran, plus 110 vh de défilement pour les quatre étapes (≈ 25 vh chacune) */
+.xp[data-live] {
+  height: 210vh;
+}
+
+.xp[data-live] .xp-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+  display: flex;
+  align-items: center;
+  /* l'en-tête est fixe : la scène se centre dans ce qui reste */
+  padding-top: calc(var(--header-h, 76px) + 12px);
+  padding-bottom: 24px;
+  box-sizing: border-box;
+}
+
+/* La grille a trois rangées de hauteur fixe : l'en-tête, les quatre étapes fermées, et une réserve pour le texte de l'étape ouverte
+   (--xp-body, mesurée). La liste occupe les deux dernières : elle s'agrandit dans la réserve quand une étape s'ouvre, sans rien
+   déplacer d'autre. Le bloc complet est donc de la même hauteur à chaque étape, centré dans l'écran une fois pour toutes. */
+.xp[data-live] .xp-inner {
+  grid-template-rows: auto calc(4 * var(--row) + 1px) var(--xp-body);
+}
+
+.xp[data-live] .xp-steps {
+  grid-row: 2 / 4;
+  align-self: start;
+}
+
+/* étapes : seule l'étape active déplie son texte, les autres restent en titre */
+.xp[data-live] .xp-step {
+  opacity: 0.42;
+  cursor: pointer;
+}
+
+.xp[data-live] .xp-step.is-done {
+  opacity: 0.7;
+}
+
+.xp[data-live] .xp-step.is-on,
+.xp[data-live][data-step='-1'] .xp-step {
+  opacity: 1;
+}
+
+.xp[data-live] .xp-step.is-on::before {
+  transform: scaleY(1);
+}
+
+.xp[data-live] .xp-step-body {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.55s var(--ease-out);
+}
+
+.xp[data-live] .xp-step-in {
+  overflow: hidden;
+  min-height: 0;
+  margin-top: 0;
+  transition: margin-top 0.55s var(--ease-out);
+}
+
+.xp[data-live] .xp-step.is-on .xp-step-body {
+  grid-template-rows: 1fr;
+}
+
+.xp[data-live] .xp-step.is-on .xp-step-in {
+  margin-top: 8px;
+}
+
+.xp[data-live] .xp-step-in > p:first-child {
+  margin-top: 0;
+}
+
+/* avant la première étape (couches en train de se déployer), toutes les étapes sont fermées : seul le titre de chacune est visible */
+.xp[data-live][data-step='-1'] .xp-step-body {
+  grid-template-rows: 0fr;
+}
+
+/* ====================================================================================================================
+   PETIT ÉCRAN, ou mouvement réduit : la vue est montrée à plat, éclatée, au-dessus de la liste des étapes
+   ==================================================================================================================== */
+@media (max-width: 900px) {
+  .xp {
+    padding-block: clamp(56px, 12vw, 96px);
+    --p: 0.7;
+  }
+
+  .xp-inner {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .xp-copy,
+  .xp-head {
+    display: contents;
+  }
+
+  .xp-copy h2,
+  .xp-sub {
+    text-align: center;
+    margin-inline: auto;
+    max-width: 22ch;
+  }
+
+  .xp-sub {
+    max-width: 36ch;
+  }
+
+  /* téléphone : le titre et l'introduction sont ferrés à gauche, sur l'axe des étapes */
+  @media (max-width: 700px) {
+    .xp-copy h2,
+    .xp-sub {
+      text-align: left;
+      margin-inline: 0;
+      max-width: none;
+    }
+  }
+
+  .xp-visual {
+    order: 2;
+    min-height: 0;
+  }
+
+  .xp-steps {
+    order: 3;
+  }
+
+  .xp-visual {
+    padding-bottom: 0;
+  }
+
+  /* La scène est rognée à ses bords (contain: paint, pour la fluidité). La pile éclatée, descendue de 70 %, touche son bord bas : on ajoute
+     26 px en bas, et la marge du haut diminue de 13 px pour que la pile reste à la même place. */
+  .xp-scene {
+    /* plus bas sur téléphone (466 px avant ; 474 px : la pile ouverte, mesurée à 390 px, tient entière avec 7 px de marge en bas) : « Comprendre » arrive plus tôt dans l'écran */
+    height: 474px;
+    margin-top: -1px;
+    /* toute la largeur de l'écran : une fois éclatée, la couche du haut déborde de 10 px de chaque côté de la colonne de texte */
+    width: calc(100% + var(--edge, 20px) * 2);
+    margin-inline: calc(var(--edge, 20px) * -1);
+  }
+
+  .xp-stack {
+    --w: min(290px, 74vw);
+    transform: translateY(calc(var(--s) * 70%)) rotateX(58deg) rotateZ(calc(-30deg - var(--s) * 12deg));
+    will-change: transform;
+  }
+
+  /* Fluidité sur téléphone. Le script écrit directement la transformation de chaque couche (voir ExplodedProcess.astro) : le navigateur
+     n'a plus à recalculer le style de tous les éléments à chaque image, et les couches, promues une fois, bougent sur le processeur
+     graphique. Ici, on allège ce qu'elles coûtent à composer : pas de mode de fusion sur chaque couche (le béton est un simple voile
+     léger), des ombres plus petites, aucune transition. */
+  .xp-layer {
+    will-change: transform;
+    transition: none;
+    box-shadow: inset 0 1px 0 #fff, 0 0 0 1px rgb(26 60 191 / 0.14), 0 8px 14px -12px rgb(8 20 90 / 0.18);
+  }
+
+  .xp-fill {
+    will-change: opacity;
+  }
+
+  .xp-layer::after {
+    mix-blend-mode: normal;
+    opacity: calc(var(--concrete, 0.3) * 0.22);
+  }
+
+  .xp-scene {
+    contain: layout paint;
+  }
+
+  .xp-step::before {
+    display: none;
+  }
+
+  .xp-step {
+    grid-template-columns: 48px minmax(0, 1fr);
+    column-gap: 12px;
+    padding-block: 20px;
+  }
+}
+
+/* ====================================================================================================================
+   PETIT ÉCRAN : l'ouverture suit le défilement par une animation pilotée par le défilement (CSS pur). Contrairement à un script qui
+   écrit des valeurs à chaque image, elle tourne sur le processeur graphique avec le défilement lui-même : pas de retard, pas de saccade.
+   Navigateurs sans cette fonction (Safari avant 26, Firefox) : le script de repli prend le relais (voir ExplodedProcess.astro).
+   ==================================================================================================================== */
+@property --xgap {
+  syntax: '<length>';
+  inherits: true;
+  initial-value: 0px;
+}
+
+@media (max-width: 900px) and (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .xp-scene {
+      view-timeline: --xpv block;
+    }
+
+    .xp-stack {
+      --xgap: calc(min(290px, 74vw) * 0.3);
+    }
+
+    .xp-stack,
+    .xp-layer,
+    .xp-fill {
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-duration: 1ms;
+      animation-timeline: --xpv;
+      /* de la scène qui entre dans l'écran jusqu'aux étapes qui arrivent à 75 % de la hauteur */
+      animation-range: entry 5svh entry calc(100% + 25svh);
+    }
+
+    .xp-stack {
+      animation-name: xp-open-stack;
+    }
+
+    .xp-l1 {
+      animation-name: xp-open-l1;
+    }
+
+    .xp-l2 {
+      animation-name: xp-open-l2;
+    }
+
+    .xp-l3 {
+      animation-name: xp-open-l3;
+    }
+
+    .xp-l4 {
+      animation-name: xp-open-l4;
+    }
+
+    .xp-fill {
+      animation-name: xp-open-fill;
+    }
+  }
+}
+
+@keyframes xp-open-stack {
+  from {
+    transform: translateY(0%) rotateX(58deg) rotateZ(-30deg);
+  }
+
+  to {
+    transform: translateY(70%) rotateX(58deg) rotateZ(-42deg);
+  }
+}
+
+@keyframes xp-open-l1 {
+  from {
+    transform: translateZ(0px);
+  }
+
+  to {
+    transform: translateZ(0px);
+  }
+}
+
+@keyframes xp-open-l2 {
+  from {
+    transform: translateZ(1px);
+  }
+
+  to {
+    transform: translateZ(calc(var(--xgap) + 1px));
+  }
+}
+
+@keyframes xp-open-l3 {
+  from {
+    transform: translateZ(2px);
+  }
+
+  to {
+    transform: translateZ(calc(var(--xgap) * 2 + 2px));
+  }
+}
+
+@keyframes xp-open-l4 {
+  from {
+    transform: translateZ(3px);
+  }
+
+  to {
+    transform: translateZ(calc(var(--xgap) * 3 + 3px));
+  }
+}
+
+@keyframes xp-open-fill {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .xp *,
+  .xp-layer {
+    transition: none !important;
+  }
+}
+
+.xp-after {
+  position: relative;
+  max-width: 62ch;
+  margin: clamp(0px, 1vw, 12px) auto clamp(40px, 5vw, 72px);
+  padding-inline: var(--edge, 24px);
+  text-align: center;
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--ink-soft);
+}
+
+.xp-after strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+/* la précision sur les interfaces, juste avant la note d'après livraison : les deux paragraphes se suivent sans grand vide */
+.xp-note {
+  margin-bottom: var(--space-3);
+}
+
+/* ====================================================================================================================
+   VARIANTE « À PLAT » (prop plain) : les mêmes étapes, sans la vue éclatée ni la section collée à l'écran, pour les pages de service.
+   Le titre à gauche, la liste des étapes à droite, toutes ouvertes ; même largeur que les autres sections « étirées » (1360 px).
+   ==================================================================================================================== */
+.xp--plain {
+  --num: clamp(1.9rem, 3vw, 2.5rem);
+  --pad: clamp(16px, 2vw, 24px);
+  --row: 0px;
+  padding-top: clamp(64px, 8vw, 112px);
+  /* la section du projet qui suit remonte sous celle-ci (voir ProjectTeaser.css) : peu de marge en bas */
+  padding-bottom: clamp(24px, 4vw, 56px);
+}
+
+.xp--plain .xp-inner {
+  display: grid;
+  grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
+  grid-template-rows: auto;
+  align-items: start;
+  gap: clamp(32px, 6vw, 96px);
+  /* 100 % et non 100vw : la barre de défilement ne doit pas décaler les bords par rapport aux autres sections étirées */
+  width: min(1360px, calc(100% - 2 * var(--edge, 24px)));
+  max-width: none;
+  margin-inline: auto;
+  padding-inline: 0;
+}
+
+.xp--plain .xp-copy {
+  display: contents;
+}
+
+.xp--plain .xp-head {
+  grid-column: 1;
+  grid-row: 1;
+  margin-bottom: 0;
+}
+
+.xp--plain .xp-copy h2 {
+  max-width: 14ch;
+  font-size: clamp(2rem, 3.4vw, 2.9rem);
+  text-align: left;
+  margin-inline: 0;
+}
+
+.xp--plain .xp-sub {
+  max-width: 30ch;
+  margin-inline: 0;
+  text-align: left;
+}
+
+.xp--plain .xp-steps {
+  grid-column: 2;
+  grid-row: 1;
+  order: 0;
+  margin-top: 0;
+}
+
+.xp--plain .xp-step {
+  grid-template-columns: 72px minmax(0, 1fr);
+  min-height: 0;
+}
+
+.xp--plain .xp-step:first-child {
+  border-top: 2px solid var(--ink);
+}
+
+/* le titre reste visible pendant qu'on parcourt les étapes */
+@media (min-width: 901px) {
+  .xp--plain .xp-head {
+    position: sticky;
+    top: calc(var(--header-h) + 24px);
+    align-self: start;
+  }
+}
+
+@media (max-width: 900px) {
+  .xp--plain .xp-inner {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .xp--plain .xp-head,
+  .xp--plain .xp-steps {
+    grid-column: 1;
+    grid-row: auto;
+    position: static;
+  }
+
+  .xp--plain .xp-step {
+    grid-template-columns: 52px minmax(0, 1fr);
+  }
+}

@@ -6,7 +6,15 @@
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 112px;
   overflow-x: hidden;
+}
+
+@media (max-width: 700px) {
+  html {
+    scroll-padding-top: 90px;
+    scroll-padding-bottom: 104px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -38,23 +46,13 @@ body {
   overflow: hidden;
 }
 
-/* Mesh gradient + grain, posés sur <html> plutôt qu'en pseudo-éléments fixed sur body :
-   avec background-attachment:fixed, le fond du canevas racine est peint par le
-   navigateur relativement au VIEWPORT (pas à la hauteur totale de la page) et reste
-   ancré à l'écran au scroll — sans cette propriété, le fond se cale sur la hauteur du
-   document entier et finit par s'arrêter net à mi-page. Cette peinture "canvas" est en
-   plus immunisée contre le bug iOS où un position:fixed classique se désynchronise
-   quand la barre d'adresse se rétracte au scroll. */
+/* Fond des sections claires : une crème légère dérivée de la palette, avec un grain très fin. Les tuiles sombres portent leur propre
+   dégradé (voir Tile.css). */
 html {
   background:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.09'/%3E%3C/svg%3E") repeat,
-    radial-gradient(820px 640px at 6% 8%, color-mix(in srgb, var(--mesh-orange) 26%, transparent), transparent 62%) no-repeat,
-    radial-gradient(780px 620px at 96% 6%, color-mix(in srgb, var(--mesh-purple) 24%, transparent), transparent 60%) no-repeat,
-    radial-gradient(760px 600px at 88% 96%, color-mix(in srgb, var(--mesh-purple) 20%, transparent), transparent 60%) no-repeat,
-    radial-gradient(880px 680px at 10% 96%, color-mix(in srgb, var(--mesh-green) 20%, transparent), transparent 62%) no-repeat,
+    var(--grain) 0 0 / 160px 160px repeat,
     var(--paper);
-  background-attachment: fixed, fixed, fixed, fixed, fixed;
-  background-blend-mode: multiply, normal, normal, normal, normal;
+  background-blend-mode: soft-light, normal;
 }
 
 img {
@@ -74,8 +72,12 @@ a {
 a:focus-visible,
 button:focus-visible {
   outline: 2px solid var(--signal-deep);
-  outline-offset: 2px;
-  border-radius: 4px;
+  outline-offset: 3px;
+}
+
+/* Sur les zones sombres l'anneau bleu marine se confondait avec le fond (contraste 1,8 à 2,8) : anneau blanc */
+:is(.tile--dark, .dark-zone) :is(a, button):focus-visible {
+  outline-color: #fff;
 }
 
 h1,
@@ -86,13 +88,11 @@ h3 {
   text-wrap: balance;
 }
 
-/* Be Vietnam Pro partout — y compris les h1 des pages secondaires
-   (mentions légales, CGV, contact...). Seul le grand titre du hero garde
-   Bricolage Grotesque, via .hero h1 dans index.css. */
+/* Bricolage Grotesque pour tous les titres h1 à h3 (--font-title) ; le corps de texte, la navigation et les boutons restent en Be Vietnam Pro. */
 h1,
 h2,
 h3 {
-  font-family: var(--font-body);
+  font-family: var(--font-title);
 }
 
 p {
@@ -100,14 +100,15 @@ p {
 }
 
 .skip-link {
-  position: absolute;
+  /* fixe : au focus, le lien est toujours dans la fenêtre, même quand la page est défilée (retour de Tab en fin de page) */
+  position: fixed;
   left: 12px;
   top: -100px;
   z-index: 100;
   background: var(--ink);
   color: var(--signal-ink);
   padding: 12px 16px;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   text-decoration: none;
 }
 
@@ -126,10 +127,15 @@ main:focus {
   padding-right: var(--edge);
 }
 
-.eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
+/* Conteneur « étiré » : jusqu'à 1360 px de contenu, à la marge de l'écran près. C'est la largeur de la vitrine du projet et de la
+   méthode sur l'accueil ; les sections des pages de service la reprennent. */
+.wrap--wide {
+  max-width: calc(1360px + 2 * var(--edge));
+}
+
+/* Petit libellé en capitales, réutilisé sur plusieurs pages (statut, « Contact », « Écrire directement »…) */
+.label {
+  display: inline-block;
   font-family: var(--font-mono);
   font-size: 12.5px;
   letter-spacing: 0.12em;
@@ -137,24 +143,12 @@ main:focus {
   color: var(--muted);
 }
 
-.eyebrow::before {
-  content: '';
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--signal);
-  box-shadow: 0 0 0 4px color-mix(in srgb, var(--signal) 16%, transparent);
-  flex: none;
-}
-
-/* Comme .eyebrow, mais sans la pastille — label discret réutilisé sur
-   plusieurs pages (statut, "Contact", "Écrire directement"...) */
-.label {
-  display: inline-block;
+/* Texte en chasse fixe, pour les petites annotations (maquette d'audit) */
+.mono {
   font-family: var(--font-mono);
-  font-size: 12.5px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
   color: var(--muted);
 }
 
@@ -167,7 +161,7 @@ main:focus {
   font-weight: 600;
   font-size: 15.5px;
   padding: 13px 26px;
-  border-radius: 8px;
+  border-radius: var(--radius-btn);
   border: 1px solid transparent;
   cursor: pointer;
   text-decoration: none;
@@ -175,25 +169,53 @@ main:focus {
   transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease, border-color 0.25s ease;
 }
 
+/* Bouton principal : le même verre teinté que les CTA de la Hero (dégradé de lumière, liseré clair, flou d'arrière-plan,
+   ombre bleue). Au survol rien ne bouge : le verre se sature et l'ombre se creuse. */
 .btn-primary {
-  background: var(--signal);
+  position: relative;
+  isolation: isolate;
   color: var(--signal-ink);
+  background: linear-gradient(180deg, rgb(255 255 255 / 0.14), rgb(255 255 255 / 0) 60%), color-mix(in srgb, var(--signal) 92%, transparent);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  backdrop-filter: blur(14px) saturate(160%);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.16), inset 0 1px 0 rgb(255 255 255 / 0.4), 0 14px 30px -18px rgb(12 58 115 / 0.85);
+  transition: background-color 0.5s var(--ease-out), box-shadow 0.5s var(--ease-out), backdrop-filter 0.5s var(--ease-out), transform 0.45s var(--spring);
 }
 
-.btn-primary:hover {
-  background: var(--signal-deep);
-  transform: translateY(-2px);
+.btn-primary:active {
+  transform: scale(0.97);
 }
 
-.btn-ghost {
-  background: transparent;
-  border-color: var(--line-strong);
-  color: var(--ink);
+@media (hover: hover) {
+  .btn-primary:hover {
+    -webkit-backdrop-filter: blur(16px) saturate(190%);
+    backdrop-filter: blur(16px) saturate(190%);
+    background: linear-gradient(180deg, rgb(255 255 255 / 0.12), rgb(255 255 255 / 0) 60%), color-mix(in srgb, var(--signal) 98%, transparent);
+    box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.3), inset 0 1px 0 rgb(255 255 255 / 0.5), 0 18px 36px -16px rgb(12 58 115 / 0.95);
+  }
 }
 
-.btn-ghost:hover {
-  background: var(--paper-soft);
-  border-color: var(--ink);
+.btn-primary:focus-visible {
+  outline: 3px solid var(--signal-deep);
+  outline-offset: 3px;
+}
+
+/* Coins lisses : une courbure continue (superellipse 1,5, un cran en dessous du squircle d'Apple) sur les composants à rayon, quand le
+   navigateur sait la dessiner ; sinon le simple arrondi. Les ronds (50 %) et les pastilles (999 px) ne sont pas concernés. */
+@supports (corner-shape: superellipse(1.5)) {
+  .btn,
+  .frosted-cta,
+  .link-under,
+  .card,
+  .card-art,
+  .glass,
+  .cta-panel,
+  .portrait,
+  .portrait-frame,
+  .header-nav,
+  .proc-gets {
+    corner-shape: var(--corner);
+  }
 }
 
 .btn-arrow {
@@ -202,4 +224,136 @@ main:focus {
 
 .btn:hover .btn-arrow {
   transform: translateX(3px);
+}
+
+/* ---------- Mobile : comportement d'application ----------
+   Pas de flash gris au toucher, pas de zoom au double tap, pas de rebond qui révèle un fond blanc, texte non gonflé
+   par le navigateur. */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  html {
+    -webkit-tap-highlight-color: transparent;
+    overscroll-behavior-y: none;
+  }
+
+  a,
+  button,
+  .btn {
+    touch-action: manipulation;
+  }
+
+  .btn:active {
+    transform: scale(0.97);
+  }
+}
+
+/* ---------- le petit loader : un filet orange et bleu en haut de l'écran ----------
+   Il s'anime pendant le chargement d'une page et dès qu'on clique sur un lien interne (BaseLayout.astro pose html.is-loading). Il avance vite puis
+   ralentit, sans jamais finir tout seul : c'est le changement de page qui le fait disparaître. Sans JavaScript, ou avec « réduire les animations »,
+   il n'existe pas. Sur l'accueil, le loader plein écran de la première visite le remplace. */
+#nav-progress {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 9999;
+  height: 3px;
+  pointer-events: none;
+  transform-origin: 0 50%;
+  transform: scaleX(0);
+  opacity: 0;
+  background: linear-gradient(90deg, #ee8532, #1f45d6);
+  transition: opacity 0.3s ease-out 0.15s;
+}
+
+@keyframes nav-load {
+  0% {
+    transform: scaleX(0);
+  }
+  30% {
+    transform: scaleX(0.55);
+  }
+  100% {
+    transform: scaleX(0.92);
+  }
+}
+
+html.is-loading #nav-progress {
+  opacity: 1;
+  animation: nav-load 5s cubic-bezier(0.1, 0.6, 0.2, 1) forwards;
+  transition: none;
+}
+
+html.has-loader #nav-progress,
+html:not(.is-loading) #nav-progress {
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #nav-progress {
+    display: none;
+  }
+}
+
+/* Téléphone : les textures décoratives en image (béton des formes, matière des sections) ne sont demandées qu'une fois la page chargée
+   (html.tx-in, posée par BaseLayout.astro une fois le plus grand élément affiché). Le premier écran se dessine avec ses couleurs et son texte, puis la matière s'y pose : sur un
+   réseau mobile, la bande passante va d'abord au texte et aux polices. Sur ordinateur, rien ne change : les textures sont préchargées et
+   présentes dès la première image. */
+@media (max-width: 700px) {
+  /* (sélecteurs à deux classes : cette feuille est chargée avant celle des composants, qu'elle doit surclasser) */
+  .amb-atelier .at-paper {
+    background-image:
+      radial-gradient(ellipse 72% 40% at 50% -6%, #ffffff 0%, rgb(255 255 255 / 0) 100%),
+      linear-gradient(180deg, #f6f8fb 0%, #edf1f6 60%, #e4ebf3 100%);
+    /* les tailles et répétitions du papier de HeroAtelier.css visent trois calques (grès 512 px, dégradés) : avec deux calques seulement, le premier
+       dégradé était répété tous les 512 px, d'où une démarcation franche sous les boutons. Un seul calque pleine taille, sans répétition. */
+    background-size: auto, auto;
+    background-repeat: no-repeat, no-repeat;
+  }
+
+  /* Le grès du papier des en-têtes : une petite tuile découpée dans la même texture (stoneware-mini.png, moins de 2 Ko) au lieu de l'image
+     de 58 Ko. La même moucheture, présente dès la première image, et si légère que le navigateur ne la prend pas pour le contenu principal
+     de l'écran (une image presque vide n'est pas comptée).
+     Le grain argentique (opacité 6 %) n'est pas affiché sur téléphone : imperceptible à cette taille. */
+  .amb-atelier .at-paper::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url('../assets/riso/stoneware-mini.png') 0 0 / 128px 128px repeat;
+  }
+
+  .amb-atelier .at-film {
+    display: none;
+  }
+
+  html:not(.tx-in) :is(.at-arch-pale, .at-arch-mint, .at-arch, .at-orb, .at-disc, .at-quarter, .at-win-art)::before,
+  html:not(.tx-in) :is(.concrete, .xp-layer, .site-footer, .xp, .card-art, .cs-lv-gauge)::after,
+  html:not(.tx-in) :is(.xp, .site-footer, .card-art, .cs-lv-gauge)::before {
+    background-image: none;
+  }
+
+  /* Le grès des sections claires : la petite tuile de 2 Ko (comme le papier des en-têtes) au lieu de l'image de 58 Ko. Une grande image de fond
+     est comptée par le navigateur comme « plus grand élément affiché » : sa tuile légère, non. */
+  .tile--light::before {
+    background-image: url('../assets/riso/stoneware-mini.png');
+    background-size: 128px 128px;
+  }
+
+  /* Le béton des scènes (51 Ko) arrive après le chargement, en fondu (0,6 s). */
+  html:not(.tx-in) :is(.sc-stage, .cs-stage, .il-stage, .pj-visit-stage)::before {
+    background-image: none;
+  }
+
+  html.tx-in :is(.sc-stage, .cs-stage, .il-stage, .pj-visit-stage)::before {
+    animation: tx-fade 0.6s ease-out;
+  }
+
+  @keyframes tx-fade {
+    from {
+      opacity: 0;
+    }
+  }
+
 }

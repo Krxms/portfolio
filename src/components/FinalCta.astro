@@ -1,0 +1,99 @@
+---
+import './Tile.css';
+import R from './R.astro';
+import './FinalCta.css';
+import FrostedCTA from './FrostedCTA.astro';
+
+interface Props {
+  title: string;
+  text: string;
+  label: string;
+  href?: string;
+}
+const { title, text, label, href = '/contact/' } = Astro.props;
+---
+
+<section class="cta-final tile tile--dark tile--mesh-a" data-sticky-watch>
+  <div class="wrap tile-inner">
+    {/* Le disque orange est derrière le panneau, entier : la part qui passe dessous est vue à travers le verre (voir FinalCta.css). */}
+    <div class="cta-stage">
+      <div class="cta-orb concrete" aria-hidden="true"></div>
+      <div class="cta-shape concrete" aria-hidden="true"></div>
+      <div class="cta-panel glass glass--dark">
+      <h2><R t={title} /></h2>
+      <p class="tile-sub"><R t={text} /></p>
+      <div class="cta-final-row">
+        <FrostedCTA href={href}>{label}</FrostedCTA>
+        <p class="cta-final-direct">
+          <a href="tel:+33609111838">06 09 11 18 38</a>
+          <a href="mailto:contact@antoinebruneau.fr">contact@antoinebruneau.fr</a>
+        </p>
+      </div>
+      <ul class="cta-facts" role="list">
+        <li>Réponse généralement sous deux jours ouvrés</li>
+        <li>Devis gratuit et détaillé</li>
+        <li>
+          Entrepreneur individuel,{' '}
+          <a href="https://annuaire-entreprises.data.gouv.fr/entreprise/788566719" rel="noopener">SIREN 788 566 719</a>
+        </li>
+      </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Liquid glass (Chromium seulement) : sous le bord du panneau, le fond est courbé comme à travers une lentille. Deux cartes de
+  // déplacement (une horizontale dans le canal rouge, une verticale dans le vert) tirent les pixels du bord vers l'intérieur ; elles sont
+  // dessinées à la taille exacte du panneau, et refaites quand il change de taille. Les autres navigateurs gardent le flou seul.
+  const panel = document.querySelector<HTMLElement>('.cta-panel');
+  // Chromium (Chrome, Edge, Brave…) : seul moteur dont backdrop-filter accepte un filtre SVG. Chrome sur iOS (CriOS) est WebKit.
+  const chromium = /Chrome\/\d+/.test(navigator.userAgent) && !/CriOS|FxiOS/.test(navigator.userAgent);
+  if (panel && chromium && !matchMedia('(prefers-reduced-transparency: reduce)').matches) {
+    const NS = 'http://www.w3.org/2000/svg';
+    const svg = document.createElementNS(NS, 'svg');
+    svg.setAttribute('width', '0');
+    svg.setAttribute('height', '0');
+    svg.setAttribute('aria-hidden', 'true');
+    svg.style.cssText = 'position:absolute;pointer-events:none';
+    svg.innerHTML =
+      '<filter id="lg-panel" filterUnits="userSpaceOnUse" x="0" y="0" width="900" height="600" color-interpolation-filters="sRGB">' +
+      '<feImage id="lg-mx" x="0" y="0" width="900" height="600" preserveAspectRatio="none" result="mx"/>' +
+      '<feDisplacementMap in="SourceGraphic" in2="mx" scale="64" xChannelSelector="R" yChannelSelector="B" result="d1"/>' +
+      '<feImage id="lg-my" x="0" y="0" width="900" height="600" preserveAspectRatio="none" result="my"/>' +
+      '<feDisplacementMap in="d1" in2="my" scale="64" xChannelSelector="B" yChannelSelector="G"/>' +
+      '</filter>';
+    document.body.appendChild(svg);
+    const f = svg.querySelector('filter')!;
+    const mx = svg.querySelector('#lg-mx')!;
+    const my = svg.querySelector('#lg-my')!;
+
+    const ramp = (w: number, h: number, horizontal: boolean, bevel: number) => {
+      const t = bevel / (horizontal ? w : h);
+      const a = horizontal ? 'rgb(255,128,128)' : 'rgb(128,255,128)';
+      const z = horizontal ? 'rgb(1,128,128)' : 'rgb(128,1,128)';
+      const g =
+        '<linearGradient id="g" x1="0" y1="0" x2="' + (horizontal ? 1 : 0) + '" y2="' + (horizontal ? 0 : 1) + '">' +
+        '<stop offset="0" stop-color="' + a + '"/><stop offset="' + t + '" stop-color="rgb(128,128,128)"/>' +
+        '<stop offset="' + (1 - t) + '" stop-color="rgb(128,128,128)"/><stop offset="1" stop-color="' + z + '"/></linearGradient>';
+      const svgText = '<svg xmlns="http://www.w3.org/2000/svg" width="' + w + '" height="' + h + '"><defs>' + g + '</defs><rect width="100%" height="100%" fill="url(#g)"/></svg>';
+      return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgText);
+    };
+
+    const build = () => {
+      const w = Math.round(panel.offsetWidth);
+      const h = Math.round(panel.offsetHeight);
+      if (!w || !h) return;
+      const bevel = Math.min(56, Math.round(Math.min(w, h) * 0.16));
+      [f, mx, my].forEach((el) => {
+        el.setAttribute('width', String(w));
+        el.setAttribute('height', String(h));
+      });
+      mx.setAttribute('href', ramp(w, h, true, bevel));
+      my.setAttribute('href', ramp(w, h, false, bevel));
+      panel.classList.add('lg-on');
+    };
+    new ResizeObserver(build).observe(panel);
+    build();
+  }
+</script>

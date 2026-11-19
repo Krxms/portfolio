@@ -1,0 +1,859 @@
+/* Vitrine du projet : titre et texte au-dessus, scène bleue en dessous, liste sobre des prochains projets.
+   Le fond : le crème bleuté de la page (offres, méthode) devient progressivement un crème chaud entre la fin des étapes et le projet, et
+   le reste jusqu'à la section sombre « Qui suis-je ». Pas d'ombre dure orange : la matière orange reste réservée aux boutons et aux
+   accents. Les formes en béton coloré (voir .concrete dans matiere.css) sont derrière les maquettes, dans la scène : elles en font
+   partie, elles ne flottent pas dans la page. */
+.tile.project-tile {
+  /* Zone de fondu : après la méthode, la section remonte de --blend (marge négative, compensée par le padding : la mise en page ne
+     bouge pas). Son fond commence donc juste sous les étapes et passe progressivement au crème chaud, entre les deux sections :
+     rien ne change avant la fin des étapes. Ailleurs, --blend vaut 0 et la section ne déborde pas sur la précédente. */
+  --blend: 0px;
+  margin-top: calc(var(--blend) * -1);
+  padding-top: calc(clamp(40px, 5.5vw, 80px) + var(--blend));
+  padding-bottom: clamp(80px, 9.5vw, 140px);
+  /* le crème chaud est atteint progressivement, au niveau de la présentation du projet, puis tient jusqu'à la section sombre */
+  background: linear-gradient(180deg, rgb(247 239 223 / 0) 0%, #f7efdf calc(var(--blend) + clamp(240px, 26vw, 400px)), #f7efdf 100%);
+}
+
+:is(.xp, .xp-after) + .tile.project-tile {
+  --blend: clamp(80px, 9vw, 140px);
+}
+
+.showcase {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(28px, 3.4vw, 48px);
+  /* étirée : plus large que le texte de la page (jusqu'à 1360 px, à 24 px des bords de l'écran) */
+  width: min(1360px, calc(100vw - 2 * var(--edge, 24px)));
+  margin-left: 50%;
+  transform: translateX(-50%);
+}
+
+/* ---------- l'en-tête ---------- */
+.sc-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-4) clamp(20px, 4vw, 72px);
+}
+
+.sc-title {
+  flex: 1 1 520px;
+  min-width: 0;
+}
+
+.sc-title .tile-label {
+  display: inline-block;
+  margin-bottom: var(--space-4);
+  padding: 6px 14px;
+  border: 1px solid rgb(26 60 191 / 0.45);
+  border-radius: 999px;
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+  color: var(--signal-deep);
+  background: rgb(255 255 255 / 0.7);
+}
+
+.sc-title h2 {
+  max-width: none;
+  font-size: clamp(2.6rem, 6.2vw, 5.4rem);
+  line-height: 0.98;
+  letter-spacing: -0.021em;
+}
+
+/* le texte est juste sous le titre */
+.sc-text {
+  max-width: 52ch;
+  margin-top: var(--space-4);
+  font-size: clamp(1rem, 1.4vw, 1.12rem);
+  line-height: 1.55;
+  color: var(--ink-soft);
+}
+
+/* présentation en étude de cas : un intitulé en petites capitales, puis le texte, pour le besoin et pour ce qui a été fait */
+.sc-case {
+  display: grid;
+  gap: var(--space-4);
+  max-width: 56ch;
+  margin: var(--space-4) 0 0;
+}
+
+.sc-case dt,
+.sc-case-label {
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--signal-deep);
+}
+
+.sc-case dd {
+  margin: 4px 0 0;
+  font-size: clamp(1rem, 1.4vw, 1.12rem);
+  line-height: 1.55;
+  color: var(--ink-soft);
+}
+
+.sc-case-label {
+  margin-top: var(--space-5);
+}
+
+.sc-case-label + .sc-scores {
+  margin-top: var(--space-3);
+}
+
+/* les scores Lighthouse : une réglette en trois colonnes, dans le langage des pastilles voisines (filet bleu, fond papier, police d'affichage).
+   La barre fine sous chaque note montre l'écart à 100 ; aucune couleur de plus que le bleu de la charte. */
+.sc-scores {
+  margin: var(--space-5) 0 0;
+}
+
+.sc-scores ul {
+  display: inline-grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border: 1px solid rgb(26 60 191 / 0.4);
+  border-radius: var(--radius-lg, 16px);
+  background: rgb(255 255 255 / 0.55);
+}
+
+.sc-scores li {
+  display: grid;
+  gap: 6px;
+  min-width: 118px;
+  padding: 14px 18px 16px;
+}
+
+.sc-scores li + li {
+  border-left: 1px solid rgb(26 60 191 / 0.18);
+}
+
+.sc-score-label {
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+  color: var(--signal-deep);
+}
+
+.sc-score-n {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.021em;
+  color: var(--ink);
+}
+
+/* Machine à sous : chaque chiffre est un rouleau (une bande 0-9 deux fois, vue par une fenêtre d'un chiffre de haut). Au repos, la bande est
+   posée sur le bon chiffre : sans script ou avec « réduire les animations », la note est simplement affichée. */
+.sc-score-n {
+  display: flex;
+  align-items: baseline;
+}
+
+.sc-reels {
+  display: inline-flex;
+  font-variant-numeric: tabular-nums;
+  transform-origin: 0 100%;
+}
+
+.sc-reel {
+  display: block;
+  height: 1em;
+  overflow: hidden;
+}
+
+.sc-reel-strip {
+  display: block;
+  white-space: pre;
+  line-height: 1;
+  translate: 0 calc(var(--idx) * -1em);
+}
+
+.sc-reel-strip::before {
+  content: '0\A 1\A 2\A 3\A 4\A 5\A 6\A 7\A 8\A 9\A 0\A 1\A 2\A 3\A 4\A 5\A 6\A 7\A 8\A 9\A 0';
+}
+
+/* Le compteur suit le défilement : scenes.js écrit --e (0 à 1, avec un amorti qui adoucit le mouvement) sur la réglette pendant qu'elle monte
+   dans l'écran. Chaque note en tire sa propre progression --t, avec un départ (--o) et une durée (--w) un peu différents de ses voisines :
+   elles se relaient de gauche à droite sans suivre un métronome. Dans une note, les rouleaux s'arrêtent l'un après l'autre (le plus à
+   gauche d'abord) en se posant avec un très léger rebond ; à l'arrêt, la note fait un petit bond et la barre s'illumine, au rythme
+   du défilement lui-même. Sans script ou avec « réduire les animations », rien de tout cela n'existe : la note est affichée. */
+.sc-meter > i {
+  transform-origin: 0 50%;
+}
+
+.has-scenes .sc-scores li {
+  --t: clamp(0, calc((var(--e, 0) - var(--o)) / var(--w)), 1);
+  --p: clamp(0, calc((var(--t) - 0.8) / 0.2), 1);
+  --bump: sin(calc(var(--p) * 180deg));
+}
+
+.has-scenes .sc-reel {
+  /* le rouleau de gauche s'arrête en premier : il a fini quand la note est aux 60 % (trois chiffres) ou 80 % (deux) de sa progression */
+  --c: calc(1 - (var(--rs) - 1 - var(--r)) * 0.2);
+  --x: clamp(0, calc(var(--t) / var(--c)), 1);
+  /* décélération avec un léger rebond à l'arrêt (ease-out-back, rebond faible) */
+  --y: calc(1 + 1.35 * (var(--x) - 1) * (var(--x) - 1) * (var(--x) - 1) + 0.35 * (var(--x) - 1) * (var(--x) - 1));
+}
+
+.has-scenes .sc-reel-strip {
+  translate: 0 calc(var(--y) * var(--idx) * -1em);
+}
+
+.has-scenes .sc-reels {
+  scale: calc(1 + 0.14 * var(--bump));
+}
+
+.has-scenes .sc-meter > i {
+  scale: calc(1 - (1 - var(--t)) * (1 - var(--t)) * (1 - var(--t))) 1;
+  box-shadow: 0 0 calc(var(--bump) * 14px) calc(var(--bump) * 3px) rgb(26 60 191 / calc(var(--bump) * 0.5));
+}
+
+.sc-score-n small {
+  margin-left: 2px;
+  font-family: inherit;
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  color: var(--muted);
+}
+
+.sc-meter {
+  display: block;
+  height: 3px;
+  margin-top: 4px;
+  border-radius: 999px;
+  background: rgb(26 60 191 / 0.14);
+}
+
+.sc-meter > i {
+  display: block;
+  width: calc(var(--v) * 1%);
+  height: 100%;
+  border-radius: inherit;
+  background: var(--signal-deep);
+}
+
+.sc-scores figcaption {
+  margin-top: var(--space-3);
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+@media (max-width: 480px) {
+  .sc-scores ul {
+    display: grid;
+  }
+
+  .sc-scores li {
+    min-width: 0;
+    padding: 12px 10px 14px;
+  }
+
+  /* « Bonnes pratiques » passe sur deux lignes : tous les libellés réservent deux lignes et se posent en bas, pour que les notes restent alignées */
+  .sc-score-label {
+    display: flex;
+    align-items: flex-end;
+    min-height: 2.5em;
+    white-space: normal;
+    font-size: 11.5px;
+    line-height: 1.25;
+  }
+
+  .sc-score-n {
+    font-size: 1.6rem;
+  }
+}
+
+/* ce qui a été réalisé : trois pastilles, à droite de l'en-tête */
+.sc-scope {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+  margin: 0;
+  padding: 0 0 6px;
+  list-style: none;
+}
+
+.sc-scope li {
+  padding: 6px 14px;
+  border: 1px solid rgb(26 60 191 / 0.4);
+  border-radius: 999px;
+  font-size: 13.5px;
+  font-weight: 600;
+  white-space: nowrap;
+  color: var(--signal-deep);
+  background: rgb(255 255 255 / 0.55);
+}
+
+/* sur mobile, les trois pastilles du périmètre tiennent sur une seule ligne */
+@media (max-width: 480px) {
+  .sc-scope {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    gap: 6px;
+  }
+
+  .sc-scope li {
+    padding: 6px 10px;
+    font-size: 12.5px;
+  }
+}
+
+@media (max-width: 370px) {
+  .sc-scope {
+    gap: 4px;
+  }
+
+  .sc-scope li {
+    padding: 5px 7px;
+    font-size: 11.5px;
+  }
+}
+
+/* ---------- la scène ---------- */
+/* Toutes les mesures sont en cqw (largeur de la scène) : la composition garde ses proportions à toutes les largeurs. */
+.sc-stage {
+  position: relative;
+  display: block;
+  cursor: pointer;
+  text-decoration: none;
+  overflow: hidden;
+  isolation: isolate;
+  container-type: inline-size;
+  aspect-ratio: 100 / 46;
+  border-radius: var(--radius-xl);
+  /* Un fond à part : marine profond, avec une lueur lagon en bas à droite et une lueur indigo en haut à gauche. Le bleu klein vif est celui
+     de l'illustration de la carte « Création de site » ; ici, la scène est plus sombre et plus verte, pour ne pas lui ressembler. */
+  background:
+    var(--grain-soft) 0 0 / 160px 160px repeat,
+    radial-gradient(60% 80% at 88% 100%, rgb(24 156 176 / 0.42), rgb(24 156 176 / 0) 64%),
+    radial-gradient(55% 80% at 14% 0%, rgb(86 92 214 / 0.4), rgb(86 92 214 / 0) 62%),
+    linear-gradient(160deg, #1a2a78 0%, #14205f 46%, #0b1a4a 100%);
+  background-blend-mode: soft-light, normal, normal;
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.12), 0 30px 60px -36px rgb(11 26 74 / 0.55);
+}
+
+/* le béton des formes est plus discret ici que sur le reste du site : la scène doit rester propre derrière les maquettes */
+.sc-stage .concrete {
+  --concrete: 0.18;
+}
+
+.sc-cta {
+  position: absolute;
+  z-index: 6;
+  left: 3.2cqw;
+  bottom: 3.2cqw;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 34px;
+  padding: 0 14px;
+  border-radius: 999px;
+  font-size: 13.5px;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--ink);
+  background: rgb(255 255 255 / 0.94);
+  box-shadow: 0 6px 18px -8px rgb(8 20 90 / 0.5);
+  transition: transform 0.3s var(--ease-out);
+}
+
+.sc-stage:hover .sc-cta {
+  transform: translateX(3px);
+}
+
+.sc-stage:focus-visible {
+  outline: 3px solid var(--signal-deep);
+  outline-offset: 4px;
+}
+
+/* Micro-interaction : une très légère parallaxe au défilement, à la place du survol. Quand la scène traverse l'écran, chaque plan glisse de
+   quelques pixels à son propre rythme : le téléphone et les cartes (devant) un peu plus, le site au milieu, les formes (derrière) à peine.
+   C'est une animation CSS pilotée par le défilement (view-timeline) : jouée par le processeur graphique, sans script, parfaitement liée au
+   défilement (aucun retard, aucune saccade) et sans rien qui s'allume ni ne clignote : elle ne se remarque qu'en y faisant attention.
+   L'amplitude --a est en cqw (largeur de la scène) : de +a à -a sur toute la traversée. Navigateurs sans cette fonction, ou avec « réduire
+   les animations » : la scène reste immobile. */
+@keyframes sc-drift {
+  from {
+    translate: 0 calc(var(--a) * 1cqw);
+  }
+
+  to {
+    translate: 0 calc(var(--a) * -1cqw);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .sc-stage {
+      view-timeline: --sc block;
+    }
+
+    /* en propriétés séparées, sans durée : le minificateur ne peut pas les fondre dans le raccourci « animation » */
+    .sc-browser,
+    .sc-phone,
+    .sc-card,
+    .sc-shape {
+      animation-name: sc-drift;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-timeline: --sc;
+      animation-range: cover 0% cover 100%;
+      will-change: translate;
+    }
+
+    .sc-shape {
+      --a: 0.35;
+    }
+
+    .sc-browser {
+      --a: 0.6;
+    }
+
+    .sc-card {
+      --a: 1.1;
+    }
+
+    .sc-phone {
+      --a: 1.5;
+    }
+  }
+}
+
+/* les formes, derrière tout */
+.sc-shape {
+  position: absolute !important;
+  z-index: 0;
+  display: block;
+}
+
+.sc-disc {
+  right: -5cqw;
+  top: -10cqw;
+  width: 31cqw;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 24%, rgb(255 214 170 / 0.55), rgb(255 214 170 / 0) 42%), linear-gradient(150deg, #ff9a58, #f2733c 60%, #e0602a);
+  box-shadow: inset -1.2cqw -1.6cqw 3cqw -1cqw rgb(150 50 10 / 0.35);
+}
+
+.sc-arch {
+  left: 4cqw;
+  bottom: 0;
+  width: 17cqw;
+  height: 26cqw;
+  border-radius: 999px 999px 0 0;
+  background: linear-gradient(172deg, #d8f3ec 0%, #a6d4ca 55%, #82bdb0 100%);
+  box-shadow: inset 0.5cqw 0.5cqw 0 -0.1cqw rgb(255 255 255 / 0.4), inset -2cqw -2.4cqw 4cqw -1.5cqw rgb(20 80 70 / 0.3);
+}
+
+.sc-quarter {
+  left: 0;
+  top: 0;
+  width: 15cqw;
+  aspect-ratio: 1;
+  border-radius: 0 0 100% 0;
+  background: linear-gradient(150deg, #e3edff, #b4cdfa);
+}
+
+/* le site sur ordinateur */
+.sc-browser {
+  position: absolute;
+  z-index: 1;
+  left: 15cqw;
+  top: 7cqw;
+  width: 58cqw;
+  margin: 0;
+  overflow: hidden;
+  border-radius: 1.3cqw;
+  background: #fff;
+  box-shadow: 0 0 0 1px rgb(255 255 255 / 0.2), 0 3cqw 5cqw -1.5cqw rgb(4 10 56 / 0.6);
+}
+
+.sc-bar {
+  display: flex;
+  align-items: center;
+  gap: max(4px, 0.6cqw);
+  height: max(14px, 2.4cqw);
+  padding-inline: max(8px, 1.1cqw);
+  background: #eef1f7;
+  box-shadow: inset 0 -1px 0 rgb(18 32 43 / 0.08);
+}
+
+.sc-bar i {
+  width: max(4px, 0.7cqw);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #c3cada;
+}
+
+.sc-browser img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* les cartes de visite, en éventail devant le site */
+.sc-cards {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  pointer-events: none;
+}
+
+.sc-card {
+  position: absolute;
+  width: 15cqw;
+  height: auto;
+  border-radius: 0.5cqw;
+  box-shadow: 0 1.4cqw 2.6cqw -1cqw rgb(4 10 56 / 0.55), 0 0 0 1px rgb(255 255 255 / 0.2);
+}
+
+.sc-card--1 {
+  left: 5.5cqw;
+  bottom: 7cqw;
+  rotate: -9deg;
+}
+
+.sc-card--2 {
+  left: 11cqw;
+  bottom: 4.6cqw;
+  rotate: -2deg;
+}
+
+.sc-card--3 {
+  left: 17cqw;
+  bottom: 3cqw;
+  rotate: 6deg;
+}
+
+/* le site sur mobile */
+.sc-phone {
+  position: absolute;
+  z-index: 3;
+  right: 12cqw;
+  bottom: -5cqw;
+  width: 18cqw;
+  margin: 0;
+  padding: 0.55cqw;
+  border-radius: 2.8cqw;
+  background: #0b1250;
+  box-shadow: 0 0 0 1px rgb(255 255 255 / 0.18), 0 3cqw 5cqw -1.5cqw rgb(4 10 56 / 0.7);
+}
+
+.sc-phone img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 2.3cqw;
+}
+
+/* ---------- les prochains projets ---------- */
+.sc-next {
+  margin-top: clamp(4px, 1vw, 12px);
+}
+
+.sc-next-label {
+  margin: 0 0 var(--space-2);
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.sc-next ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid rgb(18 32 43 / 0.14);
+}
+
+.sc-next li {
+  border-bottom: 1px solid rgb(18 32 43 / 0.14);
+}
+
+.sc-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: clamp(14px, 2vw, 28px);
+  padding: 18px clamp(4px, 1vw, 12px);
+  color: var(--ink);
+  text-decoration: none;
+  border-radius: var(--radius-md);
+  transition: background-color 0.4s var(--ease-out);
+}
+
+/* au survol, le fond blanc déborde un peu des filets séparateurs : l'arrondi les dépasse, comme une pastille posée sur la liste */
+@media (hover: hover) {
+  .sc-row {
+    position: relative;
+    z-index: 0;
+  }
+
+  .sc-row::before {
+    content: '';
+    position: absolute;
+    inset: -1px clamp(-18px, -1.4vw, -10px);
+    z-index: -1;
+    border-radius: var(--radius-lg);
+    background: rgb(255 255 255 / 0.6);
+    opacity: 0;
+    transition: opacity 0.4s var(--ease-out);
+  }
+
+  .sc-row:hover::before {
+    opacity: 1;
+  }
+}
+
+/* une petite forme en béton coloré par ligne */
+.sc-glyph {
+  display: block;
+  width: 46px;
+  height: 46px;
+}
+
+.sc-glyph--disc {
+  border-radius: 50%;
+  background: linear-gradient(150deg, #ff9a58, #f2733c 60%, #e0602a);
+}
+
+.sc-glyph--arch {
+  width: 38px;
+  margin-inline: 4px;
+  border-radius: 999px 999px 0 0;
+  background: linear-gradient(172deg, #5b88f8 0%, #2147d4 55%, #13247c 100%);
+}
+
+.sc-row-main {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.sc-row-main strong {
+  font-family: var(--font-display);
+  font-size: clamp(1.15rem, 1.9vw, 1.5rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+.sc-row-main span {
+  font-size: 14.5px;
+  line-height: 1.45;
+  color: var(--ink-soft);
+}
+
+.sc-state {
+  padding: 4px 12px;
+  border: 1px solid rgb(26 60 191 / 0.4);
+  border-radius: 999px;
+  font-size: 12.5px;
+  font-weight: 600;
+  white-space: nowrap;
+  color: var(--signal-deep);
+}
+
+.sc-state--now {
+  border-color: transparent;
+  background: rgb(238 133 50 / 0.18);
+  color: #8a3f08;
+}
+
+/* la flèche : un petit rond discret, qui se remplit d'orange au survol */
+.sc-go {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid rgb(19 36 124 / 0.35);
+  background:
+    linear-gradient(#ee8532, #ee8532) 0 0 / 0% 100% no-repeat,
+    transparent;
+  transition: background-size 0.5s var(--ease-out), border-color 0.4s var(--ease-out);
+}
+
+.sc-go::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 8px;
+  height: 8px;
+  border-top: 1.6px solid #13247c;
+  border-right: 1.6px solid #13247c;
+  transform: translateX(-1px) rotate(45deg);
+}
+
+@media (hover: hover) {
+  .sc-row:hover .sc-go {
+    background-size: 100% 100%, auto;
+    border-color: #ee8532;
+  }
+}
+
+.sc-row:focus-visible {
+  outline: 3px solid var(--signal-deep);
+  outline-offset: 2px;
+}
+
+/* ---------- tablette et mobile ---------- */
+@media (max-width: 900px) {
+  .sc-scope {
+    justify-content: flex-start;
+    padding-bottom: 0;
+  }
+}
+
+@media (max-width: 700px) {
+  .sc-stage {
+    aspect-ratio: 100 / 118;
+  }
+
+  .sc-disc {
+    right: -14cqw;
+    top: -14cqw;
+    width: 50cqw;
+  }
+
+  .sc-quarter {
+    display: none;
+  }
+
+  .sc-arch {
+    left: 9cqw;
+    width: 30cqw;
+    height: 44cqw;
+  }
+
+  .sc-browser {
+    left: 5cqw;
+    top: 14cqw;
+    width: 90cqw;
+    border-radius: 3cqw;
+  }
+
+  .sc-card {
+    width: 28cqw;
+    border-radius: 1cqw;
+  }
+
+  .sc-card--1 {
+    left: 7cqw;
+    bottom: 13cqw;
+  }
+
+  .sc-card--2 {
+    left: 15cqw;
+    bottom: 8.5cqw;
+  }
+
+  .sc-card--3 {
+    left: 23cqw;
+    bottom: 5cqw;
+  }
+
+  .sc-phone {
+    right: 8cqw;
+    bottom: 7cqw;
+    width: 32cqw;
+    padding: 1.1cqw;
+    border-radius: 5.4cqw;
+  }
+
+  .sc-phone img {
+    border-radius: 4.4cqw;
+  }
+
+  .sc-row {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    row-gap: 8px;
+  }
+
+  .sc-row .sc-state {
+    grid-column: 2;
+    grid-row: 2;
+    justify-self: start;
+  }
+
+  .sc-row .sc-go {
+    grid-column: 3;
+    grid-row: 1 / 3;
+  }
+}
+
+/* Fond retravaillé dans Figma : un dessin SVG (marine, lueurs lagon et indigo, formes) posé derrière les maquettes.
+   Sur ordinateur, ses formes remplacent celles en CSS et gardent la parallaxe ; sur mobile (cadre plus haut), le dessin recadré ne montrerait
+   plus les formes : seul son fond est gardé et les formes en CSS, placées pour ce format, restent. */
+.sc-art {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.sc-art-shapes {
+  display: none;
+}
+
+@media (min-width: 701px) {
+  .sc-art-shapes {
+    display: block;
+  }
+
+  .sc-stage > .sc-shape {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .sc-art-quarter,
+    .sc-art-disc,
+    .sc-art-arch {
+      animation-name: sc-drift;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-timeline: --sc;
+      animation-range: cover 0% cover 100%;
+      --a: 0.35;
+    }
+  }
+}
+
+/* la matière du fond, comme sur les autres scènes : le béton raccordable en tuile, puis le grain, sous les maquettes et au-dessus du dessin */
+.sc-stage::before,
+.sc-stage::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  mix-blend-mode: soft-light;
+}
+
+.sc-stage::before {
+  background: url('../assets/riso/concrete-tile.webp') 0 0 / 256px 256px repeat;
+  opacity: 0.4;
+}
+
+.sc-stage::after {
+  background: var(--grain-soft) 0 0 / 160px 160px repeat;
+  opacity: 0.22;
+}

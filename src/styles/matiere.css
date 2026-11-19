@@ -1,0 +1,85 @@
+/* La matière de la Hero, portée au reste de la page : arches, disques, grain de grès, ombre dure orange. Les sections qui suivent
+   l'emploient pour que la page se lise comme une seule affiche. Tout est statique : formes, ombres et grain, rien d'animé.
+   Les sélecteurs sont préfixés par « html » pour passer devant les règles des composants quel que soit l'ordre de chargement.
+   Direction des ombres : toujours vers le bas à droite, pour une seule lumière sur toute la page. */
+:root {
+  /* intensité du béton sur toutes les formes du site (arches, disques, sphère, couches) */
+  --concrete: 0.3;
+  --hard-shadow: 6px 6px 0 rgb(238 133 50 / 0.9);
+  /* le fond du panneau bleu (.panel-blue) : réutilisable par une carte qui doit avoir le même (avec background-blend-mode: soft-light, normal, normal) */
+  --panel-blue-bg:
+    var(--grain-soft) 0 0 / 160px 160px repeat,
+    radial-gradient(60% 80% at 88% 100%, rgb(24 156 176 / 0.42), rgb(24 156 176 / 0) 64%),
+    radial-gradient(55% 80% at 14% 0%, rgb(86 92 214 / 0.4), rgb(86 92 214 / 0) 62%),
+    linear-gradient(160deg, #1a2a78 0%, #14205f 46%, #0b1a4a 100%);
+}
+
+/* Les offres : verre épais, ombre dure orange */
+html .card {
+  border-radius: var(--radius-xl);
+  box-shadow:
+    inset 0 1px 0 #fff,
+    inset 0 0 0 1px rgb(255 255 255 / 0.6),
+    0 0 0 1px rgb(18 32 43 / 0.07),
+    var(--hard-shadow),
+    0 34px 44px -30px rgb(18 32 43 / 0.45);
+}
+
+/* emboîtement : le rayon de la carte moins son padding (--card-pad, 10 px) */
+html .card-art {
+  border-radius: max(var(--radius-xs), calc(var(--radius-xl) - var(--card-pad, 10px)));
+}
+
+/* Qui suis-je : le portrait dans une arche */
+html .portrait,
+html .portrait-frame,
+html .portrait img {
+  border-radius: 999px 999px var(--radius-xl) var(--radius-xl);
+}
+
+/* Béton : une photo en niveaux de gris, incrustée en lumière douce (soft-light) sur la couleur de la forme. À poser sur n'importe quelle
+   forme avec la classe .concrete : la couleur reste celle de la forme, la matière s'ajoute, à la même intensité partout. */
+:where(.concrete) {
+  position: relative;
+  isolation: isolate;
+}
+
+.concrete::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: url('../assets/riso/concrete-zoom.webp') 50% 50% / cover no-repeat;
+  mix-blend-mode: soft-light;
+  opacity: var(--concrete, 0.3);
+}
+
+/* Panneau bleu : le fond de la scène du projet sur l'accueil (.sc-stage, ProjectTeaser.css), prêt à recevoir du texte blanc ou une
+   composition. Marine profond, lueur lagon en bas à droite, lueur indigo en haut à gauche, grain fin. À réutiliser pour tout bloc « posé »
+   sur la page claire (les pages de service s'en servent pour leurs comparaisons) ; garder les deux fonds identiques. */
+.panel-blue {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border-radius: var(--radius-xl);
+  color: #fff;
+  background: var(--panel-blue-bg);
+  background-blend-mode: soft-light, normal, normal;
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.12), 0 30px 60px -36px rgb(11 26 74 / 0.55);
+}
+
+/* Variante avec le grain de risographie de la zone sombre en bas de page (voir Tile.css) : grain fin et manques d'encre, à la même
+   intensité, sous le contenu. */
+.panel-blue--riso::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    var(--grain-soft) 0 0 / 160px 160px repeat,
+    var(--speck) 30px 70px / 256px 256px repeat;
+  background-blend-mode: soft-light, normal;
+  opacity: 0.55;
+}

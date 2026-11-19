@@ -1,0 +1,21 @@
+---
+import './LinkUnder.css';
+
+/* Lien secondaire souligné. Au survol : la graisse et la couleur montent d'un cran, et le trait du bas
+   se remplit de la couleur du texte, de la gauche vers la droite, comme une barre de chargement.
+   La graisse change sans décaler la mise en page : une copie invisible en gras réserve la largeur. */
+interface Props {
+  href: string;
+  label: string;
+  external?: boolean;
+  /** « light » : texte clair, pour les fonds sombres */
+  tone?: 'dark' | 'light';
+  /** reflet qui suit le pointeur (pour la version pastille) */
+  glow?: boolean;
+  /** version « flèche » : libellé et flèche dans un rond, sans soulignement */
+  arrow?: boolean;
+}
+const { href, label, external = false, tone = 'dark', glow = false, arrow = false } = Astro.props;
+---
+
+<a class:list={['link-under', tone === 'light' && 'link-under--light', arrow && 'link-under--arrow']} href={href} target={external ? '_blank' : undefined} rel={external ? 'noopener' : undefined} data-glow={glow ? '' : undefined}><span class="link-under-text" data-text={label}>{label}</span>{arrow && <span class="link-under-arrow" aria-hidden="true"><svg viewBox="0 0 16 16" width="14" height="14"><path d="M3 8h9.5M8.5 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg></span>}</a>

@@ -1,0 +1,99 @@
+---
+import './ServiceCards.css';
+import './LinkUnder.css';
+import R from './R.astro';
+import artCreation from '../assets/cards/creation.svg?raw';
+import artRefonte from '../assets/cards/refonte.svg?raw';
+
+/* Les deux domaines d'intervention : les sites web et les interfaces de logiciels. L'accueil aide à choisir un chemin, il ne décrit pas toute
+   l'offre : chaque carte a une catégorie, un titre, une courte description, éventuellement le public visé, puis, en pied de carte, les pages
+   où l'on va (une rangée par destination). Le détail (prestations, livrables, modalités) est sur chaque page de service.
+   Trois niveaux d'action sur le site : bouton principal (FrostedCTA), bouton secondaire (LinkUnder, pastille), lien de carte (la liste de
+   rangées avec flèche, ci-dessous). Une carte n'a que des liens de ce dernier niveau : un seul geste, répété, plutôt que deux boutons côte à côte.
+   Variante « compact » (bas des études de cas) : sans illustration, titre et description plus courts, pour une navigation contextuelle.
+   Un \n dans un texte devient un retour à la ligne. */
+interface Props {
+  compact?: boolean;
+}
+const { compact = false } = Astro.props;
+
+const full = [
+  {
+    tone: 'warm',
+    art: artCreation,
+    kicker: 'Sites web',
+    title: 'Votre activité mérite d’être bien comprise.',
+    text: 'Un site pour présenter votre offre, répondre aux bonnes questions et faciliter le contact.',
+    who: 'Pour les indépendants, artisans, commerçants, PME et associations.',
+    routes: [
+      { href: '/creation-site-web/', label: 'Créer un site' },
+      { href: '/refonte-site-web/', label: 'Refaire un site' },
+    ],
+  },
+  {
+    tone: 'blue',
+    art: artRefonte,
+    kicker: 'Interfaces et logiciels',
+    title: 'Des outils qui s’adaptent à ceux qui travaillent.',
+    text: 'Des parcours et des écrans conçus autour des usages de vos équipes, en mission de conception ou en renfort d’équipe UX/UI.',
+    who: 'Pour les éditeurs SaaS, les PME équipées d’un logiciel métier, les agences et les studios.',
+    routes: [
+      { href: '/interfaces-logiciels/', label: 'Interfaces et logiciels' },
+      { href: '/audit-ux-ui/', label: 'Audit UX/UI' },
+    ],
+  },
+];
+
+const short = [
+  {
+    tone: 'warm',
+    kicker: 'Sites web',
+    title: 'Un site pour votre activité.',
+    text: 'Créer un nouveau site, ou refaire celui qui ne vous convient plus.',
+    routes: full[0].routes,
+  },
+  {
+    tone: 'blue',
+    kicker: 'Interfaces et logiciels',
+    title: 'Un outil pour vos équipes.',
+    text: 'Concevoir ou faire évoluer l’interface d’un logiciel métier, d’un SaaS ou d’un outil interne.',
+    routes: full[1].routes,
+  },
+];
+
+const cards: any[] = compact ? short : full;
+---
+
+<ul class:list={['cards', 'cards--two', compact && 'cards--compact']} role="list">
+  {
+    cards.map((c) => (
+      <li class={`card card--${c.tone}`}>
+        {c.art && (
+          <div class="card-art" aria-hidden="true">
+            <Fragment set:html={c.art} />
+          </div>
+        )}
+        <p class="card-kicker"><R t={c.kicker} /></p>
+        <h3 class="card-title"><R t={c.title} /></h3>
+        <p class="card-text"><R t={c.text} /></p>
+        {c.who && <p class="card-who"><R t={c.who} /></p>}
+        <ul class="card-routes" role="list" aria-label={`${c.kicker} : pages`}>
+          {
+            c.routes.map((r: any) => (
+              <li>
+                <a class="route" href={r.href}>
+                  <span class="route-text">{r.label}</span>
+                  <span class="link-under-arrow route-arrow" aria-hidden="true">
+                    <svg viewBox="0 0 16 16" width="14" height="14">
+                      <path d="M3 8h9.5M8.5 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                  </span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </li>
+    ))
+  }
+</ul>

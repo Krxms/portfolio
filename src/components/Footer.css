@@ -3,12 +3,44 @@
   position: relative;
   z-index: 2;
   border-top: 1px solid var(--line);
-  margin-top: 40px;
+  margin-top: 0;
+}
+
+/* Liens du pied de page : au survol et au clavier, le texte passe au bleu de la navigation (var(--signal)), sans soulignement. */
+.site-footer a:not(.btn):not(.logo) {
+  text-decoration: none;
+  transition: color 0.25s var(--ease-out), border-color 0.25s var(--ease-out);
+}
+
+.site-footer a:not(.btn):not(.logo):focus-visible {
+  color: var(--signal);
+}
+
+@media (hover: hover) {
+  .site-footer a:not(.btn):not(.logo):hover {
+    color: var(--signal);
+  }
+}
+
+.site-footer .footer-top:hover,
+.site-footer .footer-top:focus-visible {
+  border-color: #ee8532;
+}
+
+/* le même grain « grès » que les sections claires (voir Tile.css) */
+.site-footer::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: url('../assets/riso/stoneware.webp') 0 0 / 512px 512px repeat;
+  opacity: 0.55;
 }
 
 .footer-inner {
   display: grid;
-  grid-template-columns: 1.2fr 0.9fr 0.9fr auto;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.2fr) auto;
   gap: 32px;
   align-items: start;
   padding: 44px 0 32px;
@@ -17,8 +49,8 @@
 .footer-brand {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  text-align: center;
+  align-items: flex-start;
+  text-align: left;
   gap: 12px;
 }
 
@@ -28,18 +60,32 @@
   max-width: 32ch;
 }
 
+/* ordinateur : la baseline est centrée sous le nom de la marque, comme un seul bloc */
+@media (min-width: 561px) {
+  .footer-brand {
+    align-items: center;
+    width: fit-content;
+  }
+
+  /* la baseline reste dans sa colonne : sur une ligne quand la place suffit, sur deux sinon (elle ne passe plus sur les liens voisins) */
+  .footer-tagline {
+    max-width: 32ch;
+    text-align: center;
+    text-wrap: balance;
+  }
+}
+
 .footer-contact {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: 8px;
+  align-items: flex-start;
+  text-align: left;
 }
 
 .footer-mail {
   display: inline-flex;
   align-items: center;
-  min-height: 44px;
+  min-height: 38px;
   font-family: var(--font-body);
   font-weight: 500;
   font-size: 14px;
@@ -57,21 +103,29 @@
 .footer-legal {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: 8px;
+  align-items: flex-start;
+  text-align: left;
 }
 
 .footer-legal a {
   display: inline-flex;
   align-items: center;
-  min-height: 44px;
+  min-height: 38px;
+  min-width: 44px;
   font-family: var(--font-body);
   font-weight: 500;
   font-size: 14px;
   text-decoration: none;
   color: var(--ink);
   width: fit-content;
+}
+
+/* écran tactile (tablette) : la zone de toucher reprend ses 44 px ; sur mobile, les règles plus bas fixent leurs propres hauteurs */
+@media (pointer: coarse) and (min-width: 561px) {
+  .footer-mail,
+  .footer-legal a {
+    min-height: 44px;
+  }
 }
 
 /* Titres de colonnes du footer ("Contact", "Conditions") : Be Vietnam Pro
@@ -81,9 +135,10 @@
   font-family: var(--font-body);
 }
 
+/* Le CTA et le logo (« Antoine Bruneau ») partent de la même ligne que les titres de colonnes */
 .footer-cta {
   justify-self: end;
-  align-self: center;
+  align-self: start;
 }
 
 .footer-bottom {
@@ -94,13 +149,258 @@
   color: var(--muted);
 }
 
-@media (max-width: 780px) {
+@media (max-width: 1000px) {
   .footer-inner {
-    grid-template-columns: 1fr;
-    gap: 24px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 28px 24px;
   }
   .footer-cta {
-    justify-self: center;
-    align-self: auto;
+    justify-self: start;
   }
+}
+
+/* Le lien « Haut de page » et la zone après la baseline n'existent que sur mobile */
+.footer-top,
+.footer-zone {
+  display: none;
+}
+
+/* ---------- Mobile : un pied de page pensé au pouce, en finesse ----------
+   Le bouton flottant se cache à l'arrivée sur le pied de page : « Me contacter » y reprend la main. Ordre : la marque, le bouton,
+   l'appel et le courriel, la navigation en deux colonnes de lignes fines, les mentions légales en une ligne discrète, puis la
+   ligne de fin avec le retour en haut. Filets à peine visibles, petites capitales espacées, aucune boîte lourde. */
+@media (max-width: 560px) {
+  .footer-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    padding: 40px 0 8px;
+  }
+
+  .footer-brand {
+    order: 1;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 4px 14px;
+  }
+
+  /* le nom revient à côté de la marque, plus fin qu'en en-tête */
+  .footer-brand .logo-name {
+    display: inline;
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  /* la marque s'aligne sur le bord du contenu (le décalage -9 px sert à l'en-tête) */
+  .footer-brand .logo {
+    margin-left: 0;
+    justify-content: flex-start;
+    gap: 12px;
+  }
+
+  .footer-tagline {
+    flex-basis: 100%;
+    margin: 0;
+    font-size: 13px;
+    letter-spacing: 0.01em;
+  }
+
+  .footer-cta {
+    order: 2;
+    display: block;
+    width: 100%;
+    justify-self: stretch;
+  }
+
+  .footer-cta .btn::before {
+    content: '';
+    flex: none;
+    width: 18px;
+    height: 18px;
+    margin-right: 12px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='5.5' width='18' height='13' rx='2'/%3E%3Cpath d='M4 7.5l8 6 8-6'/%3E%3C/svg%3E") center / contain no-repeat;
+  }
+
+  .footer-cta .btn {
+    display: flex;
+    width: 100%;
+    min-height: 54px;
+    justify-content: center;
+    font-size: 16px;
+    letter-spacing: 0.005em;
+  }
+
+  .footer-contact {
+    order: 3;
+    width: 100%;
+    gap: 0;
+  }
+
+  /* titres de colonnes : petites capitales espacées, discrètes */
+  .footer-contact .label,
+  .footer-legal .label {
+    margin-bottom: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* appel et courriel : deux lignes fines avec une pastille-icône, séparées par un filet */
+  .footer-contact .footer-mail {
+    display: flex;
+    width: 100%;
+    box-sizing: border-box;
+    min-height: 58px;
+    gap: 14px;
+    padding: 0;
+    border-top: 1px solid rgb(18 32 43 / 0.1);
+    font-size: 15.5px;
+    font-weight: 500;
+    overflow-wrap: anywhere;
+  }
+
+  .footer-contact .footer-mail::before {
+    content: '';
+    flex: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 1px solid rgb(20 80 154 / 0.28);
+    background: var(--ico) center / 15px 15px no-repeat;
+  }
+
+  .footer-contact .footer-mail[href^='tel:'] {
+    --ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2314509a' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 4h3.2l1.6 4.2-2 1.3a11 11 0 0 0 5.7 5.7l1.3-2 4.2 1.6V19a1 1 0 0 1-1 1A15 15 0 0 1 4 5a1 1 0 0 1 1-1z'/%3E%3C/svg%3E");
+  }
+
+  .footer-contact .footer-mail[href^='mailto:'] {
+    --ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2314509a' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='5.5' width='18' height='13' rx='2'/%3E%3Cpath d='M4 7.5l8 6 8-6'/%3E%3C/svg%3E");
+  }
+
+  /* la zone (« Île-de-France ») rejoint la baseline sous la marque, avec un point séparateur */
+  .footer-zone {
+    display: inline;
+  }
+
+  .footer-location {
+    display: none;
+  }
+
+  /* navigation : deux colonnes, lignes fines, chevron léger */
+  .footer-legal {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 22px;
+  }
+
+  .footer-legal:nth-of-type(1) {
+    order: 4;
+  }
+
+  .footer-legal:nth-of-type(2) {
+    order: 5;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0;
+  }
+
+  .footer-legal .label {
+    grid-column: 1 / -1;
+  }
+
+  .footer-legal:nth-of-type(2) .label {
+    flex-basis: 100%;
+  }
+
+  .footer-legal:nth-of-type(1) a {
+    width: auto;
+    justify-content: space-between;
+    min-height: 50px;
+    border-top: 1px solid rgb(18 32 43 / 0.1);
+    font-size: 15px;
+    font-weight: 500;
+  }
+
+  .footer-legal:nth-of-type(1) a::after {
+    content: '';
+    flex: none;
+    width: 7px;
+    height: 7px;
+    margin-left: 8px;
+    border-top: 1.3px solid var(--muted);
+    border-right: 1.3px solid var(--muted);
+    transform: rotate(45deg);
+    opacity: 0.7;
+  }
+
+  /* mentions légales : une ligne discrète de petits liens, séparés par des points */
+  .footer-legal:nth-of-type(2) a {
+    min-height: 44px;
+    min-width: 0;
+    padding: 0;
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--muted);
+  }
+
+  .footer-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 4px 0 calc(18px + env(safe-area-inset-bottom));
+    border-top: 0;
+    font-size: 11.5px;
+    letter-spacing: 0.02em;
+  }
+
+  /* le texte légal passe à la ligne si la largeur manque (écran de 320 px, texte agrandi ou espacé) au lieu d'élargir la page au-delà de l'écran ;
+     aux largeurs courantes il tient sur une ligne, comme avant */
+  .footer-bottom > span {
+    min-width: 0;
+    line-height: 1.5;
+  }
+
+  /* retour en haut : un petit rond avec une flèche fine ; le libellé reste pour les lecteurs d'écran */
+  .footer-top {
+    position: relative;
+    display: inline-grid;
+    place-items: center;
+    flex: none;
+    width: 44px;
+    height: 44px;
+    border: 1px solid rgb(18 32 43 / 0.16);
+    border-radius: 50%;
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .footer-top-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .footer-top-arrow {
+    width: 8px;
+    height: 8px;
+    margin-top: 3px;
+    border-top: 1.4px solid currentColor;
+    border-left: 1.4px solid currentColor;
+    transform: rotate(45deg);
+  }
+}
+
+/* même largeur que l'en-tête et les sections (jusqu'à 1360 px de contenu) : le sélecteur est plus précis que .wrap, qui la limite à --container */
+.site-footer .footer-inner {
+  max-width: calc(1360px + 2 * var(--edge));
 }

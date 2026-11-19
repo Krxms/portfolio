@@ -1,0 +1,56 @@
+# Redirections permanentes (301) : anciennes adresses, variantes courantes et fautes de frappe vers les pages du site.
+# Cloudflare lit ce fichier avant le Worker ; à garder à la racine des ressources publiques.
+
+# Accueil
+/index.html                     /                               301
+/home                           /                               301
+/accueil                        /                               301
+
+# Offres
+/creation                       /creation-site-web/             301
+/creation-site                  /creation-site-web/             301
+/creation-de-site               /creation-site-web/             301
+/creation-de-site-web           /creation-site-web/             301
+/creation-site-internet         /creation-site-web/             301
+/site-web                       /creation-site-web/             301
+/refonte                        /refonte-site-web/              301
+/refonte-site                   /refonte-site-web/              301
+/refonte-de-site                /refonte-site-web/              301
+/refonte-de-site-web            /refonte-site-web/              301
+/audit                          /audit-ux-ui/                   301
+/audit-ux                       /audit-ux-ui/                   301
+/audit-ui                       /audit-ux-ui/                   301
+/audit-site                     /audit-ux-ui/                   301
+/ux-ui                          /audit-ux-ui/                   301
+
+# Projets
+/projets                        /projets/le-cuistologue/        301
+/projet                         /projets/le-cuistologue/        301
+/realisations                   /projets/le-cuistologue/        301
+/portfolio                      /projets/le-cuistologue/        301
+/le-cuistologue                 /projets/le-cuistologue/        301
+/cuistologue                    /projets/le-cuistologue/        301
+
+# À propos, contact, questions
+/about                          /a-propos/                      301
+/qui-suis-je                    /a-propos/                      301
+/apropos                        /a-propos/                      301
+/contactez-moi                  /contact/                       301
+/contact-me                     /contact/                       301
+/devis                          /contact/                       301
+/tarifs                         /contact/                       301
+/faq                            /#faq                           301
+
+# Pages légales
+/mentions                       /mentions-legales/              301
+/legal                          /mentions-legales/              301
+/mentions-legale                /mentions-legales/              301
+/privacy                        /confidentialite/               301
+/politique-de-confidentialite   /confidentialite/               301
+/conditions-generales           /cgv/                           301
+/conditions                     /cgv/                           301
+/cookie                         /cookies/                       301
+
+# Fichiers
+/sitemap.xml                    /sitemap-index.xml              301
+/humans.txt                     /llms.txt                       301

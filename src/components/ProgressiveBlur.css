@@ -1,0 +1,38 @@
+/* Flou progressif : une pile de couches en backdrop-filter, du flou le plus faible au plus fort, chacune limitée par un
+   masque à sa bande. Pose-la dans un conteneur positionné ; la hauteur se règle avec --pb-h. */
+.pblur {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: var(--pb-h, 240px);
+  pointer-events: none;
+}
+
+.pblur--bottom {
+  bottom: 0;
+}
+
+.pblur--top {
+  top: 0;
+}
+
+.pblur i {
+  --s: calc(var(--i) * 24%);
+  position: absolute;
+  inset: 0;
+  -webkit-backdrop-filter: blur(var(--b));
+  backdrop-filter: blur(var(--b));
+  -webkit-mask-image: linear-gradient(to bottom, transparent var(--s), #000 calc(var(--s) + 16%), #000 calc(var(--s) + 32%), transparent calc(var(--s) + 48%));
+  mask-image: linear-gradient(to bottom, transparent var(--s), #000 calc(var(--s) + 16%), #000 calc(var(--s) + 32%), transparent calc(var(--s) + 48%));
+}
+
+.pblur--top i {
+  -webkit-mask-image: linear-gradient(to top, transparent var(--s), #000 calc(var(--s) + 16%), #000 calc(var(--s) + 32%), transparent calc(var(--s) + 48%));
+  mask-image: linear-gradient(to top, transparent var(--s), #000 calc(var(--s) + 16%), #000 calc(var(--s) + 32%), transparent calc(var(--s) + 48%));
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .pblur {
+    display: none;
+  }
+}

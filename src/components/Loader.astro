@@ -1,0 +1,116 @@
+---
+/* Écran d'arrivée : une goutte bleue qui respire sur le papier de la marque, puis le tout s'efface et révèle la Hero.
+   Le contenu de la page est déjà dans le HTML ; rien n'est retiré, seulement rendu transparent un instant.
+   Joué une fois par session, jamais avec « réduire les animations » (la classe has-loader n'est alors pas posée). */
+---
+
+<div class="loader" aria-hidden="true"><span class="loader-drop"></span></div>
+
+<style is:global>
+  html.has-loader {
+    overflow: hidden;
+  }
+
+  .loader {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    place-items: center;
+    background: linear-gradient(100deg, #e6ecf7 0%, #e6f6f2 100%);
+    pointer-events: none;
+  }
+  html.has-loader .loader,
+  html.ld-in .loader {
+    display: grid;
+  }
+  html.ld-in .loader {
+    opacity: 0;
+    transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .loader-drop {
+    width: 76px;
+    height: 76px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 34% 30%, #386beb 0%, #1f45d6 52%, #172b85 100%);
+    box-shadow: 0 10px 24px rgba(31, 69, 214, 0.28);
+    animation: loader-drop 1.6s ease-in-out infinite;
+  }
+  html.ld-in .loader-drop {
+    transform: scale(1.5);
+    opacity: 0;
+    transition:
+      transform 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+      opacity 0.4s ease;
+    animation: none;
+  }
+  /* une simple respiration : seule la taille change, ce que la carte graphique rend sans recalcul */
+  @keyframes loader-drop {
+    0%,
+    100% {
+      transform: scale(0.92);
+    }
+    50% {
+      transform: scale(1.06);
+    }
+  }
+
+  /* pendant le loader : le reste de la page est discret */
+  html.has-loader .site-header,
+  html.has-loader .sticky-cta,
+  html.has-loader .hero > *,
+  html.has-loader .hero-zone > .wrap {
+    opacity: 0;
+  }
+  html.has-loader .hero > * {
+    translate: 0 18px;
+  }
+  html.has-loader .curtain > .manifesto,
+  html.has-loader main > :not(.curtain),
+  html.has-loader .site-footer {
+    visibility: hidden;
+  }
+
+  /* l'apparition : en cascade, titre puis texte puis boutons, pendant que le loader s'efface */
+  html.ld-in .hero > * {
+    transition:
+      opacity 0.7s cubic-bezier(0.2, 0.7, 0.2, 1),
+      translate 0.8s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  html.ld-in .hero > :nth-child(1) { transition-delay: 0.05s; }
+  html.ld-in .hero > :nth-child(2) { transition-delay: 0.15s; }
+  html.ld-in .hero > :nth-child(3) { transition-delay: 0.25s; }
+  html.ld-in .hero-zone > .wrap {
+    transition: opacity 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) 0.3s;
+  }
+  html.ld-in .site-header {
+    transition: opacity 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) 0.2s;
+  }
+  html.ld-in .sticky-cta {
+    transition: opacity 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) 0.5s;
+  }
+</style>
+
+<script>
+  const root = document.documentElement;
+
+  if (root.classList.contains('has-loader')) {
+    try {
+      sessionStorage.setItem('ld', '1');
+    } catch (e) {}
+    // le loader se lève après un minimum de 450 ms, et seulement quand les textures de la Hero sont prêtes (voir BaseLayout.astro) : la Hero
+    // se découvre avec son grain, pas nue
+    const texturesReady: Promise<void> = (window as unknown as { __txReady?: Promise<void> }).__txReady ?? Promise.resolve();
+    Promise.all([new Promise((r) => window.setTimeout(r, 450)), texturesReady]).then(() => {
+      root.classList.add('ld-in');
+      root.classList.remove('has-loader');
+      // le négatif du titre s'active en même temps qu'il apparaît : aucun délai avant le changement de couleur
+      document.querySelector('.hero-zone')?.classList.add('neg-on');
+      window.setTimeout(() => {
+        root.classList.remove('ld-in');
+        root.classList.add('loader-done');
+      }, 1000);
+    });
+  }
+</script>

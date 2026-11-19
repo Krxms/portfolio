@@ -1,0 +1,286 @@
+---
+import sceneBack from '../assets/scenes/creation-back.svg?raw';
+import R from '../components/R.astro';
+import { plain } from '../lib/fmt';
+import sceneFront from '../assets/scenes/creation-front.svg?raw';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Tile from '../components/Tile.astro';
+import PageHero from '../components/PageHero.astro';
+import ExplodedProcess from '../components/ExplodedProcess.astro';
+import ProjectTeaser from '../components/ProjectTeaser.astro';
+import Faq from '../components/Faq.astro';
+import LinkUnder from '../components/LinkUnder.astro';
+import FinalCta from '../components/FinalCta.astro';
+import StickyCta from '../components/StickyCta.astro';
+import '../styles/scenes.css';
+import './creation-site-web.css';
+
+const site = 'https://antoinebruneau.fr';
+const description =
+  'Création de site web pour indépendants, artisans, PME et associations : organisation des contenus, UX/UI, réalisation, bases du référencement et mise en ligne.';
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Service',
+      '@id': `${site}/creation-site-web/#creation`,
+      name: 'Création de site web',
+      serviceType: 'Création de site web',
+      description:
+        'Conception et réalisation d’un site web : organisation des contenus, UX/UI, intégration (WordPress, Webflow ou code sur mesure), bases du référencement et mise en ligne.',
+      url: `${site}/creation-site-web/`,
+      inLanguage: 'fr-FR',
+      areaServed: { '@type': 'Country', name: 'France' },
+      provider: { '@type': 'ProfessionalService', '@id': `${site}/#service`, name: 'Antoine Bruneau' },
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Accueil', item: `${site}/` },
+        { '@type': 'ListItem', position: 2, name: 'Création de site web', item: `${site}/creation-site-web/` },
+      ],
+    },
+  ],
+};
+
+// Les cinq livrables, dans l'ordre des repères numérotés de la scène (voir .cs-pin).
+const received = [
+  { t: 'Une structure claire', d: 'Les pages, les contenus et les parcours organisés autour de votre offre et de vos clients.' },
+  { t: 'Une conception adaptée à votre activité', d: 'Maquettes ordinateur et mobile, cohérentes avec votre identité visuelle, ou avec celle que nous créons ensemble si le projet le demande.' },
+  { t: 'Une réalisation soignée', d: 'Un site rapide et adapté aux différents écrans, testé avant la mise en ligne.' },
+  { t: 'Les bases du référencement', d: 'Une structure technique propre, un balisage sémantique, des titres, des descriptions et des données structurées.' },
+  { t: 'Une mise en ligne complète', d: 'Nom de domaine, hébergement et mise en route, à votre nom lorsque c’est possible, avec les accès convenus.' },
+];
+const steps = [
+  { title: 'Comprendre', text: 'Votre activité, vos clients, ce que le site doit apporter. Premier échange gratuit et sans engagement.' },
+  { title: 'Cadrer', text: 'Les pages, les contenus et le calendrier. Le projet démarre à la validation du devis et au versement de l’acompte.', gets: 'Un devis détaillé, valable 30 jours.' },
+  { title: 'Concevoir', text: 'Le plan du site, puis les écrans pour ordinateur et mobile. Nous échangeons sur les maquettes, que j’ajuste selon les étapes et les retours prévus au devis.', gets: 'Le plan du site et les maquettes validées.' },
+  { title: 'Réaliser', text: 'Je construis le site et je le teste sur plusieurs écrans.', gets: 'Un site prêt à être publié.' },
+  { title: 'Mettre en ligne', text: 'Publication, vérifications et, si vous administrez votre site, prise en main. Le solde est facturé à la livraison.', gets: 'Votre site en ligne et les accès convenus.' },
+];
+// Du plus délégué au plus autonome. `me` : la part que je prends en charge, en trois crans seulement (un tiers, deux tiers, tout), lue sur la
+// jauge sans pourcentage. `name` : le nom de la formule ; `fit` : la situation du client, qui complète « Pour vous si ». `share` : ce qui change.
+const levels = [
+  { name: 'Je m’en occupe', t: 'Le moins possible à gérer', d: 'Mises à jour et évolutions sont confiées à un contrat de maintenance, défini selon votre site, sur devis séparé.', fit: 'vous préférez ne pas gérer votre site vous-même.', me: 100, share: 'Ce qui change : moi, la maintenance prévue au contrat ; vous, vos demandes.' },
+  { name: 'Nous le faisons à deux', t: 'Vos contenus, à votre main', d: 'Textes, images, nouvelles pages : vous les modifiez simplement, sans abîmer la mise en page. Pour le reste, vous faites appel à moi selon vos besoins.', fit: 'vous publiez régulièrement : actualités, offres, réalisations.', me: 66.667, share: 'Ce qui change : moi, la structure et le design ; vous, vos contenus.' },
+  { name: 'Vous menez, je vous forme', t: 'Un site qui évolue à votre rythme', d: 'Vous recevez une prise en main de votre outil. Une formation plus poussée peut être prévue au devis. Ensuite, vous décidez quand et comment faire évoluer votre site.', fit: 'vous préférez faire évoluer votre site vous‑même.', me: 33.333, share: 'Ce qui change : moi, la prise en main ; vous, le reste.' },
+];
+// Les engagements valent pour tout projet, quelle que soit son ampleur : le périmètre exact est dans le devis.
+const commitments = [
+  { t: 'Un devis écrit', d: 'Le périmètre, les livrables, les étapes de validation, le calendrier et le prix sont fixés avec vous avant de commencer. Vous savez ce qui est prévu, et ce qui ne l’est pas.' },
+  { t: 'Ce qui vous revient', d: 'Les créations finales originales réalisées pour votre projet vous sont cédées au paiement intégral, pour votre activité et votre communication. Les solutions tierces (CMS, thèmes, extensions, polices, bibliothèques) restent soumises à leurs propres licences. Le nom de domaine, l’hébergement et les comptes sont ouverts à votre nom lorsque c’est possible, et leurs accès vous sont remis.' },
+  { t: 'Des coûts annoncés', d: 'Ce qui revient chaque année (nom de domaine, hébergement, licences) est indiqué à part dans le devis et reste à votre charge, pour que vous puissiez comparer.' },
+  { t: 'Des corrections après la mise en ligne', d: 'Pendant 30 jours après la réception, je corrige sans frais les anomalies qui relèvent de ma prestation.' },
+];
+// D'autres portes d'entrée : le nom, puis ce que l'offre apporte, en une phrase.
+const nextOffers = [
+  { t: 'Refonte de site', d: 'Gardez ce qui marche, refaites le reste.', href: '/refonte-site-web/' },
+  { t: 'Audit UX/UI', d: 'Pas sûr de votre point de départ ? Un avis clair avant de décider. 50 % de l’audit est déduit si le projet suit dans les 3 mois.', href: '/audit-ux-ui/' },
+];
+const faq = [
+  {
+    q: 'Combien de temps faut-il pour créer un site ?',
+    a: 'Cela dépend de votre projet : le nombre de pages, le volume de contenus et surtout la rapidité de vos retours. Le calendrier est fixé avec vous dans le devis, après un premier échange.',
+  },
+  {
+    q: 'Dois-je fournir les textes et les images ?',
+    a: 'Oui, en général. Je vous dis dès le départ ce qu’il faut préparer et sous quelle forme. La rédaction n’est pas incluse dans le devis de base.',
+  },
+  {
+    q: 'À qui appartient le site ?',
+    a: 'Les créations finales originales réalisées pour vous vous sont cédées au paiement intégral, pour votre activité et votre communication. Les outils et composants tiers (CMS, thèmes, extensions, polices) restent soumis à leurs licences. Le nom de domaine et l’hébergement sont ouverts à votre nom lorsque c’est possible.',
+  },
+  {
+    q: 'Combien de retours sur les maquettes ?',
+    a: 'Deux séries de retours par étape de conception sont prévues, sauf adaptation au devis. Une série regroupe vos remarques en une fois. Si je corrige une erreur de ma part, cela ne compte pas comme une série.',
+  },
+  {
+    q: 'Quel outil allez-vous utiliser ?',
+    a: 'Celui qui correspond à votre besoin : ce que le site doit faire, ce que vous voulez modifier vous-même et votre budget. WordPress, Webflow, no-code ou code sur mesure : je vous explique le choix dans le devis.',
+  },
+];
+// Les questions de la page, exactement celles qui sont affichées (aide les moteurs de réponse et les assistants IA à les citer)
+schema['@graph'].push({
+  '@type': 'FAQPage',
+  '@id': `${site}/creation-site-web/#faq`,
+  inLanguage: 'fr-FR',
+  mainEntity: faq.map((item) => ({ '@type': 'Question', name: plain(item.q), acceptedAnswer: { '@type': 'Answer', text: plain(item.a) } })),
+});
+---
+
+<BaseLayout title="Création de site web professionnel" description={description} schema={schema}>
+  <PageHero
+    crumb="Création de site"
+    kicker="Sites web · Indépendants, artisans, PME"
+    line1="Un site qui explique"
+    line2="ce que vous faites."
+    lead={'Je conçois et réalise un site adapté à votre activité, de l’organisation des contenus à la mise en ligne.'}
+    ctaHref="/contact/?sujet=site"
+    ctaLabel="Parlons de votre site"
+    linkHref="/projets/le-cuistologue/"
+    linkLabel="Voir un exemple"
+    note="Premier échange gratuit · Devis gratuit et détaillé · Réponse généralement sous deux jours ouvrés"
+  />
+
+  <section class="tile tile--light" id="livrables" aria-labelledby="livrables-title">
+    <div class="wrap wrap--wide tile-inner">
+      <header class="tile-head">
+        <p class="tile-label">Ce que vous recevez</p>
+        <h2 id="livrables-title">Tout ce qu’il faut pour un site qui tient la route.</h2>
+        <p class="tile-sub">De la structure aux derniers réglages avant publication.</p>
+      </header>
+
+      <!-- La scène montre un site fini ; chaque repère orange renvoie au livrable du même numéro, dans la liste dessous. -->
+      <div class="cs-stage" aria-hidden="true">
+        <Fragment set:html={sceneBack} />
+        <Fragment set:html={sceneFront} />
+        <span class="cs-shape cs-disc concrete"></span>
+        <span class="cs-shape cs-arch concrete"></span>
+        <span class="cs-shape cs-quarter concrete"></span>
+
+        <div class="cs-site">
+          <div class="cs-site-bar">
+            <i></i><i></i><i></i>
+            <span class="cs-addr">
+              <svg viewBox="0 0 12 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M3 6V4.5a3 3 0 0 1 6 0V6M2 6h8v6H2z" /></svg>
+              votre-site.fr
+            </span>
+            <span class="cs-live"><i></i>En ligne</span>
+          </div>
+          <div class="cs-site-body">
+            <div class="cs-site-nav"><b></b><span></span><span></span><span></span><em></em></div>
+            <div class="cs-site-hero">
+              <div class="cs-site-copy">
+                <strong>Votre activité, bien présentée.</strong>
+                <p>Ce que vous proposez, en deux lignes.</p>
+                <span class="cs-site-cta">Demander un devis</span>
+              </div>
+              <div class="cs-site-img"></div>
+            </div>
+            <div class="cs-site-cards"><i></i><i></i><i></i></div>
+          </div>
+        </div>
+
+        <div class="cs-phone"><i class="cs-site-img cs-phone-hero"></i><i class="cs-phone-line"></i><i class="cs-phone-line s"></i><i class="cs-phone-btn"></i></div>
+
+        <div class="cs-serp">
+          <span class="cs-serp-url"><i></i>votre-site.fr</span>
+          <b>Votre activité, ce que vous proposez</b>
+          <i class="cs-serp-line"></i>
+          <i class="cs-serp-line s"></i>
+        </div>
+
+        <div class="cs-guide">
+          <span><i></i>Modifier un texte</span>
+          <span><i></i>Ajouter une page</span>
+          <span><i></i>Publier</span>
+        </div>
+
+        {received.map((_, i) => <span class={`cs-pin cs-pin--${i + 1}`}>{i + 1}</span>)}
+      </div>
+
+      <ol class="cs-deliv" role="list">
+        {
+          received.map((r, i) => (
+            <li>
+              <span class="cs-deliv-n" aria-hidden="true">{i + 1}</span>
+              <h3><R t={r.t} /></h3>
+              <p><R t={r.d} /></p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <Tile id="autonomie" wide title="Vous gardez la main." sub="Vous choisissez ce que vous souhaitez gérer vous-même.">
+    {/* Ordinateur : un panneau bleu, trois lignes. Mobile : chaque ligne devient une carte bleue, dans un carrousel latéral (comme les offres de l'accueil, voir scenes.js). */}
+    <div class="cs-lv-panel panel-blue panel-blue--riso">
+      <div class="cs-lv-axis" aria-hidden="true">
+        <div class="cs-lv-axis-track"><span>Je m’en occupe</span><i></i><span>Vous gérez seul</span></div>
+      </div>
+      <ol class="cs-lv-list" role="list">
+        {
+          levels.map((l) => (
+            <li class="cs-lv">
+              <div class="cs-lv-main">
+                <p class="cs-level-n"><R t={l.name} /></p>
+                <h3><R t={l.t} /></h3>
+                <p><R t={l.d} /></p>
+              </div>
+              <div class="cs-lv-gauge">
+                <i class="cs-lv-sh" aria-hidden="true"></i>
+                <i class="cs-lv-sh" aria-hidden="true"></i>
+                <div class="cs-lv-win">
+                  <div class="cs-share" role="img" aria-label={l.share} style={`--me: ${l.me}%`}>
+                    <i></i>
+                  </div>
+                  <div class="cs-share-legend" aria-hidden="true"><span>Moi</span><span>Vous</span></div>
+                </div>
+              </div>
+              <p class="cs-fit"><span>Pour vous si</span> {l.fit}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </Tile>
+
+  <ExplodedProcess plain title="De la première idée à la mise en ligne" sub="Cinq étapes, à votre rythme : le calendrier se fixe avec vous dans le devis." steps={steps} />
+
+  <ProjectTeaser label="Exemple de livrable" caseStudy />
+
+  <div class="dark-zone">
+    <Tile tone="dark" wide id="cadre" title="Un cadre clair, sans mauvaise surprise.">
+      {/* tout ce qui suit le sous-titre apparaît d'un seul bloc, en fondu, quand ses mots arrivent vers la fin (scenes.js) */}
+      <div class="cs-follow">
+        <ul class="cs-commit" role="list">
+          {commitments.map((c) => <li><h3><R t={c.t} /></h3><p><R t={c.d} /></p></li>)}
+        </ul>
+        {/* Bloc « Pas besoin de cahier des charges » : mis en commentaire, à réactiver au besoin.
+        <div class="cs-start">
+          <p>
+            <strong>Pas besoin de cahier des charges.</strong> Pour démarrer, quelques lignes suffisent : ce que l’interface doit permettre, des exemples qui
+            vous plaisent, ce qui existe déjà, votre échéance et votre budget, même approximatifs.
+          </p>
+        </div>
+        */}
+
+        {/* d'autres portes d'entrée, chacune avec son bénéfice en une phrase : le nom de l'offre, puis ce qu'elle apporte */}
+        <div class="cs-next">
+          <p class="cs-next-label">Autres façons de commencer</p>
+          <ul role="list">
+            {
+              nextOffers.map((o) => (
+                <li>
+                  <a href={o.href}>
+                    <strong><R t={o.t} /></strong>
+                    <span><R t={o.d} /></span>
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+    </Tile>
+
+    <Tile id="faq" tone="dark" title="Avant de vous lancer" sub="Les questions qui reviennent le plus, en quelques lignes. Une autre vous vient ? Un message suffit.">
+      <Faq items={faq} />
+      <p class="cs-more"><LinkUnder href="/#faq" label="Toutes les questions" tone="light" /></p>
+    </Tile>
+
+    <FinalCta
+      title="Parlons de votre site."
+      text="Dites-moi ce que fait votre entreprise et ce que votre site doit permettre."
+      label="Parlons de votre site"
+      href="/contact/?sujet=site"
+    />
+  </div>
+  <StickyCta href="/contact/?sujet=site" label="Parlons de votre site" />
+</BaseLayout>
+
+<script>
+  import '../scripts/scenes.js';
+</script>

@@ -1,0 +1,11 @@
+---
+import './InProgress.css';
+
+/* Les deux projets en cours : seulement leur nature. Ni le client, ni le lieu, ni les fonctions ne sont dévoilés (accord du client en attente,
+   produit pas encore public). */
+const items = ['Logiciel SaaS', 'Site sur mesure'] as const;
+---
+
+<ul class="ip" role="list">
+  {items.map((kind) => <li class="ip-card"><h3>{kind}</h3></li>)}
+</ul>

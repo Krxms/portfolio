@@ -1,0 +1,171 @@
+.manifesto-quote {
+  max-width: 17ch;
+  margin-inline: auto;
+  text-align: center;
+  font-size: clamp(2.3rem, 6.6vw, 5.2rem);
+  font-weight: 600;
+  line-height: 1.02;
+  letter-spacing: -0.024em;
+  text-wrap: balance;
+}
+
+/* « identité » : la police du hero (Bricolage Grotesque), dans une autre couleur que le reste de la phrase */
+.manifesto-word {
+  position: relative;
+  display: inline-block;
+  font-family: var(--font-display);
+  font-style: normal;
+  font-weight: 700;
+  letter-spacing: -0.021em;
+  /* l'orange de la charte : le mot-clé se détache du blanc de la phrase */
+  color: #ee8532;
+}
+
+.manifesto-lead {
+  max-width: 60ch;
+  margin: var(--space-6) auto 0;
+  text-align: center;
+  font-size: clamp(1.1rem, 2vw, 1.35rem);
+  line-height: 1.5;
+  color: rgb(255 255 255 / 0.92);
+}
+
+
+/* Fond de la section : un indigo qui tire vers le prune, avec une lueur chaude (corail, ambre) pour ne pas tout plonger dans
+   le bleu. Fixe : rien n'y bouge, l'information reste le centre. */
+.manifesto.tile--dark::before {
+  background:
+    radial-gradient(60% 40% at 84% 90%, rgb(255 140 110 / 0.2), transparent 72%),
+    radial-gradient(56% 36% at 10% 12%, rgb(255 196 100 / 0.12), transparent 72%),
+    radial-gradient(60% 40% at 12% 78%, rgb(70 120 255 / 0.22), transparent 74%),
+    linear-gradient(180deg, #131f76 0%, #2a1c70 100%);
+  /* le haut est translucide : le bas des gouttes de la Hero, qui déborde dessous, y reste visible, flouté de façon progressive */
+  -webkit-mask-image: linear-gradient(180deg, rgb(0 0 0 / 0.5), #000 340px);
+  mask-image: linear-gradient(180deg, rgb(0 0 0 / 0.5), #000 340px);
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .manifesto.tile--dark::before {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+}
+
+.manifesto > .pblur {
+  z-index: -3;
+  --pb-h: 340px;
+}
+
+
+/* Les objets en 3D (et le carré qui attend hors cadre) ne doivent jamais créer de défilement horizontal */
+.manifesto {
+  overflow-x: clip;
+}
+
+/* Grain de risographie, le même que sur « Qui suis-je » : les manques d'encre (le papier qui perce) et le grain de pellicule,
+   nul en haut de la section et plein en bas */
+.manifesto > .grain-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    var(--grain-soft) 0 0 / 160px 160px repeat,
+    var(--speck) 30px 70px / 256px 256px repeat;
+  background-blend-mode: soft-light, normal;
+  opacity: 0.55;
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, rgb(0 0 0 / 0.25) 45%, #000 100%);
+  mask-image: linear-gradient(180deg, transparent 0%, rgb(0 0 0 / 0.25) 45%, #000 100%);
+}
+
+/* Aucune autre texture sur le fond de la section : seul reste le voile sombre qui donne du contraste au texte */
+.manifesto.tile--dark::after {
+  background: linear-gradient(180deg, rgb(2 12 20 / 0.3), rgb(2 12 20 / 0.24));
+  background-blend-mode: normal;
+}
+
+
+/* ---------- Trois preuves de méthode : trois colonnes ouvertes, un filet en haut, sans cadre ---------- */
+.proofs {
+  max-width: 1120px;
+  margin: clamp(40px, 6vw, 80px) auto 0;
+  padding: 0;
+  list-style: none;
+  border-bottom: 1px solid rgb(255 255 255 / 0.2);
+}
+
+/* Trois lignes éditoriales, sans carte (les offres de l'accueil, juste après, en utilisent déjà) : le numéro en grand à gauche, le titre,
+   puis le texte, séparés par un filet. Sur mobile, le texte passe sous le titre. */
+.proof {
+  display: grid;
+  grid-template-columns: clamp(64px, 9vw, 112px) minmax(0, 1fr) minmax(0, 1.25fr);
+  align-items: baseline;
+  column-gap: clamp(16px, 3vw, 48px);
+  padding-block: clamp(22px, 3vw, 36px);
+  border-top: 1px solid rgb(255 255 255 / 0.2);
+}
+
+.proof-art {
+  display: block;
+}
+
+.proof-shape {
+  display: none;
+}
+
+.proof-n {
+  font-family: var(--font-display);
+  font-size: clamp(2.4rem, 4.4vw, 3.8rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.021em;
+  /* numéros du manifeste : l'orange de la charte */
+  color: #ee8532;
+}
+
+.proof-body {
+  display: contents;
+}
+
+.proof h3 {
+  margin: 0;
+  font-size: clamp(1.3rem, 2vw, 1.75rem);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+.proof p {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.6;
+  color: rgb(255 255 255 / 0.86);
+}
+
+@media (max-width: 760px) {
+  .manifesto-quote {
+    font-size: clamp(2rem, 9vw, 2.5rem);
+    max-width: 15ch;
+  }
+
+  .manifesto-lead {
+    margin-top: var(--space-4);
+    font-size: 1.04rem;
+    text-wrap: balance;
+  }
+
+  .proof {
+    grid-template-columns: 56px minmax(0, 1fr);
+    row-gap: 8px;
+    padding-block: 22px;
+  }
+
+  .proof-art {
+    grid-row: 1 / span 2;
+  }
+
+  .proof p {
+    grid-column: 2;
+    font-size: 15.5px;
+  }
+}

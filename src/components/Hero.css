@@ -1,0 +1,339 @@
+/* Zone hero : le fond (HeroAmbient pour l'accueil, PageHero pour les pages de service) passe aussi derrière l'en-tête translucide,
+   et s'arrête net au bord de la section suivante. */
+.hero-zone {
+  position: relative;
+  isolation: isolate;
+  margin-top: calc(var(--header-h) * -1);
+  padding-top: var(--header-h);
+  /* le bloc de texte est centré dans la hauteur de l'écran, un peu au-dessus du milieu (centrage optique) */
+  min-height: min(100svh, 980px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-bottom: calc(var(--header-h) * 0.2);
+  /* Le fond visible est le papier de la composition (.at-paper, HeroAtelier.css), opaque, posé par-dessus : ici, seulement la couleur du
+     papier pendant les premières millisecondes. L'ancienne image de fond (mesh/hero.webp) était entièrement cachée, mais téléchargée sur
+     chaque page, et le navigateur la prenait pour le contenu principal de l'écran. */
+  background: var(--paper);
+}
+
+.hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 22px;
+  padding-block: 0;
+}
+
+/* Ligne de rôle : à l'intérieur du h1 pour que le titre de la page porte les mots-clés (concepteur numérique, sites web, interfaces et logiciels),
+   mais présentée en petit texte au-dessus du grand titre. */
+.hero-role {
+  display: block;
+  margin-bottom: 32px;
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: clamp(1rem, 1.8vw, 1.25rem);
+  line-height: 1.4;
+  letter-spacing: -0.005em;
+  color: var(--ink);
+}
+
+/* Ordinateur : le bloc de texte et de boutons est décalé un peu vers la gauche, du côté opposé à la composition. Le décalage est
+   court : le texte reste à l'intérieur des lignes du cadre (à 5 vw du bord), sans les toucher. */
+@media (min-width: 901px) {
+  .hero {
+    translate: calc(clamp(14px, 2vw, 32px) * -1) 0;
+  }
+}
+
+/* Négatif : seule la seconde ligne du titre (« au travail. ») se mélange à ce qui passe derrière elle (mode « différence »). Sur le
+   papier clair, elle retombe sur le bleu habituel ; sur une forme sombre, la couleur s'inverse. La teinte ci-dessous est le complément
+   de ce bleu. La ligne de rôle, la première ligne du titre et la réassurance restent en noir, sans négatif. */
+.hero {
+  --neg-signal: #d29d5b;
+  --hero-h1-size: clamp(2rem, 10.3vw, 3.8rem);
+}
+
+/* téléphone : le titre grandit plus vite avec la largeur (34 px à 320 px, 44,5 px à 390 px, plafonné à 47 px) ; « prennent forme. » reste sur une ligne */
+@media (max-width: 700px) {
+  .hero {
+    --hero-h1-size: clamp(2rem, calc(34px + (100vw - 320px) * 0.15), 2.95rem);
+  }
+}
+
+@media (min-width: 901px) {
+  .hero {
+    --hero-h1-size: clamp(2.8rem, 5.6vw, 5.4rem);
+  }
+}
+
+.hero h1 {
+  margin-bottom: 0.18em;
+  font-family: var(--font-title);
+  /* le titre de la Hero est plus installé que celui des en-têtes de page : plus grand, graisse « black » (800, la plus lourde de Bricolage Grotesque) */
+  font-size: var(--hero-h1-size);
+  font-weight: 800;
+  line-height: 0.98;
+  letter-spacing: -0.021em;
+  margin-top: 0;
+}
+
+.hero-l1,
+.hero-l2 {
+  display: block;
+  letter-spacing: 0.02em;
+}
+
+.hero-l1 {
+  color: var(--ink);
+}
+
+.hero-l2 {
+  color: var(--signal);
+}
+
+/* La teinte complémentaire ne sert qu'avec le mélange « différence », au-dessus de 560 px : sur mobile, le titre garde ses vraies couleurs. */
+@media (min-width: 561px) {
+  .hero-zone.neg-on .hero-l2 {
+    mix-blend-mode: difference;
+    color: var(--neg-signal);
+  }
+}
+
+.hero-word {
+  position: relative;
+  display: inline-block;
+  font-style: normal;
+}
+
+.hero-sub {
+  color: var(--ink);
+  font-size: clamp(1.15rem, 2.2vw, 1.5rem);
+  font-weight: 500;
+  line-height: 1.55;
+  max-width: 42ch;
+  margin-top: 14px;
+  text-wrap: balance;
+}
+
+/* Ligne de réassurance : dans le bloc des boutons (elle entre donc avec eux, en douceur), sur sa propre rangée, en noir */
+.hero-assure {
+  flex-basis: 100%;
+  margin: 0;
+  margin-top: calc(var(--space-2) * -1);
+  text-align: center;
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: var(--ink);
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4) var(--space-6);
+  margin-top: var(--space-3);
+}
+
+/* Flou progressif en bas de la Hero : le fond se fond dans la section suivante */
+.hero-zone > .pblur {
+  z-index: -1;
+  --pb-h: 240px;
+}
+
+/* CTA : deux boutons de même gabarit (hauteur 54 px, coins 12 px). Le principal est en verre bleu translucide, sans
+   bordure ; le secondaire est une pastille claire à filet bleu de 1 px. Au survol, rien ne bouge : une lumière suit le
+   pointeur sur le verre et la matière réagit (filet, saturation, ombre). */
+.hero-actions {
+  align-items: center;
+  gap: var(--space-5) clamp(22px, 3vw, 36px);
+}
+
+.card-links .link-under,
+.hero-actions .link-under {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  box-sizing: border-box;
+  min-height: 54px;
+  padding: 0 26px;
+  border: 1px solid var(--signal);
+  border-radius: var(--radius-btn);
+  background: rgb(255 255 255 / 0.5);
+  -webkit-backdrop-filter: blur(12px) saturate(140%);
+  backdrop-filter: blur(12px) saturate(140%);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.7);
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--ink);
+  transition: background-color 0.5s var(--ease-out), box-shadow 0.5s var(--ease-out), backdrop-filter 0.5s var(--ease-out), border-color 0.5s var(--ease-out);
+}
+
+.card-links .link-under[data-glow]::after,
+.hero-actions .link-under[data-glow]::after {
+  background: radial-gradient(150px circle at var(--mx, 50%) var(--my, 0%), rgb(255 255 255 / 0.75), rgb(255 255 255 / 0) 70%);
+  transition-duration: 0.5s;
+}
+
+.card-links .link-under:hover,
+.hero-actions .link-under:hover,
+.card-links .link-under:focus-visible,
+.hero-actions .link-under:focus-visible {
+  background: rgb(255 255 255 / 0.68);
+  -webkit-backdrop-filter: blur(16px) saturate(170%);
+  backdrop-filter: blur(16px) saturate(170%);
+  border-color: var(--signal-deep);
+  box-shadow: inset 0 0 0 1px rgb(20 80 154 / 0.18), inset 0 1px 0 rgb(255 255 255 / 0.9), 0 14px 28px -18px rgb(12 58 115 / 0.7);
+  color: var(--ink);
+  font-weight: 600;
+}
+
+@media (max-width: 480px) {
+  .card-links .link-under,
+  .hero-actions .link-under {
+    min-height: 50px;
+    padding: 0 20px;
+    font-size: 15.5px;
+  }
+}
+
+@media (max-width: 560px) {
+  /* Composition mobile : un bloc centré (surtitre, titre en deux lignes, description, actions). La hauteur n'est pas forcée à celle de l'écran :
+     elle suit le contenu, avec de l'air autour, et reste plafonnée pour que la section suivante apparaisse dès le premier écran. Les marges
+     se règlent sur la hauteur (svh) : le bloc respire sur un grand écran et se resserre sur un petit. */
+  .hero-zone {
+    min-height: min(86svh, 720px);
+    justify-content: center;
+    padding-top: calc(var(--header-h) + clamp(20px, 5svh, 48px));
+    padding-bottom: calc(clamp(32px, 6svh, 56px) + env(safe-area-inset-bottom));
+  }
+
+  .hero {
+    /* jamais plus large que l'écran : sinon le plus long mot du titre élargit la page et ajoute un défilement latéral */
+    width: 100%;
+    min-width: 0;
+    gap: 0;
+    padding-bottom: 0;
+  }
+
+  /* « Vos besoins / prennent forme. » : deux lignes, la plus longue (« prennent forme. », 15 signes) occupe presque toute la colonne. La taille
+     suit la largeur ; la coupure vient des deux blocs (.hero-l1, .hero-l2), pas d'un retour à la ligne codé. */
+  .hero h1 {
+    display: block;
+    line-height: 0.98;
+    letter-spacing: -0.024em;
+  }
+
+  .hero-role {
+    margin: 0 0 clamp(16px, 3.2svh, 26px);
+    padding: 0;
+    font-size: 1rem;
+    line-height: 1.4;
+    text-wrap: balance;
+  }
+
+  .hero-l1,
+  .hero-l2 {
+    text-wrap: balance;
+  }
+
+  .hero-sub {
+    max-width: 30ch;
+    margin: clamp(18px, 3.4svh, 26px) auto 0;
+    font-size: 1.1rem;
+    line-height: 1.5;
+    text-wrap: balance;
+  }
+
+  .hero-sub br {
+    display: none;
+  }
+
+  /* halo clair derrière le texte : il reste lisible quelle que soit la forme qui passe dessous */
+  .hero-role,
+  .hero-sub {
+    text-shadow: 0 0 14px rgb(245 243 234 / 0.85), 0 0 3px rgb(245 243 234 / 0.6);
+  }
+
+  .hero-actions {
+    align-self: center;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: center;
+    width: min(100%, 320px);
+    gap: 12px;
+    margin-top: clamp(24px, 4.4svh, 34px);
+  }
+
+  .hero-actions .frosted-cta,
+  .hero-actions .link-under {
+    min-height: 54px;
+    font-size: 16.5px;
+  }
+
+  .hero-actions > * {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .hero-actions .hero-assure {
+    flex-basis: 100%;
+    width: 100%;
+    margin: 4px 0 0;
+    font-size: 13px;
+    text-wrap: balance;
+    text-shadow: 0 0 14px rgb(245 243 234 / 0.85), 0 0 3px rgb(245 243 234 / 0.6);
+  }
+}
+
+/* Écrans courts (iPhone avec la barre Safari déployée : environ 645 px de haut visibles) : le titre se cale aussi sur la hauteur. */
+@media (max-width: 560px) and (max-height: 700px) {
+
+  .hero-sub {
+    font-size: 1rem;
+    line-height: 1.42;
+  }
+
+  .hero-actions .frosted-cta,
+  .hero-actions .link-under {
+    min-height: 50px;
+  }
+}
+
+/* Les boutons du site suivent un seul système « Bauhaus + grès » (src/styles/cta.css). Ici, seulement ce qui est propre à la Hero : le
+   padding régulier du bouton principal. */
+.hero-actions .frosted-cta {
+  gap: 16px;
+  padding: 0 28px;
+}
+
+/* Le bouton secondaire (papier, filet bleu, ombre dure, survol « lampe ») est dans src/styles/cta.css : c'est le même que le bouton de
+   l'appel final. */
+
+/* La preuve d'expérience, sous la réassurance : une ligne discrète, en retrait (pas un second titre). */
+.hero-proof {
+  flex-basis: 100%;
+  margin: 0;
+  margin-top: calc(var(--space-2) * -1);
+  text-align: center;
+  font-family: var(--font-body);
+  font-size: 13.5px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: var(--ink-soft);
+}
+
+@media (max-width: 560px) {
+  .hero-proof {
+    flex-basis: calc(100% + 30px);
+    width: calc(100% + 30px);
+    margin-inline: -15px;
+    font-size: 12.5px;
+    text-wrap: balance;
+  }
+}
