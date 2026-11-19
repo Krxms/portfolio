@@ -40,7 +40,7 @@ if (!isLow() && !window.matchMedia('(prefers-reduced-motion: reduce)').matches &
   import('lenis').then(({ default: Lenis }) => {
     const root = document.documentElement;
     const lenis = new Lenis({
-      lerp: 0.24, // plus grand : plus réactif ; les scènes ont déjà leur propre lissage
+      lerp: 0.14, // inertie : plus petit = plus de glisse (0.09 traînait trop, 0.24 était presque sec)
       wheelMultiplier: 1.15,
       smoothWheel: true,
       anchors: { offset: -96 }, // les liens vers une ancre (#qui-suis-je) glissent aussi, sous l'en-tête

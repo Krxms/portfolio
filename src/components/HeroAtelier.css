@@ -94,6 +94,31 @@
   }
 }
 
+/* ---------- la composition aplatie (ordinateur) ----------
+   Une seule image à fond transparent (tools/bake-hero.mjs) remplace les arches, le volume de béton, le disque, la fenêtre et l'anneau : mêmes positions
+   (en vw, décalées par --at-y comme avant), mais une image décodée une fois au lieu d'une dizaine de calques avec fusions, ombres et clip-path.
+   Sur téléphone et tablette, l'image est masquée et les formes en CSS restent. */
+.at-comp {
+  display: none;
+}
+
+@media (min-width: 901px) {
+  .hero-zone--atelier .at-comp {
+    display: block;
+    position: absolute;
+    left: 47.2222vw;
+    top: calc(var(--at-y) + 7.9861vw);
+    width: 52.7778vw;
+    max-width: none;
+    height: auto;
+    pointer-events: none;
+  }
+
+  .hero-zone--atelier :is(.at-arch-pale, .at-arch-mint, .at-arch, .at-building, .at-orb, .at-window, .at-disc, .at-ring) {
+    display: none;
+  }
+}
+
 /* ---------- l'apparence des grandes formes ----------
    Partagée avec l'entête des pages de service (PageHero.css) : ici la matière, là-bas seulement la position et la taille. */
 .at-arch-pale {
@@ -587,7 +612,9 @@
   }
 }
 
-@media (min-width: 901px) and (prefers-reduced-motion: no-preference) {
+/* PARALLAXE EN PAUSE : « @media not all » ne s'applique jamais. Pour la réactiver, remettre la condition d'origine :
+   @media (min-width: 901px) and (prefers-reduced-motion: no-preference)  (et passer PARALLAX_PAUSED à false dans HeroAmbient.astro). */
+@media not all {
   :is(.hero-zone--atelier, .hero-zone--page) .at-outline,
   :is(.hero-zone--atelier, .hero-zone--page) .at-arch-pale,
   :is(.hero-zone--atelier, .hero-zone--page) .at-arch-mint,

@@ -1,6 +1,7 @@
 ---
 import './HeroAmbient.css';
 import './HeroAtelier.css';
+import comp from '../assets/hero-composition.webp';
 ---
 
 {/* Fond de la Hero : un papier clair, et à droite la composition « atelier » aux formes du logo (arches, disque orange, fenêtre d'interface en verre), la même
@@ -9,6 +10,9 @@ import './HeroAtelier.css';
   <div class="amb-atelier">
     <div class="at-paper"></div>
     <div class="at-grid"></div>
+    {/* composition de droite aplatie en UNE image WebP (ordinateur, à partir de 901 px) par tools/bake-hero.mjs ; les éléments ci-dessous sont masqués à ces largeurs
+        mais gardés pour le téléphone et la tablette. Position et taille en vw : voir .at-comp dans HeroAtelier.css. */}
+    <img class="at-comp" src={comp.src} width={comp.width} height={comp.height} alt="" decoding="async" fetchpriority="high" />
     {/* composition de droite (ordinateur seulement) : deux arches pâles en fond, l'arche bleue grainée, le disque orange qui la chevauche */}
     <div class="at-arch-pale"></div>
     <div class="at-arch-mint"></div>
@@ -43,8 +47,10 @@ import './HeroAtelier.css';
   const amb = document.querySelector<HTMLElement>('.amb');
   const nativeScroll = typeof CSS !== 'undefined' && CSS.supports('animation-timeline: scroll()');
   const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // PARALLAXE EN PAUSE (voir HeroAtelier.css) : passer à false pour la réactiver
+  const PARALLAX_PAUSED = true;
 
-  if (!nativeScroll && !reduceMotion && amb?.parentElement) {
+  if (!PARALLAX_PAUSED && !nativeScroll && !reduceMotion && amb?.parentElement) {
     const zone = amb.parentElement;
     const desktop = matchMedia('(min-width: 901px)');
     const MAX_SCROLL = 700;
