@@ -24,6 +24,18 @@ interface Props {
   /** chapô plus large (limité à la colonne) et réparti sur des lignes équilibrées : pour un chapô de deux phrases dont la fin se retrouverait seule sur une ligne */
   wideLead?: boolean;
 }
+import layers from '../assets/layers/page.json';
+const imgs = import.meta.glob('../assets/layers/page/*.webp', { eager: true, import: 'default' }) as Record<string, ImageMetadata>;
+// Chaque forme de l'en-tête a son image WebP (tools/bake-layers.mjs), placée dans la boîte de l'élément (voir HeroAmbient.astro).
+const bake = (name: keyof typeof layers) => {
+  const m = layers[name];
+  const img = imgs[`../assets/layers/page/${name}.webp`];
+  return { src: img.src, w: img.width, h: img.height, style: 'ty' in m ? `left:${m.left}%;width:${m.width}%;height:auto;top:0;transform:translateY(${m.ty}%)` : `left:${m.left}%;top:${m.top}%;width:${m.width}%;height:${m.height}%` };
+};
+const dash = bake('dash');
+const pill = bake('pill');
+const disc = bake('disc');
+const quarter = bake('quarter');
 const hasVisual = Astro.slots.has("default");
 const { crumb, kicker, line1, line2, lead, ctaHref, ctaLabel, linkHref, linkLabel, note, wideLead } = Astro.props;
 ---
@@ -32,10 +44,10 @@ const { crumb, kicker, line1, line2, lead, ctaHref, ctaLabel, linkHref, linkLabe
   <div class="amb" aria-hidden="true">
     <div class="amb-atelier">
       <div class="at-paper"></div>
-      <div class="ph-dash"></div>
-      <div class="at-arch ph-pill"></div>
-      <div class="at-arch-mint ph-disc"></div>
-      <div class="at-orb ph-quarter"></div>
+      <div class="ph-dash"><img class="at-bake" src={dash.src} width={dash.w} height={dash.h} style={dash.style} alt="" decoding="async" /></div>
+      <div class="at-arch ph-pill"><img class="at-bake" src={pill.src} width={pill.w} height={pill.h} style={pill.style} alt="" decoding="async" /></div>
+      <div class="at-arch-mint ph-disc"><img class="at-bake" src={disc.src} width={disc.w} height={disc.h} style={disc.style} alt="" decoding="async" /></div>
+      <div class="at-orb ph-quarter"><img class="at-bake" src={quarter.src} width={quarter.w} height={quarter.h} style={quarter.style} alt="" decoding="async" /></div>
       <div class="at-quarter"></div>
       <div class="at-lift"></div>
       <div class="at-film"></div>

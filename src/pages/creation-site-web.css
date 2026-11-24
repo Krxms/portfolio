@@ -1174,7 +1174,7 @@
     border-radius: var(--radius-xl);
     color: #fff;
     background: var(--panel-blue-bg);
-    background-blend-mode: soft-light, normal, normal;
+    /* GRAIN DES SECTIONS BLEUES : désactivé pour test (à décommenter pour le rétablir) : background-blend-mode: soft-light, normal, normal; */
     box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.14), 0 24px 36px -26px rgb(11 26 74 / 0.6);
   }
 
@@ -1185,9 +1185,12 @@
     inset: 0;
     z-index: -1;
     pointer-events: none;
+    /* GRAIN DES SECTIONS BLEUES : désactivé pour test (à décommenter pour le rétablir) :
     background:
       var(--tx-grain-flat-zone) 0 0 / 160px 160px repeat,
       var(--tx-speck-zone) 30px 70px / 256px 256px repeat;
+    */
+    background: none;
   }
 
   /* l'affiche du haut */
@@ -1633,6 +1636,13 @@
 
   .cs-art--back {
     z-index: 0;
+    object-fit: cover;
+  }
+
+  /* le béton et le grain du fond (les calques ::before et ::after de la scène, en mélange soft-light) sont cuits dans l'image du fond */
+  .cs-stage::before,
+  .cs-stage::after {
+    display: none;
   }
 
   .cs-art--front {

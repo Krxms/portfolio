@@ -1,7 +1,21 @@
 ---
 import './HeroAmbient.css';
 import './HeroAtelier.css';
-import comp from '../assets/hero-composition.webp';
+import layers from '../assets/layers/hero.json';
+
+// Chaque forme de l'affiche a SON image WebP (tools/bake-layers.mjs), placée dans la boîte de l'élément en pourcentages : la forme garde sa position et sa
+// taille en CSS (HeroAtelier.css) et reste déplaçable. Les formes d'origine (dégradés, ombres, béton) restent dans le CSS, sous html.hero-live et sur téléphone.
+const imgs = import.meta.glob('../assets/layers/hero/*.webp', { eager: true, import: 'default' }) as Record<string, ImageMetadata>;
+const bake = (name: keyof typeof layers) => {
+  const m = layers[name];
+  const img = imgs[`../assets/layers/hero/${name}.webp`];
+  return { src: img.src, w: img.width, h: img.height, style: 'ty' in m ? `left:${m.left}%;width:${m.width}%;height:auto;top:0;transform:translateY(${m.ty}%)` : `left:${m.left}%;top:${m.top}%;width:${m.width}%;height:${m.height}%` };
+};
+const archPale = bake('arch-pale');
+const archMint = bake('arch-mint');
+const arch = bake('arch');
+const orb = bake('orb');
+const win = bake('window');
 ---
 
 {/* Fond de la Hero : un papier clair, et à droite la composition « atelier » aux formes du logo (arches, disque orange, fenêtre d'interface en verre), la même
@@ -10,18 +24,16 @@ import comp from '../assets/hero-composition.webp';
   <div class="amb-atelier">
     <div class="at-paper"></div>
     <div class="at-grid"></div>
-    {/* composition de droite aplatie en UNE image WebP (ordinateur, à partir de 901 px) par tools/bake-hero.mjs ; les éléments ci-dessous sont masqués à ces largeurs
-        mais gardés pour le téléphone et la tablette. Position et taille en vw : voir .at-comp dans HeroAtelier.css. */}
-    <img class="at-comp" src={comp.src} width={comp.width} height={comp.height} alt="" decoding="async" fetchpriority="high" />
     {/* composition de droite (ordinateur seulement) : deux arches pâles en fond, l'arche bleue grainée, le disque orange qui la chevauche */}
-    <div class="at-arch-pale"></div>
-    <div class="at-arch-mint"></div>
-    <div class="at-arch"></div>
+    <div class="at-arch-pale"><img class="at-bake" src={archPale.src} width={archPale.w} height={archPale.h} style={archPale.style} alt="" decoding="async" /></div>
+    <div class="at-arch-mint"><img class="at-bake" src={archMint.src} width={archMint.w} height={archMint.h} style={archMint.style} alt="" decoding="async" /></div>
+    <div class="at-arch"><img class="at-bake" src={arch.src} width={arch.w} height={arch.h} style={arch.style} alt="" decoding="async" /></div>
     {/* l'angle d'un volume en béton (deux pans, une bande de fenêtres), dans le haut de l'arche */}
     <div class="at-building"><i class="b-left"></i><i class="b-right"></i><i class="b-win b-win-l"></i><i class="b-win b-win-r"></i></div>
-    <div class="at-orb"></div>
+    <div class="at-orb"><img class="at-bake" src={orb.src} width={orb.w} height={orb.h} style={orb.style} alt="" decoding="async" /></div>
     {/* une fenêtre d'interface en verre, posée sur l'arche : un clin d'œil au métier, sans texte ni image réelle */}
     <div class="at-window">
+      <img class="at-bake" src={win.src} width={win.w} height={win.h} style={win.style} alt="" decoding="async" />
       <div class="at-win-bar"><i></i><i></i><i></i></div>
       <div class="at-win-body">
         <div class="at-win-art"><b></b><u></u></div>

@@ -334,11 +334,11 @@
   /* Un fond à part : marine profond, avec une lueur lagon en bas à droite et une lueur indigo en haut à gauche. Le bleu klein vif est celui
      de l'illustration de la carte « Création de site » ; ici, la scène est plus sombre et plus verte, pour ne pas lui ressembler. */
   background:
-    var(--grain-soft) 0 0 / 160px 160px repeat,
+    /* GRAIN DES SECTIONS BLEUES : désactivé pour test (à décommenter pour le rétablir) : var(--grain-soft) 0 0 / 160px 160px repeat, */
     radial-gradient(60% 80% at 88% 100%, rgb(24 156 176 / 0.42), rgb(24 156 176 / 0) 64%),
     radial-gradient(55% 80% at 14% 0%, rgb(86 92 214 / 0.4), rgb(86 92 214 / 0) 62%),
     linear-gradient(160deg, #1a2a78 0%, #14205f 46%, #0b1a4a 100%);
-  background-blend-mode: soft-light, normal, normal;
+  /* GRAIN DES SECTIONS BLEUES : désactivé pour test (à décommenter pour le rétablir) : background-blend-mode: soft-light, normal, normal; */
   box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.12), 0 30px 60px -36px rgb(11 26 74 / 0.55);
 }
 

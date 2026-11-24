@@ -49,10 +49,8 @@
   inset: 0;
   z-index: -1;
   pointer-events: none;
-  background:
-    var(--grain-soft) 0 0 / 160px 160px repeat,
-    linear-gradient(180deg, rgb(2 12 20 / 0.34), rgb(2 12 20 / 0.26));
-  background-blend-mode: soft-light, normal;
+  /* GRAIN DES SECTIONS BLEUES : désactivé pour test (à décommenter pour le rétablir) : var(--grain-soft) 0 0 / 160px 160px repeat, + background-blend-mode: soft-light, normal; */
+  background: linear-gradient(180deg, rgb(2 12 20 / 0.34), rgb(2 12 20 / 0.26));
   box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.4), inset 0 -1px 0 rgb(255 255 255 / 0.14);
 }
 
@@ -85,10 +83,10 @@
   pointer-events: none;
   /* Le grain de risographie de toute la zone, en UNE couche (il y en avait une par tuile, trois en tout, chacune plusieurs milliers de pixels de haut) :
      le grain pré-mélangé (grain-flat) et les mouchetures (speck), à 55 % d'opacité cuite dans les images (tools/grain-flat.mjs), sous le voile sombre. */
-  background:
-    var(--tx-grain-flat-zone) 0 0 / 160px 160px repeat,
-    var(--tx-speck-zone) 30px 70px / 256px 256px repeat,
-    linear-gradient(180deg, rgb(2 12 20 / 0.22), rgb(2 12 20 / 0.16));
+  /* GRAIN DES SECTIONS BLEUES : désactivé pour test (à décommenter pour le rétablir) :
+     var(--tx-grain-flat-zone) 0 0 / 160px 160px repeat,
+     var(--tx-speck-zone) 30px 70px / 256px 256px repeat, */
+  background: linear-gradient(180deg, rgb(2 12 20 / 0.22), rgb(2 12 20 / 0.16));
   box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.3), inset 0 -1px 0 rgb(255 255 255 / 0.1);
 }
 

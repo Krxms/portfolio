@@ -27,11 +27,10 @@
 .at-paper {
   position: absolute;
   inset: 0;
-  /* le grain de grès (mouchetures à transparence) sur un papier qui se creuse un peu vers le bas */
+  /* un papier sans grain, qui se creuse un peu vers le bas ; le grain de grès arrive en fondu par .at-paper::after (matiere.css) */
   background:
-    var(--tx-stoneware) 0 0 / 512px 512px repeat,
     radial-gradient(ellipse 72% 40% at 50% -6%, #ffffff 0%, rgb(255 255 255 / 0) 100%),
-    linear-gradient(180deg, #f6f8fb 0%, #edf1f6 60%, #e4ebf3 100%);
+    linear-gradient(180deg, #f6f8fb 0%, #edf1f6 74%, #f5f3ea 94%);
 }
 
 /* un voile clair sous le texte : la lisibilité ne dépend jamais de la composition */
@@ -81,6 +80,7 @@
    composition, formes comprises : le tirage a un grain, les arches et la fenêtre en font partie. Elle ne bouge pas avec les formes (le
    grain est celui de la pellicule, pas des objets) : en défilant, la composition glisse sous lui. Mode normal, rien à recalculer. */
 .at-film {
+  display: none; /* grain argentique retiré de la Hero (le grain apparaît en fondu avec le crème, voir .at-paper::after dans matiere.css) */
   position: absolute;
   inset: 0;
   pointer-events: none;
@@ -94,29 +94,36 @@
   }
 }
 
-/* ---------- la composition aplatie (ordinateur) ----------
-   Une seule image à fond transparent (tools/bake-hero.mjs) remplace les arches, le volume de béton, le disque, la fenêtre et l'anneau : mêmes positions
-   (en vw, décalées par --at-y comme avant), mais une image décodée une fois au lieu d'une dizaine de calques avec fusions, ombres et clip-path.
-   Sur téléphone et tablette, l'image est masquée et les formes en CSS restent. */
-.at-comp {
+/* ---------- les formes en images (ordinateur) ----------
+   Chaque forme (arches, disque orange, fenêtre) est une image WebP à fond transparent, une par élément (tools/bake-layers.mjs) : l'élément garde sa position et sa
+   taille ci-dessous, l'image se place dedans en pourcentages. Les dégradés, ombres internes et externes, béton, clip-path et la perspective de la fenêtre,
+   qui coûtaient à chaque forme un calque composé avec fusions, sont cuits dans l'image. Les définitions d'origine restent plus bas : html.hero-live les remet
+   en service (le script d'export s'en sert), et elles servent sur téléphone et tablette. */
+.at-bake {
   display: none;
+  position: absolute;
+  max-width: none;
+  pointer-events: none;
 }
 
-/* hero-live : classe posée seulement par tools/bake-hero.mjs pour rendre les formes en CSS (c'est ce rendu qui est enregistré en image) */
 @media (min-width: 901px) {
-  html:not(.hero-live) .hero-zone--atelier .at-comp {
-    display: block;
-    position: absolute;
-    left: 60.2235vw;
-    top: calc(var(--at-y) + 7.9861vw);
-    width: 43.0556vw;
-    max-width: none;
-    height: auto;
-    pointer-events: none;
+  html:not(.hero-live) .hero-zone--atelier :is(.at-arch-pale, .at-arch-mint, .at-arch, .at-orb, .at-window) {
+    background: none !important;
+    box-shadow: none !important;
+    border: 0 !important;
+    transform: none !important;
+    /* l'affiche est décalée de 13 vw vers la droite : le bord droit de l'arche bleue touche le bord de l'écran (margin-left : n'entre pas en conflit avec translate) */
+    margin-left: 13vw;
   }
 
-  html:not(.hero-live) .hero-zone--atelier :is(.at-arch-pale, .at-arch-mint, .at-arch, .at-building, .at-orb, .at-window, .at-disc, .at-ring) {
-    display: none;
+  html:not(.hero-live) .hero-zone--atelier :is(.at-arch-pale, .at-arch-mint, .at-arch, .at-orb, .at-window)::before,
+  html:not(.hero-live) .hero-zone--atelier :is(.at-arch-pale, .at-arch-mint, .at-arch, .at-orb, .at-window)::after,
+  html:not(.hero-live) .hero-zone--atelier :is(.at-arch-pale, .at-arch-mint, .at-arch, .at-orb, .at-window) > :not(.at-bake) {
+    display: none !important;
+  }
+
+  html:not(.hero-live) .hero-zone--atelier .at-bake {
+    display: block;
   }
 }
 

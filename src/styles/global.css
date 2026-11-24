@@ -313,15 +313,10 @@ html:not(.is-loading) #nav-progress {
     background-repeat: no-repeat, no-repeat;
   }
 
-  /* Le grès du papier des en-têtes : une petite tuile découpée dans la même texture (stoneware-mini.png, moins de 2 Ko) au lieu de l'image
-     de 58 Ko. La même moucheture, présente dès la première image, et si légère que le navigateur ne la prend pas pour le contenu principal
-     de l'écran (une image presque vide n'est pas comptée).
-     Le grain argentique (opacité 6 %) n'est pas affiché sur téléphone : imperceptible à cette taille. */
-  .amb-atelier .at-paper::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: url('../assets/riso/stoneware-mini.png') 0 0 / 128px 128px repeat;
+  /* Le grain de grès du papier des en-têtes (.at-paper::after, matiere.css) n'est posé qu'une fois la page chargée : une grande texture de fond serait
+     comptée par le navigateur comme « plus grand élément affiché » au premier affichage. */
+  html:not(.tx-in) .at-paper::after {
+    background-image: none;
   }
 
   .amb-atelier .at-film {
@@ -348,9 +343,6 @@ html:not(.is-loading) #nav-progress {
     background-size: 512px 512px;
   }
 
-  html.tx-in .amb-atelier .at-paper::before {
-    background: var(--tx-stoneware) 0 0 / 512px 512px repeat;
-  }
 
   /* Le béton des scènes (51 Ko) arrive après le chargement, en fondu (0,6 s). */
   html:not(.tx-in) :is(.sc-stage, .cs-stage, .il-stage, .pj-visit-stage)::before {

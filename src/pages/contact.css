@@ -18,12 +18,23 @@
   z-index: -1;
   pointer-events: none;
   background:
-    var(--tx-stoneware) 0 0 / 512px 512px repeat,
     radial-gradient(ellipse 72% 40% at 50% -6%, #ffffff 0%, rgb(255 255 255 / 0) 100%),
-    linear-gradient(180deg, #f3f6fa 0%, #eef2f7 30%, #f1f2ee 68%, #f5f3ea 100%);
+    linear-gradient(180deg, #f3f6fa 0%, #eef2f7 52%, #f1f2ee 80%, #f5f3ea 95%);
   /* fondu : le bas du papier s'estompe sur le fond de la page, comme sous les en-têtes bleus de « À propos » et « Le Cuistologue » (AboutHero.css) */
   -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 calc(100% - clamp(72px, 9vw, 140px)), transparent 100%);
   mask-image: linear-gradient(180deg, #000 0%, #000 calc(100% - clamp(72px, 9vw, 140px)), transparent 100%);
+}
+
+/* le grain de grès du papier : absent en haut (papier froid et lisse), il apparaît en fondu quand le papier passe au crème chaud, comme sur le reste de la page */
+.ct::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: var(--tx-stoneware) 0 0 / 512px 512px repeat;
+  -webkit-mask-image: linear-gradient(180deg, transparent 70%, rgb(0 0 0 / 0.55) 88%, transparent 100%);
+  mask-image: linear-gradient(180deg, transparent 70%, rgb(0 0 0 / 0.55) 88%, transparent 100%);
 }
 
 .ct-grid {

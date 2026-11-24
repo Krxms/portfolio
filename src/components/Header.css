@@ -345,9 +345,12 @@
     inset: 0;
     z-index: -1;
     pointer-events: none;
+    /* GRAIN DES SECTIONS BLEUES : désactivé pour test (à décommenter pour le rétablir) :
     background:
       var(--tx-grain-flat-zone) 0 0 / 160px 160px repeat,
       var(--tx-speck-zone) 30px 70px / 256px 256px repeat;
+    */
+    background: none;
   }
 
   .nav-links {

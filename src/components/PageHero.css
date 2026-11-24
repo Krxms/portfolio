@@ -355,3 +355,59 @@
     font-size: 15px;
   }
 }
+
+/* Le disque orange n'est plus coupé en bas : au lieu du quart de disque d'origine (collé au coin bas droit), un demi-disque, de même rayon et au même
+   endroit (son centre est le coin bas droit de l'en-tête) : la moitié haute reste dans l'en-tête, la moitié basse se pose sur le crème de la page. Le fond de
+   l'en-tête (.amb) ne découpe donc que sur les côtés (overflow-x), pas en bas, et la zone passe au-dessus de la section suivante. */
+.hero-zone--page {
+  position: relative;
+  z-index: 2;
+}
+
+.hero-zone--page .amb {
+  overflow-x: clip;
+  overflow-y: visible;
+  contain: none;
+}
+
+@media (min-width: 901px) {
+  .hero-zone--page .ph-quarter {
+    right: 0;
+    bottom: -15vw;
+    width: 15vw;
+    height: 30vw;
+    aspect-ratio: auto;
+    border-radius: 100% 0 0 100% / 50% 0 0 50%;
+  }
+}
+
+@media (max-width: 900px) {
+  .hero-zone--page .ph-quarter {
+    right: 0;
+    bottom: -22vw;
+    width: 22vw;
+    height: 44vw;
+    aspect-ratio: auto;
+    border-radius: 100% 0 0 100% / 50% 0 0 50%;
+  }
+}
+
+/* Les formes de l'en-tête en images (ordinateur) : une image WebP par forme (tools/bake-layers.mjs, .at-bake défini dans HeroAtelier.css). L'élément garde sa
+   position et sa taille (règles ci-dessus), l'image se place dans sa boîte. Les définitions d'origine restent en place pour le téléphone et pour html.hero-live. */
+@media (min-width: 901px) {
+  html:not(.hero-live) .hero-zone--page :is(.ph-dash, .ph-pill, .ph-disc, .ph-quarter) {
+    background: none !important;
+    box-shadow: none !important;
+    border: 0 !important;
+    transform: none !important;
+  }
+
+  html:not(.hero-live) .hero-zone--page :is(.ph-dash, .ph-pill, .ph-disc, .ph-quarter)::before,
+  html:not(.hero-live) .hero-zone--page :is(.ph-dash, .ph-pill, .ph-disc, .ph-quarter)::after {
+    display: none !important;
+  }
+
+  html:not(.hero-live) .hero-zone--page .at-bake {
+    display: block;
+  }
+}

@@ -8,7 +8,7 @@
   --hard-shadow: 6px 6px 0 rgb(238 133 50 / 0.9);
   /* le fond du panneau bleu (.panel-blue) : réutilisable par une carte qui doit avoir le même */
   --panel-blue-bg:
-    var(--grain-soft) 0 0 / 160px 160px repeat,
+    /* GRAIN DES SECTIONS BLEUES : désactivé pour test (à décommenter pour le rétablir) : var(--grain-soft) 0 0 / 160px 160px repeat, */
     radial-gradient(60% 80% at 88% 100%, rgb(24 156 176 / 0.42), rgb(24 156 176 / 0) 64%),
     radial-gradient(55% 80% at 14% 0%, rgb(86 92 214 / 0.4), rgb(86 92 214 / 0) 62%),
     linear-gradient(160deg, #1a2a78 0%, #14205f 46%, #0b1a4a 100%);
@@ -65,7 +65,7 @@ html .portrait img {
   border-radius: var(--radius-xl);
   color: #fff;
   background: var(--panel-blue-bg);
-  background-blend-mode: soft-light, normal, normal;
+  /* GRAIN DES SECTIONS BLEUES : désactivé pour test (à décommenter pour le rétablir) : background-blend-mode: soft-light, normal, normal; */
   box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.12), 0 30px 60px -36px rgb(11 26 74 / 0.55);
 }
 
@@ -77,7 +77,22 @@ html .portrait img {
   inset: 0;
   z-index: -1;
   pointer-events: none;
+  /* GRAIN DES SECTIONS BLEUES : désactivé pour test (à décommenter pour le rétablir) :
   background:
     var(--tx-grain-flat-zone) 0 0 / 160px 160px repeat,
     var(--tx-speck-zone) 30px 70px / 256px 256px repeat;
+  */
+  background: none;
+}
+
+/* Le grain de grès des papiers d'en-tête (Hero de l'accueil, pages de service, À propos, Le Cuistologue) : le haut du papier est lisse ; le grain apparaît en fondu
+   quand le papier glisse vers le crème chaud, comme sur les sections qui suivent. Sur l'accueil, le fondu s'achève derrière le manifeste bleu. */
+.at-paper::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: var(--tx-stoneware) 0 0 / 512px 512px repeat;
+  -webkit-mask-image: linear-gradient(180deg, transparent 72%, rgb(0 0 0 / 0.55) 100%);
+  mask-image: linear-gradient(180deg, transparent 72%, rgb(0 0 0 / 0.55) 100%);
 }
