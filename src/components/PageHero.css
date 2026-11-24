@@ -428,8 +428,8 @@
   .hero-zone.hero-zone--page:not(.ah) {
     min-height: min(86svh, 700px);
     justify-content: center;
-    padding-top: var(--header-h);
-    padding-bottom: calc(clamp(40px, 10vw, 64px) + env(safe-area-inset-bottom));
+    padding-top: calc(var(--header-h) + 52px); /* place du fil d'Ariane, posé en absolu juste dessous */
+    padding-bottom: clamp(40px, 10vw, 64px);
   }
 
   /* le fil d'Ariane remonte sous l'en-tête du site, à part : le reste du texte se centre dans la zone */

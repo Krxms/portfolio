@@ -1072,6 +1072,6 @@
     min-height: min(78svh, 640px);
     justify-content: center;
     padding-top: var(--header-h);
-    padding-bottom: calc(clamp(40px, 10vw, 64px) + env(safe-area-inset-bottom));
+    padding-bottom: clamp(40px, 10vw, 64px);
   }
 }

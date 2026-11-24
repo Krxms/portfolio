@@ -221,7 +221,7 @@
     min-height: 0;
     justify-content: flex-start;
     padding-top: calc(var(--header-h) + clamp(20px, 5svh, 48px));
-    padding-bottom: calc(clamp(36px, 9vw, 52px) + env(safe-area-inset-bottom));
+    padding-bottom: clamp(36px, 9vw, 52px);
   }
 
   .hero {
