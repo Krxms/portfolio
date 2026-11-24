@@ -1059,3 +1059,19 @@
     stroke: none;
   }
 }
+
+/* Téléphone : pas d'illustration dans la Hero pour le moment (formes masquées ; elles restent dans le code, pour les rétablir retirer ce bloc). */
+@media (max-width: 700px) {
+  .hero-zone--atelier :is(.at-arch-pale, .at-arch-mint, .at-arch, .at-orb, .at-window, .at-quarter, .at-outline, .at-building, .at-disc, .at-ring) {
+    display: none !important;
+  }
+
+  /* sans composition sous le texte : la zone a une hauteur à elle (78 % de l'écran, au plus 640 px) et le bloc de texte s'y centre : l'air est le même
+     au-dessus (sous l'en-tête) et au-dessous des boutons */
+  .hero-zone.hero-zone--atelier {
+    min-height: min(78svh, 640px);
+    justify-content: center;
+    padding-top: var(--header-h);
+    padding-bottom: calc(clamp(40px, 10vw, 64px) + env(safe-area-inset-bottom));
+  }
+}

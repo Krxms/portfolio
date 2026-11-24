@@ -292,3 +292,16 @@ html .ah + .tile {
   }
 
 }
+
+/* Téléphone : l'entête (À propos, Le Cuistologue) comme les autres entêtes bleus, sans grain ni mouchetures ; l'arche menthe décorative est retirée pour le moment
+   (le portrait reste). Pour les rétablir, retirer ce bloc. */
+@media (max-width: 700px) {
+  .ah .ah-panel.panel-blue--riso::after,
+  html.tx-in .ah .ah-panel.panel-blue--riso::after {
+    background: none;
+  }
+
+  .ah .ah-mint {
+    display: none;
+  }
+}

@@ -142,6 +142,9 @@
 
   .ap-story .ap-tag {
     padding-top: 8px;
+    /* « Mon parcours » reste en place pendant qu'on lit le texte (même logique que le titre des sections à étapes) */
+    position: sticky;
+    top: calc(var(--header-h) + 24px);
   }
 }
 

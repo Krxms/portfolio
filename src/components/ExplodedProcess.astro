@@ -105,9 +105,11 @@ const names = steps.map((s) => plainText(s.title));
   </div>
 </section>
 
-{note && <p class="proc-after xp-after xp-note" set:html={rich(note)} />}
-{after && (
-  <p class="proc-after xp-after" set:html={rich(after)} />
+{(note || after) && (
+  <div class="xp-tail">
+    {note && <p class="proc-after xp-after xp-note" set:html={rich(note)} />}
+    {after && <p class="proc-after xp-after" set:html={rich(after)} />}
+  </div>
 )}
 
 <script>

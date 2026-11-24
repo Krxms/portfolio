@@ -591,3 +591,27 @@
     mask-image: radial-gradient(circle at 50% 50%, #000 calc(var(--cta-p, 0) * 75%), transparent calc(var(--cta-p, 0) * 75% + 30%));
   }
 }
+
+/* Grain du bouton de l'en-tête (accueil) en CSS pur : --cta-p va de 0 à 1 sur les 70 % de la première hauteur d'écran, sans script
+   (classe .css-scroll posée par scenes.js ; pour revenir à l'ancien calcul : CSS_SCROLL à false en tête de scenes.js). */
+@property --cta-p {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 0;
+}
+
+@keyframes cta-grain {
+  to {
+    --cta-p: 1;
+  }
+}
+
+@supports (animation-timeline: scroll()) {
+  .css-scroll body:has(.hero) .site-header {
+    animation-name: cta-grain;
+    animation-timing-function: linear;
+    animation-fill-mode: both;
+    animation-timeline: scroll(root block);
+    animation-range: 0 70svh;
+  }
+}

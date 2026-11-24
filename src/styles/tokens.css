@@ -64,6 +64,14 @@
   /* grains fins : des tuiles WebP préchargées (tools/grain-tile.mjs), plus un filtre SVG que le navigateur calculait après le reste */
   --grain: url('../assets/riso/grain.webp');
 
+  /* Le fond marine des scènes (celui de la scène de visite du Cuistologue) : lueur lagon en bas à droite, lueur indigo en haut à gauche, grain fin. À poser avec
+     background-blend-mode: soft-light, normal, normal. Le béton (concrete-tile.webp, soft-light 0,4) et le grain (soft-light 0,22) viennent en plus, en ::before et ::after. */
+  --stage-navy:
+    var(--grain-soft) 0 0 / 160px 160px repeat,
+    radial-gradient(60% 80% at 88% 100%, rgb(24 156 176 / 0.42), rgb(24 156 176 / 0) 64%),
+    radial-gradient(55% 80% at 14% 0%, rgb(86 92 214 / 0.4), rgb(86 92 214 / 0) 62%),
+    linear-gradient(160deg, #1a2a78 0%, #14205f 46%, #0b1a4a 100%);
+
   /* Rayons : une échelle unique. Les coins lisses (superellipse 1,5 : entre l'arrondi simple et le squircle d'Apple) s'appliquent aux
      composants dans global.css. */
   /* Échelle d'arrondis : 4, 8, 12, 16, 24, 32. Chaque marche est la précédente plus un padding courant, pour que l'emboîtement soit juste.

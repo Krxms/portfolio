@@ -46,7 +46,7 @@ const { href = '/contact/', label = 'Parlons de votre projet' } = Astro.props;
     update();
     // accueil : le grain du bouton de l'en-tête apparaît avec le défilement (voir Header.css)
     const hdr = document.querySelector<HTMLElement>('[data-header]');
-    if (hdr && document.querySelector('.hero')) {
+    if (hdr && document.querySelector('.hero') && !document.documentElement.classList.contains('css-scroll')) {
       let queued = false;
       const paint = () => {
         queued = false;

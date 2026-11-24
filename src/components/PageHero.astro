@@ -58,12 +58,14 @@ const { crumb, kicker, line1, line2, lead, ctaHref, ctaLabel, linkHref, linkLabe
       <nav class="ph-crumbs" aria-label="Fil d’Ariane">
         <a href="/">Accueil</a><span aria-hidden="true">/</span><span aria-current="page">{crumb}</span>
       </nav>
+      <div class="ph-text">
       <h1>
         <span class="ph-kicker"><R t={kicker} /></span><span class="visually-hidden">. </span>{' '}
         <span class="ph-l1"><R t={line1} /></span>{' '}
         <span class="ph-l2"><R t={line2} /></span>
       </h1>
       <p class:list={['ph-lead', wideLead && 'ph-lead--wide']}><R t={lead} /></p>
+      </div>
       <div class="ph-actions hero-actions">
         <FrostedCTA href={ctaHref} ink>{ctaLabel}</FrostedCTA>
         {linkHref && linkLabel && <LinkUnder href={linkHref} label={linkLabel} glow />}

@@ -36,6 +36,10 @@
   text-align: left;
 }
 
+.ph-text {
+  display: contents;
+}
+
 .ph-crumbs {
   display: flex;
   flex-wrap: wrap;
@@ -409,5 +413,73 @@
 
   html:not(.hero-live) .hero-zone--page .at-bake {
     display: block;
+  }
+}
+
+/* Téléphone : les entêtes des pages de service n'ont pas d'illustration pour le moment (formes du logo masquées ; elles restent dans le code, pour les
+   rétablir retirer ce bloc). */
+@media (max-width: 700px) {
+  .hero-zone--page :is(.ph-dash, .ph-pill, .ph-disc, .ph-quarter, .at-quarter) {
+    display: none !important;
+  }
+
+  /* Sans illustration, l'entête a une hauteur à elle (86 % de l'écran, au plus 700 px), comme la Hero de l'accueil, et son texte s'y centre : à l'arrivée, le
+     texte de l'entête est entier à l'écran et le titre de la section suivante est sous le pli, il apparaît au défilement. */
+  .hero-zone.hero-zone--page:not(.ah) {
+    min-height: min(86svh, 700px);
+    justify-content: center;
+    padding-top: var(--header-h);
+    padding-bottom: calc(clamp(40px, 10vw, 64px) + env(safe-area-inset-bottom));
+  }
+
+  /* le fil d'Ariane remonte sous l'en-tête du site, à part : le reste du texte se centre dans la zone */
+  .hero-zone.hero-zone--page:not(.ah) .ph-crumbs {
+    position: absolute;
+    left: var(--edge, 24px);
+    top: calc(var(--header-h) + 16px);
+    margin: 0;
+  }
+
+  /* Le sous-titre prend la largeur du titre : le bloc titre + sous-titre (.ph-text) s'ajuste à la plus longue ligne du titre, le sous-titre (largeur
+     nulle, étiré à 100 %) ne l'élargit pas. Les boutons et la réassurance, hors de ce bloc, occupent toute la largeur de la page, comme ceux de la Hero
+     de l'accueil : mêmes boutons, même taille sur tous les entêtes. */
+  .hero-zone.hero-zone--page:not(.ah) .ph-text {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: fit-content;
+    max-width: calc(100% + 16px);
+    margin-right: -16px;
+  }
+
+  .hero-zone.hero-zone--page:not(.ah) .ph-lead {
+    width: 0;
+    min-width: calc(100% - 16px);
+    max-width: none;
+  }
+
+  .hero-zone.hero-zone--page:not(.ah) .ph-copy {
+    align-items: stretch;
+  }
+
+  /* le rythme vertical du texte : le surtitre remonte et s'écarte du titre, le sous-titre prend de l'air sous le titre, les boutons et la réassurance
+     descendent sous le texte */
+  .hero-zone.hero-zone--page:not(.ah) .ph-kicker {
+    margin-bottom: 18px;
+    translate: 0 -12px;
+  }
+
+  .hero-zone.hero-zone--page:not(.ah) .ph-lead {
+    margin-top: 14px;
+  }
+
+  .hero-zone.hero-zone--page:not(.ah) .ph-actions {
+    margin-top: 28px;
+  }
+
+  /* la réassurance est centrée sous les boutons */
+  .hero-zone.hero-zone--page:not(.ah) .ph-note {
+    justify-content: center;
+    text-align: center;
   }
 }

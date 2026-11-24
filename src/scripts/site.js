@@ -1,9 +1,5 @@
 import 'lenis/dist/lenis.css';
 
-document.querySelectorAll('[data-year]').forEach((el) => {
-  el.textContent = String(new Date().getFullYear());
-});
-
 // Reflet du verre : la position du pointeur alimente --mx / --my sur la surface survolée.
 if (window.matchMedia('(hover: hover)').matches) {
   document.addEventListener('pointermove', (e) => {

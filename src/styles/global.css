@@ -306,7 +306,7 @@ html:not(.is-loading) #nav-progress {
   .amb-atelier .at-paper {
     background-image:
       radial-gradient(ellipse 72% 40% at 50% -6%, #ffffff 0%, rgb(255 255 255 / 0) 100%),
-      linear-gradient(180deg, #f6f8fb 0%, #edf1f6 60%, #e4ebf3 100%);
+      linear-gradient(180deg, #f6f8fb 0%, #edf1f6 56%, #f5f3ea 96%);
     /* les tailles et répétitions du papier de HeroAtelier.css visent trois calques (grès 512 px, dégradés) : avec deux calques seulement, le premier
        dégradé était répété tous les 512 px, d'où une démarcation franche sous les boutons. Un seul calque pleine taille, sans répétition. */
     background-size: auto, auto;
@@ -325,7 +325,7 @@ html:not(.is-loading) #nav-progress {
 
   html:not(.tx-in) :is(.at-arch-pale, .at-arch-mint, .at-arch, .at-orb, .at-disc, .at-quarter, .at-win-art)::before,
   html:not(.tx-in) :is(.concrete, .xp-layer, .site-footer, .xp, .card-art, .cs-lv-gauge)::after,
-  html:not(.tx-in) :is(.xp, .site-footer, .card-art, .cs-lv-gauge)::before {
+  html:not(.tx-in) :is(.xp, .xp-tail, .site-footer, .card-art, .cs-lv-gauge)::before {
     background-image: none;
   }
 

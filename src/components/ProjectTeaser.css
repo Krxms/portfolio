@@ -333,12 +333,8 @@
   border-radius: var(--radius-xl);
   /* Un fond à part : marine profond, avec une lueur lagon en bas à droite et une lueur indigo en haut à gauche. Le bleu klein vif est celui
      de l'illustration de la carte « Création de site » ; ici, la scène est plus sombre et plus verte, pour ne pas lui ressembler. */
-  background:
-    /* GRAIN DES SECTIONS BLEUES : désactivé pour test (à décommenter pour le rétablir) : var(--grain-soft) 0 0 / 160px 160px repeat, */
-    radial-gradient(60% 80% at 88% 100%, rgb(24 156 176 / 0.42), rgb(24 156 176 / 0) 64%),
-    radial-gradient(55% 80% at 14% 0%, rgb(86 92 214 / 0.4), rgb(86 92 214 / 0) 62%),
-    linear-gradient(160deg, #1a2a78 0%, #14205f 46%, #0b1a4a 100%);
-  /* GRAIN DES SECTIONS BLEUES : désactivé pour test (à décommenter pour le rétablir) : background-blend-mode: soft-light, normal, normal; */
+  background: var(--stage-navy);
+  background-blend-mode: soft-light, normal, normal;
   box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.12), 0 30px 60px -36px rgb(11 26 74 / 0.55);
 }
 
@@ -846,7 +842,8 @@
   }
 }
 
-/* la matière du fond, comme sur les autres scènes : le béton raccordable en tuile, puis le grain, sous les maquettes et au-dessus du dessin */
+/* La matière du fond, la même que la scène de visite du Cuistologue : le béton raccordable en tuile, puis le grain, sous les maquettes. Les formes du logo (disque,
+   arche, quart de disque) sont retirées de cette scène : leurs éléments restent dans le code (ProjectTeaser.astro, en commentaire). */
 .sc-stage::before,
 .sc-stage::after {
   content: '';

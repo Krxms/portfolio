@@ -293,3 +293,22 @@
     max-width: none;
   }
 }
+
+/* ---------- Téléphone : un seul rythme vertical ----------
+   Chaque section claire avait son propre espace (40, 56, 64, 80 px…) : la page manquait d'équilibre. Sur téléphone, toutes les sections ont 56 px
+   au-dessus et en dessous ; l'espace entre deux sections vaut donc partout 112 px. Exceptions voulues : la vue éclatée garde 24 px sous ses étapes (la
+   note qui les suit en est la suite), l'appel final et la zone sombre gardent leur air propre. Pour revenir à l'espacement d'origine, retirer ce bloc. */
+@media (max-width: 700px) {
+  html body main :is(.tile, #livrables, #autonomie, #methode, #parcours, #domaines, #competences, #projet):not(.cta-final):not(.tile--dark):not(.xp) {
+    padding-block: 56px;
+  }
+
+  html body main .xp:is(.xp, #methode) {
+    padding-top: 56px;
+    padding-bottom: 24px;
+  }
+
+  html body main :is(.tile.project-tile, #projet) {
+    padding-top: calc(56px + var(--blend, 0px));
+  }
+}

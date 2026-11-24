@@ -26,6 +26,23 @@
   opacity: 0.55;
 }
 
+/* la fin de la section (note et « Après la livraison ») est hors de .xp : elle porte le même grain de grès, sans quoi le fond y paraît troué */
+.xp-tail {
+  position: relative;
+  isolation: isolate;
+  display: flow-root;
+}
+
+.xp-tail::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: var(--tx-stoneware) 0 0 / 512px 512px repeat;
+  opacity: 0.55;
+}
+
 .xp-inner {
   display: grid;
   grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);

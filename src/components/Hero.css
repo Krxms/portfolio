@@ -217,10 +217,11 @@
      elle suit le contenu, avec de l'air autour, et reste plafonnée pour que la section suivante apparaisse dès le premier écran. Les marges
      se règlent sur la hauteur (svh) : le bloc respire sur un grand écran et se resserre sur un petit. */
   .hero-zone {
-    min-height: min(86svh, 720px);
-    justify-content: center;
+    /* sans illustration, la zone suit son contenu : plus de vide sous les boutons */
+    min-height: 0;
+    justify-content: flex-start;
     padding-top: calc(var(--header-h) + clamp(20px, 5svh, 48px));
-    padding-bottom: calc(clamp(32px, 6svh, 56px) + env(safe-area-inset-bottom));
+    padding-bottom: calc(clamp(36px, 9vw, 52px) + env(safe-area-inset-bottom));
   }
 
   .hero {

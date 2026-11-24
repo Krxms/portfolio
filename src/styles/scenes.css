@@ -356,3 +356,65 @@
 .has-scenes .tile {
   overflow-x: clip;
 }
+
+/* ---------- Progression pilotée par le défilement, en CSS pur (classe .css-scroll posée par scenes.js) ----------
+   Le recul de la Hero, le filet de lecture et le grain du bouton d'en-tête suivent le défilement de la page sans script : le navigateur
+   les calcule (animation-timeline: scroll()), et le recul et le filet sont joués par la carte graphique. Pour revenir au calcul en
+   JavaScript : mettre CSS_SCROLL à false en tête de scenes.js, ces règles ne s'appliquent alors plus. */
+@supports (animation-timeline: scroll()) {
+  @keyframes hero-back {
+    to {
+      scale: 0.92;
+      translate: 0 7svh;
+      opacity: 0.35;
+    }
+  }
+
+  @keyframes read-bar {
+    from {
+      transform: scaleX(0);
+    }
+    to {
+      transform: scaleX(1);
+    }
+  }
+
+  /* le recul de la Hero : UN seul mouvement pour tout le bloc de texte (surtitre, titre, description, boutons), qui recule, s'estompe et descend
+     ensemble, de 0 à la hauteur de la Hero. Les blocs ne portent plus chacun leur recul (ils partaient à des vitesses différentes et se chevauchaient).
+     L'entrée de chaque bloc (motion.css) reste inchangée. */
+  .css-scroll .hero {
+    transform-origin: 50% 45%;
+    animation-name: hero-back;
+    animation-duration: auto;
+    animation-timing-function: linear;
+    animation-fill-mode: both;
+    animation-timeline: scroll(root block);
+    animation-range: 0 min(100svh, 980px);
+    will-change: transform, opacity;
+  }
+
+  .css-scroll .hero > *,
+  .css-scroll .hero h1 > * {
+    scale: none;
+    translate: none;
+    opacity: 1;
+    will-change: auto;
+  }
+
+  .css-scroll .site-header::after {
+    animation-name: read-bar;
+    animation-duration: auto;
+    animation-timing-function: linear;
+    animation-fill-mode: both;
+    animation-timeline: scroll(root block);
+  }
+}
+
+/* téléphone : la Hero est plus courte, le recul s'achève plus tôt */
+@media (max-width: 560px) {
+  @supports (animation-timeline: scroll()) {
+    .css-scroll .hero {
+      animation-range: 0 min(70svh, 560px);
+    }
+  }
+}

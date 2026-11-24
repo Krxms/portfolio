@@ -16,6 +16,12 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
   const root = document.documentElement;
   root.classList.add('has-scenes');
 
+  // Progression pilotée par le CSS (animation-timeline: scroll()) : le recul de la Hero (--hp), le filet de lecture (--page-p) et le grain du bouton d'en-tête
+  // (--cta-p) n'ont plus besoin du script. Pour revenir à l'ancien calcul en JavaScript : mettre CSS_SCROLL à false (rien d'autre à changer).
+  const CSS_SCROLL = true;
+  const cssScroll = CSS_SCROLL && typeof CSS !== 'undefined' && CSS.supports('animation-timeline: scroll()');
+  if (cssScroll) root.classList.add('css-scroll');
+
   const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
   const ease = (t) => 1 - Math.pow(1 - t, 3);
 
@@ -230,16 +236,18 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
     if (hero && heroText) {
       const h = hero.offsetHeight || vh;
       const target = clamp(y / h);
-      if (hp === null) hp = target;
-      else {
-        hp += (target - hp) * kh;
-        if (Math.abs(target - hp) > 0.0006) moving = true;
-        else hp = target;
-      }
-      const hpv = hp.toFixed(4);
-      if (hpv !== lastHp) {
-        lastHp = hpv;
-        heroText.style.setProperty('--hp', hpv);
+      if (!cssScroll) {
+        if (hp === null) hp = target;
+        else {
+          hp += (target - hp) * kh;
+          if (Math.abs(target - hp) > 0.0006) moving = true;
+          else hp = target;
+        }
+        const hpv = hp.toFixed(4);
+        if (hpv !== lastHp) {
+          lastHp = hpv;
+          heroText.style.setProperty('--hp', hpv);
+        }
       }
       const nowCovered = y > h + 60;
       if (nowCovered !== covered) {
@@ -259,7 +267,7 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
 
     const max = root.scrollHeight - vh;
     const pv = max > 0 ? clamp(y / max).toFixed(4) : '0';
-    if (pv !== lastPage) {
+    if (!cssScroll && pv !== lastPage) {
       lastPage = pv;
       (header || root).style.setProperty('--page-p', pv);
     }

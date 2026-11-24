@@ -1,6 +1,6 @@
 ---
-// Illustration large des pages de service (au-dessus de 700 px), sous l'en-tête « Ce que vous recevez » : un fond en WebP (dégradés, formes, béton et grain
-// cuits ensemble par tools/bake-scene-back.mjs) puis quatre plans de maquettes en WebP à fond transparent (tools/render-scenes.mjs, à partir des exports
+// Illustration large des pages de service (au-dessus de 700 px), sous l'en-tête « Ce que vous recevez » : un fond en dégradés CSS (sur .cs-stage, sans formes ni texture : le cadre
+// l'arrondit lui-même, aucun coin cuit dans une image) puis quatre plans de maquettes en WebP à fond transparent (tools/render-scenes.mjs, à partir des exports
 // Figma de src/assets/scenes/source). Chaque plan de maquette glisse à son rythme au défilement (animation CSS, creation-site-web.css). Sur mobile, ces
 // éléments sont masqués (display: none) et, grâce à loading="lazy", les images ne sont pas téléchargées.
 interface Props {
@@ -9,7 +9,6 @@ interface Props {
 const { scene } = Astro.props;
 
 const images = import.meta.glob('../assets/scenes/*.webp', { eager: true, import: 'default' }) as Record<string, ImageMetadata>;
-const back = images[`../assets/scenes/${scene}-back.webp`];
 
 // les images couvrent le cadre (1297 x 571) plus une marge de 140 unités de chaque côté (formes et ombres qui dépassent)
 const W = 1297;
@@ -27,16 +26,6 @@ const planes = [
 ];
 ---
 
-<img
-  class="cs-art cs-art--back"
-  src={back.src}
-  width={back.width}
-  height={back.height}
-  alt=""
-  aria-hidden="true"
-  loading="lazy"
-  decoding="async"
-/>
 {
   planes.map((p) => {
     const img = images[`../assets/scenes/${scene}-${p.name}.webp`];
