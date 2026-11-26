@@ -94,26 +94,52 @@
 .cta-panel.glass--dark {
   background:
     var(--grain-soft) 0 0 / 160px 160px repeat,
+    linear-gradient(115deg, rgb(255 255 255 / 0.22) 0%, rgb(255 255 255 / 0) 38%),
+    linear-gradient(0deg, rgb(255 255 255 / 0) 65%, rgb(255 255 255 / 0.1)),
     linear-gradient(145deg, rgb(255 255 255 / 0.22), rgb(255 255 255 / 0.05) 42%, rgb(255 255 255 / 0.12)),
-    rgb(28 54 160 / 0.74);
-  background-blend-mode: soft-light, normal, normal;
+    linear-gradient(rgb(28 54 160 / 0.74), rgb(28 54 160 / 0.74));
+  background-blend-mode: soft-light, normal, normal, normal, normal;
   -webkit-backdrop-filter: none;
   backdrop-filter: none;
+  /* le liseré : deux ombres internes décalées en diagonale (vif en haut à gauche, plus doux en bas à droite), comme l'ancien dégradé à 140° ; une ombre
+     interne suit exactement le rayon du panneau (l'ancien anneau masqué, un ::after, débordait aux coins haut droit et bas gauche) */
   box-shadow:
+    inset 1.5px 1.5px 0 rgb(255 255 255 / 0.85),
+    inset -1.5px -1.5px 0 rgb(255 255 255 / 0.45),
     inset 0 0 36px rgb(255 255 255 / 0.1),
     inset 0 -14px 24px -18px rgb(255 255 255 / 0.28),
     0 34px 60px -30px rgb(0 0 0 / 0.6);
 }
 
-/* Téléphone : le verre d'origine (flou d'arrière-plan réel, sans la lentille SVG) : sur mobile, il ne pèse pas assez pour justifier le verre sablé, et il
-   garde le disque et l'arche floutés sous le panneau. */
-@media (max-width: 700px) {
+/* Verre réel (flou d'arrière-plan), à toutes les largeurs, allégé par rapport au réglage d'origine :
+   - rayon de flou ramené de 7 à 5 px (le coût d'un flou croît avec son rayon) et plus de filtre de luminosité (un filtre de moins par image) ;
+   - plus aucune variable de défilement écrite sur le panneau (scène « .cta-panel » retirée de scenes.js : elle ne servait à aucun dessin et
+     invalidait le style du panneau à chaque image) ;
+   - le verre sablé ci-dessus reste le rendu de secours : navigateur sans backdrop-filter, ou « réduire la transparence ». */
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
   .cta-panel.glass--dark {
     background:
+      linear-gradient(115deg, rgb(255 255 255 / 0.22) 0%, rgb(255 255 255 / 0) 38%),
+      linear-gradient(0deg, rgb(255 255 255 / 0) 65%, rgb(255 255 255 / 0.1)),
       linear-gradient(145deg, rgb(255 255 255 / 0.16), rgb(255 255 255 / 0.03) 42%, rgb(255 255 255 / 0.08)),
-      rgb(8 22 80 / 0.1);
-    -webkit-backdrop-filter: blur(7px) saturate(175%) brightness(1.05);
-    backdrop-filter: blur(7px) saturate(175%) brightness(1.05);
+      linear-gradient(rgb(8 22 80 / 0.12), rgb(8 22 80 / 0.12));
+    -webkit-backdrop-filter: blur(5px) saturate(170%);
+    backdrop-filter: blur(5px) saturate(170%);
+  }
+
+  /* « réduire la transparence » : retour au verre sablé (un navigateur qui ne connaît pas ce réglage garde le verre réel) */
+  @media (prefers-reduced-transparency: reduce) {
+    .cta-panel.glass--dark {
+      background:
+        var(--grain-soft) 0 0 / 160px 160px repeat,
+        linear-gradient(115deg, rgb(255 255 255 / 0.22) 0%, rgb(255 255 255 / 0) 38%),
+        linear-gradient(0deg, rgb(255 255 255 / 0) 65%, rgb(255 255 255 / 0.1)),
+        linear-gradient(145deg, rgb(255 255 255 / 0.22), rgb(255 255 255 / 0.05) 42%, rgb(255 255 255 / 0.12)),
+        linear-gradient(rgb(28 54 160 / 0.74), rgb(28 54 160 / 0.74));
+      background-blend-mode: soft-light, normal, normal, normal, normal;
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
+    }
   }
 }
 
@@ -145,22 +171,14 @@
 }
    ====================================================================================================================================== */
 
+/* Le reflet du verre (.glass::before, glass.css) est dans le fond du panneau (voir ci-dessus) : une couche séparée, sur un autre plan de composition,
+   ne suivait pas exactement le rayon du panneau et dépassait aux coins haut droit et bas gauche (une bande plus claire hors du liseré). */
+.cta-panel::before {
+  content: none;
+}
+
 .cta-panel::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  box-sizing: border-box;
-  padding: 1.5px;
-  border-radius: inherit;
-  pointer-events: none;
-  background: linear-gradient(140deg, rgb(255 255 255 / 0.95), rgb(255 255 255 / 0.14) 26%, rgb(255 255 255 / 0.05) 56%, rgb(255 255 255 / 0.55));
-  /* liseré creux : Safari ne comprend pas « exclude » dans le raccourci -webkit-mask (le dégradé remplissait alors tout le panneau d'un voile
-     blanc) ; son équivalent préfixé est -webkit-mask-composite: xor */
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  mask-composite: exclude;
+  content: none;
 }
 
 .cta-final h2 {

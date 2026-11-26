@@ -13,6 +13,7 @@ const links = [
   { href: '/a-propos/', label: 'À propos', cls: '' },
 ];
 const path = Astro.url.pathname;
+const isContact = path.startsWith('/contact');
 const isCurrent = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
 ---
 
@@ -34,7 +35,8 @@ const isCurrent = (href: string) => (href === '/' ? path === '/' : path.startsWi
           ))
         }
       </div>
-      <a class="btn btn-primary" href="/contact/" style="--i:7">Parlons de votre projet</a>
+      {/* sur la page contact, le bouton ne mènerait qu'à la page où l'on est déjà : il n'est pas affiché (ordinateur et menu mobile) */}
+      {!isContact && <a class="btn btn-primary" href="/contact/" style="--i:7">Parlons de votre projet</a>}
       <p class="nav-direct" style="--i:8">
         <a href="tel:+33609111838">Appeler directement</a>
       </p>

@@ -21,6 +21,10 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
   const CSS_SCROLL = true;
   const cssScroll = CSS_SCROLL && typeof CSS !== 'undefined' && CSS.supports('animation-timeline: scroll()');
   if (cssScroll) root.classList.add('css-scroll');
+  // Apparitions liées à la position d'un bloc dans l'écran (animation-timeline: view()) : le manifeste (mots du titre, paragraphe, étapes) est joué en CSS
+  // (voir scenes.css, « css-view ») ; les entrées marquées `css` ci-dessous ne sont alors plus suivies par le script. Sans view() (Firefox, Safari ancien), le script reprend.
+  const cssView = cssScroll && CSS.supports('animation-timeline: view()');
+  if (cssView) root.classList.add('css-view');
 
   const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
   const ease = (t) => 1 - Math.pow(1 - t, 3);
@@ -57,39 +61,53 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
   // ---- 2. Les scènes : sélecteur, fenêtre d'entrée (en part de la hauteur d'écran), options
   //  stagger : numérote les enfants (--i, --n) ; avec `in`, ceux du sélecteur donné
   const CONFIG = [
+    // les en-têtes de section (étiquette, titre, sous-titre), un enfant après l'autre ; les en-têtes propres à une section (projet, expérience) aussi
     { sel: '.tile-head', start: 0.95, end: 0.6, stagger: true },
-    { sel: '.manifesto-quote, .about-lead, #cadre .tile-sub', start: 0.88, end: 0.38, words: true },
+    { sel: '.sc-title', start: 0.95, end: 0.6, stagger: true },
+    { sel: '.il-xp-copy', start: 0.95, end: 0.6, stagger: true },
+    // page Interfaces : les cartes des interventions arrivent une à une, puis leurs pictogrammes s'animent (interfaces-logiciels.css)
+    { sel: '.il-tasks', start: 0.95, end: 0.6, stagger: true },
+    { sel: '.manifesto-quote', start: 0.88, end: 0.38, words: true, css: true },
+    // Qui suis-je : l'étiquette et l'introduction, en blocs (les mots ne s'allument plus que dans le manifeste, la phrase signature de l'accueil)
+    { sel: '.about-copy > .tile-label', start: 0.95, end: 0.6 },
+    { sel: '.about-lead', start: 0.95, end: 0.6 },
     // le texte qui suit le titre du manifeste : d'un seul bloc, qui apparaît quand le titre arrive vers la fin de ses mots (même progression : ref)
-    { sel: '.manifesto-lead', ref: '.manifesto-quote', start: 0.88, end: 0.38 },
+    { sel: '.manifesto-lead', ref: '.manifesto-quote', start: 0.88, end: 0.38, css: true },
     // idem pour la suite de « Qui suis-je » : elle suit la progression de l'introduction
     { sel: '.about-follow', ref: '.about-lead', start: 0.88, end: 0.38 },
     // page Création, « Un cadre clair » : même mécanique, les engagements suivent l'introduction dont les mots s'allument
     { sel: '.cs-follow', ref: '#cadre .tile-sub', start: 0.88, end: 0.38 },
     // page Création : le panneau « Vous gardez la main » donne sa progression à ses trois jauges (voir creation-site-web.css)
+    // (plus de suivi du défilement : les jauges se remplissent une fois, à l'arrivée du panneau ; voir plus bas, « reveal »)
     { sel: '.cs-lv-panel', start: 0.92, end: 0.4, stagger: true, in: '.cs-lv-list', damp: 5 },
     // scores du projet : le compteur se déclenche à l'arrivée de la réglette dans l'écran (un tiers de l'écran passé), puis se joue seul, en 2,6 s
     // (voir ProjectTeaser.css) : il ne dépend plus de la vitesse du défilement
     { sel: '.sc-scores', timed: true, trigger: 0.82, dur: 2600 },
     { sel: '.cards', start: 0.96, end: 0.34, stagger: true },
-    { sel: '.proofs', start: 0.96, end: 0.3, stagger: true },
+    { sel: '.proofs', start: 0.96, end: 0.3, stagger: true, css: true },
     { sel: '.proc-wrap[data-scene]', start: 0.98, end: 0.5, stagger: true, in: '.proc' },
     { sel: '.proc-after', start: 1, end: 0.75 },
     { sel: '.about', start: 0.9, end: 0.3 },
-    { sel: '.cta-panel', start: 0.95, end: 0.45 },
   ];
 
-  // Téléphone : les apparitions de texte (titres de section, mots qui s'allument, suites de paragraphe) ne suivent plus le doigt image par image. Le script
-  // écrivait leur progression à chaque image de défilement, ce qui forçait un recalcul de style sur chaque mot et saccadait le défilement. Elles se jouent
-  // maintenant UNE fois, quand l'élément entre dans l'écran (classe .is-in, transition CSS sur opacity et translate, jouées par la carte graphique).
-  const reveal = matchMedia('(max-width: 700px)').matches;
-  const REVEAL_SEL = new Set(['.tile-head', '.manifesto-quote, .about-lead, #cadre .tile-sub', '.manifesto-lead', '.about-follow', '.cs-follow']);
+  // Une seule logique d'apparition, sur tous les écrans : les titres et les textes se jouent UNE fois, quand ils entrent dans l'écran (classe .is-in,
+  // transition CSS sur opacity et translate, jouées par la carte graphique) : l'en-tête d'une section monte enfant après enfant (étiquette, titre,
+  // sous-titre), puis le texte qui le suit arrive d'un bloc. Ils ne suivent plus le doigt image par image (le recalcul à chaque image saccadait).
+  // Seule exception : le manifeste de l'accueil sur ordinateur, dont les mots s'allument au défilement (animation-timeline, scenes.css).
+  // Téléphone : le carrousel des formules ne suit plus le défilement ; il reçoit .is-in à son arrivée (la première carte se remplit, voir creation-site-web.css).
+  const reveal = true;
+  const REVEAL_SEL = new Set(['.tile-head', '.sc-title', '.il-xp-copy', '.il-tasks', '.about-copy > .tile-label', '.about-lead', '.manifesto-quote', '.manifesto-lead', '.about-follow', '.cs-follow']);
+  // les jauges des formules (« Vous gardez la main ») : remplies une seule fois, à la première arrivée du panneau dans l'écran (creation-site-web.css)
+  REVEAL_SEL.add('.cs-lv-panel');
   const revealEls = [];
   if (reveal) root.classList.add('has-reveal');
 
   const scenes = [];
   CONFIG.forEach((c) => {
+    if (cssView && c.css) return;
     document.querySelectorAll(c.sel).forEach((el) => {
-      if (c.words) splitWords(el);
+      // un texte déjà découpé dans le HTML (le titre du manifeste) n'est pas redécoupé
+      if (c.words && !el.querySelector('.w')) splitWords(el);
       if (c.stagger) {
         const list = c.in ? el.querySelector(c.in) : el;
         if (list) {
@@ -162,13 +180,17 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
 
   // ---- 4. Boucle : écrit les variables, avec amorti, tant que la page bouge ou que les valeurs rattrapent la cible
   const hero = document.querySelector('.hero-zone');
-  const veil = document.querySelector('.curtain > .manifesto');
+  const veil = document.querySelector('.curtain > :not(.hero-zone)');
   const heroActs = [...document.querySelectorAll('.hero-zone .hero-actions a, .hero-zone .hero-assure')];
   // Une variable personnalisée écrite sur <html> est héritée par tous les éléments : à chaque valeur nouvelle, le navigateur recalcule les
   // styles de toute la page. On l'écrit donc le plus bas possible : le recul de la Hero (--hp) sur le bloc de texte de la Hero, le seul à
   // le lire (seulement tant qu'il change), et la progression de lecture (--page-p) directement sur l'en-tête, le seul à la lire.
   const header = document.querySelector('.site-header');
-  const heroText = document.querySelector('.hero');
+  // accueil : .hero ; pages de service au traitement de l'accueil (rideau) : le texte de l'en-tête
+  const heroText = document.querySelector('.hero') || document.querySelector('.curtain > .hero-zone--page .ph-copy');
+  // l'en-tête d'une page de service est plus court que l'écran : son fondu suit la hauteur réelle de l'en-tête, en script (--hp), même quand le
+  // navigateur sait jouer animation-timeline (une plage fixe en svh ne correspondrait pas)
+  const hpByScript = !cssScroll || (heroText && !heroText.classList.contains('hero'));
   let lastHp = '';
   let lastPage = '';
   let covered = false;
@@ -236,7 +258,7 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
     if (hero && heroText) {
       const h = hero.offsetHeight || vh;
       const target = clamp(y / h);
-      if (!cssScroll) {
+      if (hpByScript) {
         if (hp === null) hp = target;
         else {
           hp += (target - hp) * kh;
@@ -254,7 +276,7 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
         covered = nowCovered;
         hero.classList.toggle('is-covered', covered);
       }
-      // les boutons de la Hero que le manifeste commence à recouvrir s'effacent et cessent d'être une cible (clic, focus clavier) :
+      // les boutons de la Hero que la section suivante (les offres) commence à recouvrir s'effacent et cessent d'être une cible (clic, focus clavier) :
       // un bouton entièrement visible répond, un bouton à moitié caché n'est plus présenté comme utilisable
       if (veil && !covered) {
         const edge = veil.getBoundingClientRect().top;

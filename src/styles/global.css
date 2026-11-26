@@ -227,7 +227,7 @@ main:focus {
 }
 
 /* ---------- Mobile : comportement d'application ----------
-   Pas de flash gris au toucher, pas de zoom au double tap, pas de rebond qui révèle un fond blanc, texte non gonflé
+   Pas de flash gris au toucher, pas de zoom au double tap, texte non gonflé
    par le navigateur. */
 html {
   -webkit-text-size-adjust: 100%;
@@ -237,7 +237,7 @@ html {
 @media (hover: none) and (pointer: coarse) {
   html {
     -webkit-tap-highlight-color: transparent;
-    overscroll-behavior-y: none;
+    /* pas d'overscroll-behavior : en haut de page, tirer vers le bas rafraîchit la page (geste natif du navigateur), comme partout ailleurs */
   }
 
   a,

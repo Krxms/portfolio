@@ -305,3 +305,46 @@ html .ah + .tile {
     display: none;
   }
 }
+
+/* ---------- Le fil d'Ariane (À propos, Le Cuistologue) : à la même hauteur que celui des pages de service ----------
+   Même dessin que .ph-crumbs (PageHero.css, non chargé ici) ; il est posé au-dessus du panneau, sur le papier. */
+.ah-crumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: -12px 0 14px;
+  font-size: 12.5px;
+  letter-spacing: 0.01em;
+  color: var(--muted);
+}
+
+.ah-crumbs > span[aria-hidden] {
+  opacity: 0.45;
+}
+
+.ah-crumbs a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  margin-block: -14px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.ah-crumbs a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.ah-crumbs [aria-current] {
+  color: var(--ink-soft);
+  font-weight: 500;
+}
+
+@media (max-width: 700px) {
+  .ah-crumbs {
+    margin: -8px 0 16px;
+    font-size: 12px;
+    opacity: 0.8;
+  }
+}

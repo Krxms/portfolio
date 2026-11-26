@@ -312,3 +312,15 @@
     padding-top: calc(56px + var(--blend, 0px));
   }
 }
+
+/* La zone sombre commune (manifeste, Qui suis-je, FAQ, appel final) : fond à 92 %, le papier grainé du body transparaît à peine. Pas de flou : rien à
+   flouter derrière, et un flou d'arrière-plan sur plusieurs milliers de pixels de haut coûterait à chaque image de défilement. */
+.dark-zone::before {
+  opacity: 0.92;
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .dark-zone::before {
+    opacity: 1;
+  }
+}

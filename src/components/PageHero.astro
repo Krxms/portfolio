@@ -23,6 +23,9 @@ interface Props {
   note?: string;
   /** chapô plus large (limité à la colonne) et réparti sur des lignes équilibrées : pour un chapô de deux phrases dont la fin se retrouverait seule sur une ligne */
   wideLead?: boolean;
+  /** le traitement de la Hero de l'accueil : titre en dégradé (Bricolage 800), lien secondaire avec flèche (léger sur téléphone), fondu au défilement.
+      Page Création d'abord, modèle des autres pages de service. */
+  modern?: boolean;
 }
 import layers from '../assets/layers/page.json';
 const imgs = import.meta.glob('../assets/layers/page/*.webp', { eager: true, import: 'default' }) as Record<string, ImageMetadata>;
@@ -37,10 +40,10 @@ const pill = bake('pill');
 const disc = bake('disc');
 const quarter = bake('quarter');
 const hasVisual = Astro.slots.has("default");
-const { crumb, kicker, line1, line2, lead, ctaHref, ctaLabel, linkHref, linkLabel, note, wideLead } = Astro.props;
+const { crumb, kicker, line1, line2, lead, ctaHref, ctaLabel, linkHref, linkLabel, note, wideLead, modern = false } = Astro.props;
 ---
 
-<div class="hero-zone hero-zone--page" data-sticky-watch>
+<div class:list={['hero-zone', 'hero-zone--page', modern && 'ph-modern']} data-sticky-watch>
   <div class="amb" aria-hidden="true">
     <div class="amb-atelier">
       <div class="at-paper"></div>
@@ -61,14 +64,14 @@ const { crumb, kicker, line1, line2, lead, ctaHref, ctaLabel, linkHref, linkLabe
       <div class="ph-text">
       <h1>
         <span class="ph-kicker"><R t={kicker} /></span><span class="visually-hidden">. </span>{' '}
-        <span class="ph-l1"><R t={line1} /></span>{' '}
-        <span class="ph-l2"><R t={line2} /></span>
+        <span class="ph-l1"><span class="ph-ink"><R t={line1} /></span></span>{' '}
+        <span class="ph-l2"><span class="ph-ink"><R t={line2} /></span></span>
       </h1>
       <p class:list={['ph-lead', wideLead && 'ph-lead--wide']}><R t={lead} /></p>
       </div>
       <div class="ph-actions hero-actions">
         <FrostedCTA href={ctaHref} ink>{ctaLabel}</FrostedCTA>
-        {linkHref && linkLabel && <LinkUnder href={linkHref} label={linkLabel} glow />}
+        {linkHref && linkLabel && <LinkUnder href={linkHref} label={linkLabel} glow arrow={modern} />}
       </div>
       {/* la note est découpée à chaque « · » : sur ordinateur, ses éléments se répartissent sur toute la largeur du chapô */}
       {note && (

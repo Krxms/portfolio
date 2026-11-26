@@ -483,3 +483,159 @@
     text-align: center;
   }
 }
+
+/* =====================================================================================================================
+   PAGES DE SERVICE, TRAITEMENT DE L'ACCUEIL (prop « modern » : classe .ph-modern). Page Création d'abord, modèle des autres pages.
+   - le titre en dégradé, Bricolage Grotesque 800, comme « Vos clients comprennent. / Vos équipes avancent. » ;
+   - le lien secondaire : un bouton sur ordinateur, un lien léger avec sa flèche sur téléphone ; le texte ne change pas de couleur au survol ;
+   - le fondu au défilement : voir scenes.css (le texte s'estompe pendant que la section suivante monte par-dessus).
+   Préfixe « html » : passe devant mobile-heads.css.
+   ===================================================================================================================== */
+html .hero-zone--page.ph-modern .ph-copy h1 :is(.ph-l1, .ph-l2) {
+  font-weight: 800;
+  letter-spacing: -0.012em;
+  word-spacing: 0.04em;
+}
+
+html .hero-zone--page.ph-modern .ph-ink {
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+html .hero-zone--page.ph-modern .ph-l1 .ph-ink {
+  background-image: linear-gradient(100deg, var(--ink) 0%, #1b2a6b 48%, #2747c4 100%);
+}
+
+html .hero-zone--page.ph-modern .ph-l2 .ph-ink {
+  background-image: linear-gradient(100deg, #1f2fa6 0%, #2552d6 55%, #2f7fd8 100%);
+}
+
+html .hero-zone--page.ph-modern .ph-actions > .link-under:is(:hover, :focus-visible) .link-under-text {
+  color: inherit;
+}
+
+@media (min-width: 701px) {
+  html .hero-zone--page.ph-modern .ph-actions .link-under-arrow {
+    display: none;
+  }
+}
+
+@media (max-width: 700px) {
+  /* l'approche des en-têtes mobiles (mobile-heads.css) : la plus longue ligne (« Un site qui explique ») tient dans la colonne */
+  html .hero-zone--page.ph-modern .ph-copy h1 :is(.ph-l1, .ph-l2) {
+    letter-spacing: -0.035em;
+    word-spacing: 0;
+  }
+
+  /* « Voir une réalisation » : un lien léger, souligné, avec sa flèche (sans rond), sous le bouton principal, comme sur l'accueil */
+  html .hero-zone--page.ph-modern .ph-actions > .link-under:is(*, :hover, :focus-visible, :active) {
+    align-self: flex-start;
+    width: auto;
+    min-height: 44px;
+    margin-top: 6px;
+    padding: 0;
+    gap: 8px;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    box-shadow: none;
+    justify-content: flex-start;
+    font-size: 17px;
+    translate: none;
+  }
+
+  html .hero-zone--page.ph-modern .ph-actions > .link-under:is(*, [data-glow])::after {
+    content: none;
+  }
+
+  html .hero-zone--page.ph-modern .ph-actions > .link-under .link-under-arrow {
+    width: auto;
+    height: auto;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+  }
+
+  html .hero-zone--page.ph-modern .ph-actions > .link-under .link-under-arrow svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  html .hero-zone--page.ph-modern .ph-actions > .link-under:is(:hover, :focus-visible) .link-under-arrow {
+    background: none;
+    box-shadow: none;
+    color: inherit;
+    transform: translateX(3px);
+  }
+
+  /* le surtitre, long sur une seule ligne, ne doit pas élargir le bloc du titre (largeur ajustée au contenu) au-delà de l'écran : sa contribution est
+     plafonnée à la colonne, il passe à la ligne */
+  html .hero-zone--page.ph-modern .ph-kicker {
+    max-width: calc(100vw - 2 * var(--edge, 20px));
+  }
+
+  /* même chose pour le titre : une ligne longue (« pour ceux qui les utilisent. ») passe à la ligne au bord de l'écran, sans élargir la page ; il garde
+     les 10 px de marge droite où il peut déborder (mobile-heads.css) */
+  html .hero-zone--page.ph-modern .ph-copy h1 {
+    max-width: calc(100vw - var(--edge, 20px));
+  }
+
+  /* la réassurance, à gauche (le texte et les boutons le sont) */
+  html .hero-zone.hero-zone--page.ph-modern .ph-note {
+    justify-content: flex-start;
+    text-align: left;
+  }
+}
+
+/* ---------- En-têtes des pages de service (.ph-modern) : la hauteur de la Hero de l'accueil ----------
+   La zone fait la hauteur de l'écran ; le fil d'Ariane reste en haut, à sa hauteur (posé à part), et le bloc du texte (surtitre, titre, chapô, boutons,
+   réassurance) se centre dans la place qui reste : il descend, au lieu d'être collé sous le fil d'Ariane. Surtitre : une approche plus serrée (il doit
+   tenir sur une ligne), une puce orange plus petite. */
+@media (min-width: 901px) {
+  html .hero-zone.hero-zone--page.ph-modern {
+    min-height: max(620px, 100svh);
+    justify-content: center;
+    padding-top: calc(var(--header-h) + 56px);
+    padding-bottom: clamp(40px, 6svh, 72px);
+  }
+
+  html .hero-zone--page.ph-modern .ph-crumbs {
+    position: absolute;
+    /* le bord gauche du texte (la colonne .ph-grid est centrée, 1280 px au plus) */
+    left: calc((100% - min(100% - 2 * var(--edge, 24px), 1280px)) / 2);
+    top: calc(var(--header-h) + clamp(4px, 3.6svh - 4px, 43px) - 14px);
+    margin: 0;
+    translate: none;
+  }
+
+  html .hero-zone--page.ph-modern .ph-grid {
+    position: static;
+  }
+}
+
+html .hero-zone--page.ph-modern .ph-kicker::before {
+  width: 8px;
+  height: 8px;
+}
+
+@media (max-width: 700px) {
+  html .hero-zone.hero-zone--page.ph-modern {
+    min-height: 100svh;
+  }
+
+  /* une approche plus serrée : le surtitre tient sur une ligne (à 390 px) quand son texte est court */
+  html .hero-zone--page.ph-modern .ph-kicker {
+    letter-spacing: 0.03em;
+  }
+
+  html .hero-zone--page.ph-modern .ph-kicker::before {
+    width: 7px;
+    height: 7px;
+    margin-right: 8px;
+  }
+}

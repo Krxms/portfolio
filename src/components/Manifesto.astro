@@ -2,50 +2,202 @@
 import './Tile.css';
 import R from './R.astro';
 import './Manifesto.css';
-import ProgressiveBlur from './ProgressiveBlur.astro';
+import LinkUnder from './LinkUnder.astro';
+import { isoScenes } from '../lib/isoScenes';
 
-const proofs = [
-  {
-    t: 'Une structure qui suit les parcours',
-    d: 'Les pages, les parcours et les contenus sont organisés autour de ce que vos visiteurs ou vos utilisateurs viennent faire.',
-  },
-  {
-    t: 'Des écrans pensés pour ceux qui s’en servent',
-    d: 'Lisibles, cohérents entre eux, utilisables au clavier et adaptés aux différents écrans.',
-  },
-  {
-    t: 'Une qualité vérifiée avant la mise en ligne',
-    d: 'Performance, accessibilité et bases du référencement sont prises en compte dès la conception, puis vérifiées lors de la réalisation.',
-  },
+/* La démarche en quatre étapes, chacune avec sa scène isométrique (src/lib/isoScenes.ts) : écouter, cadrer sur un plan, empiler les calques de
+   l'interface, mettre en ligne. Deux usages :
+   - accueil (sans props) : le manifeste, une idée (« Avant les écrans, il y a vos besoins. »), puis les étapes résumées en une ligne ;
+   - pages de service (title, steps) : un titre de section, puis les mêmes étapes détaillées pour l'offre, avec le livrable de chaque étape (gets). */
+interface Step {
+  t: string;
+  d: string;
+  /** ce que le client reçoit à la fin de l'étape (« Vous recevez ») */
+  gets?: string;
+}
+interface Props {
+  id?: string;
+  /** pages de service : le titre de la section (à la place du manifeste) */
+  title?: string;
+  sub?: string;
+  steps?: Step[];
+  /** le lien « La démarche en détail » (accueil) */
+  more?: boolean;
+  /** sans les scènes isométriques (page Audit, en attendant ses illustrations) : un grand numéro orange par étape, reliés par la même ligne
+      en pointillés et la même lumière */
+  plain?: boolean;
+  /** les quatre scènes (SVG), à la place de celles de la démarche de conception (page Audit : isoScenes.auditScenes) */
+  arts?: string[];
+  /** l'étiquette au-dessus du titre (pages de service) */
+  label?: string;
+  /** une phrase sous les étapes */
+  after?: string;
+}
+const homeSteps: Step[] = [
+  { t: 'Comprendre', d: 'Votre activité, vos utilisateurs, vos objectifs.' },
+  { t: 'Cadrer', d: 'Périmètre, contenus et délais, dans un devis.' },
+  { t: 'Concevoir', d: 'Le plan, puis les écrans, ajustés avec vous.' },
+  { t: 'Réaliser', d: 'Le site en ligne, ou les écrans transmis.' },
 ];
+const { id = 'manifeste', title, sub, steps: given, more = !title, plain = false, arts: givenArts, label, after } = Astro.props;
+const arts = givenArts ?? [isoScenes.comprendre, isoScenes.cadrer, isoScenes.concevoir, isoScenes.realiser];
+const steps = (given ?? homeSteps).map((s, i) => ({ ...s, art: arts[i] }));
+const headId = `${id}-title`;
+const quote = ['Avant', 'les', 'écrans,', 'il', 'y', 'a', 'vos'];
+
+/* Les liens entre les étapes, d'une scène à la suivante (ordinateur) : des liens à peine courbés qui partent du coin droit d'un socle, s'infléchissent
+   légèrement dans l'espace entre les scènes et rejoignent le coin gauche du socle suivant. Coordonnées dans un repère de 1000 de large où une scène fait
+   W = 226 de large, 199 de haut (0,88 W), espacées de 258, toutes alignées. Les coins des socles sont à 6,7 % et
+   93,3 % de la largeur d'une scène, à 55,7 % de sa hauteur (voir isoScenes.ts). */
+// n scènes : même écart (32 sur 1000) qu'à l'accueil, où quatre scènes font 226 de large, espacées de 258 ; la hauteur d'une scène vaut 0,88 de sa largeur
+const N = steps.length;
+const GAP = 32;
+const W = (1000 - (N - 1) * GAP) / N;
+const STEP = W + GAP;
+const H = W * 0.88;
+const WAVE = 0;
+// variante sans scènes : des liens droits, d'un numéro au suivant (repère de 1000 x 72, le numéro fait environ 56 de large à gauche de sa colonne)
+const pairs = Array.from({ length: N - 1 }, (_, i) => i);
+const plainLinks = pairs.map((i) => `M${(STEP * i + 62).toFixed(1)} 36H${(STEP * (i + 1) - 6).toFixed(1)}`);
+const links = pairs.map((i) => {
+  // départ et arrivée À L'INTÉRIEUR des socles (sous la dalle) : la lumière en sort, puis s'y enfonce et s'éteint dessous
+  const x1 = STEP * i + 0.76 * W;
+  const y1 = (i % 2) * WAVE + 0.6 * H;
+  const x2 = STEP * (i + 1) + 0.24 * W;
+  const y2 = ((i + 1) % 2) * WAVE + 0.6 * H;
+  return `M${x1.toFixed(1)} ${y1.toFixed(1)}C${(x1 + 60).toFixed(1)} ${(y1 + 16).toFixed(1)} ${(x2 - 60).toFixed(1)} ${(y2 + 16).toFixed(1)} ${x2.toFixed(1)} ${y2.toFixed(1)}`;
+});
 ---
 
-<section class="tile tile--dark manifesto" id="manifeste" aria-labelledby="manifeste-title">
-  {/* flou progressif retiré (au-dessus de la Hero) : <ProgressiveBlur toward="top" /> */}
+<section class:list={['tile', 'tile--dark', 'manifesto', title && 'manifesto--steps', plain && 'manifesto--plain']} id={id} aria-labelledby={headId} style={`--n:${N};--nl:${N - 1}`}>
   <div class="grain-layer" aria-hidden="true"></div>
   <div class="wrap tile-inner">
-    <h2 id="manifeste-title" class="manifesto-quote">
-      Avant les écrans, il y a vos <em class="manifesto-word">besoins</em>.
-    </h2>
-    <p class="manifesto-lead">
-      Je commence par comprendre votre activité, vos utilisateurs et ce que le projet doit permettre.
-    </p>
+    {/* les mots sont découpés ici, pas par le script : leur allumage au défilement est joué en CSS (animation-timeline, voir scenes.css) */}
+    {
+      title ? (
+        <header class="tile-head">
+          {label && <p class="tile-label"><R t={label} /></p>}
+          <h2 id={headId}><R t={title} /></h2>
+          {sub && <p class="tile-sub"><R t={sub} /></p>}
+        </header>
+      ) : (
+        <>
+          <h2 id={headId} class="manifesto-quote" style={`--n:${quote.length + 2}`}>
+            {quote.map((w, i) => <><span class="w" style={`--i:${i}`}>{w}</span>{' '}</>)}<em class="manifesto-word"><span class="w" style={`--i:${quote.length}`}>besoins</span></em><span class="w" style={`--i:${quote.length + 1}`}>.</span>
+          </h2>
+          <p class="manifesto-lead">Je commence par les comprendre. Tout le reste en découle.</p>
+        </>
+      )
+    }
 
-    <ol class="proofs" role="list">
+    {/* les liens entre les étapes : une ligne en pointillés, discrète, que parcourt une lueur blanche avec sa traînée, d'une scène à la
+        suivante ; à son arrivée, le socle s'éclaire. Décoratif. */}
+    <div class="steps">
+    <svg class="steps-links" viewBox={plain ? '0 0 1000 72' : `0 0 1000 ${H.toFixed(1)}`} preserveAspectRatio="none" aria-hidden="true" focusable="false">
       {
-        proofs.map((p, i) => (
-          <li class={`proof proof--${i + 1}`}>
+        (plain ? plainLinks : links).map((d, i) => (
+          <g class="link" style={`--i:${i}`}>
+            <path class="link-line" d={d} />
+            <path class="link-light link-halo" d={d} pathLength="1" />
+            {[1, 2, 3, 4, 5].map((k) => <path class={`link-light link-tail link-t${k}`} d={d} pathLength="1" />)}
+            <path class="link-light link-head" d={d} pathLength="1" />
+          </g>
+        ))
+      }
+    </svg>
+    <ol class="proofs" role="list" aria-label="La démarche, en quatre étapes">
+      {
+        steps.map((p, i) => (
+          <li class={`proof proof--${i + 1}`} style={`--i:${i}`}>
+            {/* téléphone : le lien vers l'étape suivante, une courbe en S d'une scène à l'autre (elles alternent de côté) */}
+            {i < N - 1 && (
+              <svg class="proof-link" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+                <path class="link-line" d={plain ? 'M50 0V100' : i % 2 ? 'M100 0C88 32 18 42 0 100' : 'M0 0C12 32 82 42 100 100'} />
+                <path class="link-light link-halo" d={plain ? 'M50 0V100' : i % 2 ? 'M100 0C88 32 18 42 0 100' : 'M0 0C12 32 82 42 100 100'} pathLength="1" />
+                {[1, 2, 3, 4, 5].map((k) => <path class={`link-light link-tail link-t${k}`} d={plain ? 'M50 0V100' : i % 2 ? 'M100 0C88 32 18 42 0 100' : 'M0 0C12 32 82 42 100 100'} pathLength="1" />)}
+                <path class="link-light link-head" d={plain ? 'M50 0V100' : i % 2 ? 'M100 0C88 32 18 42 0 100' : 'M0 0C12 32 82 42 100 100'} pathLength="1" />
+              </svg>
+            )}
             <div class="proof-art" aria-hidden="true">
-              <i class="proof-shape" />
+              {!plain && <div class="proof-float"><Fragment set:html={p.art} /></div>}
               <span class="proof-n">{String(i + 1).padStart(2, '0')}</span>
             </div>
             <div class="proof-body">
               <h3><R t={p.t} /></h3>
               <p><R t={p.d} /></p>
+              {p.gets && <p class="proof-gets"><span>Vous recevez</span> <R t={p.gets} /></p>}
             </div>
           </li>
         ))
       }
     </ol>
+    </div>
+    {after && <p class="manifesto-after"><R t={after} /></p>}
+    {more && (
+      <p class="manifesto-more">
+        <LinkUnder href="/creation-site-web/#methode" label="La démarche en détail" tone="light" arrow />
+      </p>
+    )}
   </div>
 </section>
+
+<script>
+  // Les scènes isométriques ne s'animent que lorsqu'elles sont à l'écran (data-play) : hors champ, aucune animation ne tourne.
+  // Avec « réduire les animations », rien n'est posé : les scènes restent fixes (voir Manifesto.css).
+  // Téléphone (zigzag) : le lien d'une scène à la suivante est une seule courbe en S, aux tangentes verticales (il part et arrive en descendant), dont le
+  // passage d'une colonne à l'autre est placé dans l'écart entre deux lignes. Les textes d'une étape peuvent être plus hauts que sa scène : la courbe est
+  // donc calculée d'après les hauteurs réelles, pour ne jamais passer sous un texte, tout en gardant le même dessin courbe sur toutes les pages. En pixels
+  // (le repère du SVG est ses dimensions réelles).
+  const fitLinks = () => {
+    const narrow = matchMedia('(max-width: 760px)').matches;
+    document.querySelectorAll('.manifesto:not(.manifesto--plain) .proof-link').forEach((svg) => {
+      const li = svg.parentElement;
+      const next = li && li.nextElementSibling;
+      if (!li || !next) return;
+      const paths = svg.querySelectorAll('path');
+      if (!svg.dataset.d0) {
+        svg.dataset.d0 = paths[0].getAttribute('d');
+        svg.dataset.vb0 = svg.getAttribute('viewBox');
+      }
+      if (!narrow) {
+        paths.forEach((pth) => pth.setAttribute('d', svg.dataset.d0));
+        svg.setAttribute('viewBox', svg.dataset.vb0);
+        return;
+      }
+      const w = svg.clientWidth;
+      const h = svg.clientHeight;
+      if (!w || !h) return;
+      const sr = svg.getBoundingClientRect();
+      const lr = li.getBoundingClientRect();
+      const rowBottom = lr.bottom - sr.top; // le bas de la ligne, dans le repère du lien
+      const gap = next.getBoundingClientRect().top - lr.bottom;
+      const odd = [...li.parentElement.children].indexOf(li) % 2 === 1;
+      const xs = odd ? w : 0;
+      const xe = odd ? 0 : w;
+      // deux poignées verticales : la première au bas de la ligne, la seconde au haut de la ligne suivante : la courbe descend droit dans la colonne de sa
+      // scène, ne change de colonne que dans l'écart entre les deux lignes, puis descend droit jusqu'au socle suivant
+      const g = Math.max(gap, 16);
+      const a = Math.min(rowBottom, h - g);
+      const b = Math.min(rowBottom + g, h);
+      const d = `M${xs} 0C${xs} ${a} ${xe} ${b} ${xe} ${h}`;
+      svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+      paths.forEach((pth) => pth.setAttribute('d', d));
+    });
+  };
+  fitLinks();
+  addEventListener('resize', fitLinks);
+  addEventListener('load', fitLinks);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitLinks);
+
+  if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.querySelectorAll('.manifesto .steps').forEach((list) => {
+      new IntersectionObserver(
+        ([en]) => {
+          if (en.isIntersecting) list.setAttribute('data-play', '');
+          else list.removeAttribute('data-play');
+        },
+        { rootMargin: '10% 0px 10% 0px' },
+      ).observe(list);
+    });
+  }
+</script>

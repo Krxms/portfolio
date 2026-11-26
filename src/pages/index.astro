@@ -4,76 +4,37 @@ import { plain } from '../lib/fmt';
 import Tile from '../components/Tile.astro';
 import Hero from '../components/Hero.astro';
 import HeroAmbient from '../components/HeroAmbient.astro';
-import ProgressiveBlur from '../components/ProgressiveBlur.astro';
+import HeroMobileArt from '../components/HeroMobileArt.astro';
 import Manifesto from '../components/Manifesto.astro';
 import ServiceCards from '../components/ServiceCards.astro';
 import ProjectTeaser from '../components/ProjectTeaser.astro';
 import Reviews from '../components/Reviews.astro';
 import Faq from '../components/Faq.astro';
-import ExplodedProcess from '../components/ExplodedProcess.astro';
 import AboutMini from '../components/AboutMini.astro';
 import FinalCta from '../components/FinalCta.astro';
 import StickyCta from '../components/StickyCta.astro';
 import '../styles/scenes.css';
 
-const steps = [
-  {
-    title: 'Comprendre',
-    text: 'Un premier échange pour cerner vos clients, vos objectifs et ce que le site doit vous apporter. \nPour une refonte, je fais une lecture rapide de votre site actuel.',
-  },
-  {
-    title: 'Cadrer',
-    text: 'Nous précisons le périmètre : pages, contenus, fonctionnalités et calendrier. \nLe projet démarre à la validation du devis et au versement de l’acompte.',
-    gets: 'Un devis détaillé, valable 30 jours.',
-  },
-  {
-    title: 'Concevoir',
-    text: 'J’organise les contenus et la navigation, puis je conçois les écrans pour ordinateur et mobile. \nNous échangeons sur les maquettes, que j’ajuste selon les étapes et les retours prévus au devis.',
-    gets: 'Le plan du site et les maquettes validées.',
-  },
-  {
-    title: 'Réaliser',
-    text: 'Je construis votre site avec l’outil retenu (WordPress, Webflow, développement sur mesure…), avec les bases du référencement. \nJe le teste sur différents écrans et navigateurs, puis je le mets en ligne. Le solde est facturé à la livraison.',
-    gets: 'Votre site en ligne, les accès convenus et, si vous administrez votre site, une prise en main adaptée.',
-  },
-];
-
 const faq = [
   {
     q: 'Combien coûte un site ou une interface ?',
-    a: 'Cela dépend du nombre de pages ou d’écrans, des contenus et des fonctionnalités. Après un premier échange gratuit, je vous envoie un devis gratuit et détaillé : vous savez exactement ce qui est inclus avant de vous engager.',
+    a: 'Cela dépend du nombre de pages ou d’écrans, des contenus et des fonctionnalités. Après un premier échange gratuit, vous recevez un devis détaillé : vous savez ce qui est inclus avant de vous engager.',
   },
   {
     q: 'Combien de temps faut-il ?',
-    a: 'Le calendrier dépend de votre projet et de la rapidité de vos retours. Il est fixé avec vous dans le devis, pas avant.',
+    a: 'Cela dépend de votre projet et de la rapidité de vos retours. Le calendrier est fixé avec vous dans le devis.',
   },
   {
     q: 'Que dois-je préparer avant de vous écrire ?',
-    a: 'Rien d’obligatoire : pas besoin de cahier des charges. Quatre choses m’aident à démarrer, même incomplètes : ce que l’interface doit permettre (une phrase suffit), quelques exemples qui vous plaisent, ce qui existe déjà (logo, textes, photos, accès) et votre échéance, même approximative. Si vous ne les avez pas, nous les trouvons ensemble au premier échange.',
-  },
-  {
-    q: 'Dois-je fournir les textes et les images ?',
-    a: 'Oui, en général. Je vous dis dès le départ ce qu’il faut préparer et sous quelle forme. La rédaction n’est pas incluse dans le devis de base.',
-  },
-  {
-    q: 'À qui appartient le site ?',
-    a: 'Les créations finales originales réalisées pour vous vous sont cédées au paiement intégral, pour votre activité et votre communication. Les outils et composants tiers (CMS, thèmes, extensions, polices) restent soumis à leurs licences. Le nom de domaine et l’hébergement sont ouverts à votre nom lorsque c’est possible.',
+    a: 'Rien d’obligatoire, pas même un cahier des charges. Une phrase sur ce que le projet doit permettre, quelques exemples qui vous plaisent et votre échéance suffisent pour démarrer.',
   },
   {
     q: 'Mon site ou mon logiciel existe déjà : par où commencer ?',
-    a: 'Pour établir un devis de refonte, je fais une lecture rapide de votre site, gratuite et sans rapport écrit. Pour un diagnostic détaillé avant de décider, vous pouvez commander un audit UX/UI.',
-  },
-  {
-    q: 'Travaillez-vous sur des applications et des logiciels ?',
-    a: 'Oui. Je conçois ou fais évoluer les interfaces de logiciels métier, de produits SaaS et d’outils internes : audit, parcours, wireframes, prototypes, conception UI et spécifications. Je peux réaliser l’intégration front-end lorsque je prends en charge le projet complet. Je rejoins aussi des équipes en renfort ponctuel, comme designer UX/UI.\nAvant de me mettre à mon compte, j’ai conçu pendant environ deux ans les interfaces d’un logiciel SaaS de gestion de maintenance.',
+    a: 'Pour un devis de refonte, une lecture rapide de votre site suffit, gratuite et sans rapport écrit. Pour un diagnostic détaillé avant de décider, vous pouvez commander un audit UX/UI.',
   },
   {
     q: 'Avec quelles technologies travaillez-vous ?',
-    a: 'Celles qui servent votre projet : WordPress (classique ou headless), Webflow, des outils no-code ou low-code quand ils suffisent, du code sur mesure (HTML, CSS, JavaScript, React, Astro) quand il le faut. Je vous recommande ce qui convient à votre besoin, à votre budget et à votre autonomie après la livraison.',
-  },
-  {
-    q: 'Travaillez-vous à distance ?',
-    a: 'Oui. Je travaille en Île-de-France et à distance partout en France ; nous pouvons nous rencontrer si c’est plus simple pour vous.',
+    a: 'Celles qui servent votre projet : WordPress, Webflow, du no-code quand il suffit, du code sur mesure (HTML, CSS, JavaScript, React, Astro) quand il le faut. Je vous recommande ce qui convient à votre budget et à votre autonomie.',
   },
 ];
 
@@ -96,35 +57,30 @@ const schema = {
   title="Antoine Bruneau"
   description="Conception et réalisation de sites web, conception UX/UI d’interfaces de logiciels métier, refonte et audit. Île-de-France et à distance."
 >
+  {/* Accueil, en alternance clair / sombre : la Hero (clair), les offres (sombre : elles passent par-dessus la Hero, comme le faisait le
+      manifeste), l'aperçu du projet (clair), la démarche (sombre), Qui suis-je (clair), puis la FAQ et l'appel final (sombres). */}
   <div class="curtain">
   <div class="hero-zone hero-zone--atelier">
     <HeroAmbient />
-    {/* flou progressif retiré de la Hero : <ProgressiveBlur toward="bottom" /> */}
+    <HeroMobileArt />
     <Hero />
   </div>
 
-  <Manifesto />
-  </div>
-
-  <Tile id="services" title="Un site pour votre activité.\nDes interfaces pour vos métiers.">
+  <Tile id="services" tone="dark" title="Un site pour votre activité.\nDes interfaces pour vos métiers.">
     <ServiceCards />
   </Tile>
+  </div>
 
-  <ExplodedProcess
-    title="Du premier échange au site en ligne."
-    sub="Quatre étapes, des décisions partagées et un cadre défini dès le départ."
-    steps={steps}
-    note="Pour les logiciels, la démarche s’adapte à votre organisation : parcours, écrans et prototypes, transmis à votre équipe ou intégrés lorsque je réalise le projet. \nEn renfort d’équipe, j’interviens comme designer UX/UI."
-    after="<strong>Après la livraison :</strong> vous gérez votre site vous-même, ou vous me confiez sa maintenance, sur devis ou contrat distinct."
-  />
-
-  <ProjectTeaser progress caseStudy />
+  <ProjectTeaser brief progress />
 
   <Reviews />
 
-  <div class="dark-zone">
-    <AboutMini />
+  <Manifesto />
 
+  {/* Qui suis-je, sur le papier clair : une respiration entre la démarche (sombre) et la FAQ et le contact (sombres) */}
+  <AboutMini tone="light" />
+
+  <div class="dark-zone">
     <Tile id="faq" tone="dark" title="Questions fréquentes" sub={'Ce que l’on me demande le plus souvent.\nUne autre question ? Écrivez-moi.'}>
       <Faq items={faq} />
     </Tile>

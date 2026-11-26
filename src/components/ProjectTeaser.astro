@@ -18,8 +18,10 @@ interface Props {
   progress?: boolean;
   /** présentation en étude de cas : le besoin, ce que j'ai fait, les chiffres (essai sur la page Création) */
   caseStudy?: boolean;
+  /** accueil : un bloc visuel (titre, scène, une légende sur un choix de conception), sans texte de présentation ni scores */
+  brief?: boolean;
 }
-const { href = '/projets/le-cuistologue/', label = 'Réalisations', progress = false, caseStudy = false } = Astro.props;
+const { href = '/projets/le-cuistologue/', label = 'Réalisations', progress = false, caseStudy = false, brief = false } = Astro.props;
 const img = (m: { src: string; width: number; height: number }) => ({ src: m.src, width: m.width, height: m.height });
 // la scène fait toute la largeur du bloc : le site y occupe environ 90 % (téléphone) ou 58 % (ordinateur), le téléphone 32 % ou 18 %,
 // chaque carte 28 % ou 16 %
@@ -31,15 +33,15 @@ const cardsR = await Promise.all([cardVert, cardOrange, cardRose].map((c) => res
 {/* Une vitrine : le titre et le texte au-dessus, puis une scène bleue où le projet est montré tel qu'il a été livré (le site sur ordinateur
     et mobile, les cartes de visite), devant des formes en béton coloré qui font partie de la composition. Sur l'accueil, une liste sobre
     des projets à venir ferme la section ; leur détail vit sur la page À propos. Pas d'ombre dure orange : le papier, un filet, un aplat. */}
-<section class="tile tile--light project-tile" id="projet" aria-labelledby="projet-title">
+<section class:list={['tile', 'tile--light', 'project-tile', brief && 'project-tile--brief', caseStudy && 'project-tile--case']} id="projet" aria-labelledby="projet-title">
   <div class="wrap tile-inner">
     <div class="showcase">
       <header class="sc-head">
         <div class="sc-title">
-          <p class="tile-label"><R t={label} /></p>
-          <h2 id="projet-title">Le Cuistologue</h2>
+          <p class="tile-label"><R t={brief ? 'Réalisation · Le Cuistologue' : label} /></p>
+          <h2 id="projet-title">{brief ? 'Faire confiance avant d’ouvrir sa porte.' : 'Le Cuistologue'}</h2>
           {
-            caseStudy ? (
+            brief ? null : caseStudy ? (
               <dl class="sc-case">
                 <div>
                   <dt>Le besoin</dt>
@@ -56,8 +58,9 @@ const cardsR = await Promise.all([cardVert, cardOrange, cardRose].map((c) => res
               </p>
             )
           }
-          {caseStudy && <p class="sc-case-label">En chiffres</p>}
+          {caseStudy && !brief && <p class="sc-case-label">En chiffres</p>}
           {/* Les scores mesurés avec Lighthouse (l'outil d'audit de Google), en jauges : le même langage visuel que le rapport d'origine. */}
+          {!brief && (
           <figure class="sc-scores">
             <ul role="list" aria-label="Scores Lighthouse du site, sur 100">
               {
@@ -87,6 +90,7 @@ const cardsR = await Promise.all([cardVert, cardOrange, cardRose].map((c) => res
             </ul>
             <figcaption>Mesuré avec Lighthouse : un contrôle automatisé de bonnes pratiques, pas une mesure de positionnement ni un audit SEO complet.</figcaption>
           </figure>
+          )}
         </div>
         <ul class="sc-scope" role="list" aria-label="Ce que j’ai réalisé">
           <li>Identité visuelle</li>
@@ -127,6 +131,16 @@ const cardsR = await Promise.all([cardVert, cardOrange, cardRose].map((c) => res
           <svg viewBox="0 0 16 16" width="14" height="14"><path d="M3 8h9.5M8.5 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg>
         </span>
       </a>
+
+      {/* accueil : la légende de la scène, un choix de conception tiré de l'étude de cas */}
+      {
+        brief && (
+          <p class="sc-caption">
+            <span class="sc-caption-label">Choix de conception</span>
+            Le service expliqué dès le premier écran, puis deux chemins : voir les formules ou demander un devis.
+          </p>
+        )
+      }
 
       {
         progress && (

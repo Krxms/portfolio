@@ -5,8 +5,10 @@ import { plain } from '../lib/fmt';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Tile from '../components/Tile.astro';
 import PageHero from '../components/PageHero.astro';
-import ExplodedProcess from '../components/ExplodedProcess.astro';
+import Manifesto from '../components/Manifesto.astro';
+import { auditScenes } from '../lib/isoScenes';
 import Faq from '../components/Faq.astro';
+import ProjectTeaser from '../components/ProjectTeaser.astro';
 import LinkUnder from '../components/LinkUnder.astro';
 import FinalCta from '../components/FinalCta.astro';
 import StickyCta from '../components/StickyCta.astro';
@@ -50,6 +52,16 @@ const cases = [
   { t: 'Un produit qu’on ne voit plus', d: 'À force de le côtoyer, on s’y habitue : un regard neuf remarque ce qui gêne vos utilisateurs.' },
 ];
 
+// Les affiches des cartes (téléphone) : une fenêtre blanche, un dessin par situation. Retoucher ou refaire (l'écran en deux états), peu de demandes
+// (des visites, un formulaire resté vide), un regard neuf (une loupe sur un écran).
+const cw = (inner: string) =>
+  `<svg class="cs-case-svg" viewBox="0 0 120 64" focusable="false"><rect x="2" y="2" width="116" height="60" rx="7" fill="#fff"/>${inner}</svg>`;
+const casePicto = [
+  cw('<rect x="10" y="12" width="40" height="30" rx="3" fill="#e3e6ee"/><rect x="14" y="17" width="18" height="3" rx="1.5" fill="#a9b1c6"/><rect x="14" y="24" width="28" height="2.4" rx="1.2" fill="#c8cede"/><rect x="14" y="30" width="22" height="2.4" rx="1.2" fill="#c8cede"/><path d="M56 27h10m-4-4l4 4-4 4" stroke="#ee8532" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/><rect x="72" y="12" width="40" height="30" rx="3" fill="#eef2ff" stroke="#1a3cbf" stroke-width="1.2"/><rect x="76" y="17" width="18" height="3.4" rx="1.7" fill="#1a3cbf"/><path d="M76 38V30a6 6 0 0 1 12 0v8z" fill="#a6d4ca"/><rect x="92" y="32" width="16" height="5" rx="2.5" fill="#ee8532"/><text x="30" y="54" font-size="7" text-anchor="middle" fill="#7a8195" font-family="inherit">avant</text><text x="92" y="54" font-size="7" text-anchor="middle" fill="#1a3cbf" font-weight="700" font-family="inherit">après</text>'),
+  cw('<g fill="#1a3cbf"><rect x="12" y="34" width="6" height="12" rx="1.5"/><rect x="21" y="26" width="6" height="20" rx="1.5"/><rect x="30" y="18" width="6" height="28" rx="1.5"/><rect x="39" y="22" width="6" height="24" rx="1.5"/></g><path d="M10 48H48" stroke="#c8cede" stroke-width="1.2"/><rect x="58" y="12" width="52" height="38" rx="4" fill="#f3f6fb" stroke="#dfe5f3"/><rect x="63" y="18" width="42" height="6" rx="2" fill="#fff" stroke="#dfe5f3"/><rect x="63" y="28" width="42" height="10" rx="2" fill="#fff" stroke="#dfe5f3"/><rect x="83" y="42" width="22" height="5" rx="2.5" fill="#c8cede"/><circle cx="104" cy="14" r="6" fill="#ee8532"/><text x="104" y="16.6" font-size="7.5" text-anchor="middle" fill="#fff" font-weight="700" font-family="inherit">0</text>'),
+  cw('<rect x="10" y="10" width="70" height="44" rx="4" fill="#f3f6fb" stroke="#dfe5f3"/><rect x="16" y="16" width="30" height="4" rx="2" fill="#1a3cbf"/><rect x="16" y="25" width="56" height="3" rx="1.5" fill="#c8cede"/><rect x="16" y="32" width="44" height="3" rx="1.5" fill="#c8cede"/><rect x="16" y="41" width="20" height="7" rx="3.5" fill="#a6d4ca"/><circle cx="84" cy="34" r="14" fill="rgb(255 255 255 / 0.6)" stroke="#ee8532" stroke-width="4"/><path d="M94 44l10 10" stroke="#ee8532" stroke-width="5" stroke-linecap="round"/>'),
+];
+
 // Les cinq points examinés, dans l'ordre des repères numérotés de la scène (voir .cs-pin).
 const examined = [
   { t: 'Les parcours qui comptent', d: 'De la page d’arrivée jusqu’à l’action attendue : contact, achat, inscription, formulaires compris.' },
@@ -59,11 +71,12 @@ const examined = [
   { t: 'L’accessibilité et la cohérence', d: 'Contrastes mesurés, usage au clavier, libellés des champs, composants qui se ressemblent quand ils font la même chose.' },
 ];
 
+// La démarche de l'audit : ses quatre étapes à lui (ce n'est pas un site à construire) ; « Vous recevez » : ce qu'apporte chaque étape.
 const steps = [
-  { title: 'Cadrage', text: 'Vos objectifs, vos utilisateurs, les parcours à examiner et les données que vous avez déjà.', gets: 'Un périmètre écrit, dans le devis.' },
-  { title: 'Revue', text: 'Je parcours le site ou le produit comme le ferait un utilisateur, puis je relève chaque problème avec une capture.', gets: 'Une liste de constats illustrés.' },
-  { title: 'Priorisation', text: 'Chaque recommandation est classée selon son effet attendu et l’effort qu’elle demande.', gets: 'Un ordre d’action clair.' },
-  { title: 'Restitution', text: 'Je vous présente les résultats et je réponds à vos questions.', gets: 'Le rapport commenté.' },
+  { t: 'Cadrage', d: 'Vos objectifs, vos utilisateurs et les parcours à examiner.', gets: 'Un périmètre écrit, dans le devis.' },
+  { t: 'Revue', d: 'Je parcours votre interface comme un utilisateur et relève chaque problème, capture à l’appui.', gets: 'Des constats illustrés.' },
+  { t: 'Priorisation', d: 'Chaque recommandation est classée selon son effet attendu et l’effort qu’elle demande.', gets: 'Un ordre d’action clair.' },
+  { t: 'Restitution', d: 'Je vous présente les résultats et réponds à vos questions.', gets: 'Le rapport commenté.' },
 ];
 
 // Ce que contient le rapport : valable pour tout audit, quel que soit son périmètre (fixé avec vous avant le devis).
@@ -117,9 +130,13 @@ schema['@graph'].push({
 ---
 
 <BaseLayout title="Audit UX/UI de site web ou de logiciel" description={description} schema={schema}>
+  {/* Alternance clair / sombre, comme les autres pages de service : la Hero (clair), ce que j'examine (sombre, qui passe par-dessus la Hero :
+      le rideau), quand un audit est utile (clair), la démarche (sombre), le Cuistologue (clair), puis ce que vous recevez, la FAQ et l'appel final (sombres). */}
+  <div class="curtain">
   <PageHero
+    modern
     crumb="Audit UX/UI"
-    kicker="Audit UX/UI · Site, application & logiciel"
+    kicker="Audit UX/UI · Sites et logiciels"
     line1="Voir ce qui freine."
     line2="Savoir quoi changer."
     lead={'Une analyse de votre site ou de votre logiciel, avec des constats illustrés et des recommandations classées par priorité.'}
@@ -127,10 +144,10 @@ schema['@graph'].push({
     ctaLabel="Demander un audit"
     linkHref="#livrable"
     linkLabel="Voir le rapport"
-    note="Devis gratuit et détaillé · Réponse généralement sous deux jours ouvrés · 50 % de l’audit déduit si le projet suit dans les 3 mois"
+    note="Premier échange gratuit et sans engagement · 50 % de l’audit déduit si le projet suit dans les 3 mois"
   />
 
-  <section class="tile tile--light" id="perimetre" aria-labelledby="perimetre-title">
+  <section class="tile tile--dark tile--mesh-a cs-dark" id="perimetre" aria-labelledby="perimetre-title">
     <div class="wrap wrap--wide tile-inner">
       <header class="tile-head">
         <p class="tile-label">Ce que j’examine</p>
@@ -198,20 +215,49 @@ schema['@graph'].push({
         }
       </ol>
 
-      {/* « Quand un audit est utile » : le prolongement de la liste. On a vu ce que j'examine, voici les trois situations où cela sert. Il ouvre aussi la page (le chapô évoque déjà ces symptômes), la scène reste donc le premier grand visuel. */}
-      <div class="cs-when" id="quand">
-        <h3>Quand un audit est <em>utile</em>.</h3>
-        <ul class="cs-commit cs-commit--light" role="list">
-          {cases.map((c) => <li><strong><R t={c.t} /></strong><p><R t={c.d} /></p></li>)}
-        </ul>
+    </div>
+  </section>
+  </div>
+
+  {/* Quand un audit est utile : présenté comme « Vous choisissez l'ampleur » (page Refonte). Ordinateur : un panneau bleu, trois lignes (la situation,
+      puis ce que l'audit apporte). Téléphone : trois cartes bleues dans un carrousel latéral ; en haut de chaque carte, une affiche dont la fenêtre
+      illustre la situation (sans jauge). */}
+  <section class="tile tile--light cs-quand" id="quand" aria-labelledby="quand-title">
+    <div class="wrap wrap--wide tile-inner">
+      <header class="tile-head">
+        <h2 id="quand-title">Quand un audit est <em>utile</em>.</h2>
+      </header>
+      <div class="cs-lv-panel panel-blue panel-blue--riso cs-cases">
+        <ol class="cs-lv-list" role="list">
+          {
+            cases.map((c, i) => (
+              <li class="cs-lv">
+                <div class="cs-lv-gauge cs-case-poster" aria-hidden="true">
+                  <i class="cs-lv-sh"></i>
+                  <i class="cs-lv-sh"></i>
+                  <div class="cs-lv-win">
+                    <Fragment set:html={casePicto[i]} />
+                  </div>
+                </div>
+                <div class="cs-lv-main">
+                  <h3><R t={c.t} /></h3>
+                </div>
+                <p class="cs-case-d"><R t={c.d} /></p>
+              </li>
+            ))
+          }
+        </ol>
       </div>
     </div>
   </section>
 
-  <ExplodedProcess plain title="Comment je procède" sub="Quatre étapes, et à chacune quelque chose de concret à valider." steps={steps} />
+  <Manifesto id="methode" arts={auditScenes} title="Comment je procède" sub="Quatre étapes, et à chacune quelque chose de concret à valider." steps={steps} />
 
+  <ProjectTeaser label="Réalisation" caseStudy />
+
+  {/* Ce que vous recevez : dans la zone sombre de bas de page, comme « Un cadre clair » sur les autres pages de service */}
   <div class="dark-zone">
-    <Tile tone="dark" wide id="livrable" title="Ce que vous recevez." sub="Des constats concrets et un ordre de priorité.">
+  <Tile wide id="livrable" tone="dark" title="Ce que vous recevez." sub="Des constats concrets et un ordre de priorité.">
       {/* tout ce qui suit le sous-titre apparaît d'un seul bloc, en fondu, quand ses mots arrivent vers la fin (scenes.js) */}
       <div class="cs-follow">
         <ul class="cs-commit" role="list">
@@ -258,7 +304,7 @@ schema['@graph'].push({
           </ul>
         </div>
       </div>
-    </Tile>
+  </Tile>
 
     <Tile id="faq" tone="dark" title="Avant de vous lancer" sub="Les questions qui reviennent le plus, en quelques lignes. Une autre vous vient ? Un message suffit.">
       <Faq items={faq} />

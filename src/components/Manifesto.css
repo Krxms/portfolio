@@ -39,9 +39,7 @@
     radial-gradient(56% 36% at 10% 12%, rgb(255 196 100 / 0.12), transparent 72%),
     radial-gradient(60% 40% at 12% 78%, rgb(70 120 255 / 0.22), transparent 74%),
     linear-gradient(180deg, #131f76 0%, #2a1c70 100%);
-  /* le haut est translucide : le bas des gouttes de la Hero, qui déborde dessous, y reste visible, flouté de façon progressive */
-  -webkit-mask-image: linear-gradient(180deg, rgb(0 0 0 / 0.5), #000 340px);
-  mask-image: linear-gradient(180deg, rgb(0 0 0 / 0.5), #000 340px);
+  /* opaque : la section ne passe plus par-dessus la Hero (elle suit l'aperçu du projet) */
 }
 
 @media (prefers-reduced-transparency: reduce) {
@@ -86,28 +84,67 @@
 }
 
 
-/* ---------- Trois preuves de méthode : trois colonnes ouvertes, un filet en haut, sans cadre ---------- */
+/* ---------- La démarche en quatre étapes : une infographie isométrique ----------
+   Quatre scènes (src/lib/isoScenes.ts) reliées d'une scène à la suivante par un câble courbe en relief, que parcourt une pulsion lumineuse ;
+   à son arrivée, le socle s'éclaire d'un halo. Ordinateur : une rangée, scènes et textes alignés. Téléphone : un zigzag,
+   les scènes alternent à gauche et à droite, reliées par des courbes en S. Chaque scène flotte doucement de haut en bas, en décalé avec ses voisines. */
+.steps {
+  --g: clamp(14px, 2.4vw, 36px);
+  /* largeur d'une scène, et la vague */
+  --w: calc((100cqw - 3 * var(--g)) / 4);
+  position: relative;
+  max-width: 1160px;
+  margin: clamp(28px, 4.5vw, 56px) auto 0;
+  container-type: inline-size;
+}
+
 .proofs {
-  max-width: 1120px;
-  margin: clamp(40px, 6vw, 80px) auto 0;
+  position: relative;
+  z-index: 1;
+  margin: 0;
   padding: 0;
   list-style: none;
-  border-bottom: 1px solid rgb(255 255 255 / 0.2);
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--g);
 }
 
-/* Trois lignes éditoriales, sans carte (les offres de l'accueil, juste après, en utilisent déjà) : le numéro en grand à gauche, le titre,
-   puis le texte, séparés par un filet. Sur mobile, le texte passe sous le titre. */
 .proof {
-  display: grid;
-  grid-template-columns: clamp(64px, 9vw, 112px) minmax(0, 1fr) minmax(0, 1.25fr);
-  align-items: baseline;
-  column-gap: clamp(16px, 3vw, 48px);
-  padding-block: clamp(22px, 3vw, 36px);
-  border-top: 1px solid rgb(255 255 255 / 0.2);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
 }
+
 
 .proof-art {
+  position: relative;
   display: block;
+}
+
+/* le halo d'arrivée : une flaque de lumière sous le socle, qui s'allume quand la pulsion arrive (opacité seule : jouée par la carte graphique) */
+.proof-art::before {
+  content: '';
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  top: 30%;
+  height: 56%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgb(255 255 255 / 0.32), rgb(214 226 255 / 0.12) 55%, rgb(214 226 255 / 0) 100%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.proof-float {
+  position: relative;
+}
+
+.proof-art svg {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 
 .proof-shape {
@@ -115,32 +152,135 @@
 }
 
 .proof-n {
+  position: absolute;
+  z-index: 1;
+  left: 2px;
+  top: 0;
   font-family: var(--font-display);
-  font-size: clamp(2.4rem, 4.4vw, 3.8rem);
+  font-size: clamp(1.4rem, 2.2vw, 1.9rem);
   font-weight: 700;
   line-height: 1;
   letter-spacing: -0.021em;
-  /* numéros du manifeste : l'orange de la charte */
   color: #ee8532;
 }
 
 .proof-body {
-  display: contents;
+  display: block;
 }
 
 .proof h3 {
   margin: 0;
-  font-size: clamp(1.3rem, 2vw, 1.75rem);
+  font-size: clamp(1.2rem, 1.7vw, 1.45rem);
   line-height: 1.2;
   letter-spacing: -0.02em;
-  text-wrap: balance;
 }
 
 .proof p {
-  margin: 0;
-  font-size: 16px;
-  line-height: 1.6;
-  color: rgb(255 255 255 / 0.86);
+  margin: 4px 0 0;
+  max-width: 24ch;
+  font-size: 15.5px;
+  line-height: 1.45;
+  color: rgb(255 255 255 / 0.82);
+  text-wrap: balance;
+}
+
+/* ---------- les câbles ---------- */
+/* ordinateur : un calque au-dessus des scènes, de la hauteur d'une scène plus la vague (même repère que les tracés, voir Manifesto.astro) */
+.steps-links {
+  position: absolute;
+  /* sous les scènes : la lumière passe sous les socles */
+  z-index: 0;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: calc(var(--w) * 0.88);
+  overflow: visible;
+  pointer-events: none;
+}
+
+.proof-link {
+  display: none;
+}
+
+:is(.steps-links, .proof-link) path {
+  fill: none;
+  vector-effect: non-scaling-stroke;
+  stroke-linecap: round;
+}
+
+/* la ligne : des points unis, ronds, peu opaques (un seul tracé, pas de filet au milieu) */
+:is(.steps-links, .proof-link) .link-line {
+  stroke: rgb(214 226 255 / 0.32);
+  stroke-width: 2.2;
+  stroke-dasharray: 0 7;
+}
+
+/* La lueur qui parcourt la ligne : une tête blanche, une traînée en deux longueurs de plus en plus pâles, un halo large et très doux.
+   Toutes les couches se terminent au même point : la position --p (animée, voir link-light) ; chacune est un tiret unique de longueur --len
+   (pathLength = 1, l'espace qui suit dépasse la longueur du tracé), décalé pour finir sur --p. */
+@property --p {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 0;
+}
+
+:is(.steps-links, .proof-link) .link-light {
+  --p: 0;
+  stroke: #ffffff;
+  stroke-dasharray: var(--len) 3;
+  stroke-dashoffset: calc(var(--len) - var(--p));
+  opacity: 0;
+}
+
+/* la tête : un point blanc net */
+:is(.steps-links, .proof-link) .link-head {
+  --len: 0.012;
+  stroke-width: 3.6;
+}
+
+/* la traînée : cinq longueurs de plus en plus longues, de plus en plus fines et pâles, toutes terminées sur la tête : en se superposant, elles
+   dessinent un dégradé continu (la comète), sans palier visible */
+:is(.steps-links, .proof-link) .link-tail {
+  stroke-linecap: round;
+}
+
+:is(.steps-links, .proof-link) .link-t1 {
+  --len: 0.035;
+  stroke-width: 2.6;
+  stroke: rgb(255 255 255 / 0.5);
+}
+
+:is(.steps-links, .proof-link) .link-t2 {
+  --len: 0.07;
+  stroke-width: 2.2;
+  stroke: rgb(255 255 255 / 0.26);
+}
+
+:is(.steps-links, .proof-link) .link-t3 {
+  --len: 0.12;
+  stroke-width: 1.8;
+  stroke: rgb(255 255 255 / 0.15);
+}
+
+:is(.steps-links, .proof-link) .link-t4 {
+  --len: 0.19;
+  stroke-width: 1.4;
+  stroke: rgb(255 255 255 / 0.09);
+}
+
+:is(.steps-links, .proof-link) .link-t5 {
+  --len: 0.28;
+  stroke-width: 1;
+  stroke: rgb(255 255 255 / 0.06);
+}
+
+/* le halo : un tiret large et flouté autour de la tête (le flou ne porte que sur ce petit tracé) */
+:is(.steps-links, .proof-link) .link-halo {
+  --len: 0.06;
+  /* Sans flou : un filtre de flou est borné à la boîte du tracé, et sur le lien oblique du téléphone il laissait un halo à bords nets, en rectangle. La
+     lueur est portée par la traînée et la tête (plus haut) ; ce trait n'ajoute qu'un voile à peine perceptible, sans bord visible. */
+  stroke-width: 9;
+  stroke: rgb(225 235 255 / 0.07);
 }
 
 @media (max-width: 760px) {
@@ -155,18 +295,1007 @@
     text-wrap: balance;
   }
 
-  .proof {
-    grid-template-columns: 56px minmax(0, 1fr);
-    row-gap: 8px;
-    padding-block: 22px;
+  /* un zigzag : la scène à gauche puis à droite, le texte de l'autre côté */
+  .steps {
+    /* l'écart entre les rangées laisse passer la courbe qui change de côté, sans croiser les textes */
+    --g: 40px;
+    --aw: calc(50cqw - 8px);
+    margin-top: 24px;
   }
 
-  .proof-art {
-    grid-row: 1 / span 2;
+  .steps-links {
+    display: none;
+  }
+
+  .proofs {
+    grid-template-columns: 1fr;
+  }
+
+  .proof,
+  .proof:nth-child(even) {
+    display: grid;
+    grid-template-columns: var(--aw) minmax(0, 1fr);
+    align-items: center;
+    column-gap: 16px;
+    margin-top: 0;
+  }
+
+  .proof:nth-child(even) {
+    grid-template-columns: minmax(0, 1fr) var(--aw);
+  }
+
+  .proof:nth-child(even) .proof-art {
+    order: 2;
+  }
+
+  .proof:nth-child(even) .proof-body {
+    text-align: right;
+  }
+
+  .proof:nth-child(even) p {
+    margin-left: auto;
+  }
+
+  .proof h3 {
+    font-size: 1.25rem;
   }
 
   .proof p {
-    grid-column: 2;
-    font-size: 15.5px;
+    font-size: 15px;
+  }
+
+  /* le numéro, toujours au coin extérieur haut de sa scène : à gauche quand la scène est à gauche, à droite quand elle est à droite (en miroir) */
+  .proof-n {
+    top: 2px;
+    left: 2px;
+    font-size: 1.3rem;
+  }
+
+  .proof:nth-child(even) .proof-n {
+    left: auto;
+    right: 2px;
+  }
+
+  /* la courbe en S : du coin avant du socle de cette scène (au centre de sa colonne, à 90 % de sa hauteur) au coin arrière du socle suivant
+     (centre de l'autre colonne, 30 % de sa hauteur). Elle change de côté tôt, dans l'écart entre les rangées (sous le texte de cette étape,
+     au-dessus de celui de la suivante), puis descend dans la colonne de la scène suivante ; elle passe derrière les scènes. */
+  .proof-link {
+    display: block;
+    position: absolute;
+    z-index: 0;
+    left: calc(var(--aw) / 2);
+    right: calc(var(--aw) / 2);
+    top: calc(var(--aw) * 0.88 * 0.72);
+    /* un SVG garde son ratio quand une dimension est « auto » (même avec left et right) : largeur et hauteur explicites. Largeur : d'un centre
+       de colonne de scène à l'autre ; hauteur : de son départ, dans cette rangée, au socle suivant */
+    width: calc(100% - var(--aw));
+    height: calc(100% - var(--aw) * 0.88 * 0.72 + var(--g) + var(--aw) * 0.88 * 0.48);
+    overflow: visible;
+    pointer-events: none;
+  }
+
+  .proof-art,
+  .proof-body {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+/* le lien vers la démarche détaillée, sous les quatre étapes, ferré à droite (comme « Voir mon parcours ») */
+.manifesto-more {
+  margin: clamp(24px, 3vw, 36px) 0 0;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* ---------- Le mouvement des scènes isométriques (src/lib/isoScenes.ts) ----------
+   Des boucles lentes et discrètes, une par idée : ce qui flotte (les bulles, la pastille validée), ce qui se pose (les fiches, le dernier bloc du
+   périmètre), ce qui se coche (le devis), ce qui respire (les calques de la vue éclatée), ce qui se remplit (la mise en ligne), ce qui signale
+   (les ondes). Uniquement transform et opacity (la carte graphique les joue sans recalcul), en pause hors de l'écran (data-play absent), et rien
+   avec « réduire les animations ». transform-box: fill-box : chaque élément tourne ou grandit autour de son propre centre. */
+.iso :is(.iso-float, .iso-drop, .iso-stack, .iso-layer, .iso-pulse, .iso-check, .iso-blink, .iso-progress, .iso-flag, .iso-click, .iso-cursor, .iso-ghost, .iso-sign) {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.iso .iso-progress {
+  transform-origin: left center;
+  transform: scaleX(0.35);
+}
+
+.iso .iso-flag {
+  transform-origin: left center;
+}
+
+.iso .iso-sign {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* (un pseudo-élément ne peut pas aller dans :is() : le halo a sa propre règle) */
+  .steps :is(.iso *, .proof-float, .link-light),
+  .steps .proof-art::before {
+    animation-play-state: paused;
+  }
+
+  .steps[data-play] :is(.iso *, .proof-float, .link-light),
+  .steps[data-play] .proof-art::before {
+    animation-play-state: running;
+  }
+
+  /* Le flottement de chaque scène : un calque à part (will-change), déplacé par la carte graphique avec des positions intermédiaires (pas d'arrondi
+     au pixel). Léger et lent ; chaque scène a sa phase (--i), décalée de 1,5 s sur la précédente. */
+  /* (souplesse : une période longue, une course un peu plus ample et une courbe sinusoïdale, sans palier aux extrémités ; le calque est isolé et
+     rendu à la carte graphique, sans retour au pixel entier) */
+  .proof-float {
+    will-change: transform;
+    backface-visibility: hidden;
+    animation: proof-float 6s cubic-bezier(0.45, 0.05, 0.55, 0.95) calc(var(--i, 0) * -1.5s) infinite alternate;
+  }
+
+  /* Les mouvements dans les scènes : moins nombreux, plus amples et plus lents (un déplacement de 2 px redessiné à chaque image paraissait saccadé) */
+  .iso .iso-float {
+    animation: iso-float 7s cubic-bezier(0.37, 0, 0.63, 1) var(--d, 0s) infinite alternate;
+  }
+
+  .iso .iso-drop {
+    animation: iso-drop 10s cubic-bezier(0.37, 0, 0.63, 1) var(--d, 0s) infinite;
+  }
+
+  .iso .iso-stack {
+    animation: iso-drop 10s cubic-bezier(0.37, 0, 0.63, 1) 2.5s infinite;
+  }
+
+  .iso .iso-pulse {
+    animation: iso-pulse 5s cubic-bezier(0.22, 0.61, 0.36, 1) infinite;
+  }
+
+  .iso .iso-check {
+    animation: iso-check 10s cubic-bezier(0.37, 0, 0.63, 1) var(--d, 0s) infinite;
+  }
+
+  .iso .iso-sign {
+    animation: iso-sign 10s cubic-bezier(0.37, 0, 0.63, 1) infinite;
+  }
+
+  .iso .iso-blink {
+    animation: iso-blink 3.2s cubic-bezier(0.37, 0, 0.63, 1) infinite alternate;
+  }
+
+  .iso .iso-l2 {
+    animation: iso-l2 8s cubic-bezier(0.37, 0, 0.63, 1) infinite alternate;
+  }
+
+  .iso .iso-l3 {
+    animation: iso-l3 8s cubic-bezier(0.37, 0, 0.63, 1) infinite alternate;
+  }
+
+  .iso .iso-ghost {
+    animation: iso-ghost 8s cubic-bezier(0.37, 0, 0.63, 1) infinite alternate;
+  }
+
+  .iso .iso-click {
+    animation: iso-click 5s cubic-bezier(0.22, 0.61, 0.36, 1) infinite;
+  }
+
+  .iso .iso-cursor {
+    animation: iso-cursor 5s cubic-bezier(0.37, 0, 0.63, 1) infinite;
+  }
+
+  .iso .iso-progress {
+    animation: iso-progress 7s cubic-bezier(0.37, 0, 0.63, 1) infinite;
+  }
+
+  .iso .iso-flag {
+    animation: iso-flag 3.4s cubic-bezier(0.37, 0, 0.63, 1) infinite alternate;
+  }
+
+  /* La pulsion : une boucle de 10 s. Elle part de la scène 1 (halo), file le long du premier câble (2 s), éclaire la scène 2, et ainsi de suite ;
+     puis un temps de repos. Câble i : départ à i × 2,5 s ; halo de la scène i : à i × 2,5 s - 0,5 s (l'arrivée du câble précédent). */
+  /* la lueur : chaque couche (halo, traînées, tête) suit la même position --p, d'où un seul mouvement souple ; seule la longueur change */
+  /* Une seule lumière à la fois : elle sort de sous un socle (invisible au départ, cachée par la dalle), file avec une accélération puis un
+     ralenti doux, s'enfonce sous le socle suivant et s'y éteint ; la suivante repart 0,1 s plus tard de ce même socle. Durée d'un trajet :
+     2,4 s ; boucle : 10 s (quatre trajets, puis un temps de repos). */
+  .link-light {
+    animation-duration: 8s;
+    animation-timing-function: cubic-bezier(0.55, 0.05, 0.35, 1);
+    animation-delay: calc(var(--i, 0) * 2.2s);
+    animation-iteration-count: infinite;
+  }
+
+  .link-head {
+    animation-name: link-head;
+  }
+
+  .link-t1 {
+    animation-name: link-t1;
+  }
+
+  .link-t2 {
+    animation-name: link-t2;
+  }
+
+  .link-t3 {
+    animation-name: link-t3;
+  }
+
+  .link-t4 {
+    animation-name: link-t4;
+  }
+
+  .link-t5 {
+    animation-name: link-t5;
+  }
+
+  .link-halo {
+    animation-name: link-halo;
+  }
+
+
+  /* le halo d'un socle s'allume quand la lumière s'enfonce dessous (fin du trajet précédent), et s'éteint pendant qu'elle repart */
+  .proof-art::before {
+    animation: proof-halo 8s cubic-bezier(0.37, 0, 0.63, 1) calc(var(--i, 0) * 2.2s - 0.3s) infinite;
+  }
+}
+
+/* un flottement léger (6 px de course), chaque scène décalée d'un quart de période sur la précédente : une onde qui passe de gauche à droite */
+@keyframes proof-float {
+  from {
+    transform: translate3d(0, 4px, 0) rotate(0.001deg);
+  }
+  to {
+    transform: translate3d(0, -4px, 0) rotate(0.001deg);
+  }
+}
+
+@keyframes iso-float {
+  from {
+    transform: translateY(1.5px);
+  }
+  to {
+    transform: translateY(-4px);
+  }
+}
+
+/* une fiche descend doucement, se pose, reste, puis s'efface pour recommencer (pas de rebond) */
+@keyframes iso-drop {
+  0% {
+    transform: translateY(-12px);
+    opacity: 0;
+  }
+  24%,
+  84% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+}
+
+@keyframes iso-pulse {
+  from {
+    transform: scale(0.65);
+    opacity: 0.65;
+  }
+  to {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+}
+
+@keyframes iso-check {
+  0%,
+  6% {
+    transform: scale(0.7);
+    opacity: 0;
+  }
+  20%,
+  84% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  96%,
+  100% {
+    transform: scale(1);
+    opacity: 0;
+  }
+}
+
+@keyframes iso-sign {
+  0%,
+  38% {
+    stroke-dashoffset: 1;
+  }
+  66%,
+  86% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 0;
+  }
+}
+
+@keyframes iso-blink {
+  from {
+    opacity: 0.6;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes iso-l2 {
+  from {
+    transform: translateY(1px);
+  }
+  to {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes iso-l3 {
+  from {
+    transform: translateY(2px);
+  }
+  to {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes iso-ghost {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0.55;
+  }
+}
+
+@keyframes iso-click {
+  0%,
+  40% {
+    transform: scale(0.3);
+    opacity: 0;
+  }
+  48% {
+    opacity: 0.85;
+  }
+  88%,
+  100% {
+    transform: scale(1.7);
+    opacity: 0;
+  }
+}
+
+@keyframes iso-cursor {
+  0%,
+  100% {
+    transform: translate(5px, 4px);
+  }
+  40%,
+  56% {
+    transform: translate(0, 0);
+  }
+}
+
+@keyframes iso-progress {
+  0% {
+    transform: scaleX(0.05);
+  }
+  72%,
+  90% {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scaleX(1);
+    opacity: 0;
+  }
+}
+
+@keyframes iso-flag {
+  from {
+    transform: skewY(-2deg) scaleX(0.97);
+  }
+  to {
+    transform: skewY(2deg) scaleX(1);
+  }
+}
+
+/* la pulsion le long d'un câble : elle apparaît à la sortie du socle, file, et s'éteint en arrivant (20 % de la boucle, soit 2 s) */
+/* --p : la position de la tête le long du lien, de 0 (départ) à 1 (arrivée), puis un peu au-delà pour que la traînée finisse d'entrer dans le socle.
+   Elle occupe 22 % de la boucle (2,2 s) ; l'opacité monte au départ et retombe à l'arrivée. */
+/* Animée directement sur stroke-dashoffset, avec des valeurs écrites en clair pour chaque couche (une valeur calculée avec var() n'est pas interpolée :
+   elle sautait du départ à l'arrivée ; et une variable --p déclarée en @property n'est pas animée par tous les navigateurs). Chaque couche part de
+   sa longueur (le tiret caché avant le départ) et finit 1,32 plus loin (la traînée est entrée sous le socle suivant). */
+@keyframes link-head {
+  0% {
+    stroke-dashoffset: 0.012;
+    opacity: 1;
+  }
+  22% {
+    opacity: 1;
+  }
+  27%,
+  100% {
+    stroke-dashoffset: -1.308;
+    opacity: 0;
+  }
+}
+
+@keyframes link-t1 {
+  0% {
+    stroke-dashoffset: 0.035;
+    opacity: 1;
+  }
+  22% {
+    opacity: 1;
+  }
+  27%,
+  100% {
+    stroke-dashoffset: -1.285;
+    opacity: 0;
+  }
+}
+
+@keyframes link-t2 {
+  0% {
+    stroke-dashoffset: 0.07;
+    opacity: 1;
+  }
+  22% {
+    opacity: 1;
+  }
+  27%,
+  100% {
+    stroke-dashoffset: -1.25;
+    opacity: 0;
+  }
+}
+
+@keyframes link-t3 {
+  0% {
+    stroke-dashoffset: 0.12;
+    opacity: 1;
+  }
+  22% {
+    opacity: 1;
+  }
+  27%,
+  100% {
+    stroke-dashoffset: -1.2;
+    opacity: 0;
+  }
+}
+
+@keyframes link-t4 {
+  0% {
+    stroke-dashoffset: 0.19;
+    opacity: 1;
+  }
+  22% {
+    opacity: 1;
+  }
+  27%,
+  100% {
+    stroke-dashoffset: -1.13;
+    opacity: 0;
+  }
+}
+
+@keyframes link-t5 {
+  0% {
+    stroke-dashoffset: 0.28;
+    opacity: 1;
+  }
+  22% {
+    opacity: 1;
+  }
+  27%,
+  100% {
+    stroke-dashoffset: -1.04;
+    opacity: 0;
+  }
+}
+
+@keyframes link-halo {
+  0% {
+    stroke-dashoffset: 0.06;
+    opacity: 1;
+  }
+  22% {
+    opacity: 1;
+  }
+  27%,
+  100% {
+    stroke-dashoffset: -1.26;
+    opacity: 0;
+  }
+}
+
+
+/* le halo d'un socle : il monte quand la pulsion arrive, puis s'éteint lentement */
+@keyframes proof-halo {
+  0% {
+    opacity: 0;
+  }
+  6% {
+    opacity: 1;
+  }
+  26%,
+  100% {
+    opacity: 0;
+  }
+}
+
+/* ---------- Pages de service : la démarche détaillée ----------
+   Un titre de section à la place du manifeste, et sous chaque étape son livrable (« Vous recevez »). Le texte est plus long qu'à l'accueil :
+   il garde la largeur de sa colonne. */
+.manifesto--steps .tile-head {
+  margin-bottom: clamp(36px, 4.4vw, 64px);
+}
+
+.manifesto--steps .proof p {
+  max-width: none;
+  text-wrap: pretty;
+}
+
+.proof .proof-gets {
+  margin-top: 12px;
+  font-size: 14.5px;
+  line-height: 1.45;
+  color: #fff;
+}
+
+.proof-gets span {
+  display: block;
+  margin-bottom: 2px;
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #f5a25c;
+}
+
+/* téléphone : le texte détaillé est plus long qu'à l'accueil. La scène prend un peu moins de place (40 % au lieu de la moitié), le texte en gagne ;
+   il reste aligné à gauche dans les deux sens du zigzag (un long paragraphe aligné à droite se lit mal). */
+@media (max-width: 760px) {
+  .manifesto--steps .steps {
+    --aw: calc(40cqw - 6px);
+  }
+
+  .manifesto--steps .proof:nth-child(even) .proof-body {
+    text-align: left;
+  }
+
+  .manifesto--steps .proof p {
+    font-size: 14.5px;
+  }
+
+  .manifesto--steps .proof .proof-gets {
+    font-size: 14px;
+  }
+}
+
+/* ---------- Variante sans scènes (page Audit, en attendant ses illustrations) ----------
+   Chaque étape commence par son numéro, en grand, dans un disque de verre ; une ligne en pointillés relie les numéros, et la même lumière passe
+   de l'un au suivant (ordinateur : à l'horizontale ; téléphone : à la verticale, la liste n'est plus en zigzag). Le halo d'arrivée éclaire le disque. */
+.manifesto--plain .steps {
+  --disc: 56px;
+}
+
+.manifesto--plain .proof-art {
+  display: grid;
+  place-items: center;
+  width: var(--disc);
+  height: var(--disc);
+  margin-bottom: 14px;
+  border-radius: 50%;
+  background: rgb(255 255 255 / 0.08);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.2), inset 0 1px 0 rgb(255 255 255 / 0.3);
+}
+
+.manifesto--plain .proof-art::before {
+  left: -40%;
+  right: -40%;
+  top: -40%;
+  height: 180%;
+}
+
+.manifesto--plain .proof-n {
+  position: static;
+  font-size: 1.35rem;
+}
+
+.manifesto--plain .steps-links {
+  height: 72px;
+  top: calc((var(--disc) - 72px) / 2);
+}
+
+@media (max-width: 760px) {
+  .manifesto--plain .steps {
+    --g: 28px;
+  }
+
+  .manifesto--plain .proof,
+  .manifesto--plain .proof:nth-child(even) {
+    grid-template-columns: var(--disc) minmax(0, 1fr);
+    align-items: start;
+    column-gap: 18px;
+  }
+
+  .manifesto--plain .proof:nth-child(even) .proof-art {
+    order: 0;
+  }
+
+  .manifesto--plain .proof:nth-child(even) .proof-body {
+    text-align: left;
+  }
+
+  .manifesto--plain .proof-art {
+    margin-bottom: 0;
+  }
+
+  .manifesto--plain .proof-n {
+    font-size: 1.2rem;
+  }
+
+  /* le lien vertical : du bas d'un disque au haut du suivant */
+  .manifesto--plain .proof-link {
+    left: calc(var(--disc) / 2 - 10px);
+    right: auto;
+    top: var(--disc);
+    width: 20px;
+    height: calc(100% - var(--disc) + var(--g));
+  }
+}
+
+/* ---------- Les mouvements propres aux scènes de l'audit (isoScenes.ts, auditScenes) ----------
+   La loupe parcourt l'écran ; les barres du tableau montent, restent, puis repartent. Mêmes règles que les autres : transform seulement, en pause hors
+   de l'écran, rien avec « réduire les animations ». */
+.iso :is(.iso-scan, .iso-rise) {
+  transform-box: fill-box;
+}
+
+/* le plan d'un décalque est retourné (z vers le haut) : le « haut » de la boîte de la barre est sa base à l'écran */
+.iso .iso-rise {
+  transform-origin: center top;
+}
+
+.steps .iso :is(.iso-scan, .iso-rise) {
+  animation-play-state: paused;
+}
+
+.steps[data-play] .iso :is(.iso-scan, .iso-rise) {
+  animation-play-state: running;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .iso .iso-scan {
+    animation: iso-scan 9s cubic-bezier(0.45, 0, 0.25, 1) infinite;
+  }
+
+  .iso .iso-rise {
+    animation: iso-rise 8s cubic-bezier(0.37, 0, 0.63, 1) var(--d, 0s) infinite;
+  }
+}
+
+@keyframes iso-scan {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  30% {
+    transform: translate(18px, 8px);
+  }
+  55% {
+    transform: translate(30px, -4px);
+  }
+  78% {
+    transform: translate(10px, -10px);
+  }
+}
+
+/* les barres : dessinées dans un plan retourné (z vers le haut), la hauteur s'étire donc depuis leur base */
+@keyframes iso-rise {
+  0% {
+    transform: scaleY(0.2);
+  }
+  25%,
+  85% {
+    transform: scaleY(1);
+  }
+  100% {
+    transform: scaleY(0.2);
+  }
+}
+
+/* ---------- Les mouvements propres aux scènes des interventions (Interfaces et logiciels) ----------
+   L'interrupteur qui bascule ; le paquet des maquettes qui part vers l'équipe, puis revient. */
+.iso :is(.iso-toggle, .iso-send) {
+  transform-box: fill-box;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .iso .iso-toggle {
+    animation: iso-toggle 6s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+  }
+
+  .iso .iso-send {
+    animation: iso-send 7s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+  }
+}
+
+@keyframes iso-toggle {
+  0%,
+  30% {
+    transform: translate(0, 0);
+  }
+  45%,
+  80% {
+    transform: translate(9px, 5px);
+  }
+  95%,
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+/* le paquet glisse vers le développeur (en avant et à droite, le long de la diagonale du socle), puis s'efface et revient à sa place */
+@keyframes iso-send {
+  0%,
+  15% {
+    transform: translate(0, 0);
+    opacity: 1;
+  }
+  60% {
+    transform: translate(-4px, 22px);
+    opacity: 1;
+  }
+  75% {
+    transform: translate(-4px, 22px);
+    opacity: 0;
+  }
+  76% {
+    transform: translate(0, 0);
+    opacity: 0;
+  }
+  100% {
+    transform: translate(0, 0);
+    opacity: 1;
+  }
+}
+
+/* ---------- n étapes ----------
+   Le nombre d'étapes (--n, posé par Manifesto.astro) règle les colonnes et la largeur d'une scène ; la boucle de la lumière dure autant de trajets
+   qu'il y a de liens (--nl), à 2,2 s chacun, plus 1,4 s de repos : 8 s pour trois liens (l'accueil), 10,2 s pour quatre. */
+.steps {
+  --w: calc((100cqw - (var(--n, 4) - 1) * var(--g)) / var(--n, 4));
+}
+
+.proofs {
+  grid-template-columns: repeat(var(--n, 4), minmax(0, 1fr));
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .link-light {
+    animation-duration: calc(var(--nl, 3) * 2.2s + 1.4s);
+  }
+
+  .proof-art::before {
+    animation-duration: calc(var(--nl, 3) * 2.2s + 1.4s);
+  }
+}
+
+@media (max-width: 760px) {
+  .proofs {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* la phrase sous les étapes */
+.manifesto-after {
+  max-width: 62ch;
+  margin: clamp(28px, 3.4vw, 48px) auto 0;
+  font-size: 15.5px;
+  line-height: 1.55;
+  text-align: center;
+  color: rgb(255 255 255 / 0.78);
+}
+
+@media (max-width: 760px) {
+  .manifesto-after {
+    text-align: left;
+  }
+}
+
+/* ---------- Téléphone : la même lumière qu'à l'ordinateur ----------
+   Les longueurs de la comète sont des parts du tracé (pathLength = 1). Le lien d'une scène à l'autre mesure environ 150 px sur ordinateur et 257 px sur
+   téléphone : la même part y dessinait une comète 1,7 fois plus longue, étirée. Sur téléphone, chaque couche a donc des longueurs réduites (× 0,58),
+   pour la même taille à l'écran ; la tête finit à 1,25 (la traînée, plus courte, est entrée sous le socle suivant). */
+@keyframes link-m-head {
+  0% {
+    stroke-dashoffset: 0.007;
+    opacity: 1;
+  }
+  22% {
+    opacity: 1;
+  }
+  27%,
+  100% {
+    stroke-dashoffset: -1.243;
+    opacity: 0;
+  }
+}
+
+@keyframes link-m-t1 {
+  0% {
+    stroke-dashoffset: 0.0203;
+    opacity: 1;
+  }
+  22% {
+    opacity: 1;
+  }
+  27%,
+  100% {
+    stroke-dashoffset: -1.2297;
+    opacity: 0;
+  }
+}
+
+@keyframes link-m-t2 {
+  0% {
+    stroke-dashoffset: 0.0406;
+    opacity: 1;
+  }
+  22% {
+    opacity: 1;
+  }
+  27%,
+  100% {
+    stroke-dashoffset: -1.2094;
+    opacity: 0;
+  }
+}
+
+@keyframes link-m-t3 {
+  0% {
+    stroke-dashoffset: 0.0696;
+    opacity: 1;
+  }
+  22% {
+    opacity: 1;
+  }
+  27%,
+  100% {
+    stroke-dashoffset: -1.1804;
+    opacity: 0;
+  }
+}
+
+@keyframes link-m-t4 {
+  0% {
+    stroke-dashoffset: 0.1102;
+    opacity: 1;
+  }
+  22% {
+    opacity: 1;
+  }
+  27%,
+  100% {
+    stroke-dashoffset: -1.1398;
+    opacity: 0;
+  }
+}
+
+@keyframes link-m-t5 {
+  0% {
+    stroke-dashoffset: 0.1624;
+    opacity: 1;
+  }
+  22% {
+    opacity: 1;
+  }
+  27%,
+  100% {
+    stroke-dashoffset: -1.0876;
+    opacity: 0;
+  }
+}
+
+@keyframes link-m-halo {
+  0% {
+    stroke-dashoffset: 0.0348;
+    opacity: 1;
+  }
+  22% {
+    opacity: 1;
+  }
+  27%,
+  100% {
+    stroke-dashoffset: -1.2152;
+    opacity: 0;
+  }
+}
+
+@media (max-width: 760px) {
+  .proof-link .link-head {
+    stroke-dasharray: 0.007 3;
+    stroke-dashoffset: 0.007;
+  }
+
+  .proof-link .link-t1 {
+    stroke-dasharray: 0.0203 3;
+    stroke-dashoffset: 0.0203;
+  }
+
+  .proof-link .link-t2 {
+    stroke-dasharray: 0.0406 3;
+    stroke-dashoffset: 0.0406;
+  }
+
+  .proof-link .link-t3 {
+    stroke-dasharray: 0.0696 3;
+    stroke-dashoffset: 0.0696;
+  }
+
+  .proof-link .link-t4 {
+    stroke-dasharray: 0.1102 3;
+    stroke-dashoffset: 0.1102;
+  }
+
+  .proof-link .link-t5 {
+    stroke-dasharray: 0.1624 3;
+    stroke-dashoffset: 0.1624;
+  }
+
+  .proof-link .link-halo {
+    stroke-dasharray: 0.0348 3;
+    stroke-dashoffset: 0.0348;
+  }
+
+}
+
+@media (max-width: 760px) and (prefers-reduced-motion: no-preference) {
+  .proof-link .link-head {
+    animation-name: link-m-head;
+  }
+
+  .proof-link .link-t1 {
+    animation-name: link-m-t1;
+  }
+
+  .proof-link .link-t2 {
+    animation-name: link-m-t2;
+  }
+
+  .proof-link .link-t3 {
+    animation-name: link-m-t3;
+  }
+
+  .proof-link .link-t4 {
+    animation-name: link-m-t4;
+  }
+
+  .proof-link .link-t5 {
+    animation-name: link-m-t5;
+  }
+
+  .proof-link .link-halo {
+    animation-name: link-m-halo;
+  }
+
+}
+
+/* téléphone : pages de service (textes plus longs, avec « Vous recevez ») : un écart plus grand entre deux lignes, pour que la courbe de liaison ait la
+   place de changer de colonne sans frôler un texte */
+@media (max-width: 760px) {
+  .manifesto--steps:not(.manifesto--plain) .steps {
+    --g: 60px;
   }
 }

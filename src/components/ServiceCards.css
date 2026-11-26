@@ -168,7 +168,7 @@
   background-size: 100% 100%;
   border-color: var(--lu-fill);
   box-shadow: 0 0 18px -4px rgb(255 150 60 / 0.5);
-  color: #06133f;
+  color: var(--paper);
   transform: translateX(4px);
 }
 
@@ -181,7 +181,7 @@
     background-size: 100% 100%;
     border-color: var(--lu-fill);
     box-shadow: 0 0 18px -4px rgb(255 150 60 / 0.5);
-    color: #06133f;
+    color: var(--paper);
     transform: translateX(4px);
   }
 }
@@ -195,7 +195,7 @@
   .route:active .route-arrow {
     background-size: 100% 100%;
     border-color: var(--lu-fill);
-    color: #06133f;
+    color: var(--paper);
   }
 }
 
@@ -370,5 +370,101 @@
       inset 0 0 0 1px rgb(255 255 255 / 0.6),
       0 0 0 1px rgb(18 32 43 / 0.07),
       0 18px 32px -26px rgb(18 32 43 / 0.45);
+  }
+}
+
+/* Accueil réordonné (Hero, offres, projet) : la section des offres est sombre et passe par-dessus la Hero, comme le faisait le manifeste.
+   Même matière que lui : un indigo qui tire vers le prune, avec une lueur chaude, et le même voile. Les cartes, en verre clair, ne changent pas. */
+#services.tile--dark::before {
+  background:
+    radial-gradient(60% 40% at 84% 90%, rgb(255 140 110 / 0.2), transparent 72%),
+    radial-gradient(56% 36% at 10% 12%, rgb(255 196 100 / 0.12), transparent 72%),
+    radial-gradient(60% 40% at 12% 78%, rgb(70 120 255 / 0.22), transparent 74%),
+    linear-gradient(180deg, #131f76 0%, #2a1c70 100%);
+}
+
+#services.tile--dark::after {
+  background: linear-gradient(180deg, rgb(2 12 20 / 0.3), rgb(2 12 20 / 0.24));
+}
+
+/* ---------- Accueil : les cartes sur le fond sombre des offres ----------
+   Le papier crème du site (celui du corps de page), sans ombre dure orange, une illustration plus basse (elle n'est plus le centre de la carte).
+   Les sélecteurs #services passent devant « html .card » (matiere.css) et le verre de la carte centrale (scenes.css). */
+#services .card {
+  /* le grain de grès du body (.tile--light::before, Tile.css) : même texture sur le papier de la carte */
+  background: var(--tx-stoneware) 0 0 / 512px 512px repeat, var(--paper);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.7),
+    0 0 0 1px rgb(18 32 43 / 0.08),
+    0 30px 44px -30px rgb(2 8 30 / 0.6);
+}
+
+#services .card-art {
+  aspect-ratio: 333 / 150;
+}
+
+/* Téléphone : un carrousel latéral, comme les cartes de la page Création (chaque carte s'arrête au centre, celles des côtés pivotent un peu :
+   scenes.css et scenes.js, « carrousels »). */
+@media (max-width: 700px) {
+  #services .cards {
+    display: flex;
+    gap: 14px;
+    margin-inline: calc(var(--edge) * -1);
+    padding: 6px 0 46px;
+    margin-bottom: -22px;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  #services .cards::-webkit-scrollbar {
+    display: none;
+  }
+
+  #services .cards::before,
+  #services .cards::after {
+    content: '';
+    flex: 0 0 max(0px, calc((100vw - min(80vw, 330px)) / 2 - 14px));
+  }
+
+  #services .card {
+    flex: 0 0 min(80vw, 330px);
+    scroll-snap-align: center;
+  }
+
+  #services .card-art {
+    aspect-ratio: 333 / 112;
+  }
+}
+
+/* ---------- Sections bleues légèrement translucides ----------
+   Le fond (dégradé + voile) est à 90 % : le papier grainé du body transparaît à peine. Pas de flou sur ces grandes surfaces (rien derrière à flouter,
+   et un backdrop-filter sur 1 000 px de haut coûterait à chaque image), SAUF pour les offres tant qu'elles passent sur la Hero : là, un flou léger
+   (8 px) rend le texte de la Hero illisible dessous. Il s'arrête dès que la Hero est entièrement couverte (classe .is-covered, scenes.js). */
+#services.tile--dark::before,
+#services.tile--dark::after {
+  opacity: 0.9;
+}
+
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+  .has-scenes .curtain > #services.tile--dark {
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+  }
+
+  .has-scenes .curtain:has(> .hero-zone.is-covered) > #services.tile--dark {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  #services.tile--dark::before,
+  #services.tile--dark::after {
+    opacity: 1;
   }
 }

@@ -4,10 +4,15 @@ import './AboutMini.css';
 import LinkUnder from './LinkUnder.astro';
 import portrait from '../assets/portrait-cine.webp';
 
+interface Props {
+  /** accueil : sur fond clair (papier), entre deux sections sombres */
+  tone?: 'dark' | 'light';
+}
+const { tone = 'dark' } = Astro.props;
 const zones = ['Île-de-France', 'À distance'];
 ---
 
-<section class="tile tile--dark tile--mesh-b about" id="qui-suis-je" aria-labelledby="about-title">
+<section class:list={['tile', tone === 'light' ? 'tile--light about--light' : 'tile--dark tile--mesh-b', 'about']} id="qui-suis-je" aria-labelledby="about-title">
   <div class="wrap tile-inner about-grid">
     <figure class="portrait">
       <div class="portrait-frame">
@@ -47,7 +52,7 @@ const zones = ['Île-de-France', 'À distance'];
       </p>
       <div class="about-zones-row">
         <ul class="about-zones" role="list">{zones.map((z) => <li>{z}</li>)}</ul>
-        <LinkUnder href="/a-propos/" label="Voir mon parcours" tone="light" arrow />
+        <LinkUnder href="/a-propos/" label="Voir mon parcours" tone={tone === 'light' ? 'dark' : 'light'} arrow />
       </div>
       </div>
     </div>

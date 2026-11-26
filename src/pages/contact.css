@@ -693,3 +693,282 @@ textarea[aria-invalid='true'] {
     padding-inline: 32px;
   }
 }
+
+/* ==========================================================================================================================
+   Puces orange (comme sur le reste du site) à la place des barres ; l'encadré « Ce qui m'aide à vous répondre vite » ; téléphone : une seule section
+   bleue (titre, chapô, engagements), puis le formulaire, puis une ligne pour appeler.
+   ========================================================================================================================== */
+.ct-promises li {
+  align-items: center;
+}
+
+.ct-promises li::before {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  translate: none;
+}
+
+/* l'encadré : une carte blanche discrète, le titre en encre, la liste à puces, puis la relance vers le modèle */
+.ct-guide {
+  padding: 16px 18px 6px;
+  border-radius: var(--radius-lg, 18px);
+  background: #fff;
+  box-shadow: inset 0 0 0 1px rgb(26 60 191 / 0.12), 0 14px 24px -22px rgb(11 26 74 / 0.45);
+}
+
+.ct-guide-title {
+  margin: 0 0 10px;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  color: var(--ink);
+}
+
+.ct-guide ul {
+  gap: 7px 24px;
+}
+
+.ct-guide li {
+  align-items: center;
+  font-size: 14.5px;
+}
+
+.ct-guide li::before {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  translate: none;
+}
+
+.ct-guide-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 10px;
+  margin: 10px 0 0;
+  padding-top: 4px;
+  border-top: 1px solid rgb(26 60 191 / 0.1);
+  font-size: 14px;
+}
+
+.ct-guide-ask {
+  color: var(--ink-soft);
+}
+
+.ct-guide-use {
+  gap: 6px;
+  margin: 0;
+  text-decoration: none;
+}
+
+.ct-guide-use svg {
+  transition: translate 0.25s ease;
+}
+
+.ct-guide-use:not(:disabled):hover svg,
+.ct-guide-use:not(:disabled):focus-visible svg {
+  translate: 3px 0;
+}
+
+.ct-guide-use:not(:disabled):hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.ct-guide-use:disabled svg {
+  display: none;
+}
+
+/* la ligne « Vous préférez appeler ? » : seulement sur téléphone */
+.ct-call {
+  display: none;
+}
+
+@media (max-width: 700px) {
+  /* la section bleue : le titre, le chapô et les engagements ; le téléphone, l'e-mail, les zones et le lien vers le formulaire n'y sont plus */
+  html .ct .ct-panel :is(.ct-direct, .ct-zones, .ct-skip) {
+    display: none;
+  }
+
+  /* le formulaire suit, sans titre affiché */
+  .ct-form h2 {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .ct-form .form-hint {
+    margin-top: 0;
+  }
+
+  .ct-call {
+    display: block;
+    margin: 4px 0 0;
+    font-size: 15px;
+    text-align: center;
+    color: var(--ink-soft);
+  }
+
+  .ct-call a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    font-weight: 600;
+    color: var(--signal-deep);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+}
+
+/* téléphone : les engagements, en bloc centré sous le chapô (le texte du panneau est centré) */
+@media (max-width: 700px) {
+  html .ct .ct-promises {
+    align-self: center;
+    width: fit-content;
+    max-width: 100%;
+  }
+}
+
+/* ==========================================================================================================================
+   Un seul panneau bleu : il porte les moyens de me joindre et le formulaire. Le panneau (.ct-grid.panel-blue) a ses deux colonnes sur ordinateur ;
+   la colonne de gauche n'a plus de fond propre, le formulaire n'est plus une carte claire : ses libellés passent en blanc, les champs restent blancs.
+   Champs obligatoires : une astérisque ; à l'envoi, le contour d'un champ manquant devient rouge (aria-invalid, contactForm.js).
+   ========================================================================================================================== */
+.ct-grid.panel-blue {
+  gap: 0;
+  overflow: hidden;
+}
+
+.ct-grid > .ct-panel {
+  background: none;
+  box-shadow: none;
+}
+
+.ct-grid > .ct-form {
+  background: none;
+  box-shadow: none;
+  border-radius: 0;
+  color: #fff;
+}
+
+.ct-form h2 {
+  color: #fff;
+}
+
+.ct-form h2 + .field-row,
+.ct-form h2 + .hp-field + .field-row {
+  margin-top: clamp(14px, 2.4svh, 24px);
+}
+
+.ct-form .field label {
+  color: #fff;
+}
+
+.ct-form .req {
+  margin-left: 3px;
+  color: #ffc79b;
+}
+
+.ct-form .field-hint {
+  color: rgb(255 255 255 / 0.76);
+}
+
+.ct-form .ct-reassure {
+  color: rgb(255 255 255 / 0.78);
+}
+
+/* une erreur se lit sur le bleu : contour rouge franc et halo, message en rose clair */
+.ct-form :is(input, select, textarea)[aria-invalid='true'] {
+  border-color: #ff5d4f;
+  box-shadow: 0 0 0 2px #ff5d4f, 0 0 0 5px rgb(255 93 79 / 0.25);
+}
+
+.ct-form .field-error {
+  color: #ffc1ba;
+}
+
+.ct-form .form-status {
+  color: #fff;
+}
+
+.ct-form .form-status.is-error {
+  color: #ffc1ba;
+}
+
+/* « Ce qui m'aide à vous répondre vite » : le papier du site et son grain, posés sur le bleu */
+.ct-form .ct-guide {
+  background: var(--tx-stoneware) 0 0 / 512px 512px repeat, var(--paper, #f5f3ea);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.7), 0 16px 26px -20px rgb(4 10 56 / 0.6);
+}
+
+/* le lien vers le modèle, seul, sans filet au-dessus */
+.ct-guide-foot {
+  border-top: 0;
+  padding-top: 0;
+  margin-top: 6px;
+}
+
+@media (min-width: 901px) {
+  .ct-grid.panel-blue {
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  }
+
+  /* un filet clair entre les deux colonnes */
+  .ct-grid > .ct-form {
+    border-left: 1px solid rgb(255 255 255 / 0.14);
+  }
+}
+
+@media (max-width: 900px) {
+  .ct-grid > .ct-form {
+    padding: 4px 20px 26px;
+  }
+
+  .ct-grid > .ct-panel {
+    padding-bottom: 18px;
+  }
+}
+
+@media (max-width: 700px) {
+  html .ct .ct-grid > .ct-panel {
+    padding-bottom: 14px;
+  }
+}
+
+/* téléphone : les engagements, un peu plus loin du chapô, sous un filet clair, en lignes centrées et un peu plus petites (une ligne chacune) */
+@media (max-width: 700px) {
+  html .ct .ct-promises {
+    align-self: stretch;
+    width: auto;
+    justify-items: center;
+    gap: 6px;
+    margin-top: 10px;
+    padding-top: 16px;
+    border-top: 1px solid rgb(255 255 255 / 0.16);
+  }
+
+  html .ct .ct-promises li {
+    gap: 9px;
+    font-size: 13.5px;
+    color: rgb(255 255 255 / 0.86);
+  }
+
+  html .ct .ct-promises li::before {
+    width: 6px;
+    height: 6px;
+  }
+}
+
+@media (max-width: 700px) {
+  html .ct .ct-grid > .ct-panel {
+    padding-inline: 16px;
+  }
+
+  html .ct .ct-grid > .ct-form {
+    padding-inline: 16px;
+  }
+}

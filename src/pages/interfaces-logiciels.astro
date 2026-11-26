@@ -5,13 +5,14 @@ import { plain } from '../lib/fmt';
 import Tile from '../components/Tile.astro';
 import PageHero from '../components/PageHero.astro';
 import Faq from '../components/Faq.astro';
-import ExplodedProcess from '../components/ExplodedProcess.astro';
 import LinkUnder from '../components/LinkUnder.astro';
 import FinalCta from '../components/FinalCta.astro';
 import StickyCta from '../components/StickyCta.astro';
 import '../styles/scenes.css';
 // Même langage visuel et mêmes composants que les pages « Création » et « Refonte » : on réutilise leur feuille de style (préfixe cs-)
 import './creation-site-web.css';
+import Manifesto from '../components/Manifesto.astro';
+import { interfaceScenes } from '../lib/isoScenes';
 import './interfaces-logiciels.css';
 
 const site = 'https://antoinebruneau.fr';
@@ -60,6 +61,7 @@ const tasks = [
   { t: 'Concevoir l’interface', d: 'Maquettes, composants et design system pour garder des écrans cohérents.' },
   { t: 'Accompagner le développement', d: 'Spécifications et échanges avec les développeurs. Intégration front-end lorsque je réalise le projet.' },
 ];
+
 
 // Deux façons de travailler ensemble (mêmes lignes que les formules des pages Création et Refonte, sans jauge).
 const modes = [
@@ -121,9 +123,13 @@ schema['@graph'].push({
 ---
 
 <BaseLayout title="Conception UX/UI d’interfaces et logiciels" description={description} schema={schema}>
+  {/* Alternance clair / sombre, comme les pages Création et Refonte : la Hero (clair), les situations (sombre, qui passe par-dessus la Hero :
+      le rideau), les deux façons de travailler (clair), les interventions (sombre), l'expérience (clair), puis le cadre, la FAQ et l'appel final (sombres). */}
+  <div class="curtain">
   <PageHero
+    modern
     crumb="Interfaces et logiciels"
-    kicker="Logiciels métier, SaaS & outils internes"
+    kicker="Conception UX/UI · Logiciels, SaaS"
     wideLead
     line1="Des logiciels pensés"
     line2="pour ceux qui les utilisent."
@@ -132,10 +138,10 @@ schema['@graph'].push({
     ctaLabel="Échanger sur mon interface"
     linkHref="#experience"
     linkLabel="Voir mon expérience métier"
-    note="Premier échange gratuit · Devis gratuit et détaillé"
+    note="Premier échange gratuit et sans engagement · Réponse sous deux jours ouvrés en général"
   />
 
-  <section class="tile tile--light" id="situations" aria-labelledby="situations-title">
+  <section class="tile tile--dark tile--mesh-a cs-dark" id="situations" aria-labelledby="situations-title">
     <div class="wrap wrap--wide tile-inner">
       <header class="tile-head">
         <p class="tile-label">Quand faire appel à moi</p>
@@ -144,25 +150,50 @@ schema['@graph'].push({
       </header>
       <div class="il-split">
         {/* La scène : un écran de logiciel métier, abstrait. Chaque repère orange désigne une situation de la liste, sous le même numéro. */}
+        {/* La scène, avec les éléments des scènes des pages Création et Refonte (fenêtre, cartes blanches, repères orange) : un logiciel métier
+            et, autour, ce qui pose problème. Chaque repère désigne une situation de la liste, sous le même numéro. */}
         <div class="il-stage" aria-hidden="true">
-          <span class="cs-shape cs-disc concrete"></span>
-          <span class="cs-shape cs-arch concrete"></span>
-          <span class="cs-shape cs-quarter concrete"></span>
-          <div class="il-app">
-            <div class="il-bar"><i></i><i></i><i></i><span class="il-team"><b></b><b></b><b></b></span></div>
-            <div class="il-body">
-              <div class="il-nav"><b></b><span></span><span></span><span></span><span></span><span></span><span></span></div>
+          <div class="cs-site il-win">
+            <div class="cs-site-bar">
+              <i></i><i></i><i></i>
+              <span class="cs-addr">
+                <svg viewBox="0 0 12 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M3 6V4.5a3 3 0 0 1 6 0V6M2 6h8v6H2z" /></svg>
+                app.votre-logiciel.fr
+              </span>
+            </div>
+            <div class="il-app">
+              <div class="il-side"><b></b><span></span><span></span><span></span><span></span></div>
               <div class="il-main">
                 <div class="il-tools"><span class="il-search"></span><em></em></div>
                 <div class="il-row"><i></i><s class="c1"></s></div>
-                <div class="il-row il-row--off"><i></i><s class="c2"></s></div>
+                <div class="il-row il-row--off"><i></i><s class="c2"></s><span class="cs-pin">2</span></div>
                 <div class="il-row"><i></i><s class="c3"></s></div>
-                <div class="il-new"></div>
+                <div class="il-new"><span>Nouveau module</span><span class="cs-pin">1</span></div>
               </div>
-              <div class="il-detail"><b class="il-av"></b><i></i><i></i><em class="il-btn1"></em><em class="il-btn2"></em></div>
             </div>
           </div>
-          {situations.map((_, i) => <span class={`cs-pin il-pin il-pin--${i + 1}`}>{i + 1}</span>)}
+
+          <div class="cs-serp il-path">
+            <span class="cs-pin">3</span>
+            <span class="cs-serp-url">Créer une demande</span>
+            <b>Étape 6 sur 9</b>
+            <span class="il-steps">{[1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => <i class={n <= 6 ? 'on' : ''}></i>)}</span>
+          </div>
+
+          <div class="cs-guide il-kit">
+            <span class="cs-pin">4</span>
+            <p class="il-kit-label">Boutons</p>
+            <span class="il-kit-row"><em class="k1">Valider</em><em class="k2">Valider</em><em class="k3">OK</em></span>
+          </div>
+
+          <div class="cs-phone il-team">
+            <span class="cs-pin">5</span>
+            <p class="il-kit-label">Équipe produit</p>
+            <span class="il-mate"><b class="m1"></b><i></i></span>
+            <span class="il-mate"><b class="m2"></b><i></i></span>
+            <span class="il-mate"><b class="m3"></b><i></i></span>
+            <span class="il-mate il-mate--new"><b></b>Designer UX/UI</span>
+          </div>
         </div>
 
         <ol class="cs-deliv il-list" role="list">
@@ -179,21 +210,28 @@ schema['@graph'].push({
       </div>
     </div>
   </section>
+  </div>
 
-  <ExplodedProcess
-    plain
-    title="De la compréhension du besoin aux écrans."
-    sub="Une intervention adaptée à votre équipe et à votre projet."
-    steps={tasks.map((r) => ({ title: r.t, text: r.d }))}
-    after="Je travaille avec les informations et les utilisateurs auxquels vous me donnez accès. Quand une question mérite d’être testée auprès d’eux, je vous le signale."
-  />
-
+  {/* Sur ordinateur, un panneau bleu, deux lignes ; sur téléphone, deux cartes bleues dans un carrousel latéral, comme les formules des pages
+      Création et Refonte : en haut, une affiche dont la fenêtre illustre la formule (un livrable, une équipe), sans jauge. */}
   <Tile id="collaboration" wide title="Deux façons de travailler ensemble." sub="Les modalités sont définies avec vous avant de commencer.">
     <div class="cs-lv-panel panel-blue panel-blue--riso il-modes">
       <ol class="cs-lv-list" role="list">
         {
-          modes.map((l) => (
+          modes.map((l, i) => (
             <li class="cs-lv">
+              <div class="cs-lv-gauge il-poster" aria-hidden="true">
+                <i class="cs-lv-sh"></i>
+                <i class="cs-lv-sh"></i>
+                <div class="cs-lv-win">
+                  {i === 0 ? (
+                    <span class="il-pw il-pw--mission"><i></i><i></i><i class="done"></i></span>
+                  ) : (
+                    <span class="il-pw il-pw--team"><b class="m1"></b><b class="m2"></b><b class="m3"></b><b class="new">+</b></span>
+                  )}
+                  <span class="il-pw-legend">{i === 0 ? 'Maquettes validées' : 'Votre équipe, renforcée'}</span>
+                </div>
+              </div>
               <div class="cs-lv-main">
                 <p class="cs-level-n"><R t={l.name} /></p>
                 <h3><R t={l.t} /></h3>
@@ -206,6 +244,46 @@ schema['@graph'].push({
       </ol>
     </div>
   </Tile>
+
+  {/* Les interventions : la même infographie animée que la démarche de l'accueil (Manifesto.astro), avec ses scènes à elles (isoScenes.ts,
+      interfaceScenes) : mêmes dispositions, même lumière d'une scène à l'autre. Les cartes de verre qui la précédaient sont gardées en commentaire. */}
+  <Manifesto
+    id="interventions"
+    label="Ce que je peux prendre en charge"
+    title="De la compréhension du besoin aux écrans."
+    sub="Une partie ou l’ensemble, selon votre équipe et votre projet."
+    steps={tasks}
+    arts={interfaceScenes}
+    after="Je travaille avec les informations et les utilisateurs auxquels vous me donnez accès. Quand une question mérite d’être testée auprès d’eux, je vous le signale."
+  />
+  {/*
+  {/ * Les interventions, à la carte (une partie ou l'ensemble) : sur le fond sombre, cinq cartes de verre, chacune avec sa scène isométrique animée
+      (isoScenes.ts, interfaceScenes), sans numéros ni liens entre elles : ce ne sont pas des étapes. * /}
+  <section class="tile tile--dark tile--mesh-a cs-dark il-tasks-tile" id="interventions" aria-labelledby="interventions-title">
+    <div class="wrap wrap--wide tile-inner">
+      <header class="tile-head">
+        <p class="tile-label">Ce que je peux prendre en charge</p>
+        <h2 id="interventions-title">De la compréhension du besoin aux écrans.</h2>
+        <p class="tile-sub">Une partie ou l’ensemble, selon votre équipe et votre projet.</p>
+      </header>
+      <ul class="il-tasks" role="list">
+        {
+          tasks.map((r, i) => (
+            <li class="il-task">
+              <span class="il-task-art" aria-hidden="true"><span class="il-task-float" style={`--i:${i}`}><Fragment set:html={interfaceScenes[i]} /></span></span>
+              <h3><R t={r.t} /></h3>
+              <p><R t={r.d} /></p>
+            </li>
+          ))
+        }
+      </ul>
+      <p class="il-after">
+        <R t="Je travaille avec les informations et les utilisateurs auxquels vous me donnez accès. Quand une question mérite d’être testée auprès d’eux, je vous le signale." />
+      </p>
+    </div>
+  </section>
+  */}
+
 
   <section class="tile tile--light il-xp" id="experience" aria-labelledby="experience-title">
     <div class="wrap wrap--wide tile-inner il-xp-grid">

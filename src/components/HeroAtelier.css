@@ -245,6 +245,9 @@
 
   /* ----- le texte à gauche ----- */
   .hero-zone--atelier .hero {
+    /* « Vos clients comprennent. » est plus long que l'ancien titre : chaque phrase tient sur une ligne, à gauche de la composition
+       (environ 760 px à 1440 px de large) */
+    --hero-h1-size: clamp(3.3rem, 5.3vw, 5.8rem);
     align-items: flex-start;
     text-align: left;
     /* même largeur et mêmes bords que le quadrillage : le texte s'aligne sur le cadre */
@@ -254,7 +257,10 @@
   }
 
   .hero-zone--atelier .hero-sub {
-    max-width: min(40ch, 40vw);
+    /* un peu plus large : deux lignes et demie au lieu de trois à 1440 px */
+    /* plus large : deux lignes égales à 1440 px (au lieu de trois), qui s'arrêtent avant la composition */
+    max-width: min(60ch, 50vw);
+    text-wrap: balance;
     text-align: left;
   }
 
@@ -275,7 +281,8 @@
   .hero-zone--atelier .hero-proof {
     grid-column: 1 / -1;
     width: auto;
-    text-align: center;
+    /* ferrée à gauche, sous le bouton principal */
+    text-align: left;
   }
 
   .hero-zone--atelier .hero-proof {
@@ -755,10 +762,19 @@
     translate: 0 -1px;
   }
 
+  /* « Vos clients comprennent. / Vos équipes avancent. » : chaque phrase commence sa ligne et se coupe d'elle-même. La taille suit la largeur
+     pour que le plus long mot (« comprennent. ») occupe environ 93 % de la colonne (375, 390 et 430 px : 4 lignes). */
+  .hero-zone--atelier .hero {
+    --hero-h1-size: clamp(2.25rem, calc(13vw - 5px), 3.2rem);
+  }
+
   .hero-zone--atelier .hero-sub {
-    max-width: 30ch;
+    /* toute la largeur de la colonne : trois lignes de 375 à 430 px */
+    max-width: 36ch;
+    /* « balance » ajoutait une quatrième ligne courte : ici, des lignes pleines */
+    text-wrap: pretty;
     margin: -6px 0 0;
-    font-size: 1.05rem;
+    font-size: min(1.05rem, 4.27vw);
     line-height: 1.45;
     text-align: left;
   }
@@ -768,7 +784,8 @@
     align-items: stretch;
     width: 100%;
     gap: 10px;
-    margin-top: clamp(14px, 3svh, 28px);
+    /* le premier bouton, un peu plus près du paragraphe */
+    margin-top: clamp(8px, 1.6svh, 16px);
   }
 
   .hero-zone--atelier .hero-actions .hero-assure {
@@ -1060,18 +1077,165 @@
   }
 }
 
-/* Téléphone : pas d'illustration dans la Hero pour le moment (formes masquées ; elles restent dans le code, pour les rétablir retirer ce bloc). */
+/* Une seule illustration, à toutes les largeurs : HeroMobileArt.astro (arche bleue, arche sable, fenêtre, disque orange). La composition d'origine
+   (arches, sphère, fenêtre, anneau, quadrillage), plus chargée, est masquée ; ses règles restent dans ce fichier pour la rétablir. */
+.hero-zone--atelier :is(.at-arch-pale, .at-arch-mint, .at-arch, .at-orb, .at-window, .at-quarter, .at-outline, .at-building, .at-disc, .at-ring, .at-grid) {
+  display: none !important;
+}
+
+/* Ordinateur : le lien secondaire reste un bouton (la flèche ronde ne sert que sur téléphone) */
+@media (min-width: 701px) {
+  .hero-zone--atelier .hero-actions .link-under-arrow {
+    display: none;
+  }
+}
+
+/* ---------- Téléphone : titre en dégradé, lien secondaire léger ---------- */
 @media (max-width: 700px) {
-  .hero-zone--atelier :is(.at-arch-pale, .at-arch-mint, .at-arch, .at-orb, .at-window, .at-quarter, .at-outline, .at-building, .at-disc, .at-ring) {
-    display: none !important;
+  /* chaque phrase passe doucement d'un bleu chaud (encre, indigo) à un bleu plus froid, de gauche à droite */
+  .hero-zone--atelier .hero-ink {
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
   }
 
-  /* sans composition sous le texte : la zone a une hauteur à elle (78 % de l'écran, au plus 640 px) et le bloc de texte s'y centre : l'air est le même
-     au-dessus (sous l'en-tête) et au-dessous des boutons */
+  .hero-zone--atelier .hero-l1 .hero-ink {
+    background-image: linear-gradient(100deg, var(--ink) 0%, #1b2a6b 48%, #2747c4 100%);
+  }
+
+  .hero-zone--atelier .hero-l2 .hero-ink {
+    background-image: linear-gradient(100deg, #1f2fa6 0%, #2552d6 55%, #2f7fd8 100%);
+  }
+
+  /* ordre : le bouton principal, la mention, puis « Voir une réalisation » en lien léger (souligné, flèche ronde), comme « Voir mon parcours » */
+  .hero-zone--atelier .hero-actions .hero-assure {
+    order: 1;
+    margin: 2px 0 0;
+  }
+
+  /* :is(…) porte la spécificité au-dessus des états du bouton papier (cta.css : survol, focus, appui) */
+  .hero-zone--atelier .hero-actions > .link-under:is(*, :hover, :focus-visible, :active) {
+    order: 2;
+    align-self: flex-start;
+    width: auto;
+    min-height: 44px;
+    margin-top: 10px;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    box-shadow: none;
+    justify-content: flex-start;
+    font-size: 17px;
+    translate: none;
+  }
+
+  .hero-zone--atelier .hero-actions > .link-under:is(*, [data-glow])::after {
+    content: none;
+  }
+}
+
+/* Titre de la Hero de l'accueil : Bricolage Grotesque (la police des titres du site), graisse 800, la plus lourde de la police ; la taille
+   optique suit le corps (axe opsz). Approche resserrée : en grand corps, les lettres de Bricolage respirent trop. */
+.hero-zone--atelier .hero h1 :is(.hero-l1, .hero-l2) {
+  font-family: var(--font-title);
+  font-weight: 800;
+  font-optical-sizing: auto;
+  letter-spacing: -0.03em;
+  word-spacing: 0;
+}
+
+/* Téléphone : la Hero fait un écran (petit viewport : barres Safari visibles), l'illustration (HeroMobileArt) occupe le bas à droite et le bloc de texte
+   se pose juste au-dessus d'elle. Le bas du texte peut descendre sur le haut de l'illustration (environ 18 % de sa hauteur) : seule l'arche bleue y monte,
+   à droite, loin du texte ferré à gauche. Sur un écran plus haut, l'air supplémentaire va au-dessus du titre, pas sous les boutons. */
+@media (max-width: 700px) {
   .hero-zone.hero-zone--atelier {
-    min-height: min(78svh, 640px);
+    --hm-h: calc(min(62vw, 300px) * 220 / 260);
+    /* un peu plus haute qu'un écran : le bloc de texte descend d'environ 24 px, et l'illustration, ancrée en bas, s'écarte du lien « Voir une réalisation » */
+    min-height: calc(100svh + 72px);
+    /* le bloc est centré entre l'en-tête et le haut de l'illustration, un peu plus bas qu'avant (il paraissait haut sur un iPhone) : son bas
+       peut passer sur le haut de l'arche, à droite, loin du texte ferré à gauche */
     justify-content: center;
     padding-top: var(--header-h);
-    padding-bottom: clamp(40px, 10vw, 64px);
+    padding-bottom: calc(var(--hm-h) * 0.36 + 24px);
   }
+
+  .hero-zone--atelier .hero {
+    z-index: 1;
+  }
+}
+
+/* ---------- Ordinateur : titre en dégradé, plus grand et mieux réparti ----------
+   Un intervalle franc sépare les deux phrases (le sujet, puis le résultat),
+   l'interligne reste régulier. */
+@media (min-width: 701px) {
+  /* le dégradé du titre, comme sur téléphone : du bleu nuit chaud vers un bleu plus froid, sur la largeur du texte (et non du bloc, d'où fit-content).
+     Pas de filet : avec un texte transparent (dégradé), il laisse voir les contours qui se chevauchent dans la police variable (traits sous les p et les q). */
+  .hero-zone--atelier .hero h1 :is(.hero-l1, .hero-l2) {
+    mix-blend-mode: normal;
+  }
+
+  .hero-zone--atelier .hero h1 .hero-ink {
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+
+  .hero-zone--atelier .hero h1 .hero-l1 .hero-ink {
+    background-image: linear-gradient(100deg, var(--ink) 0%, #1b2a6b 48%, #2747c4 100%);
+  }
+
+  .hero-zone--atelier .hero h1 .hero-l2 .hero-ink {
+    background-image: linear-gradient(100deg, #1f2fa6 0%, #2552d6 55%, #2f7fd8 100%);
+  }
+
+  .hero-zone--atelier .hero h1 :is(.hero-l1, .hero-l2) {
+    font-weight: 800;
+    /* en très grand corps, la taille optique resserre déjà le dessin : approche à peine négative, un peu d'air entre les mots */
+    letter-spacing: -0.012em;
+    word-spacing: 0.04em;
+    line-height: 1.04;
+  }
+
+  .hero-zone--atelier .hero h1 .hero-l2 {
+    margin-top: 0.24em;
+  }
+}
+
+/* ---------- Téléphone : « Voir une réalisation », sans rond autour de la flèche ---------- */
+@media (max-width: 700px) {
+  .hero-zone--atelier .hero-actions > .link-under {
+    gap: 8px;
+  }
+
+  .hero-zone--atelier .hero-actions > .link-under .link-under-arrow {
+    width: auto;
+    height: auto;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+  }
+
+  .hero-zone--atelier .hero-actions > .link-under .link-under-arrow svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  /* au survol / focus, la flèche glisse d'un cran (le rond qui se remplissait n'existe plus) */
+  .hero-zone--atelier .hero-actions > .link-under:is(:hover, :focus-visible) .link-under-arrow {
+    background: none;
+    box-shadow: none;
+    color: inherit;
+    transform: translateX(3px);
+  }
+}
+
+/* Lien secondaire : le texte ne change pas de couleur au survol (le rond de flèche est déjà retiré sur téléphone, et masqué sur ordinateur) */
+.hero-zone--atelier .hero-actions > .link-under:is(:hover, :focus-visible) .link-under-text {
+  color: inherit;
 }

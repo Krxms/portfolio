@@ -91,6 +91,8 @@
      --lu-text : un orange foncé sur fond clair (lisible), le même orange doux que le rond sur fond sombre */
   --lu-fill: #ee8532;
   --lu-text: #b4520c;
+  /* la flèche, dans le rond rempli : la couleur du fond de la section (papier sur fond clair, marine sur fond sombre) */
+  --lu-on: var(--paper);
   gap: 12px;
   padding-bottom: 0;
   background: none;
@@ -99,6 +101,7 @@
 .link-under--arrow.link-under--light {
   --lu-fill: #ffa65a;
   --lu-text: #ffa65a;
+  --lu-on: #0b1a4a;
 }
 
 .link-under--arrow .link-under-text {
@@ -140,7 +143,7 @@
   background-size: 100% 100%;
   border-color: var(--lu-fill);
   box-shadow: 0 0 18px -4px rgb(255 150 60 / 0.5);
-  color: #06133f;
+  color: var(--lu-on);
   transform: translateX(4px);
 }
 

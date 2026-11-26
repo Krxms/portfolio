@@ -56,276 +56,581 @@
   }
 }
 
-/* ---------- Quand faire appel à moi : la liste et, à côté, une scène (les repères numérotés) ---------- */
-/* la scène au-dessus, la liste horizontale dessous : même présentation que les pages Création et Refonte */
+/* ---------- Quand faire appel à moi : la scène au-dessus, la liste horizontale dessous (même présentation que les pages Création et Refonte) ---------- */
 .il-split {
   display: block;
 }
 
-/* La scène reprend le fond des scènes des pages Création et Refonte (dégradé bleu, béton et grain derrière, formes du logo). Elle ne porte pas
-   la classe .cs-stage : au-dessus de 700 px, celle-ci laisse la place à l'illustration Figma de ces pages. */
+/* La scène reprend le format et les éléments des scènes des pages Création et Refonte : un cadre presque carré sur téléphone, large au-dessus
+   de 700 px ; une fenêtre (.cs-site), trois cartes blanches (.cs-serp, .cs-guide, .cs-phone), les repères orange. Elle est posée sur le fond
+   sombre de la section, sans panneau. Mesures en cqw (largeur de la scène), échelle --q de chaque élément (creation-site-web.css). */
 .il-stage {
   position: relative;
-  isolation: isolate;
-  overflow: hidden;
   container-type: inline-size;
-  aspect-ratio: 100 / 92;
-  width: min(100%, 520px);
-  margin: clamp(24px, 3.6vw, 52px) auto 0;
-  border-radius: var(--radius-xl);
-  background: var(--stage-navy);
-  background-blend-mode: soft-light, normal, normal;
-  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.12), 0 30px 60px -36px rgb(11 26 74 / 0.55);
+  aspect-ratio: 100 / 112;
+  width: 100%;
+  margin-top: clamp(24px, 3.6vw, 52px);
 }
 
-.il-stage::before,
-.il-stage::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
+@media (min-width: 701px) {
+  .il-stage {
+    aspect-ratio: 100 / 44;
+  }
 }
 
-.il-stage::before {
-  background: url('../assets/riso/concrete-tile.webp') 0 0 / 256px 256px repeat;
-  mix-blend-mode: soft-light;
-  opacity: 0.4;
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .il-stage {
+      view-timeline: --cs block;
+    }
+  }
 }
 
-.il-stage::after {
-  background: var(--grain-soft) 0 0 / 160px 160px repeat;
-  mix-blend-mode: soft-light;
-  opacity: 0.22;
-}
-
-.il-stage .concrete {
-  --concrete: 0.16;
-}
-
-/* l'écran du logiciel, en cqw (la largeur de la scène) */
-.il-app {
-  position: absolute;
-  z-index: 1;
-  left: 7cqw;
-  top: 12cqw;
-  width: 86cqw;
-  height: 70cqw;
-  overflow: hidden;
-  border-radius: 2.4cqw;
-  background: #f5f3ea;
-  box-shadow: 0 3cqw 5cqw -2.4cqw rgb(6 19 63 / 0.55), 0 0 0 0.3cqw rgb(255 255 255 / 0.5);
-}
-
-.il-bar {
-  display: flex;
-  align-items: center;
-  gap: 1.2cqw;
-  height: 6.4cqw;
-  padding-inline: 2.4cqw;
-  background: #e3e6f1;
-}
-
-.il-bar > i {
-  width: 1.5cqw;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background: #ee8532;
-}
-
-.il-bar > i:nth-child(2) { background: #f1c56b; }
-.il-bar > i:nth-child(3) { background: #a6d4ca; }
-
-.il-team {
-  display: flex;
-  margin-left: auto;
-}
-
-.il-team b {
-  width: 3.4cqw;
-  aspect-ratio: 1;
-  margin-left: -0.8cqw;
-  border-radius: 50%;
-  background: #1f45d6;
-  box-shadow: 0 0 0 0.45cqw #e3e6f1;
-}
-
-.il-team b:nth-child(2) { background: #ee8532; }
-.il-team b:nth-child(3) { background: #8fc9bb; }
-
-.il-body {
+/* les repères sont posés dans l'élément qu'ils désignent : ils suivent son glissement, sans le leur. Les règles des cartes (.cs-guide span…) ne
+   s'appliquent pas à eux. */
+.il-stage .cs-pin {
   display: grid;
-  grid-template-columns: 13cqw minmax(0, 1fr) 20cqw;
-  gap: 2cqw;
-  height: calc(100% - 6.4cqw);
-  padding: 2.4cqw;
+  gap: 0;
+  font-size: calc(var(--pin) * 0.5);
+  font-weight: 700;
+  color: #fff;
+  animation: none;
 }
 
-.il-nav {
+/* le logiciel : une barre latérale, des outils, une liste, un module à créer */
+.il-app {
+  display: grid;
+  grid-template-columns: calc(9 * var(--q)) minmax(0, 1fr);
+  gap: calc(1.8 * var(--q));
+  padding: calc(1.8 * var(--q));
+}
+
+.il-side {
   display: flex;
   flex-direction: column;
-  gap: 1.8cqw;
-  padding: 2cqw 1.6cqw;
-  border-radius: 1.6cqw;
-  background: rgb(31 69 214 / 0.12);
+  gap: calc(1.2 * var(--q));
+  padding: calc(1.4 * var(--q)) calc(1.1 * var(--q));
+  border-radius: calc(0.9 * var(--q));
+  background: #f3f6fb;
 }
 
-.il-nav b,
-.il-nav span {
+.il-side b,
+.il-side span {
   display: block;
-  height: 1.3cqw;
-  border-radius: 1cqw;
-  background: rgb(19 36 124 / 0.35);
+  height: calc(0.65 * var(--q));
+  border-radius: calc(0.4 * var(--q));
+  background: rgb(18 32 43 / 0.16);
 }
 
-.il-nav b {
-  height: 1.8cqw;
-  background: #1f45d6;
+.il-side b {
+  height: calc(1.4 * var(--q));
+  margin-bottom: calc(0.6 * var(--q));
+  background: #1a3cbf;
 }
 
 .il-main {
   display: flex;
   flex-direction: column;
-  gap: 1.8cqw;
+  gap: calc(1 * var(--q));
   min-width: 0;
 }
 
 .il-tools {
   display: flex;
-  gap: 1.6cqw;
+  gap: calc(1 * var(--q));
+  height: calc(2.4 * var(--q));
 }
 
 .il-search {
   flex: 1;
-  height: 4.6cqw;
-  border-radius: 2.3cqw;
+  border-radius: 999px;
   background: #fff;
-  box-shadow: inset 0 0 0 0.25cqw rgb(19 36 124 / 0.2);
+  box-shadow: inset 0 0 0 1px rgb(18 32 43 / 0.14);
 }
 
 .il-tools em {
-  width: 9cqw;
-  border-radius: 2.3cqw;
-  background: #1f45d6;
+  width: calc(6 * var(--q));
+  border-radius: 999px;
+  background: linear-gradient(180deg, #3566ee, #1f45d6);
 }
 
 .il-row {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 7cqw;
-  padding-inline: 2cqw;
-  border-radius: 1.4cqw;
-  background: #fff;
-  box-shadow: inset 0 0 0 0.25cqw rgb(19 36 124 / 0.12);
+  height: calc(3.6 * var(--q));
+  padding-inline: calc(1.2 * var(--q));
+  border-radius: calc(0.9 * var(--q));
+  background: #f3f6fb;
+  box-shadow: inset 0 0 0 1px rgb(18 32 43 / 0.07);
 }
 
 .il-row > i {
-  width: 22cqw;
-  height: 1.5cqw;
-  border-radius: 1cqw;
-  background: rgb(19 36 124 / 0.38);
+  width: 46%;
+  height: calc(0.7 * var(--q));
+  border-radius: calc(0.4 * var(--q));
+  background: rgb(18 32 43 / 0.2);
 }
 
 .il-row > s {
-  width: 7cqw;
-  height: 3cqw;
-  border-radius: 1.5cqw;
+  width: calc(4.6 * var(--q));
+  height: calc(1.6 * var(--q));
+  border-radius: 999px;
   background: #a6d4ca;
 }
 
-.il-row > s.c2 { background: #f1c56b; }
+.il-row > s.c2 { background: #f2cf86; }
 .il-row > s.c3 { background: #ee8532; }
 
-/* une ligne qui ne suit pas l'alignement des autres : l'incohérence que l'absence de système laisse s'installer */
+/* une ligne qui ne suit pas l'alignement des autres : la cohérence perdue */
 .il-row--off {
-  margin-left: 2.4cqw;
+  margin-left: calc(1.6 * var(--q));
+  margin-right: calc(-1.6 * var(--q));
 }
 
 .il-new {
-  flex: 1;
-  min-height: 7cqw;
-  border-radius: 1.4cqw;
-  border: 0.35cqw dashed rgb(31 69 214 / 0.5);
-  background: rgb(31 69 214 / 0.05);
+  position: relative;
+  display: grid;
+  place-items: center;
+  height: calc(6 * var(--q));
+  border-radius: calc(0.9 * var(--q));
+  border: max(1px, calc(0.16 * var(--q))) dashed rgb(26 60 191 / 0.45);
+  background: rgb(26 60 191 / 0.05);
+  font-size: calc(1.05 * var(--q));
+  font-weight: 600;
+  color: #1a3cbf;
 }
 
-.il-detail {
+/* les repères dans la fenêtre : sur le bord droit de la ligne décalée, au coin du module à créer */
+.il-win .cs-pin {
+  left: auto;
+  right: calc(-0.4 * var(--q));
+  top: 50%;
+  margin: calc(var(--pin) / -2) 0 0;
+}
+
+.il-new .cs-pin {
+  right: calc(1.2 * var(--q));
+}
+
+/* la ligne décalée : le repère à son bord gauche (le bord droit passe sous la carte de l'équipe) */
+.il-row--off .cs-pin {
+  right: auto;
+  left: calc(-0.2 * var(--q));
+}
+
+/* les cartes : le repère à leur coin haut gauche */
+.il-path .cs-pin,
+.il-kit .cs-pin,
+.il-team .cs-pin {
+  left: 0;
+  top: 0;
+}
+
+/* le parcours trop long : neuf étapes, on n'en est qu'à la sixième */
+.il-steps {
   display: flex;
-  flex-direction: column;
-  gap: 1.6cqw;
-  padding: 2cqw;
-  border-radius: 1.6cqw;
-  background: #fff;
-  box-shadow: inset 0 0 0 0.25cqw rgb(19 36 124 / 0.12);
+  gap: calc(0.5 * var(--q));
+  margin-top: calc(0.3 * var(--q));
 }
 
-.il-av {
-  width: 7cqw;
+.il-steps i {
+  flex: 1;
+  height: calc(0.7 * var(--q));
+  border-radius: 999px;
+  background: rgb(18 32 43 / 0.12);
+}
+
+.il-steps i.on {
+  background: #1a3cbf;
+}
+
+/* des composants sans système commun : trois boutons pour la même action */
+.il-kit-label {
+  margin: 0;
+  font-size: calc(1.05 * var(--q));
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+
+.il-kit-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: calc(0.7 * var(--q));
+}
+
+.il-kit-row em {
+  padding: calc(0.55 * var(--q)) calc(1 * var(--q));
+  font-size: calc(1.05 * var(--q));
+  font-style: normal;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.il-kit-row .k1 {
+  border-radius: 999px;
+  background: linear-gradient(180deg, #3566ee, #1f45d6);
+  color: #fff;
+}
+
+.il-kit-row .k2 {
+  border-radius: calc(0.3 * var(--q));
+  background: #ee8532;
+  color: #fff;
+}
+
+.il-kit-row .k3 {
+  border-radius: calc(0.6 * var(--q));
+  box-shadow: inset 0 0 0 max(1px, calc(0.14 * var(--q))) #1a3cbf;
+  color: #1a3cbf;
+}
+
+/* l'équipe produit, et la place du renfort */
+.il-team {
+  gap: calc(1.2 * var(--q));
+  padding: calc(1.8 * var(--q)) calc(1.4 * var(--q));
+}
+
+.il-mate {
+  display: flex;
+  align-items: center;
+  gap: calc(0.8 * var(--q));
+}
+
+.il-mate b {
+  flex: none;
+  width: calc(2.6 * var(--q));
   aspect-ratio: 1;
   border-radius: 50%;
-  background: rgb(31 69 214 / 0.2);
+  background: #1a3cbf;
 }
 
-.il-detail > i {
-  height: 1.3cqw;
-  border-radius: 1cqw;
-  background: rgb(19 36 124 / 0.3);
+.il-mate b.m2 { background: #ee8532; }
+.il-mate b.m3 { background: #a6d4ca; }
+
+.il-mate i {
+  flex: 1;
+  height: calc(0.65 * var(--q));
+  border-radius: calc(0.4 * var(--q));
+  background: rgb(18 32 43 / 0.16);
 }
 
-.il-detail > i:nth-of-type(2) { width: 70%; }
-
-.il-detail em {
-  height: 4cqw;
-  border-radius: 1.2cqw;
-  background: #1f45d6;
+.il-mate--new {
+  margin-top: auto;
+  padding: calc(0.7 * var(--q));
+  border-radius: calc(1 * var(--q));
+  border: max(1px, calc(0.16 * var(--q))) dashed rgb(26 60 191 / 0.45);
+  font-size: calc(0.95 * var(--q));
+  font-weight: 600;
+  line-height: 1.2;
+  color: #1a3cbf;
 }
 
-/* deux boutons de styles différents : pas de système commun */
-.il-detail .il-btn2 {
-  border-radius: 2cqw;
-  background: #ee8532;
+.il-mate--new b {
+  width: calc(2 * var(--q));
+  background: #fff;
+  box-shadow: inset 0 0 0 max(1px, calc(0.16 * var(--q))) #1a3cbf;
 }
 
-/* les repères : en pourcentages de la scène */
-.il-pin--1 { left: 54%; top: 66%; }
-.il-pin--2 { left: 41%; top: 46%; }
-.il-pin--3 { left: 17%; top: 38%; }
-.il-pin--4 { left: 88%; top: 68%; }
-.il-pin--5 { left: 80%; top: 17%; }
+/* la carte de l'équipe a la place du téléphone : un peu moins haute que lui */
+.il-team.cs-phone {
+  height: auto;
+  min-height: calc(22 * var(--q));
+}
 
-/* ordinateur et tablette : la scène est un cadre large, comme celles des autres pages. L'écran du logiciel garde son dessin (86 x 70 cqw) et
-   se réduit de moitié, au centre ; les repères suivent. */
+/* téléphone : la fenêtre en haut ; dessous, le parcours et les boutons à gauche, l'équipe à droite */
+.il-stage .il-path {
+  top: 64cqw;
+}
+
+.il-stage .il-kit {
+  top: 88cqw;
+}
+
+/* la carte de l'équipe, sous la fenêtre, à droite (au-dessus, elle masquait le module à créer) */
+.il-stage .il-team {
+  top: 61cqw;
+}
+
 @media (min-width: 701px) {
-  .il-stage {
-    aspect-ratio: 100 / 46;
-    width: 100%;
+  .il-stage .il-path {
+    left: 3cqw;
+    top: 30cqw;
   }
 
-  .il-app {
-    left: 7cqw;
-    top: -12cqw;
-    transform: scale(0.5);
-    transform-origin: center;
+  .il-stage .il-kit {
+    left: 77cqw;
+    top: 27cqw;
+    width: calc(19 * var(--q));
   }
 
-  .il-stage .cs-pin {
-    --pin: max(22px, 2.6cqw);
+  .il-stage .il-team {
+    top: 6cqw;
   }
-
-  .il-pin--1 { left: 52%; top: 65%; }
-  .il-pin--2 { left: 45.5%; top: 45%; }
-  .il-pin--3 { left: 34.3%; top: 37%; }
-  .il-pin--4 { left: 69%; top: 67%; }
-  .il-pin--5 { left: 65%; top: 16%; }
-
-  /* les formes du logo, à la mesure du cadre large */
-  .il-stage .cs-disc { top: -9cqw; right: -5cqw; width: 22cqw; }
-  .il-stage .cs-arch { left: 80cqw; width: 12cqw; height: 16cqw; }
-  .il-stage .cs-quarter { width: 8cqw; }
 }
 
-/* Comme les scènes des pages Création, Refonte et Audit : le fond marine de la scène du Cuistologue, sans les formes du logo (retirer ce bloc pour les rétablir). */
-.il-stage .cs-shape {
-  display: none;
+/* ---------- Deux façons de travailler : l'affiche de chaque carte (téléphone) ----------
+   Comme les formules des pages Création et Refonte, sans jauge : la fenêtre illustre la formule. Une mission : trois écrans, le dernier validé.
+   Un renfort : l'équipe, et la place qui s'y ajoute. Sur ordinateur, l'affiche est masquée (le panneau a deux colonnes, sans jauge). */
+@media (min-width: 701px) {
+  .il-modes .il-poster {
+    display: none;
+  }
+}
+
+.il-pw {
+  display: flex;
+  justify-content: center;
+  gap: 3cqw;
+  margin-bottom: 3.4cqw;
+}
+
+.il-pw--mission i {
+  position: relative;
+  width: 17cqw;
+  aspect-ratio: 4 / 3;
+  border-radius: 1.6cqw;
+  background:
+    linear-gradient(#f1f4f9, #f1f4f9) 0 0 / 100% 22% no-repeat,
+    linear-gradient(rgb(18 32 43 / 0.14), rgb(18 32 43 / 0.14)) 18% 48% / 64% 9% no-repeat,
+    linear-gradient(rgb(18 32 43 / 0.1), rgb(18 32 43 / 0.1)) 18% 72% / 40% 9% no-repeat,
+    #fff;
+  box-shadow: inset 0 0 0 1px rgb(18 32 43 / 0.12);
+}
+
+.il-pw--mission i.done {
+  background:
+    linear-gradient(#f1f4f9, #f1f4f9) 0 0 / 100% 22% no-repeat,
+    linear-gradient(#1a3cbf, #1a3cbf) 18% 48% / 64% 12% no-repeat,
+    linear-gradient(#a6d4ca, #a6d4ca) 18% 76% / 40% 10% no-repeat,
+    #fff;
+  box-shadow: inset 0 0 0 1px rgb(26 60 191 / 0.35);
+}
+
+.il-pw--mission i.done::after {
+  content: '';
+  position: absolute;
+  right: -2.4cqw;
+  top: -2.4cqw;
+  width: 6cqw;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #35b394 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M3 6.2l2 2.1 4-4.6' fill='none' stroke='%23fff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 70% no-repeat;
+}
+
+.il-pw--team b {
+  display: grid;
+  place-items: center;
+  width: 10cqw;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #1a3cbf;
+  font-size: 5cqw;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.il-pw--team b.m2 { background: #ee8532; }
+.il-pw--team b.m3 { background: #a6d4ca; }
+
+.il-pw--team b.new {
+  background: #fff;
+  box-shadow: inset 0 0 0 0.5cqw #1a3cbf;
+  color: #1a3cbf;
+}
+
+.il-pw-legend {
+  display: block;
+  font-size: max(11px, 3.6cqw);
+  font-weight: 600;
+  text-align: center;
+  color: var(--ink-soft);
+}
+
+/* ---------- Ce que je peux prendre en charge : cinq cartes de verre sur le fond sombre ----------
+   Chacune porte sa scène isométrique, puis son titre et son texte. Ce ne sont pas des étapes : ni numéro ni
+   lien. Ordinateur : cinq colonnes ; tablette : trois puis deux ; téléphone : une carte par ligne, la fenêtre à gauche. */
+.il-tasks {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: clamp(14px, 1.6vw, 24px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.il-task {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px 12px 22px;
+  border-radius: var(--radius-xl);
+  background: linear-gradient(180deg, rgb(255 255 255 / 0.1), rgb(255 255 255 / 0.05));
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.16), inset 0 1px 0 rgb(255 255 255 / 0.28), 0 24px 36px -28px rgb(4 10 56 / 0.7);
+}
+
+.il-task-art {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 16 / 10;
+  margin-bottom: 6px;
+  border-radius: calc(var(--radius-xl) - 12px);
+  background: radial-gradient(70% 90% at 22% 8%, rgb(120 160 255 / 0.45), transparent 62%), linear-gradient(158deg, #2f5de6 0%, #1f45d6 38%, #1a3cbf 66%, #13247c 100%);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.3);
+}
+
+.il-task:nth-child(2) .il-task-art {
+  background: radial-gradient(70% 90% at 20% 6%, rgb(255 255 255 / 0.55), transparent 62%), linear-gradient(158deg, #d8f3ec 0%, #a6d4ca 52%, #86c3b5 100%);
+}
+
+.il-task:nth-child(3) .il-task-art {
+  background: radial-gradient(70% 90% at 20% 6%, rgb(255 214 170 / 0.6), transparent 62%), linear-gradient(158deg, #ff9a58 0%, #f2733c 55%, #e0602a 100%);
+}
+
+.il-task:nth-child(4) .il-task-art {
+  background: radial-gradient(70% 90% at 20% 6%, rgb(255 255 255 / 0.55), transparent 62%), linear-gradient(158deg, #e3edff 0%, #b4cdfa 100%);
+}
+
+.il-task-art svg {
+  display: block;
+  width: 74%;
+  height: auto;
+  filter: drop-shadow(0 8px 12px rgb(4 10 56 / 0.35));
+}
+
+.il-task h3,
+.il-task p {
+  padding-inline: 8px;
+}
+
+.il-task h3 {
+  font-size: clamp(1.1rem, 1.4vw, 1.25rem);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: #fff;
+  text-wrap: balance;
+}
+
+.il-task p {
+  font-size: 15px;
+  line-height: 1.5;
+  color: rgb(255 255 255 / 0.8);
+}
+
+.il-after {
+  max-width: 62ch;
+  margin: clamp(28px, 3.4vw, 48px) auto 0;
+  font-size: 15.5px;
+  line-height: 1.55;
+  text-align: center;
+  color: rgb(255 255 255 / 0.78);
+}
+
+@media (max-width: 1100px) {
+  .il-tasks {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .il-tasks {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+
+  .il-task {
+    display: grid;
+    grid-template-columns: 38% minmax(0, 1fr);
+    column-gap: 14px;
+    row-gap: 4px;
+    align-items: start;
+    padding: 10px 14px 10px 10px;
+  }
+
+  .il-task-art {
+    grid-row: 1 / span 2;
+    margin: 0;
+  }
+
+  .il-task h3,
+  .il-task p {
+    padding: 0;
+  }
+
+  .il-task h3 {
+    margin-top: 4px;
+    font-size: 1.05rem;
+  }
+
+  .il-task p {
+    font-size: 14px;
+  }
+
+  .il-after {
+    text-align: left;
+  }
+}
+
+/* ---------- Les interventions : les cartes arrivent une à une, puis chaque scène s'anime ----------
+   La liste reçoit .is-in à son arrivée dans l'écran (scenes.js) : les cartes montent l'une après l'autre ; les scènes isométriques (mêmes mouvements
+   que celles de la démarche, Manifesto.css) ne s'animent qu'à partir de là, et flottent doucement, chacune avec sa phase. */
+.has-scenes .il-task {
+  opacity: 0;
+  translate: 0 22px;
+  transition:
+    opacity 0.55s ease calc(var(--i, 0) * 90ms),
+    translate 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) calc(var(--i, 0) * 90ms);
+}
+
+.has-scenes .il-tasks.is-in .il-task {
+  opacity: 1;
+  translate: 0 0;
+}
+
+.il-tasks:not(.is-in) .iso * {
+  animation-play-state: paused;
+}
+
+/* la scène : sans fond (posée sur le verre de la carte), un halo blanc très doux dessous */
+html .il-tasks .il-task .il-task-art {
+  position: relative;
+  display: block;
+  aspect-ratio: auto;
+  background: none;
+  box-shadow: none;
+  overflow: visible;
+}
+
+.il-task-art::before {
+  content: '';
+  position: absolute;
+  left: 6%;
+  right: 6%;
+  top: 34%;
+  height: 56%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgb(255 255 255 / 0.16), rgb(214 226 255 / 0) 100%);
+  pointer-events: none;
+}
+
+.il-task-float {
+  position: relative;
+  display: block;
+  width: 100%;
+}
+
+.il-task-float svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .has-scenes .il-tasks.is-in .il-task-float {
+    will-change: transform;
+    backface-visibility: hidden;
+    animation: proof-float 6s cubic-bezier(0.45, 0.05, 0.55, 0.95) calc(var(--i, 0) * -1.2s) infinite alternate;
+  }
 }

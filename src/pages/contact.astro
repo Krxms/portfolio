@@ -74,10 +74,12 @@ const turnstileKey = import.meta.env.PUBLIC_TURNSTILE_SITEKEY;
   description="Présentez votre projet de site web, d’interface de logiciel ou d’audit UX/UI. Premier échange gratuit, réponse généralement sous deux jours ouvrés."
   schema={schema}
 >
-  {/* pas d'entête de page classique : un panneau bleu (les moyens de me joindre) et le formulaire, sur le papier froid de l'accueil qui glisse vers le crème */}
+  {/* pas d'entête de page classique : un seul panneau bleu, qui porte les moyens de me joindre ET le formulaire (deux colonnes sur ordinateur,
+      l'un sous l'autre sur téléphone), sur le papier froid de l'accueil qui glisse vers le crème */}
   <div class="ct">
-    <div class="wrap wrap--wide ct-grid">
-      <div class="ct-panel panel-blue panel-blue--riso">
+    <div class="wrap wrap--wide">
+    <div class="ct-grid panel-blue panel-blue--riso">
+      <div class="ct-panel">
         <h1>
           <span class="ct-l1">Parlons de</span>{' '}
           <span class="ct-l2">votre projet.</span>
@@ -95,8 +97,8 @@ const turnstileKey = import.meta.env.PUBLIC_TURNSTILE_SITEKEY;
       </div>
 
       <form id="contactForm" class="ct-form" novalidate>
+        {/* téléphone : le titre du formulaire n'est plus affiché (la section bleue au-dessus l'introduit), il reste pour les lecteurs d'écran */}
         <h2>Présenter mon projet</h2>
-        <p class="form-hint">Nom, e-mail et message sont obligatoires.</p>
         <input
           type="text"
           name="company"
@@ -107,12 +109,12 @@ const turnstileKey = import.meta.env.PUBLIC_TURNSTILE_SITEKEY;
         />
         <div class="field-row">
           <div class="field">
-            <label for="fName">Nom</label>
+            <label for="fName">Nom<span class="req" aria-hidden="true">*</span></label>
             <input type="text" id="fName" name="name" placeholder="Votre nom" autocomplete="name" required aria-required="true" aria-describedby="fNameErr" />
             <p class="field-error" id="fNameErr" hidden></p>
           </div>
           <div class="field">
-            <label for="fEmail">E-mail</label>
+            <label for="fEmail">E-mail<span class="req" aria-hidden="true">*</span></label>
             <input type="email" id="fEmail" name="email" placeholder="vous@exemple.fr" autocomplete="email" inputmode="email" autocapitalize="off" spellcheck="false" required aria-required="true" aria-describedby="fEmailErr" />
             <p class="field-error" id="fEmailErr" hidden></p>
           </div>
@@ -128,15 +130,20 @@ const turnstileKey = import.meta.env.PUBLIC_TURNSTILE_SITEKEY;
           {
             guides.map((g, i) => (
               <div class="ct-guide" data-type={g.type} data-template={g.template} hidden={i > 0 ? true : undefined}>
-                <p class="ct-guide-title">Pour bien démarrer, dites-moi :</p>
+                <p class="ct-guide-title">Ce qui m’aide à vous répondre vite</p>
                 <ul role="list">{g.points.map((p) => <li>{p}</li>)}</ul>
-                <button type="button" class="ct-guide-use">Pré-remplir mon message</button>
+                <p class="ct-guide-foot">
+                  <button type="button" class="ct-guide-use">
+                    Partir d’un modèle
+                    <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M3 8h9.5M8.5 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                  </button>
+                </p>
               </div>
             ))
           }
         </div>
         <div class="field">
-          <label for="fMessage">Votre besoin</label>
+          <label for="fMessage">Votre besoin<span class="req" aria-hidden="true">*</span></label>
           <p class="field-hint" id="fMessageHint">Votre activité, ce que vous attendez, et une date si vous en avez une.</p>
           <textarea id="fMessage" aria-describedby="fMessageHint fMessageErr" name="message" placeholder="Parlez-moi de votre projet, de vos objectifs, de vos délais…" required aria-required="true"></textarea>
           <p class="field-error" id="fMessageErr" hidden></p>
@@ -145,16 +152,18 @@ const turnstileKey = import.meta.env.PUBLIC_TURNSTILE_SITEKEY;
         {/* le bouton principal des entêtes : tache de matière au survol, libellé qui défile (data-ink, cta.css) ; l'avion de papier part à l'envoi (contact.css) */}
         <div class="ct-actions">
           <p class="ct-reassure"><span class="ct-reassure-delay">Réponse généralement sous deux jours ouvrés. </span>Vos informations ne servent qu’à vous répondre.</p>
-          <button type="submit" class="frosted-cta ct-submit" data-ink>
+          {/* le bouton principal, inversé (papier, texte bleu nuit) : sur le bleu du panneau. Même survol « encre » : une tache bleu nuit se répand
+              depuis le pointeur, le libellé défile (cta.css). Pas d'icône. */}
+          <button type="submit" class="frosted-cta ct-submit" data-ink data-glow>
             <span class="text"><span class="roll"><span class="roll-a">Envoyer</span><span class="roll-b" aria-hidden="true">Envoyer</span></span></span>
-            <svg class="ct-send" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M3 11.5 21 3l-8.5 18-2.2-7.3z" />
-              <path d="M10.3 13.7 21 3" />
-            </svg>
           </button>
         </div>
         <p class="form-status" id="formStatus" role="status" aria-live="polite" aria-atomic="true"></p>
       </form>
+
+      {/* téléphone : sous le formulaire, une seule ligne pour appeler (le téléphone et l'e-mail sont aussi dans le menu et le pied de page) */}
+    </div>
+      <p class="ct-call">Vous préférez appeler ? <a href="tel:+33609111838">06 09 11 18 38</a></p>
     </div>
   </div>
 

@@ -212,3 +212,20 @@
     text-align: center;
   }
 }
+
+/* ---------- En-têtes bleus sur téléphone (À propos, Le Cuistologue, Contact) : titres et chapôs plus larges ----------
+   Le chapô n'est plus limité à 34 caractères et ses lignes ne sont plus resserrées (« balance ») : titre et chapô prennent la largeur du panneau. */
+@media (max-width: 700px) {
+  html :is(.ah-l1, .ah-l2, .ct-l1, .ct-l2) {
+    text-wrap: pretty;
+  }
+
+  html :is(.ah-lead, .ct-lead) {
+    max-width: none;
+    text-wrap: pretty;
+  }
+
+  html .ah-panel {
+    padding-inline: 16px;
+  }
+}

@@ -1603,7 +1603,7 @@
   }
 }
 
-/* Scène retravaillée dans Figma : sur ordinateur, l'illustration remplace le dessin construit en CSS (mêmes proportions, 1297 x 571).
+/* Scène retravaillée dans Figma (plus affichée, voir dessous) : sur ordinateur, l'illustration remplaçait le dessin construit en CSS (mêmes proportions, 1297 x 571).
    Elle est en deux dessins superposés : le fond (dégradé et formes), puis la texture du site (béton et grain, comme les autres scènes),
    puis les maquettes par-dessus, nettes. Chaque plan glisse à son rythme au défilement (cs-drift, plus haut). Sur mobile, la scène en CSS
    (cadre presque carré, téléphone au premier plan) reste en place : l'image large y serait trop petite pour être lue. */
@@ -1611,25 +1611,10 @@
   display: none;
 }
 
-@media (min-width: 701px) {
-  .cs-stage > :not(.cs-art) {
-    display: none;
-  }
-
-  .cs-art {
-    position: absolute;
-    inset: 0;
-    display: block;
-    width: 100%;
-    height: 100%;
-    overflow: visible;
-    pointer-events: none;
-  }
-
-  .cs-art--front {
-    z-index: 2;
-  }
-}
+/* Uniformisation (référence : la scène de la page Interfaces et logiciels) : sur ordinateur aussi, la scène est celle construite en CSS (fenêtre,
+   cartes blanches, repères), comme sur téléphone. Les images Figma ne sont plus affichées (masquées, et non téléchargées : loading="lazy"). Pour les
+   rétablir sur ordinateur, remettre ici : @media (min-width: 701px) { .cs-stage > :not(.cs-art) { display: none } .cs-art { display: block;
+   position: absolute; inset: 0; width: 100%; height: 100% } }. */
 
 @media (min-width: 701px) and (prefers-reduced-motion: no-preference) {
   @supports (animation-timeline: view()) {
@@ -1648,4 +1633,250 @@
    logo (disque, arche, quart de disque), qui restent dans le code, masquées : pour les rétablir, retirer ce bloc. */
 .cs-stage .cs-shape {
   display: none;
+}
+
+/* ---------- La section de la scène, sur fond sombre (.cs-dark : « Ce que vous recevez », « Votre site ne fait plus le travail ? ») ----------
+   La section passe par-dessus l'en-tête (le rideau), comme les offres de l'accueil : même matière (indigo qui tire vers le prune, lueur chaude),
+   fond à 90 %, flou léger tant qu'elle couvre l'en-tête. La scène est posée sur le fond, sans panneau : plus de cadre, d'ombre ni de matière propre. */
+.cs-dark.tile--dark::before {
+  background:
+    radial-gradient(60% 40% at 84% 90%, rgb(255 140 110 / 0.2), transparent 72%),
+    radial-gradient(56% 36% at 10% 12%, rgb(255 196 100 / 0.12), transparent 72%),
+    radial-gradient(60% 40% at 12% 78%, rgb(70 120 255 / 0.22), transparent 74%),
+    linear-gradient(180deg, #131f76 0%, #2a1c70 100%);
+}
+
+.cs-dark.tile--dark::after {
+  background: linear-gradient(180deg, rgb(2 12 20 / 0.3), rgb(2 12 20 / 0.24));
+}
+
+.cs-dark.tile--dark::before,
+.cs-dark.tile--dark::after {
+  opacity: 0.9;
+}
+
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+  .has-scenes .curtain > .cs-dark.tile--dark {
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+  }
+
+  .has-scenes .curtain:has(> .hero-zone.is-covered) > .cs-dark.tile--dark {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .cs-dark.tile--dark::before,
+  .cs-dark.tile--dark::after {
+    opacity: 1;
+  }
+}
+
+.cs-dark .cs-stage {
+  background: none;
+  box-shadow: none;
+  overflow: visible;
+}
+
+.cs-dark .cs-stage::before,
+.cs-dark .cs-stage::after {
+  content: none;
+}
+
+/* la liste des livrables, en blanc */
+.cs-dark .cs-deliv li {
+  border-top-color: rgb(255 255 255 / 0.18);
+}
+
+.cs-dark .cs-deliv li:last-child {
+  border-bottom-color: rgb(255 255 255 / 0.18);
+}
+
+.cs-dark .cs-deliv p {
+  color: rgb(255 255 255 / 0.78);
+}
+
+@media (min-width: 701px) {
+  .cs-dark .cs-deliv li {
+    border-top: 2px solid rgb(255 255 255 / 0.85);
+  }
+}
+
+/* ---------- Téléphone : la jauge des cartes ne suit plus le défilement ----------
+   Les jauges sont pleines. Seule la première carte (celle qu'on voit en arrivant) se remplit, une fois, quand le carrousel entre dans l'écran
+   (classe .is-in, scenes.js) : une animation CSS de --k, déclarée comme nombre pour pouvoir être animée. Les autres cartes, hors de l'écran, n'en ont
+   pas besoin. Avec « réduire les animations », rien ne bouge : les jauges sont pleines. */
+@property --k {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 1;
+}
+
+@keyframes cs-lv-fill {
+  from {
+    --k: 0;
+  }
+
+  to {
+    --k: 1;
+  }
+}
+
+@media (max-width: 700px) {
+  .has-scenes .cs-lv {
+    --k: 1;
+  }
+
+  .has-scenes .cs-lv-panel:not(.is-in) .cs-lv:first-child {
+    --k: 0;
+  }
+
+  .has-scenes .cs-lv-panel.is-in .cs-lv:first-child {
+    animation: cs-lv-fill 1.6s cubic-bezier(0.45, 0, 0.2, 1) 0.25s both;
+  }
+}
+
+/* ---------- Téléphone : les sections sombres de bas de page (« Un cadre clair… ») ----------
+   Plus d'air entre le titre et le premier engagement ; le premier engagement n'a pas de barre orange (le titre ouvre déjà la liste). */
+@media (max-width: 700px) {
+  #cadre .tile-head {
+    margin-bottom: 44px;
+  }
+
+  #cadre .cs-commit li:first-child::before {
+    display: none;
+  }
+}
+
+/* ---------- Ordinateur : les jauges se remplissent une seule fois, à la première arrivée du panneau ----------
+   Plus de suivi du défilement (--e) : quand le panneau entre dans l'écran (.is-in, scenes.js), chaque ligne se remplit à son tour (--i), en 1,6 s,
+   puis ne bouge plus, même si l'on remonte ou redescend. Sur téléphone, seule la première carte se remplit (plus haut). */
+@media (min-width: 701px) {
+  .has-scenes .cs-lv {
+    --k: 1;
+  }
+
+  .has-scenes .cs-lv-panel:not(.is-in) .cs-lv {
+    --k: 0;
+  }
+
+  .has-scenes .cs-lv-panel.is-in .cs-lv {
+    animation: cs-lv-fill 1.6s cubic-bezier(0.45, 0, 0.2, 1) calc(0.2s + var(--i, 0) * 0.22s) both;
+  }
+}
+
+/* ---------- Audit : « Quand un audit est utile », en section à part (clair) ---------- */
+.cs-quand .tile-head h2 em {
+  font-style: normal;
+  color: inherit;
+}
+
+/* ---------- Audit : « Ce que vous recevez », sur le papier clair ----------
+   Les blocs pensés pour la zone sombre (engagements, revue experte, liens « Après l'audit ») passent à l'encre. */
+.cs-onlight .cs-commit h3 {
+  color: var(--ink);
+}
+
+.cs-onlight .cs-commit p {
+  color: var(--ink-soft);
+}
+
+.cs-onlight .cs-start {
+  border-top-color: rgb(18 32 43 / 0.16);
+}
+
+.cs-onlight .cs-start p {
+  color: var(--ink-soft);
+}
+
+.cs-onlight .cs-start strong,
+.cs-onlight .cs-limits h3 {
+  color: var(--ink);
+}
+
+.cs-onlight .cs-start strong {
+  color: #b4520c;
+}
+
+.cs-onlight .cs-next-label {
+  color: var(--signal-deep);
+}
+
+.cs-onlight .cs-next a {
+  border-top-color: rgb(18 32 43 / 0.2);
+  color: var(--ink);
+}
+
+.cs-onlight .cs-next a::after {
+  color: #b4520c;
+}
+
+.cs-onlight .cs-next span {
+  color: var(--ink-soft);
+}
+
+@media (max-width: 700px) {
+  .cs-onlight .tile-head {
+    margin-bottom: 44px;
+  }
+
+  .cs-onlight .cs-commit li:first-child::before {
+    display: none;
+  }
+}
+
+/* ---------- Audit : « Quand un audit est utile », comme « Vous choisissez l'ampleur » ----------
+   Ordinateur : le panneau bleu, trois lignes : la situation à gauche, ce que l'audit apporte à droite (l'affiche est masquée). Téléphone : trois cartes
+   bleues à affiche, dans le carrousel des formules (règles .cs-lv plus haut) ; la fenêtre de l'affiche porte un dessin, sans jauge. */
+.cs-cases .cs-lv-list {
+  border-top: 0;
+}
+
+.cs-cases .cs-case-d {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.6;
+  color: rgb(255 255 255 / 0.9);
+}
+
+.cs-case-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+@media (min-width: 701px) {
+  .cs-cases .cs-lv {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr);
+    align-items: center;
+  }
+
+  .cs-cases .cs-case-poster {
+    display: none;
+  }
+}
+
+@media (max-width: 700px) {
+  .cs-cases .cs-lv-win {
+    padding: 3.4cqw;
+  }
+
+  .cs-cases .cs-case-d {
+    padding-inline: 12px;
+    font-size: 15px;
+  }
+}
+
+/* « Ce que vous recevez » (Audit), dans la zone sombre : sur téléphone, comme « Un cadre clair » : plus d'air sous le titre, pas de barre orange
+   devant le premier engagement */
+@media (max-width: 700px) {
+  #livrable .tile-head {
+    margin-bottom: 44px;
+  }
+
+  #livrable .cs-commit li:first-child::before {
+    display: none;
+  }
 }

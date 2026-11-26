@@ -5,7 +5,7 @@ import { plain } from '../lib/fmt';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Tile from '../components/Tile.astro';
 import PageHero from '../components/PageHero.astro';
-import ExplodedProcess from '../components/ExplodedProcess.astro';
+import Manifesto from '../components/Manifesto.astro';
 import ProjectTeaser from '../components/ProjectTeaser.astro';
 import Faq from '../components/Faq.astro';
 import LinkUnder from '../components/LinkUnder.astro';
@@ -53,12 +53,12 @@ const signs = [
   { t: 'Vous n’osez plus y toucher', d: 'Modifier un texte devient une affaire de spécialiste, ou casse la mise en page.' },
 ];
 
+// La démarche : les quatre étapes de l'accueil (mêmes titres, mêmes scènes), détaillées pour une refonte ; « Vous recevez » : le livrable de l'étape.
 const steps = [
-  { title: 'Comprendre', text: 'Un premier échange et une lecture rapide de votre site actuel, gratuits, pour comprendre votre demande et établir le devis. Pour un diagnostic écrit et détaillé, l’audit UX/UI est une prestation à part.' },
-  { title: 'Cadrer', text: 'Ce qu’on garde, ce qu’on change, le niveau d’intervention et le calendrier. Le projet démarre à la validation du devis et au versement de l’acompte.', gets: 'Un devis détaillé, valable 30 jours.' },
-  { title: 'Concevoir', text: 'Le plan de la refonte, puis les écrans pour ordinateur et mobile. Nous échangeons sur les maquettes, que j’ajuste selon les étapes et les retours prévus au devis.', gets: 'Le plan de la refonte et les maquettes validées.' },
-  { title: 'Réaliser', text: 'Je construis le site, je reprends vos contenus et je prépare les redirections des anciennes adresses vers les pages les plus pertinentes du nouveau site.', gets: 'Un site prêt à remplacer l’ancien.' },
-  { title: 'Mettre en ligne', text: 'Bascule préparée, vérifications après la mise en ligne et, si vous administrez votre site, prise en main. Le solde est facturé à la livraison.', gets: 'Votre nouveau site en ligne et les accès convenus.' },
+  { t: 'Comprendre', d: 'Un premier échange et une lecture rapide de votre site, gratuits.' },
+  { t: 'Cadrer', d: 'Ce qu’on garde, ce qu’on change et le calendrier, dans un devis valable 30 jours.', gets: 'Le devis.' },
+  { t: 'Concevoir', d: 'Le plan de la refonte, puis les maquettes, ajustées avec vous.', gets: 'Le plan et les maquettes validées.' },
+  { t: 'Réaliser', d: 'Le site construit, vos contenus repris, les anciennes adresses redirigées, puis la bascule.', gets: 'Votre nouveau site en ligne et les accès convenus.' },
 ];
 // De la correction ciblée à la refonte complète. `me` : la part refaite, en trois crans seulement (un tiers, deux tiers, tout), lue sur la
 // jauge sans pourcentage. `name` : le type de projet ; `fit` complète « Pour vous si » ; `share` : ce qui change, lu par les lecteurs d'écran.
@@ -107,9 +107,13 @@ schema['@graph'].push({
 ---
 
 <BaseLayout title="Refonte de site web, sans repartir de zéro" description={description} schema={schema}>
+  {/* Alternance clair / sombre, comme la page Création : la Hero (clair), les signes (sombre, qui passe par-dessus la Hero : le rideau),
+      l'ampleur (clair), la démarche (sombre), le Cuistologue (clair), puis le cadre, la FAQ et l'appel final (sombres). */}
+  <div class="curtain">
   <PageHero
+    modern
     crumb="Refonte de site"
-    kicker="Sites web existants"
+    kicker="Refonte de site · Indépendants, PME"
     line1="Gardez ce qui marche,"
     line2="refaites le reste."
     lead={'Je pars de votre site actuel pour identifier ce qui mérite d’être conservé, corrigé ou repensé.'}
@@ -117,10 +121,10 @@ schema['@graph'].push({
     ctaLabel="Faire évoluer mon site"
     linkHref="/audit-ux-ui/"
     linkLabel="Commencer par un audit"
-    note="Premier échange gratuit · Devis gratuit et détaillé · Réponse généralement sous deux jours ouvrés"
+    note="Premier échange gratuit et sans engagement · Réponse sous deux jours ouvrés en général"
   />
 
-  <section class="tile tile--light" id="signes" aria-labelledby="signes-title">
+  <section class="tile tile--dark tile--mesh-a cs-dark" id="signes" aria-labelledby="signes-title">
     <div class="wrap wrap--wide tile-inner">
       <header class="tile-head">
         <p class="tile-label">Quand s’en occuper</p>
@@ -189,8 +193,9 @@ schema['@graph'].push({
       </ol>
     </div>
   </section>
+  </div>
 
-  <Tile id="ampleur" wide title="Vous choisissez l’ampleur." sub="On ne refait que ce qui le mérite : de la correction ciblée à la refonte complète. Le niveau d’intervention est décidé après la lecture de votre site et de vos besoins, pas avant.">
+  <Tile id="ampleur" wide title="Vous choisissez l’ampleur." sub="On ne refait que ce qui le mérite. Le niveau d’intervention se décide après la lecture de votre site, pas avant.">
     {/* Ordinateur : un panneau bleu, trois lignes. Mobile : chaque ligne devient une carte bleue, dans un carrousel latéral (même composant que la page Création). */}
     <div class="cs-lv-panel panel-blue panel-blue--riso">
       <div class="cs-lv-axis" aria-hidden="true">
@@ -224,9 +229,9 @@ schema['@graph'].push({
     <p class="cs-more">Votre besoin concerne une application ou un logiciel ? <LinkUnder href="/interfaces-logiciels/" label="Voir Interfaces et logiciels" /></p>
   </Tile>
 
-  <ExplodedProcess plain title="De l’analyse à la mise en ligne" sub="Cinq étapes, et un calendrier fixé avec vous dans le devis." steps={steps} />
+  <Manifesto id="methode" title="De l’analyse à la mise en ligne" sub="Quatre étapes, et un calendrier fixé avec vous dans le devis." steps={steps} />
 
-  <ProjectTeaser label="Un projet livré" caseStudy />
+  <ProjectTeaser label="Réalisation" caseStudy />
 
   <div class="dark-zone">
     <Tile tone="dark" wide id="cadre" title="Changer de site, sans avancer à l’aveugle." sub="Contenus, redirections et mise en ligne : chaque transition se prépare.">

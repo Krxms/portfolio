@@ -24,17 +24,15 @@
   z-index: 0;
 }
 
-.has-scenes .curtain > .manifesto {
+.has-scenes .curtain > :not(.hero-zone) {
+  position: relative;
   z-index: 2;
 }
 
-/* un bouton de la Hero que le manifeste recouvre (même en partie) s'efface et n'est plus une cible : le clic ne tombe jamais sur le manifeste
-   à la place d'un bouton encore présenté comme utilisable (voir scenes.js) */
+/* un bouton de la Hero que la section suivante recouvre (même en partie) n'est plus une cible : le clic ne tombe jamais sur un bouton à moitié
+   caché (voir scenes.js). Il ne s'efface plus seul, d'un coup : toute la Hero s'estompe ensemble, au défilement (voir plus bas). */
 .has-scenes .hero .is-behind {
-  opacity: 0;
-  visibility: hidden;
   pointer-events: none;
-  transition: opacity 0.18s ease, visibility 0s linear 0.18s;
 }
 
 /* une fois la Hero entièrement passée, plus rien d'elle n'est dessiné (ni peint ni composé) pendant le reste du défilement */
@@ -104,11 +102,11 @@
   opacity: clamp(0.14, calc(var(--e, 0) * (var(--n, 1) + 5) - var(--i, 0)), 1);
 }
 
-/* ---------- Téléphone : les apparitions de texte se jouent une fois (voir scenes.js, « reveal ») ----------
-   Plus de variable --e réécrite à chaque image : un état de départ (invisible, un peu plus bas), puis la classe .is-in, posée quand l'élément entre dans
-   l'écran, lance une transition sur opacity et translate (propriétés que la carte graphique anime sans recalcul de style). Les mots s'allument l'un après
-   l'autre (--i), les enfants d'un titre de section l'un après l'autre aussi. */
-.has-scenes.has-reveal .tile-head > * {
+/* ---------- Les apparitions de texte se jouent une fois, sur tous les écrans (voir scenes.js, « reveal ») ----------
+   Une seule logique pour tout le site : un état de départ (invisible, un peu plus bas), puis la classe .is-in, posée quand l'élément entre dans l'écran,
+   lance une transition sur opacity et translate (propriétés que la carte graphique anime sans recalcul de style). L'en-tête d'une section (étiquette,
+   titre, sous-titre) monte enfant après enfant (--i) ; le texte qui le suit arrive ensuite, d'un bloc. */
+.has-scenes.has-reveal :is(.tile-head, .sc-title, .il-xp-copy) > * {
   --t: 0;
   opacity: 0;
   translate: 0 22px;
@@ -117,14 +115,32 @@
     translate 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) calc(var(--i, 0) * 90ms);
 }
 
-.has-scenes.has-reveal .tile-head.is-in > * {
+.has-scenes.has-reveal :is(.tile-head, .sc-title, .il-xp-copy).is-in > * {
   opacity: 1;
   translate: 0 0;
 }
 
-.has-scenes.has-reveal #cadre .tile-sub {
+/* un en-tête vide de contenu animé (le conteneur des actions) ne retarde rien */
+.has-scenes.has-reveal .tile-head > .tile-actions:empty {
+  transition: none;
+}
+
+.has-scenes.has-reveal .about-copy > .tile-label,
+.has-scenes.has-reveal .about-lead {
+  opacity: 0;
+  translate: 0 22px;
+  transition:
+    opacity 0.55s ease,
+    translate 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.has-scenes.has-reveal .about-lead {
+  transition-delay: 90ms;
+}
+
+.has-scenes.has-reveal :is(.about-copy > .tile-label, .about-lead).is-in {
   opacity: 1;
-  translate: none;
+  translate: 0 0;
 }
 
 .has-scenes.has-reveal .manifesto-lead,
@@ -346,11 +362,7 @@
   }
 }
 
-/* Le haut de la section identité couvre la Hero : presque opaque, pour que son titre ne transparaisse pas en fantôme */
-.has-scenes .manifesto.tile--dark::before {
-  -webkit-mask-image: linear-gradient(180deg, rgb(0 0 0 / 0.9), #000 180px);
-  mask-image: linear-gradient(180deg, rgb(0 0 0 / 0.9), #000 180px);
-}
+/* Le manifeste ne couvre plus la Hero (accueil réordonné : Hero, offres, projet, manifeste) : son fond reste opaque. */
 
 /* Les formes en vol (portrait, appel final) ne doivent jamais élargir la page */
 .has-scenes .tile {
@@ -416,5 +428,161 @@
     .css-scroll .hero {
       animation-range: 0 min(70svh, 560px);
     }
+  }
+}
+
+/* ---------- Le manifeste, en CSS pur (classe .css-view posée par scenes.js quand animation-timeline: view() existe) ----------
+   Le script ne suit plus ce bloc : le navigateur calcule lui-même la progression d'après la position du bloc dans l'écran, sans réécrire de variable
+   à chaque image. Même dessin qu'avant : les mots du titre s'allument un à un (de 14 % à 100 % d'opacité), le paragraphe arrive en fondu quand le titre
+   s'achève, chaque étape monte et se pose. Sans view(), scenes.js reprend la main (règles plus haut). */
+@supports (animation-timeline: view()) {
+  @keyframes mf-word {
+    from {
+      opacity: 0.14;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes mf-rise {
+    from {
+      opacity: 0;
+      translate: 0 26px;
+    }
+    to {
+      opacity: 1;
+      translate: 0 0;
+    }
+  }
+
+  .css-view .manifesto-quote {
+    view-timeline: --mf-quote block;
+  }
+
+  /* un mot après l'autre : chaque mot a sa propre plage, décalée de son rang (--i) sur la traversée du titre */
+  .css-view .manifesto-quote .w {
+    display: inline-block;
+    opacity: 0.14;
+    transition: none;
+    animation: mf-word linear both;
+    animation-timeline: --mf-quote;
+    animation-range: cover calc(12% + var(--i, 0) * 4%) cover calc(20% + var(--i, 0) * 4%);
+  }
+
+  /* le paragraphe suit la fin du titre (même chronologie) */
+  .css-view .manifesto-lead {
+    opacity: 0;
+    transition: none;
+    animation: mf-rise linear both;
+    animation-timeline: --mf-quote;
+    animation-range: cover 40% cover 56%;
+  }
+
+  .css-view .manifesto {
+    timeline-scope: --mf-quote;
+  }
+
+  /* les étapes : chacune sur sa propre entrée dans l'écran */
+  .css-view .proof {
+    opacity: 0;
+    transition: none;
+    animation: mf-rise linear both;
+    animation-timeline: view(block);
+    animation-range: entry 10% entry 90%;
+  }
+}
+
+
+/* ---------- Hero de l'accueil : le contenu ne bouge pas au défilement ----------
+   Plus de recul (échelle, glissement, fondu) du bloc de texte : il reste en place, et c'est la section des offres qui monte par-dessus
+   (le rideau, plus haut). Placé en dernier pour passer devant les règles de recul, avec ou sans animation-timeline. */
+.has-scenes .hero > *,
+.has-scenes .hero h1 > * {
+  scale: none;
+  translate: none;
+  opacity: 1;
+  will-change: auto;
+}
+
+/* le bloc lui-même : plus d'animation de recul (son décalage de mise en page à gauche sur ordinateur, dans Hero.css, reste) */
+.css-scroll .hero {
+  animation: none;
+  scale: none;
+  opacity: 1;
+  will-change: auto;
+}
+
+/* ---------- Hero de l'accueil : un seul fondu, progressif, sous la section des offres ----------
+   Tout le bloc (surtitre, titre, texte, boutons, mention) s'estompe ensemble, au même rythme que la section bleue monte : le fondu suit le bord
+   de la section de façon linéaire, du premier pixel de défilement jusqu'à presque toute la hauteur de l'écran (quand le bord passe le milieu de
+   la Hero, le texte est à mi-opacité). Les deux mouvements se croisent sans à-coup. Opacité seule (aucun mouvement), jouée par la carte graphique
+   et calculée par le navigateur d'après le défilement (animation-timeline), sans script. */
+@supports (animation-timeline: scroll()) {
+  @keyframes hero-fade {
+    to {
+      opacity: 0;
+    }
+  }
+
+  .css-scroll .hero-zone--atelier .hero {
+    animation: hero-fade linear both;
+    animation-timeline: scroll(root block);
+    animation-range: 0 92svh;
+  }
+}
+
+/* sans animation-timeline (Firefox) : le même fondu, d'après la progression écrite par scenes.js (--hp, de 0 à 1 sur la hauteur de la Hero) */
+.has-scenes:not(.css-scroll) .hero-zone--atelier .hero {
+  opacity: clamp(0, 1 - var(--hp, 0) * 1.087, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .css-scroll .hero-zone--atelier .hero {
+    animation: none;
+  }
+}
+
+/* ---------- Accueil : un peu plus d'air entre les sections ----------
+   Téléphone : 72 px au-dessus et en dessous de chaque section (56 px ailleurs sur le site). Ordinateur : le projet et Qui suis-je, les plus
+   serrés, gagnent de l'air ; les sections sombres gardent leurs 148 px. (D'autres pages chargent ce fichier : les règles visent le main qui contient le rideau, propre à l'accueil.) */
+@media (max-width: 700px) {
+  /* :not(…) : la même force que la règle commune des sections claires (Tile.css), qu'elle doit remplacer ici */
+  html body main:has(> .curtain) :is(#services, #autonomie, #ampleur, #collaboration, #interventions, #experience, #quand, #livrable, #perimetre, #methode, #projet, #manifeste, #qui-suis-je, #faq):not(.cta-final):not(.xp):not(.x-home) {
+    padding-block: 72px;
+  }
+
+  html body main:has(> .curtain) #projet:not(.cta-final):not(.xp):not(.x-home) {
+    padding-top: calc(72px + var(--blend, 0px));
+  }
+}
+
+@media (min-width: 701px) {
+  /* « Vous gardez la main », « Vous choisissez l'ampleur » (pages de service) ont les mêmes espaces, en haut et en bas, que la section du projet */
+  html body main:has(> .curtain) :is(#autonomie, #ampleur, #collaboration, #experience, #quand) {
+    padding-top: clamp(64px, 8vw, 120px);
+    padding-bottom: clamp(96px, 11vw, 160px);
+  }
+
+  html body main:has(> .curtain) #projet {
+    padding-top: calc(clamp(64px, 8vw, 120px) + var(--blend, 0px));
+    padding-bottom: clamp(96px, 11vw, 160px);
+  }
+
+  html body main:has(> .curtain) #qui-suis-je {
+    padding-block: clamp(88px, 11vw, 156px);
+  }
+}
+
+/* ---------- Pages de service au traitement de l'accueil (.ph-modern) : le même rideau, le même fondu ----------
+   La section suivante (sombre) monte par-dessus l'en-tête ; le texte de l'en-tête s'estompe au même rythme, d'après --hp (scenes.js : 0 en haut de
+   page, 1 quand l'en-tête est couvert). L'en-tête d'une page de service est plus court que l'écran : la progression suit sa hauteur réelle. */
+.has-scenes .curtain > .hero-zone--page.ph-modern .ph-copy {
+  opacity: clamp(0, 1 - var(--hp, 0) * 1.087, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .has-scenes .curtain > .hero-zone--page.ph-modern .ph-copy {
+    opacity: 1;
   }
 }

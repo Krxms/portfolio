@@ -5,18 +5,20 @@ import LinkUnder from './LinkUnder.astro';
 ---
 
 <section class="hero wrap" data-sticky-watch>
+  {/* Deux phrases, deux blocs : chacune commence sa ligne, puis se coupe d'elle-même selon la largeur (aucun retour à la ligne codé).
+      La seconde est en bleu. */}
   <h1>
     <span class="hero-role"><span class="hero-role-a">Concepteur numérique</span></span>{' '}
-    <span class="hero-l1">Vos besoins</span>{' '}
-    <span class="hero-l2">prennent <em class="hero-word">forme</em>.</span>
+    <span class="hero-l1"><span class="hero-ink">Vos clients comprennent.</span></span>{' '}
+    <span class="hero-l2"><span class="hero-ink">Vos équipes avancent.</span></span>
   </h1>
   <p class="hero-sub">
-    Je conçois des sites web et des interfaces de logiciels adaptés à vos besoins et à ceux qui les utilisent.
+    Je conçois des sites web qui rendent votre offre claire et des interfaces métier qui simplifient le travail au quotidien.
   </p>
   <div class="hero-actions">
-    {/* bouton principal : le contact. Lien secondaire : l'étude de cas existante (Le Cuistologue), faute d'une page liste de réalisations */}
+    {/* bouton principal : le contact. Bouton secondaire : l'étude de cas existante (Le Cuistologue), faute d'une page liste de réalisations */}
     <FrostedCTA href="/contact/" ink>Parlons de votre projet</FrostedCTA>
-    <LinkUnder href="/projets/le-cuistologue/" label="Voir l’étude de cas" glow />
+    <LinkUnder href="/projets/le-cuistologue/" label="Voir une réalisation" glow arrow />
     <p class="hero-assure">Premier échange gratuit et sans engagement</p>
   </div>
 </section>

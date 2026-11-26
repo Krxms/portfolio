@@ -15,8 +15,8 @@
 .portrait img {
   width: 100%;
   height: auto;
-  /* cadrage serré : la photo s'arrête juste sous les épaules */
-  aspect-ratio: 10 / 9;
+  /* cadrage un peu plus bas : la photo descend sur les épaules (elles dépassent davantage dans le cadre) */
+  aspect-ratio: 10 / 10.5;
   object-fit: cover;
   object-position: 50% 4%;
 }
@@ -182,7 +182,7 @@
   }
 
   .portrait img {
-    aspect-ratio: 10 / 8;
+    aspect-ratio: 10 / 9.4;
     object-position: 50% 6%;
   }
 
@@ -280,3 +280,50 @@
   padding-bottom: clamp(64px, 9vw, 128px);
 }
 
+
+/* ---------- Variante claire (accueil) : Qui suis-je sur le papier, entre deux sections sombres ----------
+   Mêmes blocs, mêmes tailles : seules les couleurs passent du blanc à l'encre. */
+.about--light {
+  color: var(--ink);
+  padding-block: clamp(64px, 9vw, 120px);
+}
+
+.about--light .tile-label {
+  color: var(--signal-deep);
+}
+
+.about--light .about-values {
+  border-top-color: rgb(18 32 43 / 0.12);
+}
+
+.about--light .about-values-label {
+  color: var(--signal-deep);
+}
+
+.about--light .about-values p:not(.about-values-label):not(.about-key),
+.about--light .about-zone {
+  color: var(--ink-soft);
+}
+
+.about--light .about-values .about-key {
+  color: var(--ink);
+}
+
+.about--light .about-zones li {
+  color: var(--ink);
+  background: rgb(255 255 255 / 0.65);
+  box-shadow: inset 0 0 0 1px rgb(26 60 191 / 0.22);
+}
+
+/* le portrait, sur le clair : une ombre douce sous l'arche */
+.about--light .portrait-frame {
+  box-shadow: 0 30px 50px -34px rgb(11 26 74 / 0.45);
+}
+
+/* téléphone : « Qui suis-je ? Antoine Bruneau » à 32 px sous le portrait, le même écart que « Choix de conception » sous la scène du Cuistologue */
+@media (max-width: 860px) {
+  .about--light.about-grid,
+  .about--light .about-grid {
+    row-gap: 32px;
+  }
+}

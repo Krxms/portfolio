@@ -404,3 +404,13 @@
 .site-footer .footer-inner {
   max-width: calc(1360px + 2 * var(--edge));
 }
+
+/* Le bouton du pied de page : bleu uni, sans grain. Le body porte déjà la texture (grès) : le grain du bouton s'y ajoutait. */
+html .footer-cta .btn-primary,
+html .footer-cta .btn-primary:hover,
+html .footer-cta .btn-primary:active {
+  --cta-bg:
+    linear-gradient(180deg, rgb(255 255 255 / 0.12), rgb(255 255 255 / 0) 55%),
+    var(--cta-blue);
+  background: var(--cta-bg);
+}

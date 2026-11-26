@@ -19,8 +19,10 @@ interface Props {
   lead: string;
   zones: string[];
   alt: string;
+  /** le fil d'Ariane (dernier élément : la page) */
+  crumb?: string;
 }
-const { kicker, line1, line2, lead, zones, alt } = Astro.props;
+const { kicker, line1, line2, lead, zones, alt, crumb = 'À propos' } = Astro.props;
 // téléphone : environ 240 px de large ; ordinateur : jusqu'à 30 % de la largeur de l'écran
 const portrait = await responsive(portraitSrc, [360, 480, 720], '(max-width: 700px) 60vw, 30vw');
 ---
@@ -34,6 +36,9 @@ const portrait = await responsive(portraitSrc, [360, 480, 720], '(max-width: 700
   </div>
 
   <div class="wrap wrap--wide">
+    <nav class="ph-crumbs ah-crumbs" aria-label="Fil d’Ariane">
+      <a href="/">Accueil</a><span aria-hidden="true">/</span><span aria-current="page">{crumb}</span>
+    </nav>
     <div class="ah-panel panel-blue panel-blue--riso">
       <div class="ah-copy">
         <h1>

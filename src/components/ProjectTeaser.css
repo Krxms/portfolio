@@ -555,7 +555,7 @@
 
 /* ---------- les prochains projets ---------- */
 .sc-next {
-  margin-top: clamp(4px, 1vw, 12px);
+  margin-top: clamp(14px, 1.8vw, 24px);
 }
 
 .sc-next-label {
@@ -862,4 +862,57 @@
 .sc-stage::after {
   background: var(--grain-soft) 0 0 / 160px 160px repeat;
   opacity: 0.22;
+}
+
+/* ---------- Accueil : la version brève (titre, scène, légende) ---------- */
+.project-tile--brief .sc-title h2 {
+  max-width: 18ch;
+  font-size: clamp(2rem, 4.6vw, 3.8rem);
+  line-height: 1.02;
+  text-wrap: balance;
+}
+
+/* la légende colle à la scène qu'elle explique */
+.project-tile--brief .showcase {
+  gap: clamp(20px, 2.6vw, 36px);
+}
+
+.sc-caption {
+  max-width: 62ch;
+  /* un peu sous la scène (32 px sur téléphone, comme « Qui suis-je » sous le portrait ; 46 px sur ordinateur) : l'écart de la vitrine est compensé */
+  margin: calc(clamp(32px, 3.2vw, 46px) - clamp(28px, 3.4vw, 48px)) 0 0;
+  font-size: clamp(1rem, 1.3vw, 1.12rem);
+  line-height: 1.5;
+  color: var(--ink);
+}
+
+.sc-caption-label {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--signal-deep);
+}
+
+@media (max-width: 700px) {
+  .project-tile--brief.tile.project-tile {
+    padding-bottom: clamp(48px, 12vw, 72px);
+  }
+}
+
+/* accueil et pages de service : l'étiquette (« Réalisation · Le Cuistologue », « Réalisation ») sans fond ni filet, le texte seul */
+:is(.project-tile--brief, .project-tile--case) .sc-title .tile-label {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+}
+
+/* téléphone : l'écart de la vitrine y vaut 20 px ; la légende se pose à 32 px sous la scène */
+@media (max-width: 700px) {
+  .sc-caption {
+    margin-top: 12px;
+  }
 }
