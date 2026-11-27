@@ -8,7 +8,9 @@ export default defineConfig({
   // Les pages liées sont préchargées au survol, au focus ou au toucher d'un lien : le clic suivant est presque instantané.
   prefetch: { prefetchAll: true, defaultStrategy: 'hover' },
   // Serveur de développement seulement : autorise les adresses publiques de ngrok (sinon Vite refuse l'en-tête Host d'un domaine inconnu).
-  vite: { server: { allowedHosts: ['.ngrok-free.app', '.ngrok-free.dev', '.ngrok.app', '.ngrok.dev', '.ngrok.io'] } },
+  // CSS minifié par esbuild et non par lightningcss : ce dernier fusionne « animation-timeline » dans le raccourci « animation » (animation: linear both mf-rise view()),
+  // que Safari et les Chrome un peu anciens rejettent en bloc : les animations liées au défilement (apparitions, scènes) n'y démarraient jamais et restaient invisibles.
+  vite: { build: { cssMinify: 'esbuild' }, server: { allowedHosts: ['.ngrok-free.app', '.ngrok-free.dev', '.ngrok.app', '.ngrok.dev', '.ngrok.io'] } },
   integrations: [
     // typographie française (apostrophes, espaces insécables) appliquée aux textes de toutes les pages après la construction
     typography(),

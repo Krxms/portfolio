@@ -269,6 +269,8 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
         if (hpv !== lastHp) {
           lastHp = hpv;
           heroText.style.setProperty('--hp', hpv);
+          // pages de service : les illustrations de l'en-tête (hors du bloc de texte) s'estompent avec lui
+          if (!heroText.classList.contains('hero')) hero.style.setProperty('--hp', hpv);
         }
       }
       const nowCovered = y > h + 60;

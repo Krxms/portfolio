@@ -525,7 +525,7 @@
     }
   }
 
-  .css-scroll .hero-zone--atelier .hero {
+  .css-scroll .hero-zone--atelier :is(.hero, .hm-art) {
     animation: hero-fade linear both;
     animation-timeline: scroll(root block);
     animation-range: 0 92svh;
@@ -533,12 +533,13 @@
 }
 
 /* sans animation-timeline (Firefox) : le même fondu, d'après la progression écrite par scenes.js (--hp, de 0 à 1 sur la hauteur de la Hero) */
-.has-scenes:not(.css-scroll) .hero-zone--atelier .hero {
+.has-scenes:not(.css-scroll) .hero-zone--atelier .hero,
+.has-scenes:not(.css-scroll) .hero-zone--atelier .hm-art {
   opacity: clamp(0, 1 - var(--hp, 0) * 1.087, 1);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .css-scroll .hero-zone--atelier .hero {
+  .css-scroll .hero-zone--atelier :is(.hero, .hm-art) {
     animation: none;
   }
 }
@@ -583,6 +584,17 @@
 
 @media (prefers-reduced-motion: reduce) {
   .has-scenes .curtain > .hero-zone--page.ph-modern .ph-copy {
+    opacity: 1;
+  }
+}
+
+/* Pages de service : les formes de droite (gélule, tracé, disque, quart de disque) s'estompent comme le texte, au même rythme (--hp, posé sur la zone) */
+.has-scenes .curtain > .hero-zone--page.ph-modern :is(.ph-pill, .ph-dash, .ph-disc, .ph-quarter) {
+  opacity: clamp(0, 1 - var(--hp, 0) * 1.087, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .has-scenes .curtain > .hero-zone--page.ph-modern :is(.ph-pill, .ph-dash, .ph-disc, .ph-quarter) {
     opacity: 1;
   }
 }
