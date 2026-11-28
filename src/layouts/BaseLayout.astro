@@ -1,7 +1,6 @@
 ---
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import Loader from '../components/Loader.astro';
 import '../styles/textures.css';
 import '../styles/textures-hd.css';
 import '../styles/fonts.css';
@@ -18,6 +17,7 @@ import concreteZoom from '../assets/riso/concrete-zoom.webp?url';
 import filmGrain from '../assets/riso/film-grain.webp?url';
 import stoneware from '../assets/riso/stoneware.webp?url';
 import grain from '../assets/riso/grain.webp?url';
+import { lastModified } from '../../tools/lastmod.mjs';
 
 interface Props {
   title: string;
@@ -38,22 +38,36 @@ const {
   imageAlt = 'Antoine Bruneau, concepteur numérique indépendant : sites web, interfaces et logiciels.',
 } = Astro.props;
 const isHome = Astro.url.pathname === '/';
-// Les textures de la Hero et des formes (béton, mouchetures, grès, grain), préchargées sur TOUTES les pages. Les deux grains fins des panneaux bleus
-// (grain-soft, speck) sont, eux, intégrés au CSS en base 64 (voir astro.config.mjs) : ils sont là dès la première image, sans requête. Aucune surface
-// n'est cachée en attendant : la promesse window.__txReady ne sert qu'au loader de l'accueil.
-// Critiques : le papier de la page et le grain de la Hero, seuls à devoir être là à la première image (ils décident aussi du moment où le loader de l'accueil
-// se lève). Secondaires : les textures des formes, préchargées avec une priorité basse pour ne pas retarder le CSS, les polices ni le texte.
-const heroTextures = [stoneware, filmGrain];
+// Les textures de la Hero et des formes (béton, mouchetures, grès, grain), préchargées sur ordinateur. Les deux grains fins des panneaux bleus
+// (grain-soft, speck) sont, eux, intégrés au CSS en base 64 : ils sont là dès la première image, sans requête. Rien n'est caché en attendant une texture :
+// la page s'affiche dès que le HTML, le CSS et les polices sont là, et la matière s'y pose à son arrivée.
+// Critiques : le papier de la page et le grain de la Hero. Secondaires : les textures des formes, en priorité basse pour ne pas retarder le CSS, les polices ni le texte.
 const lateTextures = [concreteZoom, grain];
-const textureGate =
-  "(function(){var textures=matchMedia(\"(max-width: 700px)\").matches?[]:" + JSON.stringify(heroTextures) + ";var res,p=new Promise(function(r){res=r});window.__txReady=p;var over=false,left=textures.length,done=function(){if(over)return;over=true;res()};if(!left)done();setTimeout(done,2500);textures.forEach(function(u){var i=new Image();i.src=u;var ok=function(){if(--left===0)done()};if(i.decode){i.decode().then(ok,ok)}else{i.onload=i.onerror=ok}})})();";
-const navProgress =
-  "(function(){var d=document.documentElement;d.classList.add('is-loading');addEventListener('load',function(){d.classList.remove('is-loading');var on=false,go=function(){if(!on){on=true;d.classList.add('tx-in');var s=document.createElement('style');s.textContent=`@font-face { font-family: 'Be Vietnam Pro'; font-style: italic; font-weight: 400; font-display: swap; src: url('/fonts/be-vietnam-pro-400-italic.woff2') format('woff2');}@font-face { font-family: 'Inter'; font-style: normal; font-weight: 100 900; font-display: swap; src: url('/fonts/inter-variable.woff2') format('woff2');}`;document.head.appendChild(s)}};if(document.querySelector('.er-code'))go();setTimeout(go,3000);try{var seen=false;new PerformanceObserver(function(){if(!seen){seen=true;setTimeout(go,300)}}).observe({type:'largest-contentful-paint',buffered:true})}catch(e){setTimeout(go,600)}});addEventListener('pageshow',function(e){if(e.persisted){d.classList.remove('is-loading');d.classList.add('tx-in')}});document.addEventListener('click',function(e){var a=e.target&&e.target.closest&&e.target.closest('a[href]');if(!a||e.defaultPrevented||e.button||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey||(a.target&&a.target!=='_self')||a.hasAttribute('download'))return;var u;try{u=new URL(a.href,location.href)}catch(x){return}if(u.origin!==location.origin||(u.pathname===location.pathname&&u.search===location.search)||!/^https?:$/.test(u.protocol))return;d.classList.add('is-loading')})})();";
+// Le filet de chargement (#nav-progress, global.css) et la pose des textures définitives (classe tx-in). Script placé juste après le filet :
+//  Les classes sont posées sur le filet lui-même, pas sur <html> : changer une classe de <html> ferait recalculer les styles de toute la page.
+//  - chargement de la page : le filet ne s'anime qu'une fois l'élément dessiné (requestAnimationFrame), et ne devient visible qu'après un court délai
+//    (CSS) : une page qui s'affiche vite ne le montre jamais. Il se termine quand le texte est prêt (DOMContentLoaded et polices), pas à la fin du
+//    téléchargement des images : la page est lisible, il n'y a plus rien à attendre ;
+//  - clic sur un lien interne : il repart aussitôt, avant que l'écran ne change ; la page suivante prend le relais ;
+//  - tx-in : posée après le premier grand affichage (LCP) ou au plus tard 3 s après le chargement ; elle déclenche les textures haute définition et les
+//    polices secondaires (italique, Inter), qui n'ont pas à passer devant le premier écran.
+const navProgress = `(function(){
+var d=document.documentElement,b=document.getElementById('nav-progress'),done=false,t;
+function start(){clearTimeout(t);b.classList.remove('is-done');b.classList.add('is-loading')}
+function finish(){if(done)return;done=true;if(!b.classList.contains('is-loading'))return;b.classList.remove('is-loading');b.classList.add('is-done');t=setTimeout(function(){b.classList.remove('is-done')},700)}
+if(document.readyState==='loading'){requestAnimationFrame(function(){if(!done)start()});document.addEventListener('DOMContentLoaded',function(){var f=document.fonts&&document.fonts.ready;(f?Promise.race([f,new Promise(function(r){setTimeout(r,1500)})]):Promise.resolve()).then(finish)})}else{done=true}
+var on=false;function go(){if(on)return;on=true;d.classList.add('tx-in');var s=document.createElement('style');s.textContent="@font-face{font-family:'Be Vietnam Pro';font-style:italic;font-weight:400;font-display:swap;src:url('/fonts/be-vietnam-pro-400-italic.woff2') format('woff2')}@font-face{font-family:'Inter';font-style:normal;font-weight:100 900;font-display:swap;src:url('/fonts/inter-variable.woff2') format('woff2')}";document.head.appendChild(s)}
+addEventListener('load',function(){if(document.querySelector('.er-code'))go();setTimeout(go,3000);try{new PerformanceObserver(function(l,o){o.disconnect();setTimeout(go,300)}).observe({type:'largest-contentful-paint',buffered:true})}catch(e){setTimeout(go,600)}});
+addEventListener('pageshow',function(e){if(e.persisted){clearTimeout(t);b.classList.remove('is-loading','is-done');d.classList.add('tx-in')}});
+document.addEventListener('click',function(e){var a=e.target&&e.target.closest&&e.target.closest('a[href]');if(!a||e.defaultPrevented||e.button||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey||(a.target&&a.target!=='_self')||a.hasAttribute('download'))return;var u;try{u=new URL(a.href,location.href)}catch(x){return}if(u.origin!==location.origin||(u.pathname===location.pathname&&u.search===location.search)||!/^https?:$/.test(u.protocol))return;start()});
+})();`;
 const pageTitle = isHome ? 'Concepteur numérique, sites et interfaces — Antoine Bruneau' : `${title} — Antoine Bruneau`;
 
 // Cloudflare sert les pages en /page/ (avec slash final) : le canonical suit cette forme.
 const path = Astro.url.pathname.endsWith('/') ? Astro.url.pathname : `${Astro.url.pathname}/`;
 const canonical = new URL(path, Astro.site).href;
+// Pages d'erreur (404 et /erreurs/<code>/) : servies sous l'adresse demandée, elles n'ont pas d'adresse propre à déclarer (ni canonical ni og:url).
+const isError = /^\/(404|erreurs)(\/|$)/.test(Astro.url.pathname);
 
 const siteUrl = 'https://antoinebruneau.fr';
 const ogImage = new URL(image, siteUrl).href;
@@ -66,7 +80,15 @@ const services = [
 const jsonLd = {
   '@context': 'https://schema.org',
   '@graph': [
-    { '@type': 'WebSite', '@id': `${siteUrl}/#website`, url: siteUrl, name: 'Antoine Bruneau', inLanguage: 'fr-FR', publisher: { '@id': `${siteUrl}/#person` } },
+    {
+      '@type': 'WebSite',
+      '@id': `${siteUrl}/#website`,
+      url: siteUrl,
+      name: 'Antoine Bruneau',
+      description: 'Site d’Antoine Bruneau, concepteur numérique indépendant : création et refonte de sites web, conception UX/UI d’interfaces et de logiciels, audit UX/UI.',
+      inLanguage: 'fr-FR',
+      publisher: { '@id': `${siteUrl}/#person` },
+    },
     {
       '@type': 'ProfessionalService',
       '@id': `${siteUrl}/#service`,
@@ -82,6 +104,7 @@ const jsonLd = {
       address: { '@type': 'PostalAddress', addressLocality: 'Guitrancourt', postalCode: '78440', addressRegion: 'Île-de-France', addressCountry: 'FR' },
       identifier: { '@type': 'PropertyValue', propertyID: 'SIREN', value: '788566719' },
       knowsLanguage: 'fr',
+      contactPoint: { '@type': 'ContactPoint', contactType: 'customer service', email: 'contact@antoinebruneau.fr', telephone: '+33609111838', availableLanguage: 'fr', url: `${siteUrl}/contact/` },
       knowsAbout: [
         'Design UX/UI',
         'Conception d’interface',
@@ -117,15 +140,24 @@ const jsonLd = {
       email: 'contact@antoinebruneau.fr',
       telephone: '+33609111838',
       worksFor: { '@id': `${siteUrl}/#service` },
+      alumniOf: { '@type': 'EducationalOrganization', name: 'Wild Code School' },
+      knowsLanguage: 'fr',
       homeLocation: { '@type': 'Place', address: { '@type': 'PostalAddress', addressLocality: 'Guitrancourt', postalCode: '78440', addressCountry: 'FR' } },
       knowsAbout: ['Design UX/UI', 'Conception d’interface', 'Architecture de l’information', 'Prototypage', 'Design system', 'Création de site web', 'Refonte de site web', 'Audit UX/UI', 'Accessibilité numérique', 'Développement front-end', 'WordPress', 'Webflow', 'Référencement technique'],
     },
   ],
 };
 // Le graphe commun (site, activité, personne) est publié sur TOUTES les pages : les références « @id » des pages (provider, isPartOf, about…)
-// se résolvent ainsi dans le même document. La page décrit aussi ce qu'elle est (aide les moteurs et les assistants IA à la situer) ; les pages
-// qui fournissent leur propre schéma (AboutPage, Service, ContactPage…) le font elles-mêmes.
-if (!schema) {
+// se résolvent ainsi dans le même document. Chaque page décrit aussi ce qu'elle est (aide les moteurs et les assistants IA à la situer) :
+// les pages qui déclarent déjà leur nœud de page (AboutPage, ContactPage…) le gardent ; sinon (accueil, offres, projet, pages légales), un WebPage
+// est ajouté, avec pour sujet principal le service ou l'étude de cas de la page quand elle en a un.
+const modified = lastModified(path);
+const pageNodes: any[] = schema ? ((schema as any)['@graph'] ?? [schema]) : [];
+const ownPage = pageNodes.find((n) => /Page$/.test(n['@type']) && n['@type'] !== 'FAQPage');
+if (ownPage) {
+  if (modified && !ownPage.dateModified) ownPage.dateModified = modified;
+} else if (!isError) {
+  const subject = pageNodes.find((n) => (n['@type'] === 'Service' || n['@type'] === 'CreativeWork') && n['@id']);
   jsonLd['@graph'].push({
     '@type': 'WebPage',
     '@id': `${canonical}#webpage`,
@@ -135,7 +167,9 @@ if (!schema) {
     inLanguage: 'fr-FR',
     isPartOf: { '@id': `${siteUrl}/#website` },
     about: { '@id': `${siteUrl}/#service` },
+    ...(subject ? { mainEntity: { '@id': subject['@id'] } } : {}),
     primaryImageOfPage: { '@type': 'ImageObject', url: ogImage },
+    ...(modified ? { dateModified: modified } : {}),
   });
 }
 ---
@@ -147,12 +181,12 @@ if (!schema) {
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
-    <link rel="canonical" href={canonical} />
+    {!isError && <link rel="canonical" href={canonical} />}
     {noindex ? <meta name="robots" content="noindex,follow" /> : <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1" />}
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content={canonical} />
+    {!isError && <meta property="og:url" content={canonical} />}
     <meta property="og:site_name" content="Antoine Bruneau" />
     <meta property="og:locale" content="fr_FR" />
     <meta property="og:image" content={ogImage} />
@@ -170,13 +204,12 @@ if (!schema) {
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     {
-      // Toutes les graisses du texte du site sont préchargées (400, 500, 600, 700 et Bricolage Grotesque) : chacune est affichée à la bonne taille dès son premier
-      // rendu (font-display: block, fonts.css), sans échange avec une police de secours en cours de chargement.
+      // Toutes les graisses du texte du site sont préchargées (400, 500, 600, 700 et Bricolage Grotesque) : elles arrivent avec le CSS. En attendant, le texte
+      // s'affiche aussitôt dans une police de secours calée sur leurs mesures (font-display: swap, fonts.css) : rien ne bouge à l'échange.
       ['be-vietnam-pro-400', 'be-vietnam-pro-500', 'be-vietnam-pro-600', 'be-vietnam-pro-700', 'bricolage-grotesque-200-800'].map((f) => <link rel="preload" href={`/fonts/${f}.woff2`} as="font" type="font/woff2" crossorigin />)
     }
-    {isHome && <script is:inline set:html={"(function(){try{var d=document.documentElement;var q=location.search.indexOf(\"loader\")>-1;var rm=matchMedia(\"(prefers-reduced-motion: reduce)\").matches;var sm=matchMedia(\"(max-width: 700px)\").matches;if(!sm&&(q||(!rm&&!sessionStorage.getItem(\"ld\"))))d.classList.add(\"has-loader\")}catch(e){}})()"} />}
-    {/* Le papier de la page et le grain de la Hero : préchargés en priorité sur ordinateur (le loader de l'accueil les attend). Sur téléphone,
-        pas de loader : ils arrivent avec le CSS, sans passer devant le texte et les polices. */}
+    {/* Le papier de la page et le grain de la Hero : préchargés en priorité sur ordinateur. Sur téléphone, ils arrivent avec le CSS, sans passer
+        devant le texte et les polices. */}
     <link rel="preload" href={stoneware} as="image" type="image/webp" fetchpriority="high" media="(min-width: 701px)" />
     <link rel="preload" href={filmGrain} as="image" type="image/webp" fetchpriority="high" media="(min-width: 701px)" />
     {/* Sur ordinateur, les textures des formes sont préchargées (priorité basse) : elles sont là quand on défile. Sur téléphone, aucune n'est
@@ -184,19 +217,17 @@ if (!schema) {
     {lateTextures.map((href) => <link rel="preload" href={href} as="image" type="image/webp" fetchpriority="low" media="(min-width: 701px)" />)}
     {/* Mode économe (perf.css) : seulement à la demande explicite du visiteur (économiseur de données du navigateur) ou en test (localStorage « perf-force » = « low »). Plus de détection automatique : elle retirait le verre et les textures sur des machines tout à fait capables. */}
     <script is:inline set:html={"(function(){try{var n=navigator,c=n.connection;if(/Safari/.test(n.userAgent)&&!/Chrome|Chromium|CriOS|Android|Edg/.test(n.userAgent))document.documentElement.setAttribute('data-safari','');if(localStorage.getItem('perf-force')==='low'||(c&&c.saveData))document.documentElement.setAttribute('data-perf','low')}catch(e){}})()"} />
-    <script is:inline set:html={textureGate} />
     {/* Serveur de développement seulement : sur une adresse partagée (tunnel ngrok, réseau local), la barre d'outils Astro est masquée ; en local
         (localhost, 127.0.0.1), elle reste disponible. N'existe pas dans la version construite. */}
     {import.meta.env.DEV && <script is:inline set:html={"(function(){var h=location.hostname;if(h==='localhost'||h==='127.0.0.1'||h==='[::1]')return;var s=document.createElement('style');s.textContent='astro-dev-toolbar{display:none!important}';document.head.appendChild(s)})()"} />}
-    {/* le petit loader : un filet en haut de l'écran, pendant le chargement de la page et dès qu'on clique sur un lien interne (avant que l'écran ne change) */}
-    <script is:inline set:html={navProgress} />
     <slot name="head" />
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
     {schema && <script type="application/ld+json" set:html={JSON.stringify(schema)} />}
   </head>
   <body>
+    {/* le filet de chargement en haut de l'écran : visible seulement si un chargement dure (voir navProgress plus haut et global.css) */}
     <div id="nav-progress" aria-hidden="true"></div>
-    {isHome && <Loader />}
+    <script is:inline set:html={navProgress} />
     <a class="skip-link" href="#main">Aller au contenu</a>
     <Header />
     <main id="main" tabindex="-1">

@@ -370,7 +370,7 @@
   height: calc(2 * var(--q));
   margin-left: auto;
   border-radius: 999px;
-  background: #13247c;
+  background: var(--color-klein-800);
 }
 
 .cs-site-hero {

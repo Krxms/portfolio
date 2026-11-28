@@ -1,32 +1,33 @@
 /* Polices auto-hébergées (sous-ensemble latin, licence OFL) : aucun appel à Google Fonts. Les fichiers vivent dans public/fonts/ pour
-   avoir des URL stables, préchargées dans BaseLayout. font-display: block : le texte attend la vraie police (quelques dizaines de millisecondes,
-   les fichiers sont préchargés) au lieu de s'afficher d'abord dans une police de secours un peu plus petite, puis de grandir à l'échange. */
+   avoir des URL stables, préchargées dans BaseLayout. font-display: swap : le texte s'affiche dès la première image dans une police de secours
+   calée sur les mesures de la vraie (plus bas), puis la vraie police prend sa place sans rien décaler. Les fichiers sont préchargés : sur une
+   connexion correcte, l'échange a lieu avant même que l'œil ne le voie. */
 @font-face {
   font-family: 'Be Vietnam Pro';
   font-style: normal;
   font-weight: 400;
-  font-display: block;
+  font-display: swap;
   src: url('/fonts/be-vietnam-pro-400.woff2') format('woff2');
 }
 @font-face {
   font-family: 'Be Vietnam Pro';
   font-style: normal;
   font-weight: 500;
-  font-display: block;
+  font-display: swap;
   src: url('/fonts/be-vietnam-pro-500.woff2') format('woff2');
 }
 @font-face {
   font-family: 'Be Vietnam Pro';
   font-style: normal;
   font-weight: 600;
-  font-display: block;
+  font-display: swap;
   src: url('/fonts/be-vietnam-pro-600.woff2') format('woff2');
 }
 @font-face {
   font-family: 'Be Vietnam Pro';
   font-style: normal;
   font-weight: 700;
-  font-display: block;
+  font-display: swap;
   src: url('/fonts/be-vietnam-pro-700.woff2') format('woff2');
 }
 
@@ -34,7 +35,7 @@
   font-family: 'Bricolage Grotesque';
   font-style: normal;
   font-weight: 200 800;
-  font-display: block;
+  font-display: swap;
   src: url('/fonts/bricolage-grotesque-200-800.woff2') format('woff2');
 }
 

@@ -289,7 +289,7 @@
   width: 6%;
   aspect-ratio: 1;
   border-radius: 50%;
-  background: #13247c;
+  background: var(--color-klein-800);
 }
 
 .l1-d1 {
@@ -393,7 +393,7 @@
   font-weight: 700;
   line-height: 1;
   letter-spacing: -0.03em;
-  color: #13247c;
+  color: var(--color-klein-800);
 }
 
 .l3-pal {
@@ -413,11 +413,11 @@
 }
 
 .l3-pal i:nth-child(1) {
-  background: #13247c;
+  background: var(--color-klein-800);
 }
 
 .l3-pal i:nth-child(2) {
-  background: #1f45d6;
+  background: var(--color-klein-600);
 }
 
 .l3-pal i:nth-child(3) {

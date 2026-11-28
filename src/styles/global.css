@@ -251,49 +251,69 @@ html {
   }
 }
 
-/* ---------- le petit loader : un filet orange et bleu en haut de l'écran ----------
-   Il s'anime pendant le chargement d'une page et dès qu'on clique sur un lien interne (BaseLayout.astro pose html.is-loading). Il avance vite puis
-   ralentit, sans jamais finir tout seul : c'est le changement de page qui le fait disparaître. Sans JavaScript, ou avec « réduire les animations »,
-   il n'existe pas. Sur l'accueil, le loader plein écran de la première visite le remplace. */
+/* ---------- le filet de chargement, en haut de l'écran ----------
+   Une comète fine : un trait qui passe du transparent à l'abricot puis au bleu de la marque, avec une tête lumineuse qui avance. Trois états, posés
+   par BaseLayout.astro sur le filet lui-même :
+     - repos : caché, rangé à gauche hors de l'écran ;
+     - is-loading : il avance vite puis ralentit (sans jamais finir seul), et n'apparaît qu'après 0,3 s : un chargement rapide ne le montre jamais ;
+     - is-done : il file jusqu'au bout, puis s'efface ; le script le remet au repos ensuite.
+   Tout passe par transform et opacity (carte graphique). Sans JavaScript, il n'existe pas. Avec « réduire les animations », il ne bouge pas : un
+   trait fixe apparaît en fondu si le chargement dure, puis disparaît. */
 #nav-progress {
   position: fixed;
   inset: 0 0 auto 0;
   z-index: 9999;
-  height: 3px;
+  height: 2px;
   pointer-events: none;
-  transform-origin: 0 50%;
-  transform: scaleX(0);
+  transform: translate3d(-100%, 0, 0);
   opacity: 0;
-  background: linear-gradient(90deg, #ee8532, #1f45d6);
-  transition: opacity 0.3s ease-out 0.15s;
+  background: linear-gradient(90deg, rgb(241 97 65 / 0) 0%, var(--mark) 45%, var(--signal) 100%);
+  box-shadow: 0 1px 6px rgb(20 80 154 / 0.35);
+  transition: opacity 0.25s ease;
 }
 
-@keyframes nav-load {
-  0% {
-    transform: scaleX(0);
-  }
-  30% {
-    transform: scaleX(0.55);
-  }
-  100% {
-    transform: scaleX(0.92);
-  }
+/* la tête de la comète : un point lumineux qui déborde du trait */
+#nav-progress::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 0;
+  width: 72px;
+  height: 6px;
+  translate: 0 -50%;
+  border-radius: 999px;
+  background: radial-gradient(closest-side, rgb(255 255 255 / 0.95), rgb(127 176 224 / 0.6) 55%, rgb(127 176 224 / 0));
+  filter: blur(1px);
 }
 
-html.is-loading #nav-progress {
+#nav-progress.is-loading {
   opacity: 1;
-  animation: nav-load 5s cubic-bezier(0.1, 0.6, 0.2, 1) forwards;
-  transition: none;
+  transform: translate3d(-8%, 0, 0);
+  transition:
+    transform 9s cubic-bezier(0.08, 0.7, 0.15, 1) 0.3s,
+    opacity 0.2s ease 0.3s;
 }
 
-html.has-loader #nav-progress,
-html:not(.is-loading) #nav-progress {
-  animation: none;
+#nav-progress.is-done {
+  opacity: 0;
+  transform: translate3d(0, 0, 0);
+  transition:
+    transform 0.25s cubic-bezier(0.2, 0.7, 0.2, 1),
+    opacity 0.35s ease 0.2s;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  #nav-progress {
-    display: none;
+  #nav-progress,
+  #nav-progress.is-loading,
+  #nav-progress.is-done {
+    transform: none;
+  }
+  #nav-progress.is-loading {
+    opacity: 0.8;
+    transition: opacity 0.3s ease 0.4s;
+  }
+  #nav-progress.is-done {
+    transition: opacity 0.2s ease;
   }
 }
 
@@ -305,7 +325,7 @@ html:not(.is-loading) #nav-progress {
   /* (sélecteurs à deux classes : cette feuille est chargée avant celle des composants, qu'elle doit surclasser) */
   .amb-atelier .at-paper {
     background-image:
-      radial-gradient(ellipse 72% 40% at 50% -6%, #ffffff 0%, rgb(255 255 255 / 0) 100%),
+      radial-gradient(ellipse 72% 40% at 50% -6%, var(--color-paper-white) 0%, rgb(255 255 255 / 0) 100%),
       linear-gradient(180deg, #f6f8fb 0%, #edf1f6 56%, #f5f3ea 96%);
     /* les tailles et répétitions du papier de HeroAtelier.css visent trois calques (grès 512 px, dégradés) : avec deux calques seulement, le premier
        dégradé était répété tous les 512 px, d'où une démarcation franche sous les boutons. Un seul calque pleine taille, sans répétition. */

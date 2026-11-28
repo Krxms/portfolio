@@ -149,11 +149,14 @@ const schema = {
   '@graph': [
     {
       '@type': 'CreativeWork',
+      '@id': 'https://antoinebruneau.fr/projets/le-cuistologue/#projet',
       name: 'Le Cuistologue : identité visuelle, site web et imprimés',
-      creator: { '@type': 'Person', name: 'Antoine Bruneau', url: 'https://antoinebruneau.fr' },
-      about: 'Cuisinier à domicile (Oise, Val-d’Oise, Yvelines, Eure)',
+      // Renvoie à la personne du graphe commun (BaseLayout) : les assistants relient l'étude de cas à son auteur sans ambiguïté.
+      creator: { '@id': 'https://antoinebruneau.fr/#person' },
+      // Le client est un sujet de l'étude, pas la même entité qu'elle (sameAs le confondait avec la page) : son site est rattaché à lui.
+      about: { '@type': 'Organization', name: 'Le Cuistologue', description: 'Cuisinier à domicile (Oise, Val-d’Oise, Yvelines, Eure)', url: 'https://lecuistologue.fr' },
+      dateCreated: '2026-04',
       url: 'https://antoinebruneau.fr/projets/le-cuistologue/',
-      sameAs: 'https://lecuistologue.fr',
       inLanguage: 'fr-FR',
     },
     {

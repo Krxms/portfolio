@@ -60,10 +60,12 @@ const schema = {
   {/* Accueil, en alternance clair / sombre : la Hero (clair), les offres (sombre : elles passent par-dessus la Hero, comme le faisait le
       manifeste), l'aperçu du projet (clair), la démarche (sombre), Qui suis-je (clair), puis la FAQ et l'appel final (sombres). */}
   <div class="curtain">
-  <div class="hero-zone hero-zone--atelier">
+  <div class="hero-zone hero-zone--atelier neg-on">
     <HeroAmbient />
-    <HeroMobileArt />
+    {/* Le texte de la Hero passe avant l'illustration du téléphone dans le HTML : le navigateur le lit et l'affiche sans attendre les 40 Ko de
+        tracés de l'illustration. L'empilement ne change pas : l'illustration reste derrière le texte (z-index: -1, HeroMobileArt.astro). */}
     <Hero />
+    <HeroMobileArt />
   </div>
 
   <Tile id="services" tone="dark" title="Un site pour votre activité.\nDes interfaces pour vos métiers.">

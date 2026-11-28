@@ -18,7 +18,7 @@
   z-index: -1;
   pointer-events: none;
   background:
-    radial-gradient(ellipse 72% 40% at 50% -6%, #ffffff 0%, rgb(255 255 255 / 0) 100%),
+    radial-gradient(ellipse 72% 40% at 50% -6%, var(--color-paper-white) 0%, rgb(255 255 255 / 0) 100%),
     linear-gradient(180deg, #f3f6fa 0%, #eef2f7 52%, #f1f2ee 80%, #f5f3ea 95%);
   /* fondu : le bas du papier s'estompe sur le fond de la page, comme sous les en-têtes bleus de « À propos » et « Le Cuistologue » (AboutHero.css) */
   -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 calc(100% - clamp(72px, 9vw, 140px)), transparent 100%);
@@ -262,7 +262,7 @@
   font-size: 13.5px;
   font-weight: 600;
   line-height: 1.4;
-  color: #9b1c1c;
+  color: var(--color-status-danger);
 }
 
 .field-error[hidden] {
@@ -327,7 +327,7 @@ textarea:focus-visible {
 input[aria-invalid='true'],
 select[aria-invalid='true'],
 textarea[aria-invalid='true'] {
-  border-color: #9b1c1c;
+  border-color: var(--color-status-danger);
 }
 
 /* le bouton « Envoyer » : le bouton principal des entêtes (cta.css : tache de matière, libellé qui défile). Seule l'icône est propre au formulaire : un
@@ -391,7 +391,7 @@ textarea[aria-invalid='true'] {
 }
 
 .form-status.is-error {
-  color: #9b1c1c;
+  color: var(--color-status-danger);
 }
 
 .ct-grid > *,
@@ -901,7 +901,7 @@ textarea[aria-invalid='true'] {
 
 /* « Ce qui m'aide à vous répondre vite » : le papier du site et son grain, posés sur le bleu */
 .ct-form .ct-guide {
-  background: var(--tx-stoneware) 0 0 / 512px 512px repeat, var(--paper, #f5f3ea);
+  background: var(--tx-stoneware) 0 0 / 512px 512px repeat, var(--paper, var(--color-paper-base));
   box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.7), 0 16px 26px -20px rgb(4 10 56 / 0.6);
 }
 

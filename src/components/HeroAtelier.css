@@ -10,7 +10,7 @@
   position: absolute;
   inset: 0;
   --at-navy: #0b1a4a;
-  --at-klein: #1f45d6;
+  --at-klein: var(--color-klein-600);
   --at-orange: #ee8532;
   --at-cream: #f4ead9;
   --at-mint: #a6d4ca;
@@ -29,7 +29,7 @@
   inset: 0;
   /* un papier sans grain, qui se creuse un peu vers le bas ; le grain de grès arrive en fondu par .at-paper::after (matiere.css) */
   background:
-    radial-gradient(ellipse 72% 40% at 50% -6%, #ffffff 0%, rgb(255 255 255 / 0) 100%),
+    radial-gradient(ellipse 72% 40% at 50% -6%, var(--color-paper-white) 0%, rgb(255 255 255 / 0) 100%),
     linear-gradient(180deg, #f6f8fb 0%, #edf1f6 74%, #f5f3ea 94%);
 }
 

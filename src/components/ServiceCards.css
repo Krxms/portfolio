@@ -339,7 +339,7 @@
   width: 12px;
   aspect-ratio: 1;
   border-radius: 50%;
-  background: #1f45d6;
+  background: var(--color-klein-600);
 }
 
 .cards--compact .card--warm .card-kicker::before {

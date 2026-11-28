@@ -2,6 +2,8 @@ import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import typography from './tools/typography.mjs';
 import securityHeaders from './tools/security-headers.mjs';
+import llmsFull from './tools/llms-full.mjs';
+import { lastModified } from './tools/lastmod.mjs';
 
 export default defineConfig({
   site: 'https://antoinebruneau.fr',
@@ -19,6 +21,13 @@ export default defineConfig({
     sitemap({
       // Pages noindex (voir BaseLayout) : exclues pour ne pas contredire la balise robots.
       filter: (page) => !/\/(cgv|confidentialite|cookies)\/?$/.test(page) && !/\/(404|erreurs)(\/|$)/.test(page),
+      // <lastmod> : date du dernier commit de la page (même source que le « dateModified » du JSON-LD), signal de fraîcheur pour les robots.
+      serialize: (item) => {
+        const lastmod = lastModified(new URL(item.url).pathname);
+        return lastmod ? { ...item, lastmod } : item;
+      },
     }),
+    // llms-full.txt : le texte de toutes les pages indexables, en Markdown, pour les assistants IA (après la typographie : mêmes textes que les pages)
+    llmsFull(),
   ],
 });

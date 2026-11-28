@@ -18,12 +18,20 @@ User-agent: Perplexity-User
 User-agent: Google-Extended
 User-agent: Applebot
 User-agent: Applebot-Extended
-# Autres : Mistral (Le Chat), Microsoft/Bing, DuckDuckGo
+# Autres : Mistral (Le Chat), Microsoft/Bing, DuckDuckGo, Amazon, Meta, Common Crawl (corpus de nombreux modèles), Cohere, You.com
 User-agent: MistralAI-User
 User-agent: bingbot
 User-agent: DuckAssistBot
+User-agent: Amazonbot
+User-agent: meta-externalagent
+User-agent: Meta-ExternalFetcher
+User-agent: CCBot
+User-agent: cohere-ai
+User-agent: YouBot
 Allow: /
 Disallow: /api/
 Disallow: /erreurs/
 
 Sitemap: https://antoinebruneau.fr/sitemap-index.xml
+
+# Pour les assistants IA : résumé du site sur /llms.txt, texte intégral des pages sur /llms-full.txt

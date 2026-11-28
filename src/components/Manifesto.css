@@ -226,7 +226,7 @@
 
 :is(.steps-links, .proof-link) .link-light {
   --p: 0;
-  stroke: #ffffff;
+  stroke: var(--color-paper-white);
   stroke-dasharray: var(--len) 3;
   stroke-dashoffset: calc(var(--len) - var(--p));
   opacity: 0;

@@ -35,7 +35,7 @@ html .ah + .tile {
    l'entête a exactement la couleur des sections qui suivent : plus d'arête entre les deux. */
 .ah .at-paper {
   background:
-    radial-gradient(ellipse 72% 40% at 50% -6%, #ffffff 0%, rgb(255 255 255 / 0) 100%),
+    radial-gradient(ellipse 72% 40% at 50% -6%, var(--color-paper-white) 0%, rgb(255 255 255 / 0) 100%),
     linear-gradient(180deg, #f3f6fa 0%, #eef2f7 52%, #f1f2ee 80%, #f5f3ea 95%);
   /* fondu : le bas du papier s'estompe sur le fond de la page (le crème et le grès des sections qui suivent) au lieu de s'arrêter net. Même effet sur
      « À propos » et « Le Cuistologue » (ils partagent cet entête). */
@@ -69,7 +69,7 @@ html .ah + .tile {
 
   .ah .at-paper {
     background-image:
-      radial-gradient(ellipse 72% 40% at 50% -6%, #ffffff 0%, rgb(255 255 255 / 0) 100%),
+      radial-gradient(ellipse 72% 40% at 50% -6%, var(--color-paper-white) 0%, rgb(255 255 255 / 0) 100%),
       linear-gradient(180deg, #f3f6fa 0%, #eef2f7 52%, #f1f2ee 80%, #f5f3ea 95%);
   }
 }

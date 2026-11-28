@@ -427,7 +427,8 @@ import quarter from "../assets/layers/page/quarter.webp";
     position: absolute;
     right: 0;
     bottom: 0;
-    z-index: 0;
+    /* derrière le texte de la Hero, qui la précède dans le HTML (index.astro) ; au-dessus du fond (.amb, z-index -1, placé avant elle) */
+    z-index: -1;
     width: min(62vw, 300px);
     pointer-events: none;
   }

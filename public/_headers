@@ -20,6 +20,19 @@
 /.well-known/security.txt
   Content-Type: text/plain; charset=utf-8
 
+# Textes lus par les robots et les assistants IA : encodage explicite (accents), et rafraîchis chaque jour
+/robots.txt
+  Content-Type: text/plain; charset=utf-8
+  Cache-Control: public, max-age=86400
+
+/llms.txt
+  Content-Type: text/plain; charset=utf-8
+  Cache-Control: public, max-age=86400
+
+/llms-full.txt
+  Content-Type: text/plain; charset=utf-8
+  Cache-Control: public, max-age=86400
+
 /og-image.jpg
   Cache-Control: public, max-age=604800
 

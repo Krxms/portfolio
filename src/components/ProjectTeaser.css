@@ -689,8 +689,8 @@
   margin: auto;
   width: 8px;
   height: 8px;
-  border-top: 1.6px solid #13247c;
-  border-right: 1.6px solid #13247c;
+  border-top: 1.6px solid var(--color-klein-800);
+  border-right: 1.6px solid var(--color-klein-800);
   transform: translateX(-1px) rotate(45deg);
 }
 

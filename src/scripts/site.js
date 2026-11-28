@@ -49,12 +49,12 @@ if (!isLow() && !window.matchMedia('(prefers-reduced-motion: reduce)').matches &
     };
     requestAnimationFrame(raf);
 
-    // le défilement s'arrête quand la page est verrouillée : menu ouvert, ouverture de page (loader) en cours
+    // le défilement s'arrête quand la page est verrouillée : menu ouvert
     const sync = () => {
-      if (root.hasAttribute('data-nav-open') || root.classList.contains('has-loader')) lenis.stop();
+      if (root.hasAttribute('data-nav-open')) lenis.stop();
       else lenis.start();
     };
-    new MutationObserver(sync).observe(root, { attributes: true, attributeFilter: ['data-nav-open', 'class'] });
+    new MutationObserver(sync).observe(root, { attributes: true, attributeFilter: ['data-nav-open'] });
     sync();
   });
 }

@@ -11,7 +11,7 @@
 :root {
   --cta-orange: 238 133 50;
   --cta-mint: #a6d4ca;
-  --cta-blue: #13247c;
+  --cta-blue: var(--color-klein-800);
 }
 
 /* ---------- variante principale : bleu grainé ---------- */

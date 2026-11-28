@@ -17,6 +17,11 @@ Antoine Bruneau travaille seul, en entrepreneur individuel (micro-entreprise), e
 - [À propos](https://antoinebruneau.fr/a-propos/) : parcours, façon de concevoir, compétences.
 - [Le Cuistologue](https://antoinebruneau.fr/projets/le-cuistologue/) : étude de cas (identité visuelle, imprimés, site web).
 - [Contact](https://antoinebruneau.fr/contact/) : formulaire, téléphone ou e-mail ; réponse généralement sous deux jours ouvrés.
+- [Mentions légales](https://antoinebruneau.fr/mentions-legales/) : éditeur, hébergement, propriété intellectuelle.
+
+## Texte intégral
+
+- [llms-full.txt](https://antoinebruneau.fr/llms-full.txt) : le contenu complet des pages publiques, en Markdown, régénéré à chaque mise en ligne.
 
 ## Méthode (projet de site web)
 

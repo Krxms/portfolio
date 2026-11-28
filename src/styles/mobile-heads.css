@@ -178,7 +178,7 @@
     height: 5px;
     margin-right: 7px;
     border-radius: 50%;
-    background: var(--signal, #1f45d6);
+    background: var(--signal, var(--color-klein-600));
     vertical-align: middle;
     translate: 0 -1px;
   }

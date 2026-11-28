@@ -126,6 +126,8 @@ if (form && status) {
 
       if (res.ok && data.ok) {
         form.reset();
+        // reset() ne déclenche ni « change » ni « input » : le canevas affiché et son bouton sont remis d'accord avec le formulaire vidé
+        syncGuide();
         submitBtn.setAttribute('data-state', 'sent');
         setTimeout(() => submitBtn.removeAttribute('data-state'), 3200);
         status.textContent =

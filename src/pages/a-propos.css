@@ -355,7 +355,7 @@
 
 .ap-chip--tool {
   color: var(--ink);
-  background: #f5f3ea;
+  background: var(--color-paper-base);
   box-shadow: 2px 2px 0 rgb(238 133 50 / 0.9);
 }
 
