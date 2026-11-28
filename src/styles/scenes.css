@@ -467,7 +467,7 @@
     transition: none;
     animation: mf-word linear both;
     animation-timeline: --mf-quote;
-    animation-range: cover calc(12% + var(--i, 0) * 4%) cover calc(20% + var(--i, 0) * 4%);
+    animation-range: cover calc(6% + var(--i, 0) * 3.5%) cover calc(14% + var(--i, 0) * 3.5%);
   }
 
   /* le paragraphe suit la fin du titre (même chronologie) */
@@ -476,7 +476,7 @@
     transition: none;
     animation: mf-rise linear both;
     animation-timeline: --mf-quote;
-    animation-range: cover 40% cover 56%;
+    animation-range: cover 30% cover 46%;
   }
 
   .css-view .manifesto {
@@ -489,7 +489,7 @@
     transition: none;
     animation: mf-rise linear both;
     animation-timeline: view(block);
-    animation-range: entry 10% entry 90%;
+    animation-range: entry 0% entry 70%;
   }
 }
 

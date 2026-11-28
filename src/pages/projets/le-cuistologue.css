@@ -401,7 +401,8 @@
 }
 
 .pj-strip-row {
-  --piece-h: min(52svh, 520px);
+  /* les pièces imprimées, un peu plus grandes que le reste des visuels : on y lit les textes sans les agrandir */
+  --piece-h: min(62svh, 620px);
   list-style: none;
   margin: 0;
   padding: 12px max(var(--edge), calc((100vw - 1360px) / 2)) 24px;
@@ -1180,7 +1181,7 @@
   }
 
   .pj-strip-row {
-    --piece-h: min(56svh, 420px);
+    --piece-h: min(62svh, 500px);
     padding-inline: var(--edge);
   }
 

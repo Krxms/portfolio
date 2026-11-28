@@ -1880,3 +1880,76 @@
     display: none;
   }
 }
+
+/* ---------- Téléphone : les scènes des pages Création, Refonte et Audit, disposées comme celle de la page Interfaces et logiciels ----------
+   La fenêtre du site seule en haut ; dessous, sans rien qui se chevauche, la carte du moteur de recherche puis l'espace de gestion à gauche,
+   le téléphone à droite. Chaque repère suit l'élément qu'il désigne. Mesures en cqw (largeur de la scène) : fenêtre de 61,7 de haut, téléphone de
+   61,6, carte du moteur de 16,5, espace de gestion de 24,6. Placé en fin de fichier pour passer devant les positions de base et celles de l'audit. */
+@media (max-width: 700px) {
+  .cs-stage {
+    aspect-ratio: 100 / 136;
+  }
+
+  .cs-stage > .cs-site {
+    top: 4cqw;
+  }
+
+  .cs-stage > .cs-phone {
+    left: 62cqw;
+    top: 71cqw;
+  }
+
+  .cs-stage > .cs-serp {
+    top: 74cqw;
+  }
+
+  .cs-stage > .cs-guide {
+    top: 97cqw;
+  }
+
+  .cs-stage > .cs-pin--1 {
+    left: 50cqw;
+    top: 20.3cqw;
+  }
+  .cs-stage > .cs-pin--2 {
+    left: 62cqw;
+    top: 83cqw;
+  }
+  .cs-stage > .cs-pin--3 {
+    left: 6cqw;
+    top: 74cqw;
+  }
+  .cs-stage > .cs-pin--4 {
+    left: 94cqw;
+    top: 6.6cqw;
+  }
+  .cs-stage > .cs-pin--5 {
+    left: 6cqw;
+    top: 97cqw;
+  }
+
+  /* audit : trois repères sur la fenêtre, le quatrième sur le téléphone */
+  .cs-stage--audit > .cs-pin--1 {
+    left: 36.5cqw;
+    top: 41.5cqw;
+  }
+  .cs-stage--audit > .cs-pin--2 {
+    left: 58cqw;
+    top: 22.5cqw;
+  }
+  .cs-stage--audit > .cs-pin--3 {
+    left: 51.6cqw;
+    top: 14.6cqw;
+  }
+  .cs-stage--audit > .cs-pin--4 {
+    left: 62cqw;
+    top: 83cqw;
+  }
+}
+
+/* Téléphone : le surtitre des cartes de formules (« Je m'en occupe »…) sans le trait orange devant lui */
+@media (max-width: 700px) {
+  .cs-lv .cs-level-n::before {
+    content: none;
+  }
+}

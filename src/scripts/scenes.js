@@ -59,6 +59,8 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
   };
 
   // ---- 2. Les scènes : sélecteur, fenêtre d'entrée (en part de la hauteur d'écran), options
+  //  Les fenêtres commencent au bord bas de l'écran (ou juste dessous) et finissent assez haut dans l'écran : à défilement rapide, l'animation
+  //  est déjà lancée quand le bloc apparaît, et terminée avant qu'on l'ait dépassé.
   //  stagger : numérote les enfants (--i, --n) ; avec `in`, ceux du sélecteur donné
   const CONFIG = [
     // les en-têtes de section (étiquette, titre, sous-titre), un enfant après l'autre ; les en-têtes propres à une section (projet, expérience) aussi
@@ -67,27 +69,27 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
     { sel: '.il-xp-copy', start: 0.95, end: 0.6, stagger: true },
     // page Interfaces : les cartes des interventions arrivent une à une, puis leurs pictogrammes s'animent (interfaces-logiciels.css)
     { sel: '.il-tasks', start: 0.95, end: 0.6, stagger: true },
-    { sel: '.manifesto-quote', start: 0.88, end: 0.38, words: true, css: true },
+    { sel: '.manifesto-quote', start: 0.94, end: 0.48, words: true, css: true },
     // Qui suis-je : l'étiquette et l'introduction, en blocs (les mots ne s'allument plus que dans le manifeste, la phrase signature de l'accueil)
     { sel: '.about-copy > .tile-label', start: 0.95, end: 0.6 },
     { sel: '.about-lead', start: 0.95, end: 0.6 },
     // le texte qui suit le titre du manifeste : d'un seul bloc, qui apparaît quand le titre arrive vers la fin de ses mots (même progression : ref)
-    { sel: '.manifesto-lead', ref: '.manifesto-quote', start: 0.88, end: 0.38, css: true },
+    { sel: '.manifesto-lead', ref: '.manifesto-quote', start: 0.94, end: 0.48, css: true },
     // idem pour la suite de « Qui suis-je » : elle suit la progression de l'introduction
-    { sel: '.about-follow', ref: '.about-lead', start: 0.88, end: 0.38 },
+    { sel: '.about-follow', ref: '.about-lead', start: 0.94, end: 0.48 },
     // page Création, « Un cadre clair » : même mécanique, les engagements suivent l'introduction dont les mots s'allument
-    { sel: '.cs-follow', ref: '#cadre .tile-sub', start: 0.88, end: 0.38 },
+    { sel: '.cs-follow', ref: '#cadre .tile-sub', start: 0.94, end: 0.48 },
     // page Création : le panneau « Vous gardez la main » donne sa progression à ses trois jauges (voir creation-site-web.css)
     // (plus de suivi du défilement : les jauges se remplissent une fois, à l'arrivée du panneau ; voir plus bas, « reveal »)
-    { sel: '.cs-lv-panel', start: 0.92, end: 0.4, stagger: true, in: '.cs-lv-list', damp: 5 },
-    // scores du projet : le compteur se déclenche à l'arrivée de la réglette dans l'écran (un tiers de l'écran passé), puis se joue seul, en 2,6 s
+    { sel: '.cs-lv-panel', start: 0.98, end: 0.5, stagger: true, in: '.cs-lv-list', damp: 5 },
+    // scores du projet : le compteur se déclenche dès que la réglette entre dans l'écran (haut du bloc à 92 % de la hauteur), puis se joue seul, en 2,6 s
     // (voir ProjectTeaser.css) : il ne dépend plus de la vitesse du défilement
-    { sel: '.sc-scores', timed: true, trigger: 0.82, dur: 2600 },
-    { sel: '.cards', start: 0.96, end: 0.34, stagger: true },
-    { sel: '.proofs', start: 0.96, end: 0.3, stagger: true, css: true },
-    { sel: '.proc-wrap[data-scene]', start: 0.98, end: 0.5, stagger: true, in: '.proc' },
-    { sel: '.proc-after', start: 1, end: 0.75 },
-    { sel: '.about', start: 0.9, end: 0.3 },
+    { sel: '.sc-scores', timed: true, trigger: 0.92, dur: 2600 },
+    { sel: '.cards', start: 1.02, end: 0.45, stagger: true },
+    { sel: '.proofs', start: 1.02, end: 0.42, stagger: true, css: true },
+    { sel: '.proc-wrap[data-scene]', start: 1.04, end: 0.6, stagger: true, in: '.proc' },
+    { sel: '.proc-after', start: 1.04, end: 0.85 },
+    { sel: '.about', start: 0.98, end: 0.42 },
   ];
 
   // Une seule logique d'apparition, sur tous les écrans : les titres et les textes se jouent UNE fois, quand ils entrent dans l'écran (classe .is-in,
@@ -145,7 +147,9 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
           rio.unobserve(en.target);
         });
       },
-      { rootMargin: '0px 0px -12% 0px', threshold: 0.12 },
+      // déclenchée un peu AVANT l'arrivée dans l'écran (8 % de sa hauteur sous le bord bas) : à défilement rapide, le texte est déjà en mouvement
+      // quand il apparaît, au lieu d'attendre d'être bien entré
+      { rootMargin: '0px 0px 8% 0px', threshold: 0 },
     );
     revealEls.forEach((el) => rio.observe(el));
   }

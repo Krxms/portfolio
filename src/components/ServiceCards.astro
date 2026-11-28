@@ -2,8 +2,10 @@
 import './ServiceCards.css';
 import './LinkUnder.css';
 import R from './R.astro';
-import artCreation from '../assets/cards/creation.svg?raw';
-import artRefonte from '../assets/cards/refonte.svg?raw';
+// Une illustration par domaine, sans fenêtre, avec les formes du site : l'activité bien comprise (arche-porte et son enseigne, question et réponse,
+// bouton de contact) et l'outil qui s'adapte (parcours en étapes, équipe, réglage).
+import artSite from '../assets/cards/site.svg?raw';
+import artLogiciel from '../assets/cards/logiciel.svg?raw';
 
 /* Les deux domaines d'intervention : les sites web et les interfaces de logiciels. L'accueil aide à choisir un chemin, il ne décrit pas toute
    l'offre : chaque carte a une catégorie, un titre, une courte description, éventuellement le public visé, puis, en pied de carte, les pages
@@ -20,7 +22,7 @@ const { compact = false } = Astro.props;
 const full = [
   {
     tone: 'warm',
-    art: artCreation,
+    art: artSite,
     kicker: 'Sites web',
     title: 'Votre activité mérite d’être bien comprise.',
     text: 'Un site pour présenter votre offre, répondre aux bonnes questions et faciliter le contact.',
@@ -32,7 +34,7 @@ const full = [
   },
   {
     tone: 'blue',
-    art: artRefonte,
+    art: artLogiciel,
     kicker: 'Interfaces et logiciels',
     title: 'Des outils qui s’adaptent à ceux qui travaillent.',
     text: 'Des parcours et des écrans conçus autour des usages de vos équipes, en mission de conception ou en renfort d’équipe UX/UI.',

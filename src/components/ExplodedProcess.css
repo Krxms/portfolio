@@ -873,8 +873,8 @@
       animation-fill-mode: both;
       animation-duration: 1ms;
       animation-timeline: --xpv;
-      /* de la scène qui entre dans l'écran jusqu'aux étapes qui arrivent à 75 % de la hauteur */
-      animation-range: entry 5svh entry calc(100% + 25svh);
+      /* de la scène qui entre dans l'écran jusqu'aux étapes qui arrivent aux trois quarts de la hauteur (un peu plus tôt qu'avant, pour un défilement rapide) */
+      animation-range: entry 0% entry calc(100% + 15svh);
     }
 
     .xp-stack {
