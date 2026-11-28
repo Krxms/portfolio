@@ -138,7 +138,7 @@
 .nl-b {
   display: inline-block;
   white-space: nowrap;
-  transition: transform 0.16s ease-out, opacity 0.16s ease-out;
+  transition: transform 0.16s linear, opacity 0.16s linear;
 }
 
 .nl-b {
@@ -150,14 +150,14 @@
   color: var(--signal);
 }
 
-.header-nav a:not(.btn):hover .nl-a,
-.header-nav a:not(.btn):focus-visible .nl-a {
+.header-nav a:not(.btn):not([aria-current]):hover .nl-a,
+.header-nav a:not(.btn):not([aria-current]):focus-visible .nl-a {
   opacity: 0;
   transform: translateY(-100%);
 }
 
-.header-nav a:not(.btn):hover .nl-b,
-.header-nav a:not(.btn):focus-visible .nl-b {
+.header-nav a:not(.btn):not([aria-current]):hover .nl-b,
+.header-nav a:not(.btn):not([aria-current]):focus-visible .nl-b {
   transform: translate(-50%, 0);
 }
 

@@ -3,23 +3,17 @@
    sable derrière, une fenêtre d'interface crème posée sur un socle bleu clair, et un disque orange devant. Un seul SVG, statique, sans image
    à télécharger. Le grain (arche bleue, arche sable, disque) est un motif de points semés au hasard (tuile de 61 × 53), sans filtre : rien à recalculer au défilement. Deux tuiles, une par taille d'affichage : le grain a la même taille à l'écran (1 à 2 px) et la même densité que celui des formes des pages de service.
    Affichée à toutes les largeurs (sur ordinateur, la composition de HeroAmbient.astro est masquée). */
+import quarter from "../assets/layers/page/quarter.webp";
 ---
 
 <div class="hm-art" aria-hidden="true">
   <svg viewBox="0 0 260 220" preserveAspectRatio="xMaxYMax meet" focusable="false">
     <defs>
-      <linearGradient id="hm-blue" x1="0" y1="0" x2="0.4" y2="1">
-        <stop offset="0" stop-color="#2a55d6" />
-        <stop offset="1" stop-color="#1a3cbf" />
+      <linearGradient id="hm-blue" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#3a63e6" />
+        <stop offset="0.55" stop-color="#2447d2" />
+        <stop offset="1" stop-color="#17299c" />
       </linearGradient>
-      <linearGradient id="hm-sand" x1="1" y1="0" x2="0" y2="0.6">
-        <stop offset="0" stop-color="#d9c29c" />
-        <stop offset="1" stop-color="#ead9bd" stop-opacity="0.55" />
-      </linearGradient>
-      <radialGradient id="hm-orange" cx="0.38" cy="0.34" r="0.7">
-        <stop offset="0" stop-color="#ff8a3d" />
-        <stop offset="1" stop-color="#f0611a" />
-      </radialGradient>
       <pattern id="hm-speck-m" width="61" height="53" patternUnits="userSpaceOnUse">
         <circle cx="19.8" cy="8.0" r="0.83" fill="#fff" opacity="0.25" />
         <circle cx="50.1" cy="5.0" r="0.79" fill="#fff" opacity="0.35" />
@@ -419,29 +413,12 @@
         <circle cx="5.4" cy="43.5" r="0.22" fill="#fff" opacity="0.45" />
         <circle cx="15.1" cy="26.3" r="0.32" fill="#fff" opacity="0.60" />
       </pattern>
-      <filter id="hm-shadow" x="-20%" y="-20%" width="140%" height="150%">
-        <feDropShadow dx="0" dy="6" stdDeviation="6" flood-color="#0b1a4a" flood-opacity="0.18" />
-      </filter>
     </defs>
 
-    <path d="M9 220 V207 A70 70 0 0 1 149 207 V220 Z" fill="url(#hm-sand)" />
+    <image href={quarter.src} x="52.7" y="105" width="71.3" height="143.6" preserveAspectRatio="none" />
     <path d="M106 220 V172 A150 150 0 0 1 406 172 V220 Z" fill="url(#hm-blue)" />
     <path class="hm-grain" d="M106 220 V172 A150 150 0 0 1 406 172 V220 Z" />
-    <path class="hm-grain hm-grain--soft" d="M9 220 V207 A70 70 0 0 1 149 207 V220 Z" />
-        <rect x="44" y="197" width="147" height="23" fill="#9fb5e6" />
 
-    <g filter="url(#hm-shadow)">
-      <rect x="86" y="103" width="146" height="91" rx="7" fill="#f8f3ea" />
-    </g>
-    <circle cx="101" cy="116" r="3.4" fill="#a9bde8" />
-    <circle cx="112" cy="116" r="3.4" fill="#a9bde8" />
-    <circle cx="123" cy="116" r="3.4" fill="#a9bde8" />
-    <rect x="97" y="129" width="63" height="52" rx="2" fill="#a7bfe9" />
-    <rect x="171" y="137" width="50" height="5" rx="2.5" fill="#a9bde8" />
-    <rect x="171" y="148" width="31" height="5" rx="2.5" fill="#a9bde8" />
-
-    <circle cx="199" cy="182" r="18" fill="url(#hm-orange)" />
-    <circle class="hm-grain hm-grain--soft" cx="199" cy="182" r="18" />
   </svg>
 </div>
 

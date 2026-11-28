@@ -345,7 +345,8 @@
 
 /* ---------- En-têtes des sections de fin (identité, imprimés) : alignés à gauche, un surtitre et un titre ---------- */
 .pj-sec-head {
-  margin: 0 0 clamp(28px, 4vw, 56px);
+  width: 100%;
+  margin-block: 0 clamp(28px, 4vw, 56px);
 }
 
 .pj-sec-head .tile-label {
@@ -360,35 +361,34 @@
 }
 
 /* ---------- Les imprimés : une bande qui défile de côté ----------
-   Ordinateur : la bande est épinglée et avance de côté pendant qu'on descend. Téléphone : on la fait glisser, la pièce suivante dépasse.
+   Défilement latéral natif (molette latérale, trackpad, doigt, saisir et tirer) ; le défilement vertical de la page passe par-dessus.
    Les pièces sont posées sur le papier de la page, avec une ombre de pose ; une ligne de légende sous chacune, rien de plus. */
 .pj-print {
   overflow: clip;
+  /* le dialogue d'agrandissement sépare cette section de la suivante : le rythme des sections claires voisines ne s'y applique pas tout seul */
+  padding-bottom: var(--rhythm-link);
+}
+
+.pj-print ~ #suite {
+  padding-top: var(--rhythm-link);
 }
 
 .pj-strip-track {
   position: relative;
 }
 
-.pj-strip-track.is-pinned .pj-strip-stage {
-  position: sticky;
-  top: var(--header-h);
-  height: calc(100svh - var(--header-h));
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: clamp(8px, 2vh, 24px);
-}
-
-.pj-strip-track.is-pinned .pj-sec-head {
-  margin-bottom: 0;
-}
-
 .pj-strip {
   overflow-x: auto;
+  cursor: grab;
   scrollbar-width: none;
   overscroll-behavior-x: contain;
   scroll-snap-type: x mandatory;
+}
+
+.pj-strip.is-grabbing {
+  cursor: grabbing;
+  scroll-snap-type: none;
+  user-select: none;
 }
 
 .pj-strip::-webkit-scrollbar {
@@ -400,11 +400,6 @@
   outline-offset: -3px;
 }
 
-.pj-strip-track.is-pinned .pj-strip {
-  overflow: visible;
-  scroll-snap-type: none;
-}
-
 .pj-strip-row {
   --piece-h: min(52svh, 520px);
   list-style: none;
@@ -414,10 +409,6 @@
   align-items: flex-end;
   gap: clamp(28px, 4vw, 64px);
   width: max-content;
-}
-
-.pj-strip-track.is-pinned .pj-strip-row {
-  will-change: transform;
 }
 
 .pj-print-item {

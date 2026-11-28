@@ -39,27 +39,6 @@ import afficheTele from '../../assets/projets/cuistologue/affiche-teletravail.we
 const heroLaptop = await responsive(siteHeroPortable, [400, 640, 900, 1200], '(max-width: 700px) 80vw, 44vw');
 const heroPhone = await responsive(mobileTop, [200, 320, 480, 780], '(max-width: 700px) 22vw, 12vw');
 
-// Deux palettes, présentées en bento. ink : la couleur du texte posé sur l'aplat.
-// Chaque teinte : son nom et sa valeur HEX, rien d'autre.
-// 1. Logo et imprimés : les cinq carrés du fichier de travail Figma (page « Charte graphique », nœud 2113:523). Les calques n'y sont pas nommés (« Rectangle 1 »…) :
-//    les noms ci-dessous sont descriptifs. Rose, Vert d'eau, Sauge et Orange doré sont les teintes des feuilles du logo, reprises par les cartes de visite ;
-//    le mauve n'a pas d'usage documenté dans la charte.
-const printPalette = [
-  { id: 'rose', name: 'Rose', hex: '#FF9797', ink: '#2C2C28' },
-  { id: 'eau', name: 'Vert d’eau', hex: '#7FA8A2', ink: '#2C2C28' },
-  { id: 'sauge', name: 'Sauge', hex: '#8BA47E', ink: '#2C2C28' },
-  { id: 'mauve', name: 'Mauve', hex: '#AA8DA7', ink: '#2C2C28' },
-  { id: 'orange', name: 'Orange doré', hex: '#F1BE7C', ink: '#2C2C28' },
-];
-// 2. Le site lecuistologue.fr : cinq teintes, valeurs actuelles du site, en trois usages.
-const webPalette = [
-  { id: 'creme', name: 'Blanc cassé rosé', hex: '#FBF8F7', ink: '#2C2C2C' },
-  { id: 'peche', name: 'Pêche pâle', hex: '#F8E0CF', ink: '#2C2C2C' },
-  { id: 'ocre', name: 'Ocre doré', hex: '#DAA35B', ink: '#2C2C2C' },
-  { id: 'anthracite', name: 'Anthracite', hex: '#2C2C2C', ink: '#FBF8F7' },
-  { id: 'ardoise', name: 'Bleu ardoise', hex: '#253D4A', ink: '#FBF8F7' },
-];
-
 // Les pièces imprimées, dans l'ordre de la scène : trois affiches A3 (un même service, trois situations), puis les cartes de visite et le flyer.
 // Les textes viennent des pièces elles-mêmes ; les formats, des noms des sections du fichier de travail (affiche A3, cartes 88 × 58 mm, flyer 151 × 213 mm).
 const posters = [
@@ -215,7 +194,7 @@ const schema = {
             <span class="ah-l2">identité, site <span class="pj-et">et</span> print.</span>
           </h1>
           <p class="ah-lead">Un visage, un site et des supports imprimés pour un cuisinier à domicile, qui prépare chez ses clients les repas de la semaine.</p>
-          <ul class="ah-zones" role="list"><li>Identité visuelle</li><li>Site web</li><li>Imprimés</li></ul>
+          <ul class="ah-zones" role="list"><li>Identité visuelle</li><li>Site web</li><li>Print</li></ul>
           <p class="pj-live"><LinkUnder href="https://lecuistologue.fr" label="Voir le site en ligne" external tone="light" /></p>
         </div>
 
@@ -370,12 +349,12 @@ const schema = {
   </section>===== */}
 
   {/* ===== L'identité, en bento : le logo à gauche, la police à droite (la phrase des imprimés, en Poppins, sur le vert profond des
-         imprimés) ; dessous, la palette des imprimés, en aplats. Rien n'est cliquable : c'est une planche, pas un outil. ===== */}
+         imprimés) ; rien n'est cliquable : c'est une planche, pas un outil. ===== */}
   <section class="tile tile--light pj-identity" id="identite" aria-labelledby="id-title">
     <div class="wrap wrap--wide tile-inner">
       <header class="pj-sec-head">
         <p class="tile-label">L’identité</p>
-        <h2 id="id-title">Un logo, deux polices, une palette.</h2>
+        <h2 id="id-title">Un visage, du logo aux supports.</h2>
       </header>
 
       <div class="pj-id">
@@ -387,32 +366,6 @@ const schema = {
           <p class="pj-spec-big" aria-hidden="true">On mange<br /><span>quoi</span> ce&nbsp;soir&nbsp;?</p>
           <figcaption class="pj-spec-meta"><span>Poppins pour les titres</span><span>Inter pour le texte</span></figcaption>
         </figure>
-
-        <div class="pj-pals">
-          <div class="pj-bento pj-bento--print" role="group" aria-labelledby="pal-print">
-            <h3 class="pj-bento-title" id="pal-print">Logo et imprimés</h3>
-            {
-              printPalette.map((c) => (
-                <div class={`pj-tile pj-tile--${c.id}`} style={`--c:${c.hex};--t:${c.ink}`}>
-                  <span class="pj-tile-name">{c.name}</span>
-                  <span class="pj-tile-hex">{c.hex}</span>
-                  </div>
-              ))
-            }
-          </div>
-
-          <div class="pj-bento pj-bento--web" role="group" aria-labelledby="pal-web">
-            <h3 class="pj-bento-title" id="pal-web">Site web</h3>
-            {
-              webPalette.map((c) => (
-                <div class={`pj-tile pj-tile--${c.id}`} style={`--c:${c.hex};--t:${c.ink}`}>
-                  <span class="pj-tile-name">{c.name}</span>
-                  <span class="pj-tile-hex">{c.hex}</span>
-                  </div>
-              ))
-            }
-          </div>
-        </div>
       </div>
     </div>
   </section>
@@ -423,8 +376,7 @@ const schema = {
     <div class="pj-strip-track" data-strip>
       <div class="pj-strip-stage">
         <header class="pj-sec-head wrap wrap--wide">
-          <p class="tile-label">Les imprimés</p>
-          <h2 id="print-title">Une offre, trois quotidiens.</h2>
+          <p class="tile-label" id="print-title">Print</p>
         </header>
 
         <div class="pj-strip" data-strip-scroll tabindex="0" role="region" aria-label="Les imprimés : faites glisser pour parcourir">
@@ -707,62 +659,80 @@ const schema = {
     mode();
   }
 
-  // ---------- Les imprimés : la bande avance de côté pendant qu'on descend (ordinateur) ----------
-  // La hauteur du rail vaut la longueur à parcourir ; la bande est décalée d'autant que la page a défilé dans le rail. Ailleurs : défilement natif,
-  // au doigt ou à la souris (saisir et tirer).
+  // ---------- Les imprimés : une bande à défilement latéral natif ----------
+  // Le défilement vertical de la page passe par-dessus la bande (rien n’est épinglé). Dans la bande : molette latérale, trackpad ou doigt
+  // (natifs), ou saisir et tirer à la souris ; un glissement n’ouvre pas l’agrandissement.
   const strip = document.querySelector<HTMLElement>('[data-strip]');
   const stripScroll = strip?.querySelector<HTMLElement>('[data-strip-scroll]');
-  const stripRow = strip?.querySelector<HTMLElement>('[data-strip-row]');
   let dragged = false;
-  if (strip && stripScroll && stripRow) {
-    let dist = 0;
-    const stage = strip.firstElementChild as HTMLElement;
-    const update = () => {
-      if (!pinned()) return;
-      const r = strip.offsetHeight - stage.offsetHeight;
-      const p = r > 0 ? Math.min(1, Math.max(0, -strip.getBoundingClientRect().top / r)) : 0;
-      stripRow.style.transform = `translate3d(${(-p * dist).toFixed(1)}px, 0, 0)`;
-    };
-    const measure = () => {
-      if (!pinned()) {
-        strip.style.height = '';
-        stripRow.style.transform = '';
-        strip.classList.remove('is-pinned');
-        return;
-      }
-      strip.classList.add('is-pinned');
-      dist = Math.max(0, stripRow.scrollWidth - stripScroll.clientWidth);
-      strip.style.height = `${stage.offsetHeight + dist}px`;
-      update();
-    };
-    onScroll(update);
-    addEventListener('resize', measure);
-    wide.addEventListener('change', measure);
-    still.addEventListener('change', measure);
-    stripRow.querySelectorAll('img').forEach((im) => im.addEventListener('load', measure, { once: true }));
-    new ResizeObserver(measure).observe(stripRow);
-    measure();
-
-    // saisir et tirer à la souris (hors épinglage) ; un glissement n'ouvre pas l'agrandissement
+  if (stripScroll) {
     let down = false;
     let startX = 0;
     let startLeft = 0;
+    let lastX = 0;
+    let lastT = 0;
+    let vel = 0; // px par ms, dans le sens du défilement
+    let raf = 0;
+    const stop = () => {
+      cancelAnimationFrame(raf);
+      raf = 0;
+    };
+    // inertie : la vitesse du geste décroît de façon exponentielle (même sensation que le défilement vertical)
+    const glide = () => {
+      let prev = performance.now();
+      const step = (now: number) => {
+        const dt = Math.min(48, now - prev);
+        prev = now;
+        const before = stripScroll.scrollLeft;
+        stripScroll.scrollLeft = before + vel * dt;
+        vel *= Math.pow(0.94, dt / 16);
+        if (Math.abs(vel) < 0.03 || stripScroll.scrollLeft === before) {
+          stripScroll.classList.remove('is-grabbing');
+          raf = 0;
+          return;
+        }
+        raf = requestAnimationFrame(step);
+      };
+      raf = requestAnimationFrame(step);
+    };
     stripScroll.addEventListener('pointerdown', (e) => {
-      if (pinned() || e.pointerType !== 'mouse' || e.button !== 0) return;
+      stop();
+      stripScroll.classList.remove('is-grabbing');
+      if (e.pointerType !== 'mouse' || e.button !== 0) return;
       down = true;
       dragged = false;
-      startX = e.clientX;
+      startX = lastX = e.clientX;
+      lastT = performance.now();
+      vel = 0;
       startLeft = stripScroll.scrollLeft;
     });
+    stripScroll.addEventListener('wheel', stop, { passive: true });
     addEventListener('pointermove', (e) => {
       if (!down) return;
       const dx = e.clientX - startX;
-      if (Math.abs(dx) > 5) dragged = true;
-      if (dragged) stripScroll.scrollLeft = startLeft - dx;
+      if (Math.abs(dx) > 5) {
+        dragged = true;
+        stripScroll.classList.add('is-grabbing');
+      }
+      if (dragged) {
+        stripScroll.scrollLeft = startLeft - dx;
+        const now = performance.now();
+        const dt = Math.max(1, now - lastT);
+        // moyenne glissante : un geste court et net garde sa vitesse
+        vel = 0.7 * ((lastX - e.clientX) / dt) + 0.3 * vel;
+        lastX = e.clientX;
+        lastT = now;
+      }
     });
-    addEventListener('pointerup', () => {
+    const release = () => {
+      if (!down) return;
       down = false;
-    });
+      // pas d’élan si la souris est restée immobile avant le relâchement
+      if (dragged && performance.now() - lastT < 80 && Math.abs(vel) > 0.05) glide();
+      else stripScroll.classList.remove('is-grabbing');
+    };
+    addEventListener('pointerup', release);
+    addEventListener('pointercancel', release);
   }
 
   // ---------- L'agrandissement ----------
